@@ -72,4 +72,20 @@ namespace ProprietariesExceptions{
     }
 }
 
+namespace SignaturesExceptions{
+    use Exception;
+
+    class SignatureNotFound extends Exception{
+        public function showMessage(int $sign_id){ return "There's no such signature #$sign_id! {line: " . $this->getLine() . "}";}
+    }
+
+    class InvalidSignatureFile extends Exception{
+        public function showMessage(string $file_path){ return "'$file_path' is not a valid signature file. {line: " . $this->getLine() . "}";}
+    }
+
+    class SignatureAuthError extends Exception{
+        public function showMessage(){ return "Signature authentication failed. ERROR> '$this->message' {line: " . $this->getLine() . "}";}
+    }
+}
+
 ?>
