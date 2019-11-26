@@ -46,11 +46,11 @@ class DatabaseConnection{
      * @var string $user_connected The user that's doing the connection.
      * @author Giulliano Ross <giulliano.scatalon.rossi@gmail.com>
      */
-    private $connection;
-    private $database_connected;
-    private $host_using;
-    private $got_connection;
-    private $user_connected;
+    protected $connection;
+    protected $database_connected;
+    protected $host_using;
+    protected $got_connection;
+    protected $user_connected;
 
     public function checkNotConnected(bool $auto_throw = true){
         /**
@@ -97,4 +97,65 @@ class DatabaseConnection{
     }
 }
 
+class UsersData extends DatabaseConnection{
+    /**
+     * That class contains the main actions for the users database.
+     * @var SessionSystem $session_handler A handler for the session setting up
+     */
+    private $session_handler;
+
+    public function __construct(string $usr, string $passwd, string $host = DEFAULT_HOST, string $db = DEFAULT_DB){
+        /**
+         * Starts the class and the connection with the session handler.
+         * The params are the same then at the parent::__construct().
+         */
+        parent::__construct($usr, $passwd, $host, $db);
+        $this->session_handler = new SessionSystem();
+    }
+
+    public function __destruct(){
+        /**
+         * Just the same thing then the parent::__destruct, but implemented the session_handler destructor.
+         */
+        $this->session_handler->__destruct();
+        parent::__destruct();
+    }
+
+    private function checkUserExists(string $username, bool $auto_throw = true){
+        /**
+         * Checks if a user exists in the database. 
+         * @param string $username The user to search in the database.
+         * @param bool $auto_throw If the method will throw a exception if the user don't exists.
+         * @throws UserNotFound If there's no such user in the database, and the method's allowed to throw the exception.
+         * @return bool
+         */
+        $this->checkNotConnected();
+        $qr_all = $this->connection->query("SELECT nm_user FROM tb_users WHERE nm_user = \"$username\";");
+        while($row = $qr_all->fetch_array()){
+            if($row['nm_user'] == $username) return true;
+        }
+        if($auto_throw) throw new UserNotFound("There's no user '$username'", 1);
+        else return false;
+    }
+
+    public function authPassword(string $user, string $password, bool $encoded_password = true){
+        /**
+         * Authenticate a user password, for login or another simple authentication.
+         * @param string $user The user to authenticate
+         * @param string $password The user password
+         * @param bool $encoded_password If the user password's encoded on the database.
+         * @throws PasswordAuthError If the passwords doesn't matches
+         * @throws UserNotFound If the selected user don't exists.
+         * @return bool
+         */
+        $this->checkNotConnected();
+        if(!$this->checkUserExists($user, false)) throw new UserNotFound("There's no user '$user' in the database", 1);
+        $usr_dt  = $this->connection->query("SELECT vl_password FROM tb_users WHERE nm_user = \"$user\";")->fetch_array();
+        $from_db = $encoded_password ? base64_decode($usr_dt['vl_password']) : $usr_dt['vl_password'];
+        if($password != $from_db) throw new PasswordAuthError("Invalid Password!");
+        else return true;
+    }
+
+    
+}
 ?>
