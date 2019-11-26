@@ -1,5 +1,4 @@
 <?php
-
 namespace DatabaseActionsExceptions{
     use Exception;
 
