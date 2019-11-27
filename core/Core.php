@@ -3,8 +3,6 @@ namespace Core;
 
 require_once "/var/www/html/lpgp-server/core/Exceptions.php";
 require_once "/var/www/html/lpgp-server/core/session.php";
-require_once "/var/www/html/lpgp-server/PHPMailer/src/PHPMailer.php";
-require_once "/var/www/html/lpgp-server/PHPMailer/src/Exception.php";
 // add the logs manager after.
 
 // Session system.
@@ -21,7 +19,9 @@ use UsersSystemExceptions\InvalidUserName;
 use UsersSystemExceptions\PasswordAuthError;
 use UsersSystemExceptions\UserAlreadyExists;
 use UsersSystemExceptions\UserNotFound;
+use UsersSystemExceptions\UserKeyNotFound;
 
+use ProprietariesExceptions\ProprietaryKey;
 use ProprietariesExceptions\AuthenticationError;
 use ProprietariesExceptions\InvalidProprietaryName;
 use ProprietariesExceptions\ProprietaryNotFound;
@@ -34,7 +34,6 @@ use SignaturesExceptions\SignatureNotFound;
 
 define("DEFAULT_HOST", "localhost");
 define("DEFAULT_DB", "LPGP_WEB");
-
 class DatabaseConnection{
     /**
      * That class contains the main connection to the database and him universal actions,
@@ -101,8 +100,10 @@ class UsersData extends DatabaseConnection{
     /**
      * That class contains the main actions for the users database.
      * @var SessionSystem $session_handler A handler for the session setting up
+     * @const DATETIME_FORMAT The format for the date in the database.
      */
     private $session_handler;
+    const DATETIME_FORMAT = "H:m:i Y-M-d";
 
     public function __construct(string $usr, string $passwd, string $host = DEFAULT_HOST, string $db = DEFAULT_DB){
         /**
@@ -110,14 +111,14 @@ class UsersData extends DatabaseConnection{
          * The params are the same then at the parent::__construct().
          */
         parent::__construct($usr, $passwd, $host, $db);
-        $this->session_handler = new SessionSystem();
+        session_start();
     }
 
     public function __destruct(){
         /**
          * Just the same thing then the parent::__destruct, but implemented the session_handler destructor.
          */
-        $this->session_handler->__destruct();
+        
         parent::__destruct();
     }
 
@@ -156,6 +157,91 @@ class UsersData extends DatabaseConnection{
         else return true;
     }
 
-    
+    public function login(string $user, string $password, bool $encoded_password = true){
+        /**
+         * Makes the login with a user in the database, with a password authentication and login setup.
+         * @param string $user The user to make login.
+         * @param string $password The user password.
+         * @param bool $encoded_password If the user password is encoded in the database.
+         * @return void
+         */
+        $rcv = $this->authPassword($user, $password, $encoded_password);
+        if($rcv){ $this->session_handler->login($user, "normie"); }
+    }
+
+    public function logoff(){
+        /**
+         * A handler for the method logoff on the attributte session_handler.
+         * @return void
+         */
+        $this->session_handler->unsetLoginData();
+    }
+
+    public function checkUserKeyExists(string $key){
+        /**
+         * Checks if a key already haves a user, important to checking user key with email and for the creation of another key.
+         * @param string $key The key to search.
+         * @author Giulliano Rossi <giulliano.scatalon.rossi@gmail.com>
+         * @return bool
+         */
+        $this->checkNotConnected();
+        $qr_wt = $this->connection->query("SELECT vl_key FROM tb_users WHERE vl_key = \"$key\";");
+        while($row = $qr_wt->fetch_array()){
+            if($row['vl_key'] == $key) return true;
+        }
+        unset($qr_wt);
+        return false;
+    }
+
+    public function createUserKey(){
+        /**
+         * Generate a user key for the database.
+         * @return void
+         */
+        $rand_len = mt_rand(5, 255);
+        $key = "";
+        while(true){
+            $arr = [];
+            for($i = 0; $i <= $rand_len; $i++){
+                $rand = mt_rand(33, 126);
+                array_push(ord($rand));
+                unset($rand);   // maybe removed after
+            }
+            $key = implode("", $arr);
+            if(!$this->checkUserKeyExists($key)) return $key;
+            else continue;
+        }
+    }
+
+    public function addUser(string $user, string $password, string $email, bool $encode_password = true){
+        /**
+         * Adds a user for the database. Normally made for be used in HTML forms
+         * @param string $user The name for the user.
+         * @param string $password The user password.
+         * @param string $email The user email.
+         * @param bool $encode_password If the password needs to be encoded or is already encoded.
+         * @throws UserAlreadyExists If there's a user with that name already in the database.
+         * @return void
+         */
+        $this->checkNotConnected();
+        if($this->checkUserExists($user, false)) throw new UserAlreadyExists("There's already a user with the name '$user'", 1);
+        $to_db = $encode_password ? base64_encode($password) : $password;
+        $usr_key = $this->createUserKey();
+        $cr_dt = date(self::DATETIME_FORMAT);
+        $qr = $this->connection->query("INSERT INTO tb_users (nm_user, vl_email, vl_password, vl_key, dt_creation) VALUES (\"$user\", \"$email\", \"$to_db\", \"$usr_key\", \"$cr_dt\");");
+        unset($qr);
+    }
+
+    public function deleteUser(string $user){
+        /**
+         * Removes a user from the database.
+         * @param string $user the user to remove.
+         * @throws UserNotFound If the user selected don't exists in the database.
+         * @return void
+         */
+    }
 }
+
+$tt = new UsersData("giulliano_php", "");
+echo $tt->checkUserKeyExists("fsdfsdf") ? 1 : 0;
 ?>

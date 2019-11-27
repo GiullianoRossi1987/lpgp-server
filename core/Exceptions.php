@@ -49,6 +49,10 @@ namespace UsersSystemExceptions{
     class PasswordAuthError extends Exception{
         public function showMessage(){ return "Password authentication error! ERROR: '$this->message' {line: " . $this->getLine() . "}";}
     }
+
+    class UserKeyNotFound extends Exception{
+        public function showMessage(string $key){ return "There's no uses from the key '$key'! {line: " . $this->getLine() . "}";}
+    }
 }
 
 namespace ProprietariesExceptions{
@@ -68,6 +72,10 @@ namespace ProprietariesExceptions{
 
     class AuthenticationError extends Exception{
         public function showMessage(){ return "Authentication error. \nERROR> '$this->message' {line: " . $this->getLine() . "}";}
+    }
+
+    class ProprietaryKeyNotFound extends Exception{
+        public function showMessage(string $key){return "There's no key '$key' that pertences for any proprietary! {line: " . $this->getLine() . "}";}
     }
 }
 
