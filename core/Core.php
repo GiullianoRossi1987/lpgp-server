@@ -2,12 +2,9 @@
 namespace Core;
 
 require_once "/var/www/html/lpgp-server/core/Exceptions.php";
-require_once "/var/www/html/lpgp-server/core/session.php";
 // add the logs manager after.
 
 // Session system.
-use SessionSystem\SessionSystem;
-use PHPMailer\PHPMailer\PHPMailer;
 use mysqli;
 use mysqli_result;
 
@@ -99,10 +96,8 @@ class DatabaseConnection{
 class UsersData extends DatabaseConnection{
     /**
      * That class contains the main actions for the users database.
-     * @var SessionSystem $session_handler A handler for the session setting up
      * @const DATETIME_FORMAT The format for the date in the database.
      */
-    private $session_handler;
     const DATETIME_FORMAT = "H:m:i Y-M-d";
 
     public function __construct(string $usr, string $passwd, string $host = DEFAULT_HOST, string $db = DEFAULT_DB){
@@ -119,6 +114,8 @@ class UsersData extends DatabaseConnection{
          * Just the same thing then the parent::__destruct, but implemented the session_handler destructor.
          */
         
+        session_unset();
+        session_destroy(); 
         parent::__destruct();
     }
 
@@ -166,7 +163,9 @@ class UsersData extends DatabaseConnection{
          * @return void
          */
         $rcv = $this->authPassword($user, $password, $encoded_password);
-        if($rcv){ $this->session_handler->login($user, "normie"); }
+        $_SESSION['user-logged'] = "true";
+        $_SESSION['user'] = $user;
+        $_SESSION['mode'] = "normie";
     }
 
     public function logoff(){
@@ -174,7 +173,9 @@ class UsersData extends DatabaseConnection{
          * A handler for the method logoff on the attributte session_handler.
          * @return void
          */
-        $this->session_handler->unsetLoginData();
+        $_SESSION['user-logged'] = "false";
+        $_SESSION['user'] = "";
+        $_SESSION['mode'] = "";
     }
 
     public function checkUserKeyExists(string $key){
@@ -239,9 +240,10 @@ class UsersData extends DatabaseConnection{
          * @throws UserNotFound If the user selected don't exists in the database.
          * @return void
          */
+        $this->checkNotConnected();
+        if(!$this->checkUserExists($user)) throw new UserNotFound("There's no user with the name '$user'!", 1);
+        $qr_dl = $this->connection->query("DELETE FROM tb_users WHERE nm_user = \"$user\";");
+        unset($qr_dl);
     }
 }
-
-$tt = new UsersData("giulliano_php", "");
-echo $tt->checkUserKeyExists("fsdfsdf") ? 1 : 0;
 ?>

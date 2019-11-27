@@ -11,25 +11,6 @@ namespace DatabaseActionsExceptions{
     }
 }
 
-namespace SessionSystemExceptions{
-    use Exception;
-
-    class SessionAlreadyRunning extends Exception{
-        public function showMessage(){ return "There's a session started already! {line: ".$this->getLine()."}";}
-    }
-
-    class NoSessionStarted extends Exception{
-        public function showMessage(){ return "There's no session running! {line: ".$this->getLine()."}";}
-    }
-
-    class AlreadyLoggedUserError extends Exception{
-        public function showMessage(){ return "There's a user logged already. {line: ".$this->getLine()."}";}
-    }
-
-    class NoUserLogged extends Exception{
-        public function showMessage(){ return "There's no user logged already. {line: ".$this->getLine()."}";}
-    }
-}
 
 namespace UsersSystemExceptions{
     use Exception;
@@ -52,6 +33,14 @@ namespace UsersSystemExceptions{
 
     class UserKeyNotFound extends Exception{
         public function showMessage(string $key){ return "There's no uses from the key '$key'! {line: " . $this->getLine() . "}";}
+    }
+
+    class UserAlreadyLogged extends Exception{
+        public function showMessage(){ return "There's a user logged already! {line: " . $this->getLine() . "}";}
+    }
+
+    class NoUserLogged extends Exception{
+        public function showMessage(){ return "There's no user logged already! {line: " . $this->getLine() . "}"; }
     }
 }
 
@@ -76,6 +65,14 @@ namespace ProprietariesExceptions{
 
     class ProprietaryKeyNotFound extends Exception{
         public function showMessage(string $key){return "There's no key '$key' that pertences for any proprietary! {line: " . $this->getLine() . "}";}
+    }
+
+    class ProprietaryAlreadyLogged extends Exception{
+        public function showMessage(){ return "There's a proprietary user logged already! {line: " . $this->getLine() . "}";}
+    }
+
+    class NoProprietaryLogged extends Exception{
+        public function showMessage(){ return "There's no proprietary user logged already! {line: " . $this->getLine() . "}"; }
     }
 }
 
