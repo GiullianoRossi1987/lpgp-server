@@ -245,5 +245,58 @@ class UsersData extends DatabaseConnection{
         $qr_dl = $this->connection->query("DELETE FROM tb_users WHERE nm_user = \"$user\";");
         unset($qr_dl);
     }
+    
+    public function chUserName(string $user, string $newname){
+        /**
+         * Changes a user name in the database.
+         * @param string $user THe user to change the name
+         * @param string $newname The new name of the user
+         * @throws UserNotFound If the user selected don't exists.
+         * @throws UserAlreadyExists If the name selected is already in use from another user.
+         * @return void
+         */
+        $this->checkNotConnected();
+        if(!$this->checkUserExists($user)) throw new UserNotFound("There's no user '$user'", 1);
+        if($this->checkUserExists($newname)) throw new UserAlreadyExists("The name '$newname' is already in use", 1);
+        $qr = $this->connection->query("UPDATE tb_users SET nm_user = \"$newname\" WHERE nm_user = \"$user\";");
+        unset($qr);
+    }
+    
+    public function chUserEmail(string $user, string $new_email){
+        /**
+         * Changes a user email in the database.
+         * @param string $user The user to change the email.
+         * @param string $email The new user email.
+         * @throws UserNotFound If the user don't exists in the database.
+         * @return void
+         */
+        $this->checkNotConnected();
+        if(!$this->checkUserExists($user)) throw new UserNotFound("There's no user '$user'", 1);
+        $qr = $this->connection->query("UPDATE tb_users SET vl_email = \"$new_email\" WHERE nm_user = \"$user\";");
+        unset($qr);
+    }
+    
+    public function chUserPasswd(string $user, string $new_passwd, bool $encode = true){
+        /**
+         * Changes the user password, but it need to be authenticated by the user password.
+         * @param string $user The user to change the password
+         * @param string $new_passwd The new password.
+         * @param bool $encode If the method will need to encode the password before updating it, if don't the password need to be encoded on base64
+         * @throws UserNotFound If there's no user such the selected in the database.
+         * @return void
+         */
+        $this->checkNotConnected();
+        if(!$this->checkUserExists($user)) throw new UserNotFound("There's no user '$user'", 1);
+        $to_db = $encode ? base64_encode($new_passwd) : $new_passwd;
+        $qr = $this->connection->query("UPDATE tb_users SET vl_password = \"$to_db\" WHERE nm_user = \"$user\";");
+        unset($qr);
+        unset($to_db);
+    }
+    
+    public function setUserChecked(string $user, bool $checked = true){
+        /**
+         * Sets if a user haves the email checked in the database.   
+         */
+    }
 }
 ?>
