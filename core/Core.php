@@ -339,5 +339,47 @@ class UsersData extends DatabaseConnection{
         $email = $usr_data['vl_email'];
         system("echo \"$content\" | mail -s \"Authenticate your email - LPGP\" $email");   // TODO: Trade for the mail method.
     }
+
+    public function qrUserByName(string $name_needle, bool $exactly = false){
+        /**
+         * Query all the users by the name.
+         * @param string $name_needle The string to search
+         * @param bool $exactly If the method will search for te exact string in the database.
+         * @return array  in that array will have all the names.
+         */
+        $this->checkNotConnected();
+        $arr = array();
+        if($exactly) $qr = $this->connection->query("SELECT nm_user FROM tb_users WHERE nm_user = \"$name_needle\";");
+        else $qr = $this->connection->query("SELECT nm_user FROM tb_users WHERE nm_user LIKE \"%$name_needle%\";");
+        while($row = $qr->fetch_array()) array_push($arr, $row['nm_user']);
+        return $arr;
+    }
+
+    public function qrUserByEmail(string $email_needle, bool $exactly = false){
+        /**
+         * Searchs all the users with a string in the email.
+         * @param string $email_needle The string to search on the email field
+         * @param bool $exactly Searchs for the exact string in the email.
+         * @return array
+         */
+        $this->checkNotConnected();
+        $arr = array();
+        if($exactly) $qr = $this->connection->query("SELECT nm_user FROM tb_users WHERE vl_email = \"$email_needle\";");
+        else $qr = $this->connection->query("SELECT nm_user FROM tb_users WHERE vl_email LIKE \"%$email_needle%\";");
+        while($row = $qr->fetch_aray()) array_push($arr, $row['nm_user']);
+        return $arr;
+    }
+
+    public function qrUserByKey(string $key_needle, bool $exactly = false){
+        /**
+         * Searches the user name by a string on him key, it'll be used at the web, but at the admin on the server.
+         * @param string $key_needle The string to search on the key field;
+         * @param bool $exactly If the search will be the exactly the string.
+         * @return array.
+         */
+        $this->checkNotConnected();
+        $arr = array();
+        if($exactly) $qr = $this->connection->query("SELECT nm_user FROM ")
+    }
 }
 ?>
