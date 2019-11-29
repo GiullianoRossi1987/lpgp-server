@@ -379,7 +379,31 @@ class UsersData extends DatabaseConnection{
          */
         $this->checkNotConnected();
         $arr = array();
-        if($exactly) $qr = $this->connection->query("SELECT nm_user FROM ")
+        if($exactly) $qr = $this->connection->query("SELECT nm_user FROM tb_users WHERE vl_key = \"$key_needle\";");
+        else $qr = $this->connection->query("SELECT nm_user FROM tb_users WHERE vl_key LIKE \"%$key_needle%\";");
+        while($row = $qr->fetch_array()) array_push($arr, $row['nm_user']);
+        return $arr;
     }
+}
+
+class ProprietariesData extends DatabaseConnection{
+    /**
+     * That class contains the main actions with the propriearies on the system.
+     * The main methods to manage the proprietaries accounts in the database are here.
+     */
+
+     private function checkProprietaryExists(string $nm_proprietary){
+         /**
+          * Checks if a proprietary account exists in the database.
+          * @param string $nm_proprietary The name of the proprietary to search.
+          * @return bool
+          */
+          $this->checkNotConnected();
+          $qr = $this->connection->query("SELECT nm_proprietary FROM tb_proprietaries WHERE nm_proprietary = \"$nm_proprietary\";");
+          while($row = $qr->fetch_array()){
+              if($row['nm_proprietary'] == $nm_proprietary) return true;
+          }
+          return false;
+     }
 }
 ?>
