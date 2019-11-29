@@ -296,7 +296,48 @@ class UsersData extends DatabaseConnection{
     public function setUserChecked(string $user, bool $checked = true){
         /**
          * Sets if a user haves the email checked in the database.   
+	     */
+	    $this->checkNotConnected();
+        if(!$this->checkUserExists($user)) throw new UserNotFound("There's no user '$user'!", 1);
+        $to_db = $checked ? 1 : 0;
+        $qr = $this->connection->query("UPDATE tb_users SET checked = $to_db WHERE nm_user = \"$user\";");
+        unset($qr);
+        unset($to_db);
+    }
+
+    public function checkUserCheckedEmail(string $user){
+        /**
+         * Checks if the user haves the email checked on the database.
+         * Checking the field 'checked' on the MySQL Database.
+         * @param string $user The user to check
+         * @throws UserNotFound If the user don't exists
+         * @return bool
          */
+        $this->checkNotConnected();
+        if(!$this->checkUserExists($user)) throw new UserNotFound("There's no user '$user'!", 1);
+        $usr_data = $this->connection->query("SELECT checked FROM tb_users WHERE nm_user = \"$user\";")->fetch_array();
+        return $usr_data['checked'] == 1;
+    }
+
+
+    public function sendCheckEmail(string $user){
+        /**
+         * Sends a email to the selected user.
+         * That email will contain the users key storaged on the database.
+         * @param string $user The user to send the checking email
+         * @throws UserNotFound If the selected/referencied user don't exists.
+         * @return bool
+         */
+        $this->checkNotConnected();
+        if(!$this->checkUserExists($user)) throw new UserNotFound("There's no user '$user'!", 1);
+        $usr_data = $this->connection->query("SELECT vl_key, vl_email FROM tb_users WHERE nm_user = \"$user\";")->fetch_array();
+        if($this->checkUserCheckedEmail($user)) return true;  // will end the execution
+        $content = "Welcome user " . $user . "!\n";
+        $content .= "Your account is about to beeing completed, but first you'll need to be authenticated.\n";
+        $content .= "To finish your account setting up, make login and put the code: " . $usr_data['vl_key'] . "\n After that your account will be finished.\n";
+        $content .= "Attensioulsy the LPGP Team.";
+        $email = $usr_data['vl_email'];
+        system("echo \"$content\" | mail -s \"Authenticate your email - LPGP\" $email");   // TODO: Trade for the mail method.
     }
 }
 ?>
