@@ -99,6 +99,8 @@ class UsersData extends DatabaseConnection{
      * @const DATETIME_FORMAT The format for the date in the database.
      */
     const DATETIME_FORMAT = "H:m:i Y-M-d";
+    const EMAIL_USING     = "lpgp@gmail.com";
+    const TEMPLATE_USING  = "/var/www/html/lpgp-server/core/template-email.html";
 
     public function __construct(string $usr, string $passwd, string $host = DEFAULT_HOST, string $db = DEFAULT_DB){
         /**
@@ -319,6 +321,17 @@ class UsersData extends DatabaseConnection{
         return $usr_data['checked'] == 1;
     }
 
+    public function fetchTemplateEmail(string $user, string $key){
+        /**
+         * That function returns the content of the email template to send in HTML.
+         * Wich template will be used to send the checking email, it will replace
+         * The username and the user key.
+         *
+         * @param string $user
+         * @return void
+         */
+    }
+
 
     public function sendCheckEmail(string $user){
         /**
@@ -333,11 +346,9 @@ class UsersData extends DatabaseConnection{
         $usr_data = $this->connection->query("SELECT vl_key, vl_email FROM tb_users WHERE nm_user = \"$user\";")->fetch_array();
         if($this->checkUserCheckedEmail($user)) return true;  // will end the execution
         $content = "Welcome user " . $user . "!\n";
-        $content .= "Your account is about to beeing completed, but first you'll need to be authenticated.\n";
-        $content .= "To finish your account setting up, make login and put the code: " . $usr_data['vl_key'] . "\n After that your account will be finished.\n";
-        $content .= "Attensioulsy the LPGP Team.";
+        
         $email = $usr_data['vl_email'];
-        system("echo \"$content\" | mail -s \"Authenticate your email - LPGP\" $email");   // TODO: Trade for the mail method.
+        // return mail();
     }
 
     public function qrUserByName(string $name_needle, bool $exactly = false){
