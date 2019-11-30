@@ -327,9 +327,13 @@ class UsersData extends DatabaseConnection{
          * Wich template will be used to send the checking email, it will replace
          * The username and the user key.
          *
-         * @param string $user
-         * @return void
+         * @param string $user The user that the server will send the email.
+         * @param string $key The user key, storaged at the database.
+         * @return string
          */
+        $raw_content = file_get_contents(self::TEMPLATE_USING);
+        $cont1 = str_replace("%user%", $user, $raw_content);
+        return str_replace("%key%", $key, $cont1);
     }
 
 
@@ -345,10 +349,12 @@ class UsersData extends DatabaseConnection{
         if(!$this->checkUserExists($user)) throw new UserNotFound("There's no user '$user'!", 1);
         $usr_data = $this->connection->query("SELECT vl_key, vl_email FROM tb_users WHERE nm_user = \"$user\";")->fetch_array();
         if($this->checkUserCheckedEmail($user)) return true;  // will end the execution
-        $content = "Welcome user " . $user . "!\n";
-        
-        $email = $usr_data['vl_email'];
-        // return mail();
+        $headers = "MIME-Version: 1.0\n";
+        $headers .= "Content-Type: text/html; charset=iso-8859-1\n";
+        $headers .= "From: " . self::EMAIL_USING . "\n";
+        $headers .= "Cc: " . $usr_data['vl_email'] . "\n";
+        $content = $this->fetchTemplateEmail($user, $usr_data['vl_key']);
+        return mail($usr_data['vl_email'], "Your LPGP account!", $content, $headers);
     }
 
     public function qrUserByName(string $name_needle, bool $exactly = false){
