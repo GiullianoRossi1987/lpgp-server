@@ -407,7 +407,12 @@ class ProprietariesData extends DatabaseConnection{
     /**
      * That class contains the main actions with the propriearies on the system.
      * The main methods to manage the proprietaries accounts in the database are here.
+     * The constants are the same then the in UsersData class
      */
+
+    const DATETIME_FORMAT = "H:m:i Y-M-d";
+    const EMAIL_USING     = "lpgp@gmail.com";
+    const TEMPLATE_USING  = "/var/www/html/lpgp-server/core/template-email.html";
 
      private function checkProprietaryExists(string $nm_proprietary){
          /**
@@ -421,6 +426,224 @@ class ProprietariesData extends DatabaseConnection{
               if($row['nm_proprietary'] == $nm_proprietary) return true;
           }
           return false;
+     }
+
+
+    public function checkProprietaryKeyExists(string $key){
+        /**
+         * Checks if a key already haves a user, important to checking user key with email and for the creation of another key.
+         * @param string $key The key to search.
+         * @author Giulliano Rossi <giulliano.scatalon.rossi@gmail.com>
+         * @return bool
+         */
+        $this->checkNotConnected();
+        $qr_wt = $this->connection->query("SELECT vl_key FROM tb_proprietaries WHERE vl_key = \"$key\";");
+        while($row = $qr_wt->fetch_array()){
+            if($row['vl_key'] == $key) return true;
+        }
+        unset($qr_wt);
+        return false;
+    }
+
+    public function createProprietaryKey(){
+        /**
+         * Generate a user key for the database.
+         * @return void
+         */
+        $rand_len = mt_rand(5, 255);
+        $key = "";
+        while(true){
+            $arr = [];
+            for($i = 0; $i <= $rand_len; $i++){
+                $rand = mt_rand(33, 126);
+                array_push(ord($rand));
+                unset($rand);   // maybe removed after
+            }
+            $key = implode("", $arr);
+            if(!$this->checkPropreitaryKeyExists($key)) return $key;
+            else continue;
+        }
+    }
+
+     public function authPasswd(string $proprietary, string $password, bool $encoded_password = true){
+         /**
+          * Authenticates a proprietary user password, that will be used for every thing, even the user data change.
+          *
+          * @param string $proprietary The proprietary user to authenticate the password.
+          * @param string $password The proprietary password, from a input.
+          * @param bool $encoded_password If the password is enconded at the database, by default yes.
+          * @throws ProprietaryNotFound If the selected proprietary don't exists.
+          * @return bool
+          */
+        $this->checkNotConnected();
+        if(!$this->checkProprietaryExists($proprietary)) throw new ProprietaryNotFound("There's no proprietary user '$proprietary'!", 1);
+        $prop_data = $this->connection->query("SELECT vl_password FROM tb_proprietaries WHERE nm_proprietary = \"$proprietary\";")->fetch_array();
+        $from_db = $encoded_password ? base64_decode($prop_data['vl_password']) : $prop_data['vl_password'];
+        return $password == $from_db;
+     }
+
+     public function login(string $proprietary, string $password, bool $encoded_password = true){
+         /**
+          * Makes the authentication and sets the $_SESSION keys to do the login.
+          * Just like the UsersData->login function.
+          *
+          * @param string $proprietary The proprietary that will do the login.
+          * @param string $password The password received from the input at the form
+          * @param bool $encoded_password If the password is encoded at the database.
+          * @throws ProprietaryNotFound If there's no proprietary such the selected
+          * @throws AuthenticationError If the password's incorrect
+          * @return void
+          */
+        $this->checkNotConnected();
+        $auth = $this->authPasswd($proprietary, $password, $encoded_password);
+        if(!$auth) throw new AuthenticationError("Invalid password", 1);
+        // in authenticate case
+        $_SESSION['user'] = $proprietary;
+        $_SESSION['mode'] = "prop";
+        $_SESSION['user-logged'] = "true";
+        unset($auth);   // min use of memory
+     }
+
+     public function logoff(){
+         /**
+          * Does the same thing the logoff method at the UsersData.
+          * @return void;
+          */
+        $_SESSION['user-logged'] = "false";
+        $_SESSION['user'] = "";
+        $_SESSION['mode'] = "";
+     }
+
+     public function addProprietary(string $prop_name, string $password, string $email, bool $encode_password = true){
+         /**
+          * Adds a proprietary account in the database, that will be automaticly commited to the MySQL database.
+          * @param string $prop_name The proprietary account name.
+          * @param string $password The account password.
+          * @param bool $encode_password If the method will encode the password before going to the database, if don't the password need to be in bas64.
+          * @throws ProprietaryAlreadyExists If there's a proprietary with that name already.
+          * @return void
+          */
+        $this->checkNotConnected();
+        if(!$this->checkProprietaryExists($prop_name)) throw new ProprietaryAlreadyExists("There's the proprietary '$prop_name' already", 1);
+        $to_db = $encode_password ? base64_encode($password) : $password;
+        $prop_key = $this->createProprietaryKey();
+        $qr = $this->connection->query("INSERT INTO tb_proprietaries (nm_proprietary, vl_email, vl_password, vl_key) VALUES (\"$prop_name\", \"$email\", \"$to_db\", \"$prop_key\");");
+        unset($to_db);
+        unset($qr);
+     }
+
+     public function delProprietary(string $proprietary){
+         /**
+          * Removes a proprietary account from the database.
+          * @param string $proprietary The account name to remove.
+          * @throws ProprietaryNotFound If the proprietary selected don't exists
+          * @return void
+          */
+        $this->checkNotConnected();
+        if(!$this->checkProprietaryExists($proprietary)) throw new ProprietaryNotFound("There's no proprietary account '$proprietary'", 1);
+        $qr_del = $this->connection->query("DELETE FROM tb_proprietaries WHERE nm_proprietary = \"$proprietary\";");
+        unset($qr_del);
+     }
+
+     public function chProprietaryName(string $proprietary, string $new_name){
+         /**
+          * Changes a proprietary account name.
+          * @param string $proprietary The proprietary account to change the name (name)
+          * @param string $new_name The new account name
+          * @throws ProprietaryNotFound If the proprietary selected don't exists in the database.
+          * @throws ProprietaryAlreadyExists If the new name is already beeing used by another account.
+          * @return void
+          */
+        $this->checkNotConnected();
+        if(!$this->checkProprietaryExists($proprietary)) throw new ProprietaryNotFound("There's no proprietary account '$proprietary'", 1);
+        if($this->checkProprietaryExists($new_name)) throw new ProprietaryAlreadyExists("The name '$new_name' is already in use, choose another", 1);
+        $qr_ch = $this->connection->query("UPDATE tb_proprietaries SET nm_proprietary = \"$new_name\" WHERE nm_proprietary = \"$proprietary\";");
+        unset($qr_ch);
+     }
+
+     public function chProprietaryEmail(string $proprietary, string $new_email){
+         /**
+          * Changes a proprietary email account.
+          * 
+          * @param string $proprietary The proprietary to change the email.
+          * @param string $new_email The new value for the email
+          * @throws ProprietaryNotFound If the proprietary selected don't exists in the database
+          * @return void
+          */
+        $this->checkNotConnected();
+        if(!$this->checkProprietaryExists($proprietary)) throw new ProprietaryNotFound("There's no proprietary '$proprietary'", 1);
+        $qr_ch = $this->connection->query("UPDATE tb_proprietaries SET vl_email = \"$new_email\" WHERE nm_proprietary = \"$proprietary\";");
+        unset($qr_ch);
+     }
+
+     public function chProprietaryPasswd(string $proprietary, string $new_passwd, bool $encode_passwd = true){
+         /**
+          * Changes a proprietary account password, but remember to use it after the authentication (obviously)
+          *
+          * @param string $proprietary The proprietary to change the password.
+          * @param string $new_passwd The new account password
+          * @param bool $encode_passwd If the method will encode the password in base64
+          * @throws ProprietaryNotFound If the selected account ($proprietary) don't exists
+          * @return void
+          */
+        $this->checkNotConnected();
+        if(!$this->checkProprietaryExists($proprietary)) throw new ProprietaryNotFound("There's no proprietary '$proprietary'", 1);
+        $to_db = $encode_passwd ? base64_encode($new_passwd) : $new_passwd;
+        $qr_ch = $this->connection->query("UPDATE tb_proprietaries SET vl_password = \"$to_db\" WHERE nm_proprietary = \"$proprietary\";");
+        unset($to_db);
+        unset($qr_ch);
+     }
+
+     public function setProprietaryChecked(string $proprietary, bool $checked = true){
+         /**
+          * Changes the field checked, used when the key was sended and used at the email. Or when he changes him email.
+          * 
+          * @param string $proprietary The proprietary to change the info.
+          * @param bool   $checked     If the email was checked already.
+          * @throws ProprietaryNotFound If the choosed account don't exists in the database.
+          * @return void
+          */
+        $this->checkNotConnected();
+        if(!$this->checkProprietaryExists($proprietary)) throw new ProprietaryNotFound("There's no proprietary '$proprietary'", 1);
+        $checked_vl = $checked ? 1: 0;
+        $qr_ch = $this->connection->query("UPDATE tb_proprietaries SET checked = $checked_vl WHERE nm_proprietary = \"$proprietary\";");
+        unset($checked_vl);
+        unset($qr_ch);
+     }
+
+     public function parseHTMLTemplateEmailK(string $prop, string $key, string $path = self::TEMPLATE_USING){
+         /**
+          * Sets special names on the HTML file to be used to send the email with the login key.
+          * On the HTML file the special names useds are:
+          *     * %user% => The proprietary using (or any another user)
+          *     * %key% => The account key.
+          * @param string $prop The proprietary name to stay on the %user%
+          * @param string $key  The proprietary key
+          * @return string
+          */
+        $content = file_get_contents($path);
+        $r1_content = str_replace("%user%", $prop, $content);
+        return str_replace("%key%", $key, $r1_content);
+     }
+
+     public function sendCheckEmail(string $proprietary){
+         /**
+          * That function sends  a email with the code to the proprietary email. That uses the method mail, and requires the SMTP of the GMAIL.
+          * Also that function calls a method to convert the HTML file to the content. 
+          * 
+          * @param string $proprietary The proprietary to get the data and send the email.
+          * @throws ProprietaryNotFound If the selected proprietary don't exists in the database.
+          * @return bool If the email was sended, or if the account already checked the email.
+          */
+        $this->checkNotConnected();
+        if(!$this->checkProprietaryExists($proprietary)) throw new ProprietaryNotFound("There's no proprietary account '$proprietary'", 1);
+        $prop_dt = $this->connection->query("SELECT vl_key, checked, vl_email FROM tb_proprietaries WHERE nm_proprietary = \"$proprietary\";")->fetch_array();
+        $content = $this->parseHTMLTemplateEmailK($proprietary, $prop_dt['vl_key']);
+        $headers = "MIME-Version: 1.0\n";
+        $headers .= "Content-type: text/html; charset=iso-8859-1\n";
+        $headers .= "From: " . self::EMAIL_USING . "\n";
+        $headers .= "Cc: " . $prop_dt['vl_email'] . "\n";
+        return mail($prop_dt['vl_email'], "Your LPGP key!", $content, $headers);
      }
 }
 ?>
