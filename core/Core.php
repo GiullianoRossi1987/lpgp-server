@@ -465,7 +465,7 @@ class ProprietariesData extends DatabaseConnection{
         }
     }
 
-     public function authPasswd(string $proprietary, string $password, bool $encoded_password = true){
+    public function authPasswd(string $proprietary, string $password, bool $encoded_password = true){
          /**
           * Authenticates a proprietary user password, that will be used for every thing, even the user data change.
           *
@@ -482,7 +482,7 @@ class ProprietariesData extends DatabaseConnection{
         return $password == $from_db;
      }
 
-     public function login(string $proprietary, string $password, bool $encoded_password = true){
+    public function login(string $proprietary, string $password, bool $encoded_password = true){
          /**
           * Makes the authentication and sets the $_SESSION keys to do the login.
           * Just like the UsersData->login function.
@@ -504,7 +504,7 @@ class ProprietariesData extends DatabaseConnection{
         unset($auth);   // min use of memory
      }
 
-     public function logoff(){
+    public function logoff(){
          /**
           * Does the same thing the logoff method at the UsersData.
           * @return void;
@@ -514,7 +514,7 @@ class ProprietariesData extends DatabaseConnection{
         $_SESSION['mode'] = "";
      }
 
-     public function addProprietary(string $prop_name, string $password, string $email, bool $encode_password = true){
+    public function addProprietary(string $prop_name, string $password, string $email, bool $encode_password = true){
          /**
           * Adds a proprietary account in the database, that will be automaticly commited to the MySQL database.
           * @param string $prop_name The proprietary account name.
@@ -532,7 +532,7 @@ class ProprietariesData extends DatabaseConnection{
         unset($qr);
      }
 
-     public function delProprietary(string $proprietary){
+    public function delProprietary(string $proprietary){
          /**
           * Removes a proprietary account from the database.
           * @param string $proprietary The account name to remove.
@@ -545,7 +545,7 @@ class ProprietariesData extends DatabaseConnection{
         unset($qr_del);
      }
 
-     public function chProprietaryName(string $proprietary, string $new_name){
+    public function chProprietaryName(string $proprietary, string $new_name){
          /**
           * Changes a proprietary account name.
           * @param string $proprietary The proprietary account to change the name (name)
@@ -561,7 +561,7 @@ class ProprietariesData extends DatabaseConnection{
         unset($qr_ch);
      }
 
-     public function chProprietaryEmail(string $proprietary, string $new_email){
+    public function chProprietaryEmail(string $proprietary, string $new_email){
          /**
           * Changes a proprietary email account.
           * 
@@ -576,7 +576,7 @@ class ProprietariesData extends DatabaseConnection{
         unset($qr_ch);
      }
 
-     public function chProprietaryPasswd(string $proprietary, string $new_passwd, bool $encode_passwd = true){
+    public function chProprietaryPasswd(string $proprietary, string $new_passwd, bool $encode_passwd = true){
          /**
           * Changes a proprietary account password, but remember to use it after the authentication (obviously)
           *
@@ -594,7 +594,7 @@ class ProprietariesData extends DatabaseConnection{
         unset($qr_ch);
      }
 
-     public function setProprietaryChecked(string $proprietary, bool $checked = true){
+    public function setProprietaryChecked(string $proprietary, bool $checked = true){
          /**
           * Changes the field checked, used when the key was sended and used at the email. Or when he changes him email.
           * 
@@ -611,7 +611,7 @@ class ProprietariesData extends DatabaseConnection{
         unset($qr_ch);
      }
 
-     public function parseHTMLTemplateEmailK(string $prop, string $key, string $path = self::TEMPLATE_USING){
+    public function parseHTMLTemplateEmailK(string $prop, string $key, string $path = self::TEMPLATE_USING){
          /**
           * Sets special names on the HTML file to be used to send the email with the login key.
           * On the HTML file the special names useds are:
@@ -626,7 +626,7 @@ class ProprietariesData extends DatabaseConnection{
         return str_replace("%key%", $key, $r1_content);
      }
 
-     public function sendCheckEmail(string $proprietary){
+    public function sendCheckEmail(string $proprietary){
          /**
           * That function sends  a email with the code to the proprietary email. That uses the method mail, and requires the SMTP of the GMAIL.
           * Also that function calls a method to convert the HTML file to the content. 
@@ -645,5 +645,110 @@ class ProprietariesData extends DatabaseConnection{
         $headers .= "Cc: " . $prop_dt['vl_email'] . "\n";
         return mail($prop_dt['vl_email'], "Your LPGP key!", $content, $headers);
      }
+
+    public function qrPropByName(string $name_needle, bool $exactly = false){
+         /**
+          * Searches in the database for a proprietary with a name like a string or a name exactly equal a string.
+          * 
+          * @param string $name_needle The string to search in the names.
+          * @param bool $exactly If will be for the exactly equal names.
+          * @return array
+          */
+        $this->checkNotConnected();
+        $results = array();
+        if($exactly) $qr = $this->connection->query("SELECT nm_proprietary FROM tb_proprietaries WHERE nm_proprietary = \"$name_needle\";");
+        else $qr = $this->connection->querY("SELECT nm_proprietary FROM tb_proprietaries WHERE nm_proprietary LIKE  \"%$name_needle%\";");
+        while($row = $qr->fetch_array()) array_push($results, $row['nm_proprietary']);
+        return $results;
+     }
+
+    public function qrPropByEmail(string $email_needle, bool $exactly = false){
+         /**
+          * Searches a proprietary for a string in the email field at the database.
+          *
+          * @param string $email_needle The string to search at the email.
+          * @param bool $exactly If will search for the exactly string in the database.
+          * @return array
+          */
+        $this->checkNotConnected();
+        $results = array();
+        if($exactly) $qr = $this->connection->query("SELECT nm_proprietary FROM tb_proprietaries WHERE vl_email = \"$email_needle\";");
+        else $qr = $this->connection->query("SELECT nm_proprietary FROM tb_proprietaries WHERE vl_email LIKE \"%$email_needle%\";");
+        while($row = $qr->fetch_array()) array_push($results, $row['nm_proprietary']);
+        return $results;
+     }
+    // TODO: Finish the querys 
+    
+}
+
+class SignaturesData extends DatabaseConnection{
+    /**
+     * That class contains all the uses of the signatures and signatures files.
+     * 
+     * @const string|int VERSION_ACT The version the signature will be storaged.
+     * @const string|int VERSION_MIN The minimal version accepted.
+     * @const array      VERSION_ALL The allowed versions of reading.
+     */
+    const VERSION_ACT = "alpha";
+    const VERSION_MIN = "alpha";
+    const VERSION_ALL = ["alpha"];
+
+    private function checkSignatureExists(int $signature_id){
+        /**
+         * Checks if a signature exists in the database. It uses the PK at the database.
+         * 
+         * @param int $signature_id The PK for search.
+         * @return bool
+         */
+        $this->checkNotConnected();
+        $qr = $this->connection->query("SELECT cd_signature FROM tb_signatures WHERE cd_signature = $signature_id;");
+        while($row = $qr->fetch_array()){
+            if($row['cd_signature'] == $signature_id || $row['cd_signature'] == "" . $signature_id) return true;
+        }
+        unset($qr);
+        return false;
+    }
+
+    public static function generateFileNm(int $initial_counter = 0){
+        /**
+         * Creates a filename for the signature file. 
+         *
+         * @param int $initial_counter The first contage of the filename (signature-file-$initial_counter)
+         * @return string
+         */
+        $local_counter = $initial_counter;
+        while(true){
+            if(!file_exists("/var/www/html/lpgp-server/signatures.d/signature-file-". $local_counter)) break;
+            else $local_counter++;
+        }
+        return "signature-file-".$local_counter;
+    }
+
+    public function createsSignatureFile(int $signature_id, bool $HTML_mode = false){
+        /**
+         * Creates a signature file and return it link to the file.
+         * 
+         * @param string $signature_id The PK on the database.
+         * @param bool $HTML_mode If the method will return a HTML <a>
+         * @throws SignatureNotFound If there's no such PK in the database.
+         * @return string
+         */
+        $this->checkNotConnected();
+        if(!$this->checkSignatureExists($signature_id)) throw new SignatureNotFound("There's no signature #$signature_id !", 1);
+        $sig_dt = $this->connection->query("SELECT prop.nm_proprietary, sig.vl_password, sig.vl_code FROM tb_signatures as sig INNER JOIN tb_proprietaries AS prop ON prop.cd_proprietary = sig.id_proprietary WHERE sig.cd_signature = $signature_id;")->fetch_array();
+        $content = array(
+            "Version" => self::VERSION_ACT,
+            "Proprietary" => $sig_dt['nm_proprietary'],
+            "Code" => $sig_dt['vl_code'],
+            "Signature" => $sig_dt['vl_password']
+        );   // encoded on JSON format after
+        $to_json = json_encode($content);
+        $arr_ord = array();
+        for($char = 0; $char < strlen($to_json); $char++) array_push($arr_ord, "" . ord($to_json[$char]));
+        $content_file = implode("", $arr_ord);
+        $file_name = $this->generateFileNm(0);
+        file_put_contents("/var/www/html/lpgp-server/signatures.d/".$file_name, $content_file);
+        return $HTML_mode ? "<a href=\"/var/www/html/lpgp-server/signatures.d/$file_name\">Get your signature #$signature_id here!</a>" : "/var/www/html/lpgp-server/signatures.d/$file_name";
+    }
 }
 ?>
