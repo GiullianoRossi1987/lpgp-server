@@ -1,7 +1,7 @@
 <?php
 namespace Core;
 
-require_once "/var/www/html/lpgp-server/core/Exceptions.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Exceptions.php";
 // add the logs manager after.
 
 // Session system.
@@ -27,10 +27,12 @@ use ProprietariesExceptions\ProprietaryAlreadyExists;
 use SignaturesExceptions\InvalidSignatureFile;
 use SignaturesExceptions\SignatureAuthError;
 use SignaturesExceptions\SignatureNotFound;
+use SignaturesExceptions\SignatureFileNotFound;
 
 
 define("DEFAULT_HOST", "localhost");
 define("DEFAULT_DB", "LPGP_WEB");
+define("ROOT_VAR", $_SERVER['DOCUMENT_ROOT']);
 class DatabaseConnection{
     /**
      * That class contains the main connection to the database and him universal actions,
@@ -100,7 +102,6 @@ class UsersData extends DatabaseConnection{
      */
     const DATETIME_FORMAT = "H:m:i Y-M-d";
     const EMAIL_USING     = "lpgp@gmail.com";
-    const TEMPLATE_USING  = "/var/www/html/lpgp-server/core/template-email.html";
 
     public function __construct(string $usr, string $passwd, string $host = DEFAULT_HOST, string $db = DEFAULT_DB){
         /**
@@ -331,7 +332,7 @@ class UsersData extends DatabaseConnection{
          * @param string $key The user key, storaged at the database.
          * @return string
          */
-        $raw_content = file_get_contents(self::TEMPLATE_USING);
+        $raw_content = file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/template-email.html");
         $cont1 = str_replace("%user%", $user, $raw_content);
         return str_replace("%key%", $key, $cont1);
     }
@@ -412,7 +413,6 @@ class ProprietariesData extends DatabaseConnection{
 
     const DATETIME_FORMAT = "H:m:i Y-M-d";
     const EMAIL_USING     = "lpgp@gmail.com";
-    const TEMPLATE_USING  = "/var/www/html/lpgp-server/core/template-email.html";
 
      private function checkProprietaryExists(string $nm_proprietary){
          /**
@@ -611,7 +611,7 @@ class ProprietariesData extends DatabaseConnection{
         unset($qr_ch);
      }
 
-    public function parseHTMLTemplateEmailK(string $prop, string $key, string $path = self::TEMPLATE_USING){
+    public function parseHTMLTemplateEmailK(string $prop, string $key, string $path){
          /**
           * Sets special names on the HTML file to be used to send the email with the login key.
           * On the HTML file the special names useds are:
@@ -638,7 +638,7 @@ class ProprietariesData extends DatabaseConnection{
         $this->checkNotConnected();
         if(!$this->checkProprietaryExists($proprietary)) throw new ProprietaryNotFound("There's no proprietary account '$proprietary'", 1);
         $prop_dt = $this->connection->query("SELECT vl_key, checked, vl_email FROM tb_proprietaries WHERE nm_proprietary = \"$proprietary\";")->fetch_array();
-        $content = $this->parseHTMLTemplateEmailK($proprietary, $prop_dt['vl_key']);
+        $content = $this->parseHTMLTemplateEmailK($proprietary, $prop_dt['vl_key'], $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/template-email.html");
         $headers = "MIME-Version: 1.0\n";
         $headers .= "Content-type: text/html; charset=iso-8859-1\n";
         $headers .= "From: " . self::EMAIL_USING . "\n";
@@ -684,6 +684,8 @@ class ProprietariesData extends DatabaseConnection{
 class SignaturesData extends DatabaseConnection{
     /**
      * That class contains all the uses of the signatures and signatures files.
+     * The uploaded files stay at the directory ./usignatures.d and the downloadeble files stay at
+     * the directory ./signatures.d
      * 
      * @const string|int VERSION_ACT The version the signature will be storaged.
      * @const string|int VERSION_MIN The minimal version accepted.
@@ -718,10 +720,11 @@ class SignaturesData extends DatabaseConnection{
          */
         $local_counter = $initial_counter;
         while(true){
-            if(!file_exists("/var/www/html/lpgp-server/signatures.d/signature-file-". $local_counter)) break;
+            if(!file_exists($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/signatures.d/signature-file-". $local_counter . ".lpgp")) 
+                break;
             else $local_counter++;
         }
-        return "signature-file-".$local_counter;
+        return "signature-file-".$local_counter . ".lpgp";
     }
 
     public function createsSignatureFile(int $signature_id, bool $HTML_mode = false){
@@ -747,8 +750,35 @@ class SignaturesData extends DatabaseConnection{
         for($char = 0; $char < strlen($to_json); $char++) array_push($arr_ord, "" . ord($to_json[$char]));
         $content_file = implode("", $arr_ord);
         $file_name = $this->generateFileNm(0);
-        file_put_contents("/var/www/html/lpgp-server/signatures.d/".$file_name, $content_file);
-        return $HTML_mode ? "<a href=\"/var/www/html/lpgp-server/signatures.d/$file_name\">Get your signature #$signature_id here!</a>" : "/var/www/html/lpgp-server/signatures.d/$file_name";
+        $root = $_SERVER['DOCUMENT_ROOT'];
+        file_put_contents( $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/signatures.d/".$file_name, $content_file);
+        return $HTML_mode ? "<a href=\"$root/lpgp-server/signatures.d/$file_name\">Get your signature #$signature_id here!</a>" : "$root/lpgp-server/signatures.d/$file_name";
+    }
+
+
+    private static function checkFileValid(string $file_name){
+        /**
+         * Checks if the signature file is a .lpgp file.
+         *
+         * @param string $file_name The file to verify
+         * @return bool
+         */
+        $sp = explode(".", $file_name);
+        return $sp[count($sp) - 1] == "lpgp";
+    }
+
+    public function checkSignatureFile(string $file_name){
+        /**
+         * Checks a uploaded signature file. It needs to have the extension .lpgp.
+         * All the uploaded signatures files stay at the usignatures.d.
+         * 
+         * @param string $file_path The signature file uploaded path.
+         * @throws 
+         */
+        $this->checkNotConnected();
+        if(!$this->checkFileValid($file_name)) throw new InvalidSignatureFile("", 1);
+        if(!file_exists($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/usignatures.d/$file_name")) throw new SignatureFileNotFound("There's no file '$file_name' on the uploaded signatures folder.", 1);
+
     }
 }
 ?>
