@@ -18,7 +18,7 @@ use UsersSystemExceptions\UserAlreadyExists;
 use UsersSystemExceptions\UserNotFound;
 use UsersSystemExceptions\UserKeyNotFound;
 
-use ProprietariesExceptions\ProprietaryKey;
+use ProprietariesExceptions\ProprietaryKeyNotFound;
 use ProprietariesExceptions\AuthenticationError;
 use ProprietariesExceptions\InvalidProprietaryName;
 use ProprietariesExceptions\ProprietaryNotFound;

@@ -97,6 +97,12 @@ namespace SignaturesExceptions{
             return "The signature file '$file_name' don't exists at \"$dft_path\"";
         }
     }
+
+    class VersionError extends Exception{
+        public function showMessage(string $version, string $a_version){
+            return "The version used by the file is not allowed. The file version is $version, the recent allowed version is $a_version. {line: " . $this->getLine() . "}";
+        }
+    }
 }
 
 ?>
