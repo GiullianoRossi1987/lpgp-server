@@ -696,6 +696,8 @@ class SignaturesData extends DatabaseConnection{
     const VERSION_MIN = "alpha";
     const VERSION_ALL = ["alpha"];
     const CODES       = ["md5", "base64", "sha256"];
+    const DELIMITER   = "/";
+
 
     private function checkSignatureExists(int $signature_id){
         /**
@@ -729,7 +731,7 @@ class SignaturesData extends DatabaseConnection{
         return "signature-file-".$local_counter . ".lpgp";
     }
 
-    public function createsSignatureFile(int $signature_id, bool $HTML_mode = false){
+    public function createsSignatureFile(int $signature_id, bool $HTML_mode = false, string $file_name){
         /**
          * Creates a signature file and return it link to the file.
          * 
@@ -750,11 +752,10 @@ class SignaturesData extends DatabaseConnection{
         $to_json = json_encode($content);
         $arr_ord = array();
         for($char = 0; $char < strlen($to_json); $char++) array_push($arr_ord, "" . ord($to_json[$char]));
-        $content_file = implode("", $arr_ord);
-        $file_name = $this->generateFileNm(0);
+        $content_file = implode(self::DELIMITER, $arr_ord);
         $root = $_SERVER['DOCUMENT_ROOT'];
-        file_put_contents( $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/signatures.d/".$file_name, $content_file);
-        return $HTML_mode ? "<a href=\"$root/lpgp-server/signatures.d/$file_name\">Get your signature #$signature_id here!</a>" : "$root/lpgp-server/signatures.d/$file_name";
+        file_put_contents($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/signatures.d/" . $file_name, $content_file);
+        return $HTML_mode ? "<a href=\"http://localhost/lpgp-server/signatures.d/$file_name\" download>Get your signature #$signature_id here!</a>" : "$root/lpgp-server/signatures.d/$file_name";
     }
 
 
@@ -785,8 +786,9 @@ class SignaturesData extends DatabaseConnection{
         if(!$this->checkFileValid($file_name)) throw new InvalidSignatureFile("", 1);
         if(!file_exists($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/usignatures.d/$file_name")) throw new SignatureFileNotFound("There's no file '$file_name' on the uploaded signatures folder.", 1);
         $content_file = file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/usignatures.d/" . $file_name);
+        $sp_content = explode(self::DELIMITER, $content_file);
         $ascii_none = array();
-        for($i = 0; $i <= strlen($content_file); $i++) array_push($ascii_none, chr($content_file[$i]));
+        for($i = 0; $i <= count($sp_content); $i++) array_push($ascii_none, chr($content_file[$i]));
         $ascii_none_str = implode("", $ascii_none);
         $json_arr = json_decode($ascii_none_str);
         if(!in_array($json_arr['Version'], self::VERSION_ALL)) throw new VersionError("The version used by the file is not valid!", 1);
@@ -831,4 +833,7 @@ class SignaturesData extends DatabaseConnection{
         unset($to_db);
     }
 }
+
+$teste = new SignaturesData("giulliano_php", "");
+
 ?>
