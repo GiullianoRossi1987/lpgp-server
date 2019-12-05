@@ -28,6 +28,7 @@ use SignaturesExceptions\InvalidSignatureFile;
 use SignaturesExceptions\SignatureAuthError;
 use SignaturesExceptions\SignatureNotFound;
 use SignaturesExceptions\SignatureFileNotFound;
+use SignaturesExceptions\VersionError;
 
 
 define("DEFAULT_HOST", "localhost");
@@ -384,7 +385,7 @@ class UsersData extends DatabaseConnection{
         $arr = array();
         if($exactly) $qr = $this->connection->query("SELECT nm_user FROM tb_users WHERE vl_email = \"$email_needle\";");
         else $qr = $this->connection->query("SELECT nm_user FROM tb_users WHERE vl_email LIKE \"%$email_needle%\";");
-        while($row = $qr->fetch_aray()) array_push($arr, $row['nm_user']);
+        while($row = $qr->fetch_array()) array_push($arr, $row['nm_user']);
         return $arr;
     }
 
@@ -460,7 +461,7 @@ class ProprietariesData extends DatabaseConnection{
                 unset($rand);   // maybe removed after
             }
             $key = implode("", $arr);
-            if(!$this->checkPropreitaryKeyExists($key)) return $key;
+            if(!$this->checkProprietaryKeyExists($key)) return $key;
             else continue;
         }
     }
@@ -694,6 +695,7 @@ class SignaturesData extends DatabaseConnection{
     const VERSION_ACT = "alpha";
     const VERSION_MIN = "alpha";
     const VERSION_ALL = ["alpha"];
+    const CODES       = ["md5", "base64", "sha256"];
 
     private function checkSignatureExists(int $signature_id){
         /**
@@ -742,7 +744,7 @@ class SignaturesData extends DatabaseConnection{
         $content = array(
             "Version" => self::VERSION_ACT,
             "Proprietary" => $sig_dt['nm_proprietary'],
-            "Code" => $sig_dt['vl_code'],
+            "ID" => $signature_id,
             "Signature" => $sig_dt['vl_password']
         );   // encoded on JSON format after
         $to_json = json_encode($content);
@@ -773,12 +775,60 @@ class SignaturesData extends DatabaseConnection{
          * All the uploaded signatures files stay at the usignatures.d.
          * 
          * @param string $file_path The signature file uploaded path.
-         * @throws 
+         * @throws InvalidSignatureFile if the file is not a .lpgp
+         * @throws VersionError if the signature file version is not allowed.
+         * @throws SignatureNotFound if the ID of the signature on the file don't exists 
+         * @throws SignatureAuthError If the file is not valid
+         * @return true
          */
         $this->checkNotConnected();
         if(!$this->checkFileValid($file_name)) throw new InvalidSignatureFile("", 1);
         if(!file_exists($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/usignatures.d/$file_name")) throw new SignatureFileNotFound("There's no file '$file_name' on the uploaded signatures folder.", 1);
+        $content_file = file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/usignatures.d/" . $file_name);
+        $ascii_none = array();
+        for($i = 0; $i <= strlen($content_file); $i++) array_push($ascii_none, chr($content_file[$i]));
+        $ascii_none_str = implode("", $ascii_none);
+        $json_arr = json_decode($ascii_none_str);
+        if(!in_array($json_arr['Version'], self::VERSION_ALL)) throw new VersionError("The version used by the file is not valid!", 1);
+        if(!$this->checkSignatureExists((int) $json_arr['ID'])) throw new SignatureNotFound("There's no signature #" . $json_arr['Signature'], 1);
+        $signautre_data = $this->connection->query("SELECT vl_password FROM tb_signatures WHERE cd_signature = " . $json_arr['ID'])->fetch_array();
+        if($signautre_data['vl_password'] != $json_arr['Signature']) throw new SignatureAuthError("The file signature is not valid.", 1);
+        return true;
+    }
 
+    private function checkProprietaryExists(int $id){
+        /**
+         * Does the same thing then the checkProprietaryExists on the class ProprietariesData, 
+         * But this time it uses the PK not the name.
+         *
+         * @param int $id The PK of the proprietary
+         * @return bool
+         */
+        $this->checkNotConnected();
+        $all_rt = $this->connection->query("SELECT cd_proprietary FROM tb_proprietaries WHERE cd_proprietary = $id;");
+        while($row = $all_rt->fetch_array()){
+            if($row['cd_proprietary'] == $id) return true;
+        }
+        unset($all_rt);
+        return false;
+    }
+
+    public function addSignature(int $id_proprietary, string $password, int $code, bool $encode_word = true){
+        /**
+         * Creates a new signature on the database.
+         * @param int $id_proprietary The PK of the signature proprietary.
+         * @param string $password The word used to be the signature.
+         * @param int $code The algo index on the constant self::CODES
+         * @param bool $encode_word If the method will encode the signature
+         * @throws ProprietaryNotFound if the $id_proprietary don't exists as a proprietary
+         * @return void
+         */
+        $this->checkNotConnected();
+        if(!$this->checkProprietaryExists($id_proprietary)) throw new ProprietaryNotFound("There's no proprietary with the ID #$id_proprietary", 1);
+        $to_db = $encode_word ? hash(self::CODES[$code], $password) : $password;
+        $qr_vd = $this->connection->query("INSERT INTO tb_signatures (id_proprietary, vl_password, vl_code) VALUES ($id_proprietary, \"$to_db\", $code);");
+        unset($qr_vd);
+        unset($to_db);
     }
 }
 ?>
