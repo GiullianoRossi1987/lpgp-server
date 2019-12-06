@@ -785,13 +785,15 @@ class SignaturesData extends DatabaseConnection{
         $this->checkNotConnected();
         if(!$this->checkFileValid($file_name)) throw new InvalidSignatureFile("", 1);
         if(!file_exists($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/usignatures.d/$file_name")) throw new SignatureFileNotFound("There's no file '$file_name' on the uploaded signatures folder.", 1);
-        $content_file = file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/usignatures.d/" . $file_name);
+        $content_file = utf8_encode(file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/usignatures.d/" . $file_name));
         $sp_content = explode(self::DELIMITER, $content_file);
         $ascii_none = array();
-        for($i = 0; $i <= count($sp_content); $i++) array_push($ascii_none, chr($content_file[$i]));
+        for($i = 0; $i <= count($sp_content); $i++) {
+            array_push($ascii_none, chr((int)$sp_content[$i]));
+        }
         $ascii_none_str = implode("", $ascii_none);
-        $json_arr = json_decode($ascii_none_str);
-        if(!in_array($json_arr['Version'], self::VERSION_ALL)) throw new VersionError("The version used by the file is not valid!", 1);
+        $json_arr = json_decode(preg_replace("/[[[:cntrl:]]/", "", $ascii_none_str), true);
+        // if(!in_array($json_arr['Version'], self::VERSION_ALL)) throw new VersionError("The version used by the file is not valid!", 1);
         if(!$this->checkSignatureExists((int) $json_arr['ID'])) throw new SignatureNotFound("There's no signature #" . $json_arr['Signature'], 1);
         $signautre_data = $this->connection->query("SELECT vl_password FROM tb_signatures WHERE cd_signature = " . $json_arr['ID'])->fetch_array();
         if($signautre_data['vl_password'] != $json_arr['Signature']) throw new SignatureAuthError("The file signature is not valid.", 1);
@@ -832,8 +834,22 @@ class SignaturesData extends DatabaseConnection{
         unset($qr_vd);
         unset($to_db);
     }
-}
 
-$teste = new SignaturesData("giulliano_php", "");
+    public function delSignature(int $signature_id){
+        /**
+         * Removes a signature from the database. It uses the PK of the signature tuple at the MySQL database.
+         * 
+         * @param int $signature_id The signature PK on the database.
+         * @throws SignatureNotFound If the PK don't exists in the database.
+         * @return void
+         */
+        $this->checkNotConnected();
+        if(!$this->checkSignatureExists($signature_id)) throw new SignatureNotFound("There's no signature with the PK #$signature_id", 1);
+        $qr_rm = $this->connection->query("DELETE FROM tb_signatures WHERE cd_signature = $signature_id;");
+        unset($qr_rm);
+    }
+
+
+}
 
 ?>
