@@ -30,7 +30,6 @@ use SignaturesExceptions\SignatureNotFound;
 use SignaturesExceptions\SignatureFileNotFound;
 use SignaturesExceptions\VersionError;
 
-
 define("DEFAULT_HOST", "localhost");
 define("DEFAULT_DB", "LPGP_WEB");
 define("ROOT_VAR", $_SERVER['DOCUMENT_ROOT']);
@@ -695,7 +694,7 @@ class SignaturesData extends DatabaseConnection{
     const VERSION_ACT = "alpha";
     const VERSION_MIN = "alpha";
     const VERSION_ALL = ["alpha"];
-    const CODES       = ["md5", "base64", "sha256"];
+    const CODES       = ["md5", "sha1", "sha256"];
     const DELIMITER   = "/";
 
 
@@ -849,7 +848,92 @@ class SignaturesData extends DatabaseConnection{
         unset($qr_rm);
     }
 
+    public function chProprietaryId(int $signature, int $new_proprietary){
+        /**
+         * Changes the FK of the database, that contains the proprietary that owns the signature.
+         * 
+         * @param int $signature The PK of the signature.
+         * @param int $new_proprietary The new Proprietary ID
+         * @throws ProprietaryNotFound If the new ID don't exists has a proprietary
+         * @throws SignatureNotFound If the PK don't exists.
+         * @return void
+         */
+        $this->checkNotConnected();
+        if(!$this->checkSignatureExists($signature)) throw new SignatureNotFound("There's no signature #$signature;", 1);
+        if(!$this->checkProprietaryExists($new_proprietary)) throw new ProprietaryNotFound("There's no proprietary with that id #$new_proprietary", 1);
+        $qr_ch = $this->connection->query("UPDATE tb_signatures SET id_proprietary = $new_proprietary WHERE cd_signature = $signature;");
+        unset($qr_ch);
+    }
 
+    public function chSignatureCode(int $signature, int $code, string $word_same){
+        /**
+         * Changes the algo code used at the signature.
+         * 
+         * @param int $signature The PK for the signature.
+         * @param int $code The index of the constant array self::CODES.
+         * @param string $word_same The same word in the database. To reupdate the word too. It don't have to be encoded before.
+         * @throws SignatureNotFound If the PK don't exists 
+         * @return void
+         */
+        $this->checkNotConnected();
+        if(!$this->checkSignatureExists($signature)) throw new SignatureNotFound("There's no signature #$signature", 1);
+        $act_code = $this->connection->query("SELECT vl_code FROM tb_signatures WHERE cd_signatures = $signature;")->fetch_array();
+        $to_db = hash(self::CODES[(int) $act_code['vl_code']], $word_same);
+        $qr_ch = $this->connection->query("UPDATE tb_signatures SET vl_code = $code WHERE cd_signature = $signature;");
+        $qr_ch = $this->connection->query("UPDATE tb_signatures SET vl_password = \"$to_db\" WHERE cd_signature = $signature;");
+        unset($qr_ch);
+    }
+
+    public function chSignaturePassword(int $signature, string $word, bool $encode_here = true){
+        /**
+         * It changes the main word of the signature. If the new word is not encoded at the same algo, the method
+         * will encode it.
+         * 
+         * @param int $signature The PK of the signature at the database;
+         * @param string $word The new word to set.
+         * @param bool $encode_here If the method will encode the word, if don't (false) the word must be encoded already.
+         * @throws SignatureNotFound If the PK don't exists.
+         * @return void
+         */
+        $this->checkNotConnected();
+        if(!$this->checkSignatureExists($signature)) throw new SignatureNotFound("There's no signature #$signature", 1);
+        $to_db = "";
+        if($encode_here){
+            $code_arr = $this->connection->query("SELECT vl_code FROM tb_signatures WHERE cd_signature = $signature;")->fetch_array();
+            $to_db = hash(self::CODES[(int) $code_arr['vl_code']], $word);
+        }
+        else $to_db = $word;
+        $qr_ch = $this->connection->query("UPDATE tb_signatures SET vl_password = \"$to_db\" WHERE cd_signature = $signature;");
+        unset($qr_ch);
+        unset($to_db);
+    }
+
+    public function qrSignatureProprietary(int $proprietary_neddle){
+        /**
+         * Searches in the database for a singature wich the proprietary FK is the same as the parameter
+         * 
+         * @param int $proprietary_needle The FK to search
+         * @return array|null
+         */
+        $this->checkNotConnected();
+        $qr_all = $this->connection->query("SELECT cd_signature FROM tb_signatures WHERE id_proprietary = $proprietary_neddle");
+        $results = array();
+        while($row = $qr_all->fetch_array()) array_push($results, $row['cd_signature']);
+        return count($results) <= 0 ? null : $results;
+    }
+
+    public function qrSignatureAlgo(int $code){
+        /**
+         * Searches in the database for a signature wich the vl_code is the same as the parameter
+         * 
+         * @param int $code The vl_code to search
+         * @return array|null
+         */
+        $this->checkNotConnected();
+        $results = [];
+        $qr_all = $this->connection->query("SELECT cd_signature FROM tb_signatures WHERE vl_code = $code");
+        while($row = $qr_all->fetch_array()) array_push($results, $row['cd_signature']);
+        return count($results) <= 0 ? null : $results;
+    }
 }
-
 ?>
