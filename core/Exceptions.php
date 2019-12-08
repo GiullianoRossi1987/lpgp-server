@@ -104,4 +104,22 @@ namespace SignaturesExceptions{
         }
     }
 }
+
+namespace LogsErrors{
+    use Exception;
+
+    class LogsFileNotLoaded extends Exception{
+        public function showMessage(){ return "There's no logs file loaded in the class! {line: " . $this->getLine() . "}";}
+    }
+
+    class LogsFileAlreadyLoaded extends Exception{
+        public function showMessage(){ return "The class already have a logs file loaded! {line: " . $this->getLine() . "}";}
+    }
+
+    class InvalidFile extends Exception{
+        public function showMessage(string $file){ return "The file '$file' is not a valid logs file! {line: " . $this->getLine() . "}";}
+    }
+
+}
+
 ?>

@@ -1,6 +1,6 @@
 <?php
 namespace Core;
-
+// TODO: Fix the php docs (they're upside down)
 require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Exceptions.php";
 // add the logs manager after.
 
