@@ -12,8 +12,8 @@ define("DEFAULT_ERROR_LOGS", $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/logs/erro
 define("DEFAULT_FILES_LOG", $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/logs/files.log");
 
 /**
- * That class manages the logs files with a global form and connect to then.
- * That class also works as a supperclass for the others class such as the LoggerGeneral or the LoggerError.
+ * That class is a handler for the logs management at the system. 
+ * That can be used for develop other subclasses.
  * 
  * @var string|null $logs_file The logs file connected
  * @var bool $got_lfile If the class haves a logs file connected.
@@ -22,12 +22,12 @@ define("DEFAULT_FILES_LOG", $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/logs/files
  * @var ALLOWED_FORMATS The file extensions allowadeds to the logs files.
  */
 
-class LoggerCore{
+class Logger{
     protected $logs_file;
     protected $got_lfile;
     protected $added_actions;
 
-    const DATE_FORMAT = "[Y-M-d H:m:i]";
+    const DATE_FORMAT = "[Y-j-d H:m:i]";
     const ALLOWED_FORMATS = ["log"];
 
     /**
@@ -54,6 +54,7 @@ class LoggerCore{
         if(!$this->checkFileExt($lfile)) throw new InvalidFile("The file '$lfile' is not a valid logs file", 1);
         $this->logs_file = $lfile;
         $this->got_lfile = true;
+        $this->added_actions = null;
     }
 
     /**
@@ -66,6 +67,7 @@ class LoggerCore{
         if(!$this->got_lfile) throw new LogsFileNotLoaded("There's no logs file open already!", 1);
         $this->logs_file = null;
         $this->got_lfile = false;
+        $this->added_actions = null;
     }
 
     /**
@@ -99,10 +101,11 @@ class LoggerCore{
      */
     final public function commitChanges(){
         if(!$this->got_lfile) throw new LogsFileNotLoaded("There's no logs file loaded!", 1);
-        if(is_null($this->added_actions) || count($this->added_actions) == 0) return ;  // checks if there's new actions if don't just returns void.
+        if(is_null($this->added_actions) || count($this->added_actions) <= 0) return ;  // checks if there's new actions if don't just returns void.
         $dumped = implode("\n", $this->added_actions);
         $actual_contents = file_get_contents($this->logs_file);
         file_put_contents($this->logs_file, $actual_contents . "\n" . $dumped);
+        $this->added_actions = null;  // clears the added logs
     }
 
     /**
@@ -113,7 +116,7 @@ class LoggerCore{
      */
     final public function getLogs(bool $HTML_format = true){
         if($HTML_format){
-            $content = "<table class=\"default-table\" border=\"2\">\n<thead>\n<tr>\n<th>DateTime</th>\n<th>Action</th>\n<th>Success</th>\n</tr>\n";
+            $content = "<table class=\"default-table\" border=\"2\">\n<thead>\n<tr>\n<th>DateTime</th>\n<th>Action</th>\n<th>Success</th>\n<th>Error Code</th>\n</tr>\n";
             $content .= "<tbody> \n";
             $expl = explode("\n", file_get_contents($this->logs_file));
             foreach($expl as $log){
@@ -144,10 +147,14 @@ class LoggerCore{
      */
     final public function addAction(string $action, bool $success = true , $error_code = null, bool $auto_commit = false){
         if(!$this->got_lfile) throw new LogsFileNotLoaded("There's no file loaded!", 1);
-        
+        if(is_null($this->added_actions)) $this->added_actions = array();
+        $suc = $success ? "1" : "0";
+        $err = is_null($error_code) ? "none" : $error_code;
+        $dumped_action = date(self::DATE_FORMAT) . "|" . $action . "|" . $suc . "|" . $err;
+        array_push($this->added_actions, $dumped_action);
+        unset($suc);
+        if($auto_commit) $this->commitChanges();
     }
-}
 
-$teste = new LoggerCore($_SERVER["DOCUMENT_ROOT"] . "/lpgp-server/logs/error.log");
-echo $teste->getLogs();
+}
 ?>
