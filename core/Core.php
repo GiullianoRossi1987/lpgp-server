@@ -33,6 +33,7 @@ use SignaturesExceptions\VersionError;
 define("DEFAULT_HOST", "localhost");
 define("DEFAULT_DB", "LPGP_WEB");
 define("ROOT_VAR", $_SERVER['DOCUMENT_ROOT']);
+define("EMAIL_USING", "lpgp@gmail.com");
 class DatabaseConnection{
     /**
      * That class contains the main connection to the database and him universal actions,
@@ -934,6 +935,31 @@ class SignaturesData extends DatabaseConnection{
         $qr_all = $this->connection->query("SELECT cd_signature FROM tb_signatures WHERE vl_code = $code");
         while($row = $qr_all->fetch_array()) array_push($results, $row['cd_signature']);
         return count($results) <= 0 ? null : $results;
+    }
+
+    /**
+     * That method sends a e-mail for all the users and proprietaries alerting then that had a change on a signature, with a link to dowload then.
+     * 
+     * @param int $proprietary The proprietary wich changed the signature.
+     * @param int $signature_id The signature that the proprietary changed
+     * @param array|null $exceptions The users to not send the email
+     * @throws SignatureNotFound If the signature don't exists
+     * @throws ProprietaryNotFound If the proprietary don't exists,
+     * @return void;
+     */
+    public function sendChSignatureMail(int $proprietary, int $signature_id, string $html_template){
+        $this->checkNotConnected();
+        if(!$this->checkSignatureExists($signature_id)) throw new SignatureNotFound("The signature #$signature_id don't exists", 1);
+        if(!$this->checkProprietaryExists($proprietary)) throw new ProprietaryNotFound("There's no proprietary with the PK #$proprietary", 1);
+        $content_raw = file_get_contents($html_template);
+        $qr_prp = $this->connection->query("SELECT nm_proprietary FROM tb_proprietaries WHERE cd_proprietary = $proprietary;")->fetch_array();
+        $content_1 = str_replace("%prop%", $qr_prp['nm_proprietary'], $content_raw);
+        $content_full = str_replace("%signature%", $signature_id, $content_1);
+        $all_usr = $this->connection->query("SELECT vl_email FROM tb_users;");
+        $all_prop = $this->connection->query("SELECT vl_email FROM tb_proprietaries WHERE cd_proprietary != $proprietary");
+        $headers = "MIME-Version: 1.0\nContent-type: text/html; charset=iso-8859-1\nFrom: " . EMAIL_USING . "\n";
+        while($row = $all_usr->fetch_array()) mail($row['vl_email'],"Signature Update", $content_full, $headers);
+        while($row = $all_prop->fetch_array()) mail($row['vl_email'], "Signature Update", $content_full, $headers);
     }
 }
 ?>
