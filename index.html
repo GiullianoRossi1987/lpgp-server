@@ -9,8 +9,26 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link rel="stylesheet" href="./css/layout.css">
     <script src="./js/main-script.js"></script>
+    <link rel="stylesheet" href="./bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="./bootstrap/font-awesome.min.css">
+    <script src="./bootstrap/jquery-3.3.1.slim.min.js"></script>
+    <script src="./bootstrap/bootstrap.min.js"></script>
 </head>
 <body>
+    <script>
+        $(document).on("click", "#login-opt", function(){
+            $("#item1").toggle("slide");
+        });
+
+        $(document).on("click", "#sign-opts-btn", function(){
+            $("#item2").toggle("slide");
+        });
+
+        $(document).ready(function(){
+            setOptionByLogin();
+            setOptionsbyMode();
+        });
+    </script>
     <div class="container-fluid main-banner">
         <div class="un-row row">
             <div class="col-md-12 banner-col"></div>
@@ -24,6 +42,33 @@
                     <div class="row title-row">
                         <h1 class="dft-title">LPGP Oficial Server</h1>
                         <h6 class="dft-subtitle">Your work certain!</h6>
+                    </div>
+                </div>
+                <div class="container link-list-container">
+                    <div class="row links-list-row">
+                        <ul class="link-list list-unstyled">
+                            <li class="link-item">
+                                <button data-toggle="collapse" class="item-handler btn" aria-expanded="false" aria-controls="collapse" data-target="item1" type="button" id="login-opt">
+                                    Login Options
+                                </button>
+                                <div class="collapse" id="item1">
+                                    <ul class="options-login list-unstyled">
+                                        <li class="opt-login">
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="link-item">
+                                <button data-toggle="collapse" class="item-handler btn" aria-expanded="false" aria-controls="collapse" data-target="item2" type="button" id="sign-opts-btn">
+                                    Signature options
+                                </button>
+                                <div class="collapse" id="item2">
+                                    <ul class="si-opts list-unstyled">
+
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>

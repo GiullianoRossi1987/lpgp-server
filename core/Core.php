@@ -166,9 +166,11 @@ class UsersData extends DatabaseConnection{
          * @return void
          */
         $rcv = $this->authPassword($user, $password, $encoded_password);
+        $checked_usr = $this->connection->query("SELECT checked FROM tb_users WHERE nm_user = \"$user\";")->fetch_array();
         $_SESSION['user-logged'] = "true";
         $_SESSION['user'] = $user;
         $_SESSION['mode'] = "normie";
+        $_SESSION['checked'] = $checked_usr['checked'] == "1" || $checked_usr['checked'] == 1? "true": "false";
     }
 
     public function logoff(){
@@ -179,6 +181,7 @@ class UsersData extends DatabaseConnection{
         $_SESSION['user-logged'] = "false";
         $_SESSION['user'] = "";
         $_SESSION['mode'] = "";
+        $_SESSION['checked'] = "";
     }
 
     public function checkUserKeyExists(string $key){
@@ -498,9 +501,11 @@ class ProprietariesData extends DatabaseConnection{
         $auth = $this->authPasswd($proprietary, $password, $encoded_password);
         if(!$auth) throw new AuthenticationError("Invalid password", 1);
         // in authenticate case
+        $checked = $this->connection->query("SELECT checked FROM tb_proprietaries WHERE nm_proprietary = \"$proprietary\";")->fetch_array();
         $_SESSION['user'] = $proprietary;
         $_SESSION['mode'] = "prop";
         $_SESSION['user-logged'] = "true";
+        $_SESSION['checked'] = $checked['checked'] == 1 || $checked == "1" ? "true" : "false";
         unset($auth);   // min use of memory
      }
 
@@ -512,6 +517,7 @@ class ProprietariesData extends DatabaseConnection{
         $_SESSION['user-logged'] = "false";
         $_SESSION['user'] = "";
         $_SESSION['mode'] = "";
+        $_SESSION['checked'] = "";
      }
 
     public function addProprietary(string $prop_name, string $password, string $email, bool $encode_password = true){

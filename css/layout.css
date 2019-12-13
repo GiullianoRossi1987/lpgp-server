@@ -1,1 +1,5 @@
 .side-bar{ background-color: purple;}
+.side-bar *{
+    color: white;
+    font-family: Cantarell;
+}
