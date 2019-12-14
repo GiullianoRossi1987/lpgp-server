@@ -7,10 +7,14 @@ function resetVals(){
      *    logged-user => if there's a user logged ("true" or "false")
      *    user_mode   => if the logged user is a proprietary or a normal user ("null", 1, 0). null if there's no user logged. 0 if is a normal, 1 if is a proprietary;
      *    checked     => if the user email was checked ("true", "false", "null")
+     *    dark-room   => if the screen will use the dark mode or the light mode (true, false)
+     *    switcher_dk => if the switcher of the dark room will be dark or not
      */
     localStorage.setItem("logged-user", "false");
     localStorage.setItem("user_mode", "null");
     localStorage.setItem("checked", "null");
+    localStorage.setItem("dark-room", "false");
+    localStorage.setItem("switcher-dk", "true");
 }
 
 function clsLoginOpts(){
@@ -171,3 +175,27 @@ function setOptionsbyMode(){
     }
 }
 
+function switchDarkLight(){
+    var located_switcher = document.querySelector(".dk-btn");
+    var all_bck_oc = document.querySelector(".darkble-dk");
+    var all_font_oc = document.querySelector(".darkble-font");
+    if(localStorage.getItem("dark-room") == "true"){
+        all_bck_oc.style = "background-color: white;";
+        all_font_oc.style = "color: black;";
+        located_switcher.setAttribute("style", "background-color: black; color: white;");
+        located_switcher.innerHTML = "Dark Mode";
+    }
+    else{
+        all_bck_oc.style = "background-color: black;";
+        all_font_oc.style = "color: white;";
+        located_switcher.setAttribute("style", "background-color: white; color: black;");
+        located_switcher.innerHTML = "Light Mode";
+        // font.setAttribute("style", "color: black;")  
+    }
+}
+
+function autoLightDark(){
+    if(localStorage.getItem("dark-room") == "true") localStorage.setItem("dark-room", "false");
+    else localStorage.setItem("dark-room", "true");
+    switchDarkLight();
+}

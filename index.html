@@ -27,13 +27,13 @@
         $(document).ready(function(){
             setOptionByLogin();
             setOptionsbyMode();
+            switchDarkLight("dk-btn");
         });
+
+        $(document).on("click", "#help-handler", function(){
+            $("#item3").toggle("slide");
+        })
     </script>
-    <div class="container-fluid main-banner">
-        <div class="un-row row">
-            <div class="col-md-12 banner-col"></div>
-        </div>
-    </div>
 
     <div class="container-fluid side-bar-main">
         <div class="row main-row">
@@ -51,7 +51,7 @@
                                 <button data-toggle="collapse" class="item-handler btn" aria-expanded="false" aria-controls="collapse" data-target="item1" type="button" id="login-opt">
                                     Login Options
                                 </button>
-                                <div class="collapse" id="item1">
+                                <div class="collapse item-opts" id="item1">
                                     <ul class="options-login list-unstyled">
                                         <li class="opt-login">
                                         </li>
@@ -62,15 +62,46 @@
                                 <button data-toggle="collapse" class="item-handler btn" aria-expanded="false" aria-controls="collapse" data-target="item2" type="button" id="sign-opts-btn">
                                     Signature options
                                 </button>
-                                <div class="collapse" id="item2">
+                                <div class="collapse item-opts" id="item2">
                                     <ul class="si-opts list-unstyled">
 
                                     </ul>
                                 </div>
                             </li>
+                            <li class="link-item">
+                                <button class="item-handler btn" id="help-handler">
+                                    Help
+                                </button>
+                                <div class="collapse item-opts" id="item3">
+                                    <ul class="help-opts list-unstyled">
+                                        <li class="help-opt">
+                                            <a href="./contact.html">Contact us</a>
+                                        </li>
+                                        <li class="help-opt">
+                                            <a href="./docs/index.html">Documentation</a>
+                                        </li>
+                                        <li class="help-opt">
+                                            
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
                         </ul>
                     </div>
+                    <div class="container dk-btn-container">
+                        <div class="dk-row row">
+                            <button class="dk-btn btn" onclick="autoLightDark();"></button>
+                        </div>
+                    </div>
+                    <br>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="container content-container">
+        <div class="row main-row">
+            <div class="content col-12 darkble-dk">
+                <h1 class="darkble-font">LPGP-server</h1>
             </div>
         </div>
     </div>
