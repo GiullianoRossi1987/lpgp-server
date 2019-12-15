@@ -87,7 +87,7 @@ function setOptionByLogin(){
 
         opt_create.classList.add("item-option");
         opt_create.classList.add("login-opt-item");
-        opt_create.href = "http://localhost/lpgp-server/cgi-actions/create_account.php";
+        opt_create.href = "http://localhost/lpgp-server/create_account.html";
         opt_create.innerText = "Create a Account";
 
         fldr_create.classList.add("opt-login");

@@ -116,31 +116,43 @@
         <div class="row main-row">
             <div class="content col-12 darkble-dk">
                 <h1 class="darkble-font">LPGP-server</h1>
-                <h1 class="darkble-font">Login</h1>
-                <form action="./cgi-actions/login.php" method="post">
-                    <label for="username-inp" class="darkble-font">Username</label>
+                <h1 class="darkble-font">Create account</h1>
+                <form action="http://localhost/cgi-actions/create_account.php" method="post">
+                    <label for="username" class="darkble-font">Type a user name</label>
                     <br>
-                    <input type="text" name="user-name" class="darkble-input default-input" id="username-inp" required>
+                    <input type="text" name="username" id="username" class="default-input darkble-input">
                     <br>
-                    <label for="password-input" class="darkble-font">Password</label>
+                    <label for="email" class="darkble-font">Type your email</label>
                     <br>
-                    <input type="password" name="password-input" id="password-input" required>
-                    <label for="password-input">
-                        <button class="darkble-btn btn" id="show-passwd" type="button">
-                            Show password
+                    <input type="email" id="email" name="email" class="default-input darkble-input">
+                    <br>
+                    <label for="password1" class="darkble-font">Type a password</label>
+                    <br>
+                    <input type="password" id="password" name="password1" class="default-input darkble-input">
+                    <label for="password">
+                        <button class="btn default-btn darkble-btn" id="show-passwd">
+                            Show Password
                         </button>
                     </label>
                     <br>
-                    <select name="account-type" id="account-mode" class="darkble-select default-select" required>
-                        <option value="none">Select your account type</option>
-                        <option value="normal">Normal user</option>
-                        <option value="proprietary">Proprietary User</option>
+                    <label for="password-check" class="darkble-font">Confirm the password</label>
+                    <br>
+                    <input type="password" id="password-check" name="password-check" required>
+                    <label for="password-check">
+                        <button class="btn" id="show-passwd2">
+                            Show Password
+                        </button>
+                    </label>
+                    <br>
+                    <select name="account-type" id="account-select">
+                        <option value="null">Select a account type</option>
+                        <option value="normal">Normal User</option>
+                        <option value="proprietary">Proprietary </option>
                     </select>
                     <br>
-                    <button class="btn darkble-btn login-btn" id="go-login" type="submit">
-                        Login
+                    <button type="submit" class="default-btn btn darkble-btn">
+                        Create account
                     </button>
-                    <div class="error-lb darkble-error" aria-hidden="true"></div>
                 </form>
             </div>
         </div>
