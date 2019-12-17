@@ -101,7 +101,7 @@ class UsersData extends DatabaseConnection{
      * That class contains the main actions for the users database.
      * @const DATETIME_FORMAT The format for the date in the database.
      */
-    const DATETIME_FORMAT = "H:m:i Y-M-d";
+    const DATETIME_FORMAT = "H:m:i Y-j-d";
     const EMAIL_USING     = "lpgp@gmail.com";
 
     public function __construct(string $usr, string $passwd, string $host = DEFAULT_HOST, string $db = DEFAULT_DB){
@@ -206,13 +206,13 @@ class UsersData extends DatabaseConnection{
          * Generate a user key for the database.
          * @return void
          */
-        $rand_len = mt_rand(5, 255);
+        $rand_len = mt_rand(1, 5);
         $key = "";
         while(true){
-            $arr = [];
+            $arr = array();
             for($i = 0; $i <= $rand_len; $i++){
                 $rand = mt_rand(33, 126);
-                array_push(ord($rand));
+                $arr[] = ord($rand);
                 unset($rand);   // maybe removed after
             }
             $key = implode("", $arr);
@@ -235,9 +235,8 @@ class UsersData extends DatabaseConnection{
         if($this->checkUserExists($user, false)) throw new UserAlreadyExists("There's already a user with the name '$user'", 1);
         $to_db = $encode_password ? base64_encode($password) : $password;
         $usr_key = $this->createUserKey();
-        $cr_dt = date(self::DATETIME_FORMAT);
-        $qr = $this->connection->query("INSERT INTO tb_users (nm_user, vl_email, vl_password, vl_key, dt_creation) VALUES (\"$user\", \"$email\", \"$to_db\", \"$usr_key\", \"$cr_dt\");");
-        unset($qr);
+        $qr = $this->connection->query("INSERT INTO tb_users (nm_user, vl_email, vl_password, vl_key) VALUES (\"$user\", \"$email\", \"$to_db\", \"$usr_key\");");
+        
     }
 
     public function deleteUser(string $user){
@@ -460,7 +459,7 @@ class ProprietariesData extends DatabaseConnection{
             $arr = [];
             for($i = 0; $i <= $rand_len; $i++){
                 $rand = mt_rand(33, 126);
-                array_push(ord($rand));
+                $arr[] = ord($rand);
                 unset($rand);   // maybe removed after
             }
             $key = implode("", $arr);
@@ -531,7 +530,7 @@ class ProprietariesData extends DatabaseConnection{
           * @return void
           */
         $this->checkNotConnected();
-        if(!$this->checkProprietaryExists($prop_name)) throw new ProprietaryAlreadyExists("There's the proprietary '$prop_name' already", 1);
+        if($this->checkProprietaryExists($prop_name)) throw new ProprietaryAlreadyExists("There's the proprietary '$prop_name' already", 1);
         $to_db = $encode_password ? base64_encode($password) : $password;
         $prop_key = $this->createProprietaryKey();
         $qr = $this->connection->query("INSERT INTO tb_proprietaries (nm_proprietary, vl_email, vl_password, vl_key) VALUES (\"$prop_name\", \"$email\", \"$to_db\", \"$prop_key\");");
