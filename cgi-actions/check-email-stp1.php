@@ -1,3 +1,4 @@
+<?php session_start();?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,16 +8,15 @@
     <title>LPGP Oficial Server</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="./css/layout.css">
-    <script src="./js/main-script.js"></script>
-    <link rel="stylesheet" href="./bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" href="./bootstrap/font-awesome.min.css">
-    <script src="./bootstrap/jquery-3.3.1.slim.min.js"></script>
-    <script src="./bootstrap/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../css/layout.css">
+    <script src="../js/main-script.js"></script>
+    <link rel="stylesheet" href="../bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../bootstrap/font-awesome.min.css">
+    <script src="../bootstrap/jquery-3.3.1.slim.min.js"></script>
+    <script src="../bootstrap/bootstrap.min.js"></script>
 </head>
 <body>
     <script>
-        var passwd_type_change = "text";
         $(document).on("click", "#login-opt", function(){
             $("#item1").toggle("slide");
         });
@@ -33,20 +33,7 @@
 
         $(document).on("click", "#help-handler", function(){
             $("#item3").toggle("slide");
-        });
-
-        $(document).on("click", "#show-passwd", function(){
-            $("#password-input").attr("type", passwd_type_change);
-            if(passwd_type_change == "text") passwd_type_change = "password";
-            else passwd_type_change = "text";
-        });
-
-        $(document).on("change", "#account-mode", function(){
-            if($(this).val() == "none"){
-                $(".error-lb").text("Please choose a valid account type!");
-                $(".error-lb").toggle();
-            }
-        });
+        })
     </script>
 
     <div class="container-fluid side-bar-main">
@@ -116,43 +103,15 @@
         <div class="row main-row">
             <div class="content col-12 darkble-dk">
                 <h1 class="darkble-font">LPGP-server</h1>
-                <h1 class="darkble-font">Create account</h1>
-                <form action="http://localhost/lpgp-server/cgi-actions/create_account.php" method="POST">
-                    <label for="username" class="darkble-font">Type a user name</label>
+                <h1 class="darkble-font">Check your email code 
+                    <?php echo $_SESSION['user']; ?>
+                </h1>
+                <form action="http://localhost/lpgp-server/cgi-actions/check_email.php" method="POST">
+                    <label for="code" class="darkble-font">Code: </label>
+                    <input type="text" required name="code" id="code">
                     <br>
-                    <input type="text" name="username" id="username" class="default-input darkble-input">
-                    <br>
-                    <label for="email" class="darkble-font">Type your email</label>
-                    <br>
-                    <input type="email" id="email" name="email" class="default-input darkble-input">
-                    <br>
-                    <label for="password1" class="darkble-font">Type a password</label>
-                    <br>
-                    <input type="password" id="password" name="password1" class="default-input darkble-input">
-                    <label for="password">
-                        <button class="btn default-btn darkble-btn" id="show-passwd">
-                            Show Password
-                        </button>
-                    </label>
-                    <br>
-                    <label for="password-check" class="darkble-font">Confirm the password</label>
-                    <br>
-                    <input type="password" id="password-check" name="password-check" required>
-                    <label for="password-check">
-                        <button class="btn" id="show-passwd2">
-                            Show Password
-                        </button>
-                    </label>
-                    <br>
-                    <select name="account-mode" id="account-select">
-                        <option value="null">Select a account type</option>
-                        <option value="normal">Normal User</option>
-                        <option value="proprietary">Proprietary </option>
-                    </select>
-                    <br>
-                    <button type="submit" class="default-btn btn darkble-btn">
-                        Create account
-                    </button>
+                    <button class="darkble-btn btn default-btn" id="btn-send" type="submit" value="Send Code" name="btn-code">Send Email</button>
+                    <button class="darkble-btn btn default-btn" id="btn-resend" type="button" value="Resend email" name="btn-resend">Resend Email</button>
                 </form>
             </div>
         </div>

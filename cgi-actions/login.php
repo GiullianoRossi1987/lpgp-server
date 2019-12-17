@@ -16,6 +16,6 @@ else if($_POST['account-type'] == "proprietary"){
     $prop_obj->login($_POST['user-name'], $_POST['password-input']);
     sendUserLogged();
 }
-if($_SESSION['checked'] == "false") echo "<script>window.location.replace(\"http://localhost/lpgp-server/lpgp-server/cgi-actions/check_email.php\");</script>";
+if($_SESSION['checked'] == "false") echo "<script>window.location.replace(\"http://localhost/lpgp-server/cgi-actions/check-email-stp1.php\");</script>";
 else echo "<script>window.location.replace(\"http://localhost/lpgp-server/index.html\");</script>";
 ?>
