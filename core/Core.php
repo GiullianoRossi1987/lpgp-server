@@ -110,16 +110,12 @@ class UsersData extends DatabaseConnection{
          * The params are the same then at the parent::__construct().
          */
         parent::__construct($usr, $passwd, $host, $db);
-        session_start();
     }
 
     public function __destruct(){
         /**
          * Just the same thing then the parent::__destruct, but implemented the session_handler destructor.
          */
-        
-        session_unset();
-        session_destroy(); 
         parent::__destruct();
     }
 
@@ -164,25 +160,16 @@ class UsersData extends DatabaseConnection{
          * @param string $user The user to make login.
          * @param string $password The user password.
          * @param bool $encoded_password If the user password is encoded in the database.
-         * @return void
+         * @return array
          */
         $rcv = $this->authPassword($user, $password, $encoded_password);
         $checked_usr = $this->connection->query("SELECT checked FROM tb_users WHERE nm_user = \"$user\";")->fetch_array();
-        $_SESSION['user-logged'] = "true";
-        $_SESSION['user'] = $user;
-        $_SESSION['mode'] = "normie";
-        $_SESSION['checked'] = $checked_usr['checked'] == "1" || $checked_usr['checked'] == 1? "true": "false";
-    }
-
-    public function logoff(){
-        /**
-         * A handler for the method logoff on the attributte session_handler.
-         * @return void
-         */
-        $_SESSION['user-logged'] = "false";
-        $_SESSION['user'] = "";
-        $_SESSION['mode'] = "";
-        $_SESSION['checked'] = "";
+        $arr_info = [];
+        $arr_info['user-logged'] = "true";
+        $arr_info['user'] = $user;
+        $arr_info['mode'] = "normie";
+        $arr_info['checked'] = $checked_usr['checked'] == "1" || $checked_usr['checked'] == 1? "true": "false";
+        return $arr_info;
     }
 
     public function checkUserKeyExists(string $key){
@@ -495,29 +482,19 @@ class ProprietariesData extends DatabaseConnection{
           * @param bool $encoded_password If the password is encoded at the database.
           * @throws ProprietaryNotFound If there's no proprietary such the selected
           * @throws AuthenticationError If the password's incorrect
-          * @return void
+          * @return array
           */
         $this->checkNotConnected();
         $auth = $this->authPasswd($proprietary, $password, $encoded_password);
         if(!$auth) throw new AuthenticationError("Invalid password", 1);
-        // in authenticate case
+        $arr_info = [];
         $checked = $this->connection->query("SELECT checked FROM tb_proprietaries WHERE nm_proprietary = \"$proprietary\";")->fetch_array();
-        $_SESSION['user'] = $proprietary;
-        $_SESSION['mode'] = "prop";
-        $_SESSION['user-logged'] = "true";
-        $_SESSION['checked'] = $checked['checked'] == 1 || $checked == "1" ? "true" : "false";
+        $arr_info['user'] = $proprietary;
+        $arr_info['mode'] = "prop";
+        $arr_info['user-logged'] = "true";
+        $arr_info['checked'] = $checked['checked'] == 1 || $checked == "1" ? "true" : "false";
         unset($auth);   // min use of memory
-     }
-
-    public function logoff(){
-         /**
-          * Does the same thing the logoff method at the UsersData.
-          * @return void;
-          */
-        $_SESSION['user-logged'] = "false";
-        $_SESSION['user'] = "";
-        $_SESSION['mode'] = "";
-        $_SESSION['checked'] = "";
+        return $arr_info;
      }
 
     public function addProprietary(string $prop_name, string $password, string $email, bool $encode_password = true){
