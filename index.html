@@ -16,6 +16,7 @@
 </head>
 <body>
     <script>
+        var passwd_type_change = "text";
         $(document).on("click", "#login-opt", function(){
             $("#item1").toggle("slide");
         });
@@ -32,7 +33,20 @@
 
         $(document).on("click", "#help-handler", function(){
             $("#item3").toggle("slide");
-        })
+        });
+
+        $(document).on("click", "#show-passwd", function(){
+            $("#password-input").attr("type", passwd_type_change);
+            if(passwd_type_change == "text") passwd_type_change = "password";
+            else passwd_type_change = "text";
+        });
+
+        $(document).on("change", "#account-mode", function(){
+            if($(this).val() == "none"){
+                $(".error-lb").text("Please choose a valid account type!");
+                $(".error-lb").toggle();
+            }
+        });
     </script>
 
     <div class="container-fluid side-bar-main">
