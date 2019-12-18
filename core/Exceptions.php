@@ -122,4 +122,23 @@ namespace LogsErrors{
 
 }
 
+namespace ExctemplateSystem{
+    use Exception;
+
+    class InvalidFileType extends Exception{
+        public function showMessage(string $file){
+            return "The file '$file' is not a valid HTML document for fetching";
+        }
+    }
+
+    class AlreadyLoadedFile extends Exception{
+        public function showMessage(){ return "The class already haves a HTML document parsed!";}
+    }
+
+    class NotLoadedFile extends Exception{
+        public function showMessage(){ return "The class need a HTML document parsed!";}
+    }
+
+    
+}
 ?>

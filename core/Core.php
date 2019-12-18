@@ -336,7 +336,7 @@ class UsersData extends DatabaseConnection{
          * @param string $key The user key, storaged at the database.
          * @return string
          */
-        $raw_content = file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/template-email.html");
+        $raw_content = file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/templates/template-email.html");
         $cont1 = str_replace("%user%", $user, $raw_content);
         return str_replace("%key%", $key, $cont1);
     }
@@ -958,4 +958,110 @@ class SignaturesData extends DatabaseConnection{
         while($row = $all_prop->fetch_array()) mail($row['vl_email'], "Signature Update", $content_full, $headers);
     }
 }
+// Added after
+namespace templateSystem;
+require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Exceptions.php";
+
+use ExctemplateSystem\AlreadyLoadedFile;
+use ExctemplateSystem\InvalidFileType;
+use ExctemplateSystem\NotLoadedFile;
+
+/**
+ * That class is used to fetch HTML templates at the system, that class works with the errors pages.
+ * 
+ * There's no one especific error, but every big error will be handled by that.
+ * 
+ * That just works replacing strings for other values.
+ * 
+ * There's reserved names at the template, wich can be spoted by the %% at the first and the last character.
+ * ---------------------------------------------------------------------------------------------------------
+ * Those reserved names/words are:\n
+ *      * %message% => The error message, to handling the values
+ *      * %file% => The file that was fetching the template
+ *      * %line% => The line in the file that the exception was throwed
+ *      * %image% => The image that will be showing at the error page
+ *      * %title% => The error title, it can be a 500 error or even a login error.
+ *      * %btn_rt% => A HTML button to return to some previous page. By default it returns to the index
+ * 
+ * @var string $page_templated The HTML file path, that's the template. By default is the core/templates/500-error-internal.html
+ * @var string $error_message The error message to be showed on the template.
+ * @var string|null $file_throwed The file that fetched the template.
+ * @var string|int|null $line_error The line of the error at the file.
+ * @var string $btn_rt The button to return to the previous page.
+ * @var bool $got_document If the class haves a HTML document parsed already. Default = false
+ * @var string|null $content The parsed file content
+ * @author Giulliano Rossi <giulliano.scatalon.rossi@gmail.com>
+ * @access public
+ */
+class ErrorTemplate{
+    private $page_templated;
+    private $error_message;
+    private $file_throwed;
+    private $line_error;
+    private $btn_rt = "<button class=\"default-btn btn darkble-btn\" onclick=\"window.location.replace('http://localhost/lpgp-server/');\">Return to the index</button>";
+    private $got_document = false;
+    private $content;
+
+    /**
+     * Checks if the selected file is a HTML file.
+     *
+     * @param string $file_path The file path to check
+     * @author Giulliano Rossi <giulliano.scatalon.rossi@gmail.com>
+     * @return bool
+     */
+    private static function checkFileValid(string $file_path){
+        $exp = explode(".", $file_path);
+        return $exp[count($exp) - 1] == "html";
+    }
+
+    /**
+     * That function return the parsed values of the HTML file content. 
+     *
+     * Beware it have a lot of IFs :'(
+     * @throws NotLoadedFile If the class don't haves a file loaded.
+     * @return string|null
+     */
+    final public function parseFile(){
+        if(!$this->got_document) throw new NotLoadedFile("There's no HTML document loaded!", 1);
+        $rt_str = $this->content;
+        $maped_arr = array(
+            "%message%" => $this->error_message,
+            "%file%" => is_null($this->file_throwed) ? "[Anonymous file]" : $this->file_throwed,
+            "%line%" => is_null($this->line_error) ? "[Anonymous Line]" : $this->line_error,
+            "%title%" => "Error Unexpected!",
+            "%btn_rt%" => $this->btn_rt
+        );
+        $a = str_replace("%message%", $maped_arr['%message%'], $this->content);
+        $b = str_replace("%file%", $maped_arr["%file%"], $a);
+        $c = str_replace("%line%", $maped_arr['%line%'], $b);
+        $d = str_replace("%title%", $maped_arr['%title%'], $c);
+        $rt_str = str_replace("%btn_rt%", $maped_arr['%btn_rt%'], $d);
+        return $rt_str;
+    }
+
+    /**
+     * Starts the class with a document to be parsed
+     * @author Giulliano Rossi <giulliano.scatalon.rossi@gmail.com>
+     *  ************************************************************
+     * @param string $documnetHTML The HTML file to connect and parse.
+     * @param string $error_message The error string message.
+     * @param string|null $file_throwed The file that throwed the exception
+     * @param string|null $btn_rt_lc The button to return to the previous page. 
+     * @param int|null $line_error The line that showed the error
+     */
+    final public function __construct(string $documentHTML, string $error_message, string $file_throwed = null, int $line_error = null, string $btn_rt_lc){
+        if($this->got_document) throw new AlreadyLoadedFile("The class already have a document loaded", 1);
+        if(!$this->checkFileValid($documentHTML)) throw new InvalidFileType("The file '$documentHTML' is not valid!", 1);
+        $this->page_templated = $documentHTML;
+        $this->file_throwed = $file_throwed;
+        $this->lin_error = $line_error;
+        $this->btn_rt = $btn_rt_lc;
+        $this->error_message = $error_message;
+        $this->content = file_get_contents($documentHTML);
+        $this->got_document = true;
+    }
+}
+
+$teste = new ErrorTemplate($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/templates/500-error-internal.html", "teste", null, null, "<button>don't works</button>");
+echo $teste->parseFile();
 ?>
