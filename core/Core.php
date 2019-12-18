@@ -154,6 +154,20 @@ class UsersData extends DatabaseConnection{
         else return true;
     }
 
+    /**
+     * Authenticate the user key at the database.
+     *
+     * @param string $username The user that's authenticating the account.
+     * @param string $key The key received from the user
+     * @return bool
+     */
+    public function authUserKey(string $username, string $key){
+        $this->checkNotConnected();
+        if(!$this->checkUserExists($username)) throw new UserNotFound("There's no user '$username'!", 1);
+        $usr_data = $this->connection->query("SELECT * FROM tb_users WHERE nm_user = \"$username\";")->fetch_array();
+        return $key == $usr_data['vl_key'];
+    }
+
     public function login(string $user, string $password, bool $encoded_password = true){
         /**
          * Makes the login with a user in the database, with a password authentication and login setup.

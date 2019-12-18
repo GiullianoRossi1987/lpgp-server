@@ -1,4 +1,6 @@
-<?php session_start();?>
+<?php 
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -111,7 +113,7 @@
                     <input type="text" required name="code" id="code">
                     <br>
                     <button class="darkble-btn btn default-btn" id="btn-send" type="submit" value="Send Code" name="btn-code">Send Email</button>
-                    <button class="darkble-btn btn default-btn" id="btn-resend" type="button" value="Resend email" name="btn-resend">Resend Email</button>
+                    <button class="darkble-btn btn default-btn" id="btn-resend" type="submit" value="Resend email" name="btn-resend">Resend Email</button>
                 </form>
             </div>
         </div>

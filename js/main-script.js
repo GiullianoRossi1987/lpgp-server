@@ -107,7 +107,7 @@ function setOptionsbyMode(){
      */
     clsSignOpts();
     var local_opts = document.querySelector("#item2 .si-opts");
-    if(localStorage.getItem("user_mode") == "1" || localStorage.getItem("user_mode") == 1){
+    if(localStorage.getItem("user_mode") == "prop"){
         // is a proprietary account
         var get_opt = document.createElement("a");
         var get_fldr = document.createElement("li");
@@ -145,7 +145,7 @@ function setOptionsbyMode(){
 
         local_opts.appendChild(chk_sign_fldr);
     }
-    else if(localStorage.getItem("user_mode") == "0" || localStorage.getItem("user_mode") == 0){
+    else if(localStorage.getItem("user_mode") == "normie"){
         var chk_signature = document.createElement("a");
         var chk_sign_fldr = document.createElement("li");
 
@@ -190,7 +190,7 @@ function switchDarkLight(){
         all_font_oc.style = "color: white;";
         located_switcher.setAttribute("style", "background-color: white; color: black;");
         located_switcher.innerHTML = "Light Mode";
-        // font.setAttribute("style", "color: black;")  
+        font.setAttribute("style", "color: black;")  
     }
 }
 
@@ -198,4 +198,18 @@ function autoLightDark(){
     if(localStorage.getItem("dark-room") == "true") localStorage.setItem("dark-room", "false");
     else localStorage.setItem("dark-room", "true");
     switchDarkLight();
+}
+
+function showError(message){
+    /**
+     * 
+     */
+    var error_lbs = document.querySelector(".error-lb");
+    error_lbs.innerHTML = message;
+    error_lbs.setAttribute("style", "visibility: visible;");
+}
+
+function hideError(){
+    var error_lbs = document.querySelector(".error-lb");
+    error_lbs.setAttribute("style", "visibility: hidden;");
 }
