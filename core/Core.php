@@ -87,7 +87,6 @@ class DatabaseConnection{
         /**
          * Destrois the class and also closes the connection to a MySQL database.
          */
-        $this->checkNotConnected();
         $this->connection->close();
         $this->user = "";
         $this->database_connected = "";
@@ -454,7 +453,7 @@ class ProprietariesData extends DatabaseConnection{
          * Generate a user key for the database.
          * @return void
          */
-        $rand_len = mt_rand(5, 255);
+        $rand_len = mt_rand(1, 5);
         $key = "";
         while(true){
             $arr = [];
@@ -526,7 +525,7 @@ class ProprietariesData extends DatabaseConnection{
         $prop_key = $this->createProprietaryKey();
         $qr = $this->connection->query("INSERT INTO tb_proprietaries (nm_proprietary, vl_email, vl_password, vl_key) VALUES (\"$prop_name\", \"$email\", \"$to_db\", \"$prop_key\");");
         unset($to_db);
-        unset($qr);
+        echo $qr->error;
      }
 
     public function delProprietary(string $proprietary){
@@ -635,7 +634,7 @@ class ProprietariesData extends DatabaseConnection{
         $this->checkNotConnected();
         if(!$this->checkProprietaryExists($proprietary)) throw new ProprietaryNotFound("There's no proprietary account '$proprietary'", 1);
         $prop_dt = $this->connection->query("SELECT vl_key, checked, vl_email FROM tb_proprietaries WHERE nm_proprietary = \"$proprietary\";")->fetch_array();
-        $content = $this->parseHTMLTemplateEmailK($proprietary, $prop_dt['vl_key'], $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/template-email.html");
+        $content = $this->parseHTMLTemplateEmailK($proprietary, $prop_dt['vl_key'], $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/templates/template-email.html");
         $headers = "MIME-Version: 1.0\n";
         $headers .= "Content-type: text/html; charset=iso-8859-1\n";
         $headers .= "From: " . self::EMAIL_USING . "\n";
@@ -1061,7 +1060,4 @@ class ErrorTemplate{
         $this->got_document = true;
     }
 }
-
-$teste = new ErrorTemplate($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/templates/500-error-internal.html", "teste", null, null, "<button>don't works</button>");
-echo $teste->parseFile();
 ?>

@@ -7,6 +7,8 @@ use Core\ProprietariesData;
 use Core\UsersData;
 use function JSHandler\sendUserLogged; 
 
+
+
 if($_POST['account-type'] == "normal"){
     $user_obj = new UsersData("giulliano_php", "");  // trade for your username and password at MySQL
     $auth = $user_obj->login($_POST['user-name'], $_POST['password-input']);

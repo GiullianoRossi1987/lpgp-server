@@ -28,5 +28,9 @@ else if(array_key_exists("btn-code", $_POST)){
             echo "<button class=\"darkble-btn btn default-btn\" onclick=\"window.location.replace('http://localhost/lpgp-server/check-email-stp1.php');\">Try again!</button>";
         }
     }
+    else{
+        $prop = new ProprietariesData("giulliano_php", "");
+        
+    }
 }
 ?>

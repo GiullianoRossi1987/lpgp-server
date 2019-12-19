@@ -1,5 +1,5 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/template-master/raelgc/Template.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
 use templateSystem\ErrorTemplate;
 session_start();
 
@@ -9,7 +9,6 @@ if($_SESSION['user_logged'] != "true" || !isset($_SESSION['user_logged'])){
 }
 else{
     session_unset();
-    session_destroy();
     echo "<script>window.location.replace('http://localhost/lpgp-server/');</script>";
 }
 ?>
