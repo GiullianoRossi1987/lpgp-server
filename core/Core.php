@@ -468,6 +468,23 @@ class ProprietariesData extends DatabaseConnection{
         }
     }
 
+    /**
+     * That function checks if the key received is the same key then the proprietary key at
+     * the database, important for validate the proprietary email.
+     *
+     * @param string $proprietary That's checking the key
+     * @param string $key_rcv The key received.
+     * @throws ProprietaryNotFound If the proprietary don't exists.
+     * @return bool If the key is valid or not.
+     */
+    public function authPropKey(string $proprietary, string $key_rcv){
+        $this->checkNotConnected();
+        if(!$this->checkProprietaryExists($proprietary)) throw new ProprietaryNotFound("There's no proprietary '$proprietary'!", 1);
+        $prop_data = $this->connection->query("SELECT vl_key, checked FROM tb_proprietaries WHERE nm_proprietary = \"$proprietary\";")->fetch_array();
+        if($prop_data['checked'] == 1) return null;  // if the proprietary email was checked already
+        return $prop_data['vl_key'] == $key_rcv;
+    }
+
     public function authPasswd(string $proprietary, string $password, bool $encoded_password = true){
          /**
           * Authenticates a proprietary user password, that will be used for every thing, even the user data change.
