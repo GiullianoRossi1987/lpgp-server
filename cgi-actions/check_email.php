@@ -19,18 +19,25 @@ if(array_key_exists('btn-resend', $_POST)){
 else if(array_key_exists("btn-code", $_POST)){
     if($_SESSION['mode'] == "normie"){
         $usr = new UsersData("giulliano_php", "");
-        if(!$usr->authUserKey($_SESSION['user'], $_POST['code'])){
+        if($usr->authUserKey($_SESSION['user'], $_POST['code'])){
             $usr->setUserChecked($_SESSION['user'], true);
             echo "<script>window.location.replace(\"http://localhost/lpgp-server/\");</script>";
         }
         else{
             echo "<script>showError(\"Invalid Code!\");</script>";
-            echo "<button class=\"darkble-btn btn default-btn\" onclick=\"window.location.replace('http://localhost/lpgp-server/check-email-stp1.php');\">Try again!</button>";
+            echo "<button class=\"darkble-btn btn default-btn\" onclick=\"window.location.replace('http://localhost/lpgp-server/cgi-actions/check-email-stp1.php');\">Try again!</button>";
         }
     }
     else{
         $prop = new ProprietariesData("giulliano_php", "");
-        
+        if($prop->authPropKey($_SESSION['user'], $_POST['code'])){
+            $prop->setProprietaryChecked($_SESSION['user'], true);
+            echo "<script>window.location.replace(\"http://localhost/lpgp-server\");</script>";
+        }
+        else{
+            echo "<script>showError(\"Invalid Code\");</script>";
+            echo "<button class=\"darkble-btn btn default-btn\" onclick=\"window.location.replace('http://localhost/lpgp-server/cgi-actions/check-email-stp1.php');\">Return</button>";
+        }
     }
 }
 ?>
