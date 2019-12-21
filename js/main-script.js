@@ -13,8 +13,6 @@ function resetVals(){
     localStorage.setItem("logged-user", "false");
     localStorage.setItem("user_mode", "null");
     localStorage.setItem("checked", "null");
-    localStorage.setItem("dark-room", "false");
-    localStorage.setItem("switcher-dk", "true");
 }
 
 function clsLoginOpts(){
@@ -33,173 +31,99 @@ function clsSignOpts(){
     catch(ex){}  // do nothing;
 }
 
-function setOptionByLogin(){
+function setAccountOpts(){
     /**
      * 
      */
     clsLoginOpts();
-    var local_opts = document.querySelector("#item1 .options-login");
+    var local_opts = document.querySelector(".login-dropdown .dropdown-menu");
     if(localStorage.getItem("logged-user") == "true"){
-        var opt_account = document.createElement("a");
-        var opt_config = document.createElement("a");
-        var opt_logoff = document.createElement("a");
-        var li_1 = document.createElement("li");
-        var li_2 = document.createElement("li");
-        var li_3 = document.createElement("li");
+        var account_opt = document.createElement("a");
+        var logoff_opt = document.createElement("a");
+        var config_opt = document.createElement("a");
 
-        opt_account.classList.add("item-option");
-        opt_account.classList.add("login-opt-item");
-        opt_account.href = "http://localhost/lpgp-server/cgi-actions/my_account.php";
-        opt_account.innerText = "My Account";
+        config_opt.href = "http://localhost/lpgp-server/account_config.php";
+        logoff_opt.href = "http://localhost/lpgp-server/cgi-actions/logoff.php";
+        account_opt.href = "http://localhost/lpgp-server/cgi-actions/my_account.php";
 
-        opt_config.classList.add("item-option");
-        opt_config.classList.add("login-opt-item");
-        opt_config.href = "http://localhost/lpgp-server/cgi-actions/my_account_config.php";
-        opt_config.innerText = "My Configurations";
+        // classes
+        config_opt.classList.add("dropdown-item");
+        logoff_opt.classList.add("dropdown-item");
+        account_opt.classList.add("dropdown-item");
 
-        opt_logoff.classList.add("item-option");
-        opt_logoff.classList.add("login-opt-item");
-        opt_logoff.href = "http://localhost/lpgp-server/cgi-actions/logoff.php";
-        opt_logoff.innerText = "Logoff";
-
-        li_1.appendChild(opt_account);
-        li_2.appendChild(opt_config);
-        li_3.appendChild(opt_logoff);
-
-        li_1.classList.add("opt-login");
-        li_2.classList.add("opt-login");
-        li_3.classList.add("opt-login");
-
-        local_opts.appendChild(li_1);
-        local_opts.appendChild(li_2);
-        local_opts.appendChild(li_3);
+        config_opt.innerText = "Configurations";
+        logoff_opt.innerText = "Logoff";
+        account_opt.innerText = "My account";
+        
+        local_opts.appendChild(config_opt);
+        local_opts.appendChild(logoff_opt);
+        local_opts.appendChild(account_opt);
     }
     else{
-        var opt_login = document.createElement("a");
-        var opt_create = document.createElement("a");
-        var fldr_login = document.createElement("li");
-        var fldr_create = document.createElement("li");
+        var login_opt = document.createElement("a");
+        var ct_accopt = document.createElement("a");
 
-        opt_login.classList.add("item-option");
-        opt_login.classList.add("login-opt-item");
-        opt_login.href = "http://localhost/lpgp-server/cgi-actions/login.php"; // trade if it's not your used link
-        opt_login.innerText = "Login";
+        login_opt.href = "http://localhost/lpgp-server/login.html";
+        ct_accopt.href = "http://localhost/lpgp-server/create_account.html";
+        login_opt.classList.add("dropdown-item");
+        ct_accopt.classList.add("dropdown-item");
+        login_opt.innerText = "Make login";
+        ct_accopt.innerText = "Create Account";
 
-        opt_create.classList.add("item-option");
-        opt_create.classList.add("login-opt-item");
-        opt_create.href = "http://localhost/lpgp-server/create_account.html";
-        opt_create.innerText = "Create a Account";
-
-        fldr_create.classList.add("opt-login");
-        fldr_create.appendChild(opt_create);
-
-        fldr_login.classList.add("opt-login");
-        fldr_login.appendChild(opt_login);
-
-        local_opts.appendChild(fldr_login);
-        local_opts.appendChild(fldr_create);
+        local_opts.appendChild(login_opt);
+        local_opts.appendChild(ct_accopt);
     }
 }
 
-function setOptionsbyMode(){
-    /**
-     * 
-     */
+/**
+ * 
+ */
+function setSignatureOpts(){
     clsSignOpts();
-    var local_opts = document.querySelector("#item2 .si-opts");
+    var local_opts = document.querySelector(".signatures-dropdown .dropdown-menu");
     if(localStorage.getItem("user_mode") == "prop"){
         // is a proprietary account
-        var get_opt = document.createElement("a");
-        var get_fldr = document.createElement("li");
+        var che_sig = document.createElement("a");
         var my_sign = document.createElement("a");
-        var my_sign_fldr = document.createElement("li");
 
-        get_opt.classList.add("item-option");
-        get_opt.classList.add("sig-option-item");
-        get_opt.href = "http://localhost/lpgp-server/cgi-actions/get_my_signature.php";
-        get_opt.innerText = "Get my signature";
-
-        my_sign.classList.add("item-option");
-        my_sign.classList.add("sig-option-item");
-        my_sign.href = "http://localhost/lpgp-server/cgi-actions/my_signatures.php";
         my_sign.innerText = "My Signatures";
-        
-        get_fldr.classList.add("opt-signature");
-        get_fldr.appendChild(get_opt);
-        my_sign_fldr.classList.add("opt-signature");
-        my_sign_fldr.appendChild(my_sign);
+        che_sig.innerText = "Check a Signature";
+        my_sign.href = "http://localhost/lpgp-server/cgi-actions/my_signatures.php";
+        che_sig.href = "http://localhost/lpgp-server/check_signature.html";
+        my_sign.classList.add("dropdown-item");
+        che_sig.classList.add("dropdown-item");
 
-        local_opts.appendChild(get_fldr);
-        local_opts.appendChild(my_sign_fldr);
 
-        var chk_signature = document.createElement("a");
-        var chk_sign_fldr = document.createElement("li");
-
-        chk_signature.classList.add("item-option");
-        chk_signature.classList.add("sig-option-item");
-        chk_signature.href = "http://localhost/lpgp-server/check_signature.html";
-        chk_signature.innerText = "Check a signature";
-
-        chk_sign_fldr.classList.add('opt-signature');
-        chk_sign_fldr.appendChild(chk_signature);
-
-        local_opts.appendChild(chk_sign_fldr);
+        local_opts.appendChild(my_sign);
+        local_opts.appendChild(che_sig);
     }
     else if(localStorage.getItem("user_mode") == "normie"){
         var chk_signature = document.createElement("a");
-        var chk_sign_fldr = document.createElement("li");
+        var fdb_proprietary = document.createElement("a");
 
-        chk_signature.classList.add("item-option");
-        chk_signature.classList.add("sig-option-item");
+        chk_signature.innerText = "Check a Signature";
+        fdb_proprietary.innerText = "Contact a Proprietary";
         chk_signature.href = "http://localhost/lpgp-server/check_signature.html";
-        chk_signature.innerText = "Check a signature";
+        fdb_proprietary.href = "http://localhost/lpgp-server/contact_prop.html";
+        chk_signature.classList.add("dropdown-item");
+        fdb_proprietary.classList.add("dropdown-item");
 
-        chk_sign_fldr.classList.add('opt-signature');
-        chk_sign_fldr.appendChild(chk_signature);
-
-        local_opts.appendChild(chk_sign_fldr);
+        local_opts.appendChild(fdb_proprietary);
+        local_opts.appendChild(chk_signature);
     }
     else{
         var login_need = document.createElement("a");
-        var login_fldr = document.createElement("li");
-        
-        login_need.classList.add("item-option");
-        login_need.classList.add("sig-option-item");
+        login_need.innerText = "Make login for check a signature";
         login_need.href = "http://localhost/lpgp-server/login.html";
-        login_need.innerText = "Make login to access the signatures";
-
-        login_fldr.classList.add("opt-signature");
-        login_fldr.appendChild(login_need);
-        
-        local_opts.appendChild(login_fldr);
+        login_need.classList.add("dropdown-item");
+        local_opts.appendChild(login_need);
     }
 }
 
-function switchDarkLight(){
-    var located_switcher = document.querySelector(".dk-btn");
-    var all_bck_oc = document.querySelector(".darkble-dk");
-    var all_font_oc = document.querySelector(".darkble-font");
-    if(localStorage.getItem("dark-room") == "true"){
-        all_bck_oc.style = "background-color: white;";
-        all_font_oc.style = "color: black;";
-        located_switcher.setAttribute("style", "background-color: black; color: white;");
-        located_switcher.innerHTML = "Dark Mode";
-    }
-    else{
-        all_bck_oc.style = "background-color: black;";
-        all_font_oc.style = "color: white;";
-        located_switcher.setAttribute("style", "background-color: white; color: black;");
-        located_switcher.innerHTML = "Light Mode";
-        font.setAttribute("style", "color: black;")  
-    }
-}
-
-function autoLightDark(){
-    if(localStorage.getItem("dark-room") == "true") localStorage.setItem("dark-room", "false");
-    else localStorage.setItem("dark-room", "true");
-    switchDarkLight();
-}
-
+/**
+ * 
+ * @param {*} message 
+ */
 function showError(message){
     /**
      * 
@@ -208,6 +132,7 @@ function showError(message){
     error_lbs.innerHTML = message;
     error_lbs.setAttribute("style", "visibility: visible;");
 }
+
 
 function hideError(){
     var error_lbs = document.querySelector(".error-lb");

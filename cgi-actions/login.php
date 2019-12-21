@@ -11,13 +11,13 @@ use function JSHandler\sendUserLogged;
 
 if($_POST['account-type'] == "normal"){
     $user_obj = new UsersData("giulliano_php", "");  // trade for your username and password at MySQL
-    $auth = $user_obj->login($_POST['user-name'], $_POST['password-input']);
+    $auth = $user_obj->login($_POST['username'], $_POST['password']);
     $_SESSION = $auth;
     sendUserLogged();
 }
 else if($_POST['account-type'] == "proprietary"){
     $prop_obj = new ProprietariesData("giulliano_php", "");
-    $auth = $prop_obj->login($_POST['user-name'], $_POST['password-input']);
+    $auth = $prop_obj->login($_POST['username'], $_POST['password']);
     $_SESSION = $auth;
     sendUserLogged();
 }

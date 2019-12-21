@@ -351,8 +351,8 @@ class UsersData extends DatabaseConnection{
          */
         $this->checkNotConnected();
         if(!$this->checkUserExists($user)) throw new UserNotFound("There's no user '$user'!", 1);
-        $usr_data = $this->connection->query("SELECT vl_key, vl_email FROM tb_users WHERE nm_user = \"$user\";")->fetch_array();
-        if($this->checkUserCheckedEmail($user)) return true;  // will end the execution
+        $usr_data = $this->connection->query("SELECT vl_key, vl_email, checked FROM tb_users WHERE nm_user = \"$user\";")->fetch_array();
+        if($usr_data['checked'] == 1) return true;  // will end the execution
         $headers = "MIME-Version: 1.0\n";
         $headers .= "Content-Type: text/html; charset=iso-8859-1\n";
         $headers .= "From: " . self::EMAIL_USING . "\n";
@@ -427,6 +427,7 @@ class ProprietariesData extends DatabaseConnection{
           $qr = $this->connection->query("SELECT nm_proprietary FROM tb_proprietaries WHERE nm_proprietary = \"$nm_proprietary\";");
           while($row = $qr->fetch_array()){
               if($row['nm_proprietary'] == $nm_proprietary) return true;
+              else continue;
           }
           return false;
      }
@@ -502,18 +503,18 @@ class ProprietariesData extends DatabaseConnection{
         return $password == $from_db;
      }
 
+     /**
+      * Makes the authentication and sets the $_SESSION keys to do the login.
+      * Just like the UsersData->login function.
+      *
+      * @param string $proprietary The proprietary that will do the login.
+      * @param string $password The password received from the input at the form
+      * @param bool $encoded_password If the password is encoded at the database.
+      * @throws ProprietaryNotFound If there's no proprietary such the selected
+      * @throws AuthenticationError If the password's incorrect
+      * @return array
+      */
     public function login(string $proprietary, string $password, bool $encoded_password = true){
-         /**
-          * Makes the authentication and sets the $_SESSION keys to do the login.
-          * Just like the UsersData->login function.
-          *
-          * @param string $proprietary The proprietary that will do the login.
-          * @param string $password The password received from the input at the form
-          * @param bool $encoded_password If the password is encoded at the database.
-          * @throws ProprietaryNotFound If there's no proprietary such the selected
-          * @throws AuthenticationError If the password's incorrect
-          * @return array
-          */
         $this->checkNotConnected();
         $auth = $this->authPasswd($proprietary, $password, $encoded_password);
         if(!$auth) throw new AuthenticationError("Invalid password", 1);
@@ -527,15 +528,15 @@ class ProprietariesData extends DatabaseConnection{
         return $arr_info;
      }
 
+     /**
+      * Adds a proprietary account in the database, that will be automaticly commited to the MySQL database.
+      * @param string $prop_name The proprietary account name.
+      * @param string $password The account password.
+      * @param bool $encode_password If the method will encode the password before going to the database, if don't the password need to be in bas64.
+      * @throws ProprietaryAlreadyExists If there's a proprietary with that name already.
+      * @return void
+      */
     public function addProprietary(string $prop_name, string $password, string $email, bool $encode_password = true){
-         /**
-          * Adds a proprietary account in the database, that will be automaticly commited to the MySQL database.
-          * @param string $prop_name The proprietary account name.
-          * @param string $password The account password.
-          * @param bool $encode_password If the method will encode the password before going to the database, if don't the password need to be in bas64.
-          * @throws ProprietaryAlreadyExists If there's a proprietary with that name already.
-          * @return void
-          */
         $this->checkNotConnected();
         if($this->checkProprietaryExists($prop_name)) throw new ProprietaryAlreadyExists("There's the proprietary '$prop_name' already", 1);
         $to_db = $encode_password ? base64_encode($password) : $password;
@@ -545,28 +546,28 @@ class ProprietariesData extends DatabaseConnection{
         echo $qr->error;
      }
 
+     /**
+      * Removes a proprietary account from the database.
+      * @param string $proprietary The account name to remove.
+      * @throws ProprietaryNotFound If the proprietary selected don't exists
+      * @return void
+      */
     public function delProprietary(string $proprietary){
-         /**
-          * Removes a proprietary account from the database.
-          * @param string $proprietary The account name to remove.
-          * @throws ProprietaryNotFound If the proprietary selected don't exists
-          * @return void
-          */
         $this->checkNotConnected();
         if(!$this->checkProprietaryExists($proprietary)) throw new ProprietaryNotFound("There's no proprietary account '$proprietary'", 1);
         $qr_del = $this->connection->query("DELETE FROM tb_proprietaries WHERE nm_proprietary = \"$proprietary\";");
         unset($qr_del);
      }
 
+     /**
+      * Changes a proprietary account name.
+      * @param string $proprietary The proprietary account to change the name (name)
+      * @param string $new_name The new account name
+      * @throws ProprietaryNotFound If the proprietary selected don't exists in the database.
+      * @throws ProprietaryAlreadyExists If the new name is already beeing used by another account.
+      * @return void
+      */
     public function chProprietaryName(string $proprietary, string $new_name){
-         /**
-          * Changes a proprietary account name.
-          * @param string $proprietary The proprietary account to change the name (name)
-          * @param string $new_name The new account name
-          * @throws ProprietaryNotFound If the proprietary selected don't exists in the database.
-          * @throws ProprietaryAlreadyExists If the new name is already beeing used by another account.
-          * @return void
-          */
         $this->checkNotConnected();
         if(!$this->checkProprietaryExists($proprietary)) throw new ProprietaryNotFound("There's no proprietary account '$proprietary'", 1);
         if($this->checkProprietaryExists($new_name)) throw new ProprietaryAlreadyExists("The name '$new_name' is already in use, choose another", 1);
@@ -574,31 +575,31 @@ class ProprietariesData extends DatabaseConnection{
         unset($qr_ch);
      }
 
+     /**
+      * Changes a proprietary email account.
+      * 
+      * @param string $proprietary The proprietary to change the email.
+      * @param string $new_email The new value for the email
+      * @throws ProprietaryNotFound If the proprietary selected don't exists in the database
+      * @return void
+      */
     public function chProprietaryEmail(string $proprietary, string $new_email){
-         /**
-          * Changes a proprietary email account.
-          * 
-          * @param string $proprietary The proprietary to change the email.
-          * @param string $new_email The new value for the email
-          * @throws ProprietaryNotFound If the proprietary selected don't exists in the database
-          * @return void
-          */
         $this->checkNotConnected();
         if(!$this->checkProprietaryExists($proprietary)) throw new ProprietaryNotFound("There's no proprietary '$proprietary'", 1);
         $qr_ch = $this->connection->query("UPDATE tb_proprietaries SET vl_email = \"$new_email\" WHERE nm_proprietary = \"$proprietary\";");
         unset($qr_ch);
      }
 
+     /**
+      * Changes a proprietary account password, but remember to use it after the authentication (obviously)
+      *
+      * @param string $proprietary The proprietary to change the password.
+      * @param string $new_passwd The new account password
+      * @param bool $encode_passwd If the method will encode the password in base64
+      * @throws ProprietaryNotFound If the selected account ($proprietary) don't exists
+      * @return void
+      */
     public function chProprietaryPasswd(string $proprietary, string $new_passwd, bool $encode_passwd = true){
-         /**
-          * Changes a proprietary account password, but remember to use it after the authentication (obviously)
-          *
-          * @param string $proprietary The proprietary to change the password.
-          * @param string $new_passwd The new account password
-          * @param bool $encode_passwd If the method will encode the password in base64
-          * @throws ProprietaryNotFound If the selected account ($proprietary) don't exists
-          * @return void
-          */
         $this->checkNotConnected();
         if(!$this->checkProprietaryExists($proprietary)) throw new ProprietaryNotFound("There's no proprietary '$proprietary'", 1);
         $to_db = $encode_passwd ? base64_encode($new_passwd) : $new_passwd;
@@ -607,15 +608,15 @@ class ProprietariesData extends DatabaseConnection{
         unset($qr_ch);
      }
 
+     /**
+      * Changes the field checked, used when the key was sended and used at the email. Or when he changes him email.
+      * 
+      * @param string $proprietary The proprietary to change the info.
+      * @param bool   $checked     If the email was checked already.
+      * @throws ProprietaryNotFound If the choosed account don't exists in the database.
+      * @return void
+      */
     public function setProprietaryChecked(string $proprietary, bool $checked = true){
-         /**
-          * Changes the field checked, used when the key was sended and used at the email. Or when he changes him email.
-          * 
-          * @param string $proprietary The proprietary to change the info.
-          * @param bool   $checked     If the email was checked already.
-          * @throws ProprietaryNotFound If the choosed account don't exists in the database.
-          * @return void
-          */
         $this->checkNotConnected();
         if(!$this->checkProprietaryExists($proprietary)) throw new ProprietaryNotFound("There's no proprietary '$proprietary'", 1);
         $checked_vl = $checked ? 1: 0;
@@ -624,30 +625,30 @@ class ProprietariesData extends DatabaseConnection{
         unset($qr_ch);
      }
 
+     /**
+      * Sets special names on the HTML file to be used to send the email with the login key.
+      * On the HTML file the special names useds are:
+      *     * %user% => The proprietary using (or any another user)
+      *     * %key% => The account key.
+      * @param string $prop The proprietary name to stay on the %user%
+      * @param string $key  The proprietary key
+      * @return string
+      */
     public function parseHTMLTemplateEmailK(string $prop, string $key, string $path){
-         /**
-          * Sets special names on the HTML file to be used to send the email with the login key.
-          * On the HTML file the special names useds are:
-          *     * %user% => The proprietary using (or any another user)
-          *     * %key% => The account key.
-          * @param string $prop The proprietary name to stay on the %user%
-          * @param string $key  The proprietary key
-          * @return string
-          */
         $content = file_get_contents($path);
         $r1_content = str_replace("%user%", $prop, $content);
         return str_replace("%key%", $key, $r1_content);
      }
 
+     /**
+      * That function sends  a email with the code to the proprietary email. That uses the method mail, and requires the SMTP of the GMAIL.
+      * Also that function calls a method to convert the HTML file to the content. 
+      * 
+      * @param string $proprietary The proprietary to get the data and send the email.
+      * @throws ProprietaryNotFound If the selected proprietary don't exists in the database.
+      * @return bool If the email was sended, or if the account already checked the email.
+      */
     public function sendCheckEmail(string $proprietary){
-         /**
-          * That function sends  a email with the code to the proprietary email. That uses the method mail, and requires the SMTP of the GMAIL.
-          * Also that function calls a method to convert the HTML file to the content. 
-          * 
-          * @param string $proprietary The proprietary to get the data and send the email.
-          * @throws ProprietaryNotFound If the selected proprietary don't exists in the database.
-          * @return bool If the email was sended, or if the account already checked the email.
-          */
         $this->checkNotConnected();
         if(!$this->checkProprietaryExists($proprietary)) throw new ProprietaryNotFound("There's no proprietary account '$proprietary'", 1);
         $prop_dt = $this->connection->query("SELECT vl_key, checked, vl_email FROM tb_proprietaries WHERE nm_proprietary = \"$proprietary\";")->fetch_array();
@@ -659,14 +660,14 @@ class ProprietariesData extends DatabaseConnection{
         return mail($prop_dt['vl_email'], "Your LPGP key!", $content, $headers);
      }
 
+     /**
+      * Searches in the database for a proprietary with a name like a string or a name exactly equal a string.
+      * 
+      * @param string $name_needle The string to search in the names.
+      * @param bool $exactly If will be for the exactly equal names.
+      * @return array
+      */
     public function qrPropByName(string $name_needle, bool $exactly = false){
-         /**
-          * Searches in the database for a proprietary with a name like a string or a name exactly equal a string.
-          * 
-          * @param string $name_needle The string to search in the names.
-          * @param bool $exactly If will be for the exactly equal names.
-          * @return array
-          */
         $this->checkNotConnected();
         $results = array();
         if($exactly) $qr = $this->connection->query("SELECT nm_proprietary FROM tb_proprietaries WHERE nm_proprietary = \"$name_needle\";");
@@ -675,14 +676,14 @@ class ProprietariesData extends DatabaseConnection{
         return $results;
      }
 
+     /**
+      * Searches a proprietary for a string in the email field at the database.
+      *
+      * @param string $email_needle The string to search at the email.
+      * @param bool $exactly If will search for the exactly string in the database.
+      * @return array
+      */
     public function qrPropByEmail(string $email_needle, bool $exactly = false){
-         /**
-          * Searches a proprietary for a string in the email field at the database.
-          *
-          * @param string $email_needle The string to search at the email.
-          * @param bool $exactly If will search for the exactly string in the database.
-          * @return array
-          */
         $this->checkNotConnected();
         $results = array();
         if($exactly) $qr = $this->connection->query("SELECT nm_proprietary FROM tb_proprietaries WHERE vl_email = \"$email_needle\";");
@@ -690,20 +691,19 @@ class ProprietariesData extends DatabaseConnection{
         while($row = $qr->fetch_array()) array_push($results, $row['nm_proprietary']);
         return $results;
      }
-    // TODO: Finish the querys 
     
 }
 
+/**
+ * That class contains all the uses of the signatures and signatures files.
+ * The uploaded files stay at the directory ./usignatures.d and the downloadeble files stay at
+ * the directory ./signatures.d
+ * 
+ * @var string|int VERSION_ACT The version the signature will be storaged.
+ * @var string|int VERSION_MIN The minimal version accepted.
+ * @var array      VERSION_ALL The allowed versions of reading.
+ */
 class SignaturesData extends DatabaseConnection{
-    /**
-     * That class contains all the uses of the signatures and signatures files.
-     * The uploaded files stay at the directory ./usignatures.d and the downloadeble files stay at
-     * the directory ./signatures.d
-     * 
-     * @const string|int VERSION_ACT The version the signature will be storaged.
-     * @const string|int VERSION_MIN The minimal version accepted.
-     * @const array      VERSION_ALL The allowed versions of reading.
-     */
     const VERSION_ACT = "alpha";
     const VERSION_MIN = "alpha";
     const VERSION_ALL = ["alpha"];

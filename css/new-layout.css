@@ -1,0 +1,59 @@
+body{ background-color: #ffffff !important;}
+.header-container{
+    background-color: rgb(51, 51, 71);
+    position: absolute !important;
+}
+
+.header-container .header{
+    height: 71px !important;
+}
+
+/* default values*/
+.default-btn-header{
+    background-color: rgb(51, 51, 71);
+    border: 1px #ffffff solid !important;
+    color: white !important;
+    font-family: Arial; 
+    margin-top: 10px !important;
+    position: absolute;
+}
+
+.default-btn-header:hover{
+    background-color: #ffffff;
+    border-color: rgb(51, 51, 71);
+    color: rgb(51, 51, 71) !important;
+}
+
+.default-btn-header-split{
+    background-color: rgb(51, 51, 71);
+    color: #ffffff !important;
+    border: 1px #ffffff solid !important;
+}
+
+.after-opt{ margin-left: 9%;}
+
+.opts{
+    background-color: rgb(51, 51, 71) !important;
+}
+
+.opts .dropdown-item{
+    color: white;
+    font-family: Arial;
+    background-color: rgb(51, 51, 71);
+
+}
+
+.container-content{
+    position: absolute;
+    top: 10%;
+}
+
+.clear-content{
+    background-color: white;
+}
+
+.social-group{
+    position: absolute !important;
+    left: 90%;
+}
+

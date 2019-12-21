@@ -7,140 +7,102 @@
     <title>LPGP Oficial Server</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="./css/layout.css">
+    <link rel="stylesheet" href="./css/new-layout.css">
     <script src="./js/main-script.js"></script>
     <link rel="stylesheet" href="./bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="./bootstrap/font-awesome.min.css">
     <script src="./bootstrap/jquery-3.3.1.slim.min.js"></script>
     <script src="./bootstrap/bootstrap.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link rel="shortcut icon" href="./media/logo-lpgp.png" type="image/x-icon">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.2/popper.min.js"></script>
+
 </head>
 <body>
     <script>
-        var passwd_type_change = "text";
-        $(document).on("click", "#login-opt", function(){
-            $("#item1").toggle("slide");
+        $(document).ready(function(){   
+            setAccountOpts();
+            setSignatureOpts();
         });
 
-        $(document).on("click", "#sign-opts-btn", function(){
-            $("#item2").toggle("slide");
-        });
-
-        $(document).ready(function(){
-            setOptionByLogin();
-            setOptionsbyMode();
-            switchDarkLight("dk-btn");
-        });
-
-        $(document).on("click", "#help-handler", function(){
-            $("#item3").toggle("slide");
-        });
-
+        var passwd_vl = "text";
         $(document).on("click", "#show-passwd", function(){
-            $("#password-input").attr("type", passwd_type_change);
-            if(passwd_type_change == "text") passwd_type_change = "password";
-            else passwd_type_change = "text";
-        });
-
-        $(document).on("change", "#account-mode", function(){
-            if($(this).val() == "none"){
-                $(".error-lb").text("Please choose a valid account type!");
-                $(".error-lb").toggle();
-            }
+            $("#password").attr("type", passwd_vl);
+            if(passwd_vl == "text") passwd_vl = "password";
+            else passwd_vl = "text";
         });
     </script>
-
-    <div class="container-fluid side-bar-main">
-        <div class="row main-row">
-            <div class="col-md-3 side-bar">
-                <div class="container main-cont">
-                    <div class="row title-row">
-                        <h1 class="dft-title">LPGP Oficial Server</h1>
-                        <h6 class="dft-subtitle">Your work certain!</h6>
-                    </div>
-                </div>
-                <div class="container link-list-container">
-                    <div class="row links-list-row">
-                        <ul class="link-list list-unstyled">
-                            <li class="link-item">
-                                <button data-toggle="collapse" class="item-handler btn" aria-expanded="false" aria-controls="collapse" data-target="item1" type="button" id="login-opt">
-                                    Login Options
-                                </button>
-                                <div class="collapse item-opts" id="item1">
-                                    <ul class="options-login list-unstyled">
-                                        <li class="opt-login">
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <li class="link-item">
-                                <button data-toggle="collapse" class="item-handler btn" aria-expanded="false" aria-controls="collapse" data-target="item2" type="button" id="sign-opts-btn">
-                                    Signature options
-                                </button>
-                                <div class="collapse item-opts" id="item2">
-                                    <ul class="si-opts list-unstyled">
-
-                                    </ul>
-                                </div>
-                            </li>
-                            <li class="link-item">
-                                <button class="item-handler btn" id="help-handler">
-                                    Help
-                                </button>
-                                <div class="collapse item-opts" id="item3">
-                                    <ul class="help-opts list-unstyled">
-                                        <li class="help-opt">
-                                            <a href="./contact.html">Contact us</a>
-                                        </li>
-                                        <li class="help-opt">
-                                            <a href="./docs/index.html">Documentation</a>
-                                        </li>
-                                        <li class="help-opt">
-                                            
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="container dk-btn-container">
-                        <div class="dk-row row">
-                            <button class="dk-btn btn" onclick="autoLightDark();"></button>
-                        </div>
-                    </div>
-                    <br>
+    <div class="container-fluid header-container" role="banner" style="background-color: rgb(51, 51, 71); position: absolute;">
+        <div class="col-12 header" style="height: 71px">
+            <div class="opt-dropdown dropdown login-dropdown">
+                <button type="button" class="btn btn-lg default-btn-header dropdown-toggle" data-toggle="dropdown" id="account-opts" aria-haspopup="true" aria-expanded="false">
+                    Account
+                </button>
+                <div class="dropdown-menu opts" aria-labelledby="account-opts"></div>
+            </div>
+            <div class="opt-dropdown dropdown after-opt signatures-dropdown">
+                <button class="dropdown-toggle btn btn-lg default-btn-header" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true" id="signature-opts">
+                    Signatures
+                </button>
+                <div class="dropdown-menu opts" aria-labelledby="signature-opts"></div>
+            </div>
+            <div class="opt-dropdown dropdown after-opt help-dropdown" style="left: 12%; position: absolute !important;">
+                <button class="dropdown-toggle btn btn-lg default-btn-header" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true" id="help-opt">
+                    Help
+                </button>
+                <div class="dropdown-menu opts" aria-labelledby="help-opt">
+                    <a href="http://localhost/lpgp-server/docs/" class="dropdown-item">Documentation</a>
+                    <a href="http://localhost/lpgp-server/about.html" class="dropdown-item">About Us</a>
+                    <a href="http://localhost/lpgp-server/contact-us.html" class="dropdown-item">Contact Us</a>
                 </div>
             </div>
+            <div class="btn-group social-group" role="group" aria-label="Follow Us">
+                <a href="http://" class="btn default-btn-header" role="button">
+                    <img src="./media/logo-lpgp.png" alt="facebook" width="45px" height="45px">
+                </a>
+                <a href="http://" class="btn default-btn-header" role="button">
+                    <img src="./media/logo-lpgp.png" alt="twitter" width="45px" height="45px;">
+                </a>
+                <!-- TODO -->
+            </div>
         </div>
+
     </div>
-    <div class="container content-container">
-        <div class="row main-row">
-            <div class="content col-12 darkble-dk">
-                <h1 class="darkble-font">LPGP-server</h1>
-                <h1 class="darkble-font">Login</h1>
-                <form action="./cgi-actions/login.php" method="post">
-                    <label for="username-inp" class="darkble-font">Username</label>
+    <br>
+
+    <div class="container-fluid container-content" style="position: absolute;">
+        <div class="row-main row">
+            <div class="col-4 clear-content center-content" style="position: absolute; left: 32% !important; top: 30% !important;">
+                <form action="./cgi-actions/login.php" method="POST">
+                    <h1>Login</h1>
                     <br>
-                    <input type="text" name="user-name" class="darkble-input default-input" id="username-inp" required>
+                    <hr>
+                    <label for="username">Your User Name</label>
                     <br>
-                    <label for="password-input" class="darkble-font">Password</label>
+                    <input type="text" class="form-control" id="username" name="username" placeholder="Username">
                     <br>
-                    <input type="password" name="password-input" id="password-input" required>
-                    <label for="password-input">
-                        <button class="darkble-btn btn" id="show-passwd" type="button">
-                            Show password
+                    <label for="password">Your Password</label>
+                    <br>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                    <br>
+                    <label for="password">
+                        <button class="btn btn-secondary" id="show-passwd" type="button">
+                            Show Password
                         </button>
                     </label>
                     <br>
-                    <select name="account-type" id="account-mode" class="darkble-select default-select" required>
-                        <option value="none">Select your account type</option>
-                        <option value="normal">Normal user</option>
-                        <option value="proprietary">Proprietary User</option>
-                    </select>
+                    <hr>
+                    <h3>Are you a: </h3>
+                    <input type="radio" name="account-type" id="normie" value="normal" style="padding: 10px 11px;"> Normal User
                     <br>
-                    <button class="btn darkble-btn login-btn" id="go-login" type="submit">
-                        Login
-                    </button>
-                    <div class="error-lb darkble-error" aria-hidden="true"></div>
+                    <input type="radio" name="account-type" id="prop" value="proprietary"> Proprietary
+                    <hr>
+                    <button type="submit" class="btn btn-success btn-block">Login</button>
+                    <br>
                 </form>
             </div>
         </div>

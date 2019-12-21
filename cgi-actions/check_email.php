@@ -10,9 +10,10 @@ if(array_key_exists('btn-resend', $_POST)){
         $usr_obj = new UsersData("giulliano_php", "");
         $usr_obj->sendCheckEmail($_SESSION['user']);
     }
-    if($_SESSION['mode'] == "proprietary"){
+    if($_SESSION['mode'] == "prop"){
         $prop_obj = new ProprietariesData("giulliano_php", "");
         $prop_obj->sendCheckEmail($_SESSION['user']);
+        
     }
     echo "<h1>Email sended successfully!</h1>\n<button class=\"default-btn btn darkble-btn\" onclick=\"window.location.replace('http://localhost/lpgp-server/cgi-actions/check-email-stp1.php');\">Go back</button>";
 }
