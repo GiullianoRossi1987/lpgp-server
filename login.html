@@ -61,16 +61,13 @@
                 </div>
             </div>
             <div class="btn-group social-group" role="group" aria-label="Follow Us">
-                <a href="http://" class="btn default-btn-header" role="button">
-                    <img src="./media/logo-lpgp.png" alt="facebook" width="45px" height="45px">
+                <a href="http://" class="btn default-btn-social" role="button" id="github-btn">
                 </a>
-                <a href="http://" class="btn default-btn-header" role="button">
-                    <img src="./media/logo-lpgp.png" alt="twitter" width="45px" height="45px;">
+                <a href="http://" class="btn default-btn-social" role="button" id="facebook-btn">
                 </a>
-                <!-- TODO -->
+                <a href="" class="btn default-btn-social" role="button" id="twitter-btn"></a>
             </div>
         </div>
-
     </div>
     <br>
 
@@ -87,7 +84,7 @@
                     <br>
                     <label for="password">Your Password</label>
                     <br>
-                    <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                    <input type="password" class="form-control default-input" id="password" name="password" placeholder="Password">
                     <br>
                     <label for="password">
                         <button class="btn btn-secondary" id="show-passwd" type="button">
@@ -97,9 +94,12 @@
                     <br>
                     <hr>
                     <h3>Are you a: </h3>
-                    <input type="radio" name="account-type" id="normie" value="normal" style="padding: 10px 11px;"> Normal User
-                    <br>
-                    <input type="radio" name="account-type" id="prop" value="proprietary"> Proprietary
+                    <div class="form-check form-check-inline">
+                        <input type="radio" value="normal" name="account-type" class="form-check-input" id="normal-rd">
+                        <label for="normal-rd" class="form-check-label">Normal user</label>
+                        <input type="radio" value="proprietary" name="account-type" class="form-check-input" id="prop-rd" style="margin-left: 5px;">
+                        <label for="prop-rd" class="form-check-label">Proprietary</label>
+                    </div>
                     <hr>
                     <button type="submit" class="btn btn-success btn-block">Login</button>
                     <br>

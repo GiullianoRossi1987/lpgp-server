@@ -1,4 +1,4 @@
-body{ background-color: #ffffff !important;}
+body{ background-color: #f1fa8c !important;}
 .header-container{
     background-color: rgb(51, 51, 71);
     position: absolute !important;
@@ -45,15 +45,77 @@ body{ background-color: #ffffff !important;}
 
 .container-content{
     position: absolute;
-    top: 10%;
+    top: 20%;
 }
 
 .clear-content{
     background-color: white;
+    border: 3px rgb(51, 51, 71) solid;
+    border-radius: 5%;
 }
 
 .social-group{
     position: absolute !important;
     left: 90%;
+    height: 55px;
 }
 
+#facebook-btn{
+    background-image: url("../media/stand-by-facebook.png");
+    background-repeat: no-repeat;
+    background-size: 100%;
+    width: 50px;
+}
+
+#facebook-btn:hover{
+    background-image: url("../media/hover-facebook.png");
+}
+
+.default-btn-social{
+    background-color: rgb(51, 51, 71);
+    margin-top: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+#github-btn{
+    background-image: url("../media/stable-git.png");
+    background-repeat: no-repeat;
+    background-size: 100%;
+    width: 50px;
+}
+
+#github-btn:hover{
+    background-image: url("../media/hover-git.png");
+}
+
+#twitter-btn{
+    background-image: url("../media/static-twitter.png");
+    background-repeat: no-repeat;
+    background-size: 100%;
+    width: 50px;
+}
+
+#twitter-btn:hover{
+    background-image: url("../media/hover-twitter.png");
+}
+
+/* Separators default*/
+
+.sep{
+    border: 1px rgb(51, 51, 71) solid;
+}
+
+.sep-sm{
+    height: 10px;
+}
+
+.sep-md{
+    height: 50px;
+}
+
+.sep-lg{
+    height:  100px;
+}
+
+.sep-xl{ height: 250px;}
