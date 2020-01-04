@@ -1,6 +1,4 @@
-<?php 
-session_start();
-?>
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,110 +8,93 @@ session_start();
     <title>LPGP Oficial Server</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="../css/layout.css">
-    <script src="../js/main-script.js"></script>
-    <link rel="stylesheet" href="../bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" href="../bootstrap/font-awesome.min.css">
-    <script src="../bootstrap/jquery-3.3.1.slim.min.js"></script>
-    <script src="../bootstrap/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="./css/new-layout.css">
+    <script src="./js/main-script.js"></script>
+    <link rel="stylesheet" href="./bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="./bootstrap/font-awesome.min.css">
+    <script src="./bootstrap/jquery-3.3.1.slim.min.js"></script>
+    <script src="./bootstrap/bootstrap.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link rel="shortcut icon" href="./media/logo-lpgp.png" type="image/x-icon">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.2/popper.min.js"></script>
+
 </head>
 <body>
     <script>
-        $(document).on("click", "#login-opt", function(){
-            $("#item1").toggle("slide");
+        $(document).ready(function(){   
+            setAccountOpts();
+            setSignatureOpts();
         });
 
-        $(document).on("click", "#sign-opts-btn", function(){
-            $("#item2").toggle("slide");
+        $(document).on("change", "#code", function(){
+            var content = $(this).val();
+            if(content.length <= 0){
+                $("#err-lb-code").text("Please insert a valid code!");
+                $("#err-lb-code").show();
+            }
+            else $("#err-lb-code").hide();
         });
-
-        $(document).ready(function(){
-            setOptionByLogin();
-            setOptionsbyMode();
-            switchDarkLight("dk-btn");
-        });
-
-        $(document).on("click", "#help-handler", function(){
-            $("#item3").toggle("slide");
-        })
     </script>
-
-    <div class="container-fluid side-bar-main">
-        <div class="row main-row">
-            <div class="col-md-3 side-bar">
-                <div class="container main-cont">
-                    <div class="row title-row">
-                        <h1 class="dft-title">LPGP Oficial Server</h1>
-                        <h6 class="dft-subtitle">Your work certain!</h6>
-                    </div>
-                </div>
-                <div class="container link-list-container">
-                    <div class="row links-list-row">
-                        <ul class="link-list list-unstyled">
-                            <li class="link-item">
-                                <button data-toggle="collapse" class="item-handler btn" aria-expanded="false" aria-controls="collapse" data-target="item1" type="button" id="login-opt">
-                                    Login Options
-                                </button>
-                                <div class="collapse item-opts" id="item1">
-                                    <ul class="options-login list-unstyled">
-                                        <li class="opt-login">
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <li class="link-item">
-                                <button data-toggle="collapse" class="item-handler btn" aria-expanded="false" aria-controls="collapse" data-target="item2" type="button" id="sign-opts-btn">
-                                    Signature options
-                                </button>
-                                <div class="collapse item-opts" id="item2">
-                                    <ul class="si-opts list-unstyled">
-
-                                    </ul>
-                                </div>
-                            </li>
-                            <li class="link-item">
-                                <button class="item-handler btn" id="help-handler">
-                                    Help
-                                </button>
-                                <div class="collapse item-opts" id="item3">
-                                    <ul class="help-opts list-unstyled">
-                                        <li class="help-opt">
-                                            <a href="./contact.html">Contact us</a>
-                                        </li>
-                                        <li class="help-opt">
-                                            <a href="./docs/index.html">Documentation</a>
-                                        </li>
-                                        <li class="help-opt">
-                                            
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="container dk-btn-container">
-                        <div class="dk-row row">
-                            <button class="dk-btn btn" onclick="autoLightDark();"></button>
-                        </div>
-                    </div>
-                    <br>
+    <div class="container-fluid header-container" role="banner" style="background-color: rgb(51, 51, 71); position: absolute;">
+        <div class="col-12 header" style="height: 71px">
+            <div class="opt-dropdown dropdown login-dropdown">
+                <button type="button" class="btn btn-lg default-btn-header dropdown-toggle" data-toggle="dropdown" id="account-opts" aria-haspopup="true" aria-expanded="false">
+                    Account
+                </button>
+                <div class="dropdown-menu opts" aria-labelledby="account-opts"></div>
+            </div>
+            <div class="opt-dropdown dropdown after-opt signatures-dropdown">
+                <button class="dropdown-toggle btn btn-lg default-btn-header" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true" id="signature-opts">
+                    Signatures
+                </button>
+                <div class="dropdown-menu opts" aria-labelledby="signature-opts"></div>
+            </div>
+            <div class="opt-dropdown dropdown after-opt help-dropdown" style="left: 12%; position: absolute !important;">
+                <button class="dropdown-toggle btn btn-lg default-btn-header" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true" id="help-opt">
+                    Help
+                </button>
+                <div class="dropdown-menu opts" aria-labelledby="help-opt">
+                    <a href="http://localhost/lpgp-server/docs/" class="dropdown-item">Documentation</a>
+                    <a href="http://localhost/lpgp-server/about.html" class="dropdown-item">About Us</a>
+                    <a href="http://localhost/lpgp-server/contact-us.html" class="dropdown-item">Contact Us</a>
                 </div>
             </div>
+            <div class="btn-group social-group" role="group" aria-label="Follow Us">
+                <a href="http://" class="btn default-btn-social" role="button" id="github-btn">
+                </a>
+                <a href="http://" class="btn default-btn-social" role="button" id="facebook-btn">
+                </a>
+                <a href="" class="btn default-btn-social" role="button" id="twitter-btn"></a>
+            </div>
         </div>
+
     </div>
-    <div class="container content-container">
-        <div class="row main-row">
-            <div class="content col-12 darkble-dk">
-                <h1 class="darkble-font">LPGP-server</h1>
-                <h1 class="darkble-font">Check your email code 
-                    <?php echo $_SESSION['user']; ?>
-                </h1>
-                <form action="http://localhost/lpgp-server/cgi-actions/check_email.php" method="POST">
-                    <label for="code" class="darkble-font">Code: </label>
-                    <input type="text" required name="code" id="code">
+    <br>
+
+    <div class="container-fluid container-content" style="position: absolute;margin-left: 23%;">
+        <div class="row-main row">
+            <div class="col-7 clear-content">
+                <h1>Check your email <?php echo $_SESSION['user'];?></h1>
+                <br>s
+                <form action="check_email.php" method="post">
+                    <label for="code" class="form-label">
+                        <h4>Insert your e-mail code</h4>
+                    </label>
                     <br>
-                    <button class="darkble-btn btn default-btn" id="btn-send" type="submit" value="Send Code" name="btn-code">Send Email</button>
-                    <button class="darkble-btn btn default-btn" id="btn-resend" type="submit" value="Resend email" name="btn-resend">Resend Email</button>
+                    <input type="text" id="code" name="code" placeholder="Your code" class="form-control">
+                    <br>
+                    <label for="code" class="form-label">
+                        <small class="error-label" id="err-lb-code"></small>
+                    </label>
+                    <br>
+                    <div class="button-group default-group">
+                        <button class="btn btn-lg btn-secondary" name="btn-resend">Resend the email</button>
+                        <button class="btn btn-lg btn-success" name="bt-code">Submit code</button>
+                    </div>
                 </form>
             </div>
         </div>

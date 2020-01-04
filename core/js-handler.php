@@ -11,7 +11,7 @@ namespace JSHandler;
 function sendUserLogged(){
     if(session_status() == PHP_SESSION_NONE || session_status() == PHP_SESSION_DISABLED){
         // if there's no one logged.
-        echo "<script>\nlocalStorage.setItem(\"logged-user\", \"false\");\nlocalStorage.setItem(\"user_mode\", \"null\");\nlocalStorage.setItem(\"checked\", \"null\");\n</script>";
+        echo "<script>\nlocalStorage.setItem(\"logged-user\", \"false\");\nlocalStorage.setItem(\"user_mode\", \"null\");\nlocalStorage.setItem(\"checked\", \"null\");\nlocalStorage.setItem(\"user-icon\", \"\"</script>";
     }
     else{
         $logged_user = $_SESSION['user-logged'];

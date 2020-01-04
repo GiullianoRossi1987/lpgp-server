@@ -115,12 +115,12 @@
     </div>
     <br>
 
-    <div class="container-fluid container-content" style="position: absolute;left: 23%;">
+    <div class="container-fluid container-content" style="position: absolute;margin-left: 23%;">
         <div class="row-main row">
             <div class="col-7 clear-content">
                 <h1>Create a account</h1>
                 <br>
-                <form action="./cgi-actions/create_account.php" method="post">
+                <form action="https://localhost/lpgp-server/cgi-actions/create_account.php" method="post" enctype="multipart/form-data">
                     <label for="username" class="form-label">
                         <h4>Pick a Username</h4>
                     </label>
@@ -129,6 +129,16 @@
                     <br>
                     <label for="username" class="form-label" aria-hidden="true">
                         <small class="error-lb" id="err-lb-username"></small>
+                    </label>
+                    <br>
+                    <label for="email" class="form-label">
+                        <h4>Pick a e-mail address</h4>
+                    </label>
+                    <br>
+                    <input type="email" id="email" name="email" placeholder="user@example.com" class="form-control">
+                    <br>
+                    <label for="email" class="form-label">
+                        <small class="error-lb" id="err-lb-email"></small>
                     </label>
                     <br>
                     <label for="password1" class="form-label">
@@ -141,8 +151,38 @@
                     <br>
                     <input type="password" class="form-control" name="password1" id="password1" placeholder="Password">
                     <label for="password1" class="form-label">
-                        <button class="btn btn-sm btn-secondary show-passwd-btn" id="show-passwd1" type="button"></button>
+                        <button class="btn btn-secondary show-passwd-btn" id="show-passwd1" type="button">Show my password</button>
                     </label>
+                    <br>
+                    <label for="password-c" class="form-label">
+                        <h4>Confirm the password</h4>
+                    </label>
+                    <br>
+                    <label for="password-c" class="form-label">
+                        <small class="error-lb" id="err-lb-passwd2"></small>
+                    </label>
+                    <br>
+                    <input type="password" name="password2" class="form-control" id="password2" placeholder="Confirm the password">
+                    <label for="password2" class="form-label">
+                        <button class="btn btn-secondary show-passwd-btn" id="show-passwd2" type="button">Show my password</button>
+                    </label>
+                    <br>
+                    <hr>
+                    <h4>Choose a account type: </h4>
+                    <br>
+                    <div class="form-check form-check-inline">
+                        <input type="radio" name="account-mode" class="form-check-input" value="normal" id="normie-rd">
+                        <label for="normie-rd" class="form-label">Normal user</label>
+                        <br>
+                        <input type="radio" name="account-mode" class="form-check-input" value="proprietary" id="prop-rd">
+                        <label for="prop-rd" class="form-label">Proprietary</label>
+                    </div>
+                    <br>
+                    <h4>Choose your profile image</h4>
+                    <br>
+                    <input type="file" name="img-user[]" required class="form-control">
+                    <br>
+                    <button type="submit" class="btn btn-block btn-success">Create account</button>
                 </form>
             </div>
         </div>

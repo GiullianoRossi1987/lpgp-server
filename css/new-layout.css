@@ -132,11 +132,3 @@ body{ background-color: #f1fa8c !important;}
     font-family: Impact;
     font-feature-settings: "half";
 }
-
-.show-passwd-btn{
-    background-image: url("../media/static-show-passwd.png");
-    background-repeat: no-repeat;
-    background-size: 100%;
-    width: 80px;
-    height: 50px;
-}

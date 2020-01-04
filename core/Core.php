@@ -34,6 +34,7 @@ define("DEFAULT_HOST", "localhost");
 define("DEFAULT_DB", "LPGP_WEB");
 define("ROOT_VAR", $_SERVER['DOCUMENT_ROOT']);
 define("EMAIL_USING", "lpgp@gmail.com");
+define("DEFAULT_USER_ICON", $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/media/user-icon.png");
 class DatabaseConnection{
     /**
      * That class contains the main connection to the database and him universal actions,
@@ -87,7 +88,7 @@ class DatabaseConnection{
         /**
          * Destrois the class and also closes the connection to a MySQL database.
          */
-        $this->connection->close();
+        mysqli_close($this->connection);
         $this->user = "";
         $this->database_connected = "";
         $this->host_using = "";
@@ -118,7 +119,7 @@ class UsersData extends DatabaseConnection{
         parent::__destruct();
     }
 
-    private function checkUserExists(string $username, bool $auto_throw = true){
+    private function checkUserExists(string $username, bool $auto_throw = false){
         /**
          * Checks if a user exists in the database. 
          * @param string $username The user to search in the database.
@@ -177,10 +178,12 @@ class UsersData extends DatabaseConnection{
          */
         $rcv = $this->authPassword($user, $password, $encoded_password);
         $checked_usr = $this->connection->query("SELECT checked FROM tb_users WHERE nm_user = \"$user\";")->fetch_array();
+        $img_path = $this->connection->query("SELECT vl_img FROM tb_users WHERE nm_user = \"$user\";")->fetch_array();
         $arr_info = [];
         $arr_info['user-logged'] = "true";
         $arr_info['user'] = $user;
         $arr_info['mode'] = "normie";
+        $arr_info['usr-icon'] = $img_path['vl_img'];
         $arr_info['checked'] = $checked_usr['checked'] == "1" || $checked_usr['checked'] == 1? "true": "false";
         return $arr_info;
     }
@@ -221,7 +224,7 @@ class UsersData extends DatabaseConnection{
         }
     }
 
-    public function addUser(string $user, string $password, string $email, bool $encode_password = true){
+    public function addUser(string $user, string $password, string $email, bool $encode_password = true, string $img){
         /**
          * Adds a user for the database. Normally made for be used in HTML forms
          * @param string $user The name for the user.
@@ -235,8 +238,8 @@ class UsersData extends DatabaseConnection{
         if($this->checkUserExists($user, false)) throw new UserAlreadyExists("There's already a user with the name '$user'", 1);
         $to_db = $encode_password ? base64_encode($password) : $password;
         $usr_key = $this->createUserKey();
-        $qr = $this->connection->query("INSERT INTO tb_users (nm_user, vl_email, vl_password, vl_key) VALUES (\"$user\", \"$email\", \"$to_db\", \"$usr_key\");");
-        
+        $qr = $this->connection->query("INSERT INTO tb_users (nm_user, vl_email, vl_password, vl_key, vl_img) VALUES (\"$user\", \"$email\", \"$to_db\", \"$usr_key\", \"$img\");");
+        if(!$qr) echo mysqli_error($this->connection);
     }
 
     public function deleteUser(string $user){
@@ -297,6 +300,20 @@ class UsersData extends DatabaseConnection{
         $qr = $this->connection->query("UPDATE tb_users SET vl_password = \"$to_db\" WHERE nm_user = \"$user\";");
         unset($qr);
         unset($to_db);
+    }
+
+    /**
+     * Changes the User image at the database.
+     * @param string $user The user to change the image.
+     * @param string $new_img The new image path
+     * @throws UserNotFound If there's no user with the given name.
+     * @return void
+     */
+    public function chImage(string $user, string $new_img = DEFAULT_USER_ICON){
+        $this->checkNotConnected();
+        if(!$this->checkUserExists($user, false)) throw new UserNotFound("There's no user '$user'", 1);
+        $qr = $this->connection->query("UPDATE tb_users SET vl_img  = \"$new_img\" WHERE nm_user = \"$user\";");
+        unset($qr);
     }
     
     public function setUserChecked(string $user, bool $checked = true){
@@ -519,11 +536,12 @@ class ProprietariesData extends DatabaseConnection{
         $auth = $this->authPasswd($proprietary, $password, $encoded_password);
         if(!$auth) throw new AuthenticationError("Invalid password", 1);
         $arr_info = [];
-        $checked = $this->connection->query("SELECT checked FROM tb_proprietaries WHERE nm_proprietary = \"$proprietary\";")->fetch_array();
+        $checked = $this->connection->query("SELECT checked, vl_img FROM tb_proprietaries WHERE nm_proprietary = \"$proprietary\";")->fetch_array();
         $arr_info['user'] = $proprietary;
         $arr_info['mode'] = "prop";
         $arr_info['user-logged'] = "true";
         $arr_info['checked'] = $checked['checked'] == 1 || $checked == "1" ? "true" : "false";
+        $arr_info['user-icon'] = $checked['vl_img'];
         unset($auth);   // min use of memory
         return $arr_info;
      }
@@ -533,17 +551,17 @@ class ProprietariesData extends DatabaseConnection{
       * @param string $prop_name The proprietary account name.
       * @param string $password The account password.
       * @param bool $encode_password If the method will encode the password before going to the database, if don't the password need to be in bas64.
+      * @param string $img_path The path to the image file of the user avatar
       * @throws ProprietaryAlreadyExists If there's a proprietary with that name already.
       * @return void
       */
-    public function addProprietary(string $prop_name, string $password, string $email, bool $encode_password = true){
+    public function addProprietary(string $prop_name, string $password, string $email, bool $encode_password = true, string $img = DEFAULT_USER_ICON){
         $this->checkNotConnected();
         if($this->checkProprietaryExists($prop_name)) throw new ProprietaryAlreadyExists("There's the proprietary '$prop_name' already", 1);
         $to_db = $encode_password ? base64_encode($password) : $password;
         $prop_key = $this->createProprietaryKey();
-        $qr = $this->connection->query("INSERT INTO tb_proprietaries (nm_proprietary, vl_email, vl_password, vl_key) VALUES (\"$prop_name\", \"$email\", \"$to_db\", \"$prop_key\");");
+        $qr = $this->connection->query("INSERT INTO tb_proprietaries (nm_proprietary, vl_email, vl_password, vl_key, vl_img) VALUES (\"$prop_name\", \"$email\", \"$to_db\", \"$prop_key\", \"$img\");");
         unset($to_db);
-        echo $qr->error;
      }
 
      /**
@@ -589,6 +607,20 @@ class ProprietariesData extends DatabaseConnection{
         $qr_ch = $this->connection->query("UPDATE tb_proprietaries SET vl_email = \"$new_email\" WHERE nm_proprietary = \"$proprietary\";");
         unset($qr_ch);
      }
+
+     /**
+      * Changes the proprietary use avatar image.
+      * @param string $proprietary The name of the proprietary to change the image
+      * @param string $new_img The new image for the user icon.
+      * @throws ProprietaryNotFound If there's no proprietary with the $proprietary name
+      * @return void
+      */
+    public function chImage(string $proprietary, string $new_img = DEFAULT_USER_ICON){
+        $this->checkNotConnected();
+        if(!$this->checkProprietaryExists($proprietary)) throw new ProprietaryNotFound("There's no proprietary '$proprietary'", 1);
+        $qr = $this->connection->query("UPDATE tb_proprietaries SET vl_img = \"$new_img\" WHERE nm_proprietary = \"$proprietary\";");
+        unset($qr);
+    }
 
      /**
       * Changes a proprietary account password, but remember to use it after the authentication (obviously)
