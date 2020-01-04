@@ -1,7 +1,14 @@
-body{ background-color: #f1fa8c !important;}
+
 .header-container{
     background-color: rgb(51, 51, 71);
-    position: absolute !important;
+    position: fixed !important;
+    z-index: 99;
+}
+
+.scrolled{
+    background-color:black;
+    border-bottom: 1px white solid;
+    transition: background-color 200ms linear;
 }
 
 .header-container .header{
@@ -11,12 +18,27 @@ body{ background-color: #f1fa8c !important;}
 /* default values*/
 .default-btn-header{
     background-color: rgb(51, 51, 71);
-    border: 1px #ffffff solid !important;
     color: white !important;
     font-family: Arial; 
     margin-top: 10px !important;
+    margin-left: 10px;
+    margin-right: 10px;
     position: absolute;
 }
+
+.default-btn-header-scrolled{
+    border-color: rgb(51, 51, 71);
+    color: white !important;
+    transition: background-color 200ms linear();
+}
+
+.default-btn-header-scrolled:hover{
+    color: gold !important;
+    border: 1px white solid !important;
+    transition: background-color 200ms linear;
+}
+
+.help-dropdown .btn{ margin-left: 190px !important;}
 
 .default-btn-header:hover{
     background-color: #ffffff;
@@ -27,7 +49,6 @@ body{ background-color: #f1fa8c !important;}
 .default-btn-header-split{
     background-color: rgb(51, 51, 71);
     color: #ffffff !important;
-    border: 1px #ffffff solid !important;
 }
 
 .after-opt{ margin-left: 9%;}
@@ -43,6 +64,16 @@ body{ background-color: #f1fa8c !important;}
 
 }
 
+.opts-scrolled{
+    background-color: black !important;
+    transition: background-color 200ms linear;
+}
+
+.opts-scrolled .dropdown-item{
+    background-color: black;
+    transition: background-color 200ms linear;
+}
+
 .container-content{
     position: absolute;
     top: 20%;
@@ -50,7 +81,6 @@ body{ background-color: #f1fa8c !important;}
 
 .clear-content{
     background-color: white;
-    border: 3px rgb(51, 51, 71) solid;
     border-radius: 3%;
 }
 
@@ -63,12 +93,21 @@ body{ background-color: #f1fa8c !important;}
 #facebook-btn{
     background-image: url("../media/stand-by-facebook.png");
     background-repeat: no-repeat;
-    background-size: 100%;
+    background-size: cover;
     width: 50px;
+    
 }
 
 #facebook-btn:hover{
     background-image: url("../media/hover-facebook.png");
+}
+
+#facebook-btn-header-scrolled{
+    background-image: url("../media/hover-facebook.png");
+}
+
+#facebook-btn-header-scrolled{
+    background-image: url("../media/stand-by-facebook.png");
 }
 
 .default-btn-social{
@@ -131,4 +170,23 @@ body{ background-color: #f1fa8c !important;}
     color: rgb(255, 0, 0);
     font-family: Impact;
     font-feature-settings: "half";
+}
+
+/* Images selector */
+.image-box-selection{
+    width: 200px !important;
+    height: 200px !important;
+    background-color: #ffffff;
+    opacity: 0.89;
+    border: 1px black solid;
+}
+
+.image-box-selection:hover{
+    cursor: pointer;
+    opacity: 0;
+}
+
+#usr-image-default{
+    background-image: url("../media/usr-icon.png") !important;
+    background-size: cover;
 }

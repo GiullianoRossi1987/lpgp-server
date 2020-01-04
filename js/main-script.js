@@ -133,7 +133,6 @@ function showError(message){
     error_lbs.setAttribute("style", "visibility: visible;");
 }
 
-
 function hideError(){
     var error_lbs = document.querySelector(".error-lb");
     error_lbs.setAttribute("style", "visibility: hidden;");
