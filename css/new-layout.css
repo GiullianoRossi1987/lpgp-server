@@ -22,7 +22,7 @@
     font-family: Arial; 
     margin-top: 10px !important;
     margin-left: 10px;
-    margin-right: 10px;
+    margin-right: 20px;
     position: absolute;
 }
 
@@ -30,6 +30,10 @@
     border-color: rgb(51, 51, 71);
     color: white !important;
     transition: background-color 200ms linear();
+}
+
+.after-opt{
+    margin-left: 155px !important;
 }
 
 .default-btn-header-scrolled:hover{
@@ -82,13 +86,14 @@
 .clear-content{
     background-color: white;
     border-radius: 3%;
+    border: 1px black solid;
 }
 
-.social-group{
+/* .social-group{
     position: absolute !important;
     left: 90%;
     height: 55px;
-}
+} */
 
 #facebook-btn{
     background-image: url("../media/stand-by-facebook.png");
@@ -173,20 +178,64 @@
 }
 
 /* Images selector */
-.image-box-selection{
-    width: 200px !important;
-    height: 200px !important;
-    background-color: #ffffff;
+.img-box-selection{
+    width: 200px;
+    height: 200px;
+    background-color: rgb(51, 51, 71);
     opacity: 0.89;
     border: 1px black solid;
+    margin-left: 10px;
 }
 
-.image-box-selection:hover{
+.img-box-selection:hover{
     cursor: pointer;
-    opacity: 0;
+    opacity: initial;
+    background-color: #ffffff;
+    transition: background-color 200ms linear;
+    transition: opacity 200ms ease-out;
 }
 
 #usr-image-default{
-    background-image: url("../media/usr-icon.png") !important;
+    background-image: url("../media/usr-icon.png");
     background-size: cover;
+}
+
+.social-opt-footer + a + img{
+    opacity: .5;
+    padding: 2px 3px;
+    border: 1px black solid;
+}
+
+.social-opt-footer + a + img:hover{
+    opacity: 0;
+    border-color: blue;
+    transition: opacity 200ms linear;
+    transition: border-color 200ms linear;
+}
+
+.social-options-grp{
+    display: inline;
+    background-color: rgb(42, 42, 53) !important;
+    margin-left: 10px;
+}
+
+#img-upload-hidden{ visibility: hidden;}
+
+.img-select-container{
+    display: inline !important;    
+}
+
+#default-img{
+    background-image: url("../media/usr-icon.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.img-radio-default input ~ .checkmark{
+    background-color: #eee;
+}
+
+.img-radio-default:hover input ~.checkmark{
+    background-color: #ccc;
+    transition: background-color 200ms linear;
 }
