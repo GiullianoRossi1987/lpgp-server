@@ -32,6 +32,7 @@
 }
 
 .default-btn-header-scrolled{
+    background-color: black;
     border-color: rgb(51, 51, 71);
     color: white !important;
     transition: background-color 200ms linear();

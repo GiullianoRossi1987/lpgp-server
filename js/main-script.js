@@ -63,7 +63,7 @@ function setAccountOpts(){
         img.height = 40;
         var local_opt_btn = document.querySelector("#account-opts");
         var ls = localStorage.getItem("user-icon").split("/");
-        img.src = ls[ls.length - 2] + "/" + ls[ls.length -1];
+        img.src = "https://localhost/lpgp-server/" + ls[ls.length - 2] + "/" + ls[ls.length - 1];
         img.classList.add("user-icon");
         local_opt_btn.appendChild(img);
         document.querySelector("#account-opts span").remove();

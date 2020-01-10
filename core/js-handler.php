@@ -34,6 +34,7 @@ function sendUserLogged(){
  * @param string $algo The choosed hash
  * @param string|null $opts_link if will have a link to the management of the signature (only for proprietaries)
  * @param string $proprietary_nm The proprietary of the signature
+ * @return void
  */
 function createSignatureCard(int $signature_id, string $algo, $opts_link, string $proprietary_nm, string $dt_creation){
     $obj = "<div class=\"signature-card\">\n";
@@ -43,5 +44,16 @@ function createSignatureCard(int $signature_id, string $algo, $opts_link, string
     $obj_algo = "<div class=\"choosed-hash\">Hashed at: $algo</div>";
     $obj .= $obj_signature_name . "\n" . $obj_prop_nm . "\n" . $obj_algo . "\n" . $obj_dt;
     echo $obj;
+}
+
+/**
+ * That method sets all the signatures 
+ * @param array $signatures All the signatures of the proprietary, directly from the database.
+ * @return void
+ */
+function lsSignaturesMA(array $signatures){
+    for($signature = 0; $signature < count($signatures); $signature++){
+        // TODO after the registers of updates and downloads.
+    }
 }
 ?>
