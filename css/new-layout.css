@@ -74,6 +74,13 @@
 
 }
 
+.opts .dropdown-item:hover{
+    background-color: white;
+    color: rgb(51, 51, 71);
+    transition: background-color 200ms linear;
+    transition: color 200ms linear;
+}
+
 .opts-scrolled{
     background-color: black !important;
     transition: background-color 200ms linear;
@@ -83,6 +90,13 @@
     background-color: black;
     transition: background-color 200ms linear;
 }
+
+.opts-scrolled .dropdown-item:hover{
+    background-color: white;
+    color: black;
+    transition: background-color 200ms linear;
+    transition: color 200ms linear;
+}   
 
 .container-content{
     position: absolute;

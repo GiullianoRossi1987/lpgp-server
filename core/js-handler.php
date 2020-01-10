@@ -1,6 +1,9 @@
 <?php
-
 namespace JSHandler;
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
+
+use mysqli_result;
+use Core\SignaturesData;
 
 /**
  * That method sends the $_SESSION vars about the logged user to the localStorage. In a inexisting session
@@ -47,13 +50,18 @@ function createSignatureCard(int $signature_id, string $algo, $opts_link, string
 }
 
 /**
- * That method sets all the signatures 
- * @param array $signatures All the signatures of the proprietary, directly from the database.
+ * That method sets all the signatures from a proprietary
+ * @param int $proprietary The primary key reference of the proprietary to get him signatures
  * @return void
  */
-function lsSignaturesMA(array $signatures){
-    for($signature = 0; $signature < count($signatures); $signature++){
-        // TODO after the registers of updates and downloads.
+function lsSignaturesMA(int $proprietary){
+    $all = "";
+    $sig = new SignaturesData("giulliano_php", "");
+    $signatures = $sig->qrSignatureProprietary($proprietary);
+    if(is_null($signatures)){ return "<h1>You don't have any signature yet!</h1>";}
+    foreach($signatures as $cd){
+        $sig_data = $sig->getSignatureData($cd);
+        
     }
 }
 ?>

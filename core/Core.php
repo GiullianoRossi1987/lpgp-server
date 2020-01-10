@@ -760,6 +760,18 @@ class SignaturesData extends DatabaseConnection{
         unset($qr);
         return false;
     }
+    /**
+     * Get all the fields of a signature and return it in a array
+     *
+     * @throws SignatureNotFound If there's no signature with such primary key
+     * @param integer $signature The primary key reference of the signature
+     * @return array
+     */
+    public function getSignatureData(int $signature){
+        $this->checkNotConnected();
+        if(!$this->checkSignatureExists($signature)) throw new SignatureNotFound("There's no signature #$signature", 1);
+        return $this->connection->query("SELECT * FROM tb_signatures WHERE cd_signature = $signature;")->fetch_array();
+    }
 
     public static function generateFileNm(int $initial_counter = 0){
         /**
@@ -979,7 +991,7 @@ class SignaturesData extends DatabaseConnection{
         $this->checkNotConnected();
         $results = [];
         $qr_all = $this->connection->query("SELECT cd_signature FROM tb_signatures WHERE vl_code = $code");
-        while($row = $qr_all->fetch_array()) array_push($results, $row['cd_signature']);
+        while($row = $qr_all->fetch_array()) $results[] = $row['cd_signature'];
         return count($results) <= 0 ? null : $results;
     }
 
