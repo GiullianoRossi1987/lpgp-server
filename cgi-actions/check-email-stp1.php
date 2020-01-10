@@ -8,8 +8,8 @@
     <title>LPGP Oficial Server</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="./css/new-layout.css">
-    <script src="./js/main-script.js"></script>
+    <link rel="stylesheet" href="../css/new-layout.css">
+    <script src="../js/main-script.js"></script>
     <link rel="stylesheet" href="./bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="./bootstrap/font-awesome.min.css">
     <script src="./bootstrap/jquery-3.3.1.slim.min.js"></script>
@@ -18,7 +18,7 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <link rel="shortcut icon" href="./media/logo-lpgp.png" type="image/x-icon">
+    <link rel="shortcut icon" href="../media/logo-lpgp.png" type="image/x-icon">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.2/popper.min.js"></script>
 
@@ -63,13 +63,7 @@
                     <a href="http://localhost/lpgp-server/contact-us.html" class="dropdown-item">Contact Us</a>
                 </div>
             </div>
-            <div class="btn-group social-group" role="group" aria-label="Follow Us">
-                <a href="http://" class="btn default-btn-social" role="button" id="github-btn">
-                </a>
-                <a href="http://" class="btn default-btn-social" role="button" id="facebook-btn">
-                </a>
-                <a href="" class="btn default-btn-social" role="button" id="twitter-btn"></a>
-            </div>
+
         </div>
 
     </div>

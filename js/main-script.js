@@ -81,6 +81,10 @@ function setAccountOpts(){
 
         local_opts.appendChild(login_opt);
         local_opts.appendChild(ct_accopt);
+        document.querySelector("#account-opts img").remove();
+        var sp = document.createElement("span");
+        sp.innerHTML = "Account";
+        document.querySelector("#account-opts").appendChild(sp);
     }
 }
 
@@ -126,6 +130,7 @@ function setSignatureOpts(){
         login_need.href = "http://localhost/lpgp-server/login.html";
         login_need.classList.add("dropdown-item");
         local_opts.appendChild(login_need);
+        
     }
 }
 
