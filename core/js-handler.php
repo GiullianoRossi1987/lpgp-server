@@ -11,13 +11,14 @@ namespace JSHandler;
 function sendUserLogged(){
     if(session_status() == PHP_SESSION_NONE || session_status() == PHP_SESSION_DISABLED){
         // if there's no one logged.
-        echo "<script>\nlocalStorage.setItem(\"logged-user\", \"false\");\nlocalStorage.setItem(\"user_mode\", \"null\");\nlocalStorage.setItem(\"checked\", \"null\");\nlocalStorage.setItem(\"user-icon\", \"\"</script>";
+        echo "<script>\nlocalStorage.setItem(\"logged-user\", \"false\");\nlocalStorage.setItem(\"user_mode\", \"null\");\nlocalStorage.setItem(\"checked\", \"null\");\nlocalStorage.setItem(\"user-icon\", \"null\");</script>";
     }
     else{
         $logged_user = $_SESSION['user-logged'];
         $mode = $_SESSION['mode'];
         $checked = $_SESSION['checked'];
-        echo "<script>\nlocalStorage.setItem(\"logged-user\", \"$logged_user\");\nlocalStorage.setItem(\"user_mode\", \"$mode\");\nlocalStorage.setItem(\"checked\", \"$checked\");</script>";
+        $img = $_SESSION['user-icon'];
+        echo "<script>\nlocalStorage.setItem(\"logged-user\", \"$logged_user\");\nlocalStorage.setItem(\"user_mode\", \"$mode\");\nlocalStorage.setItem(\"checked\", \"$checked\");\nlocalStorage.setItem(\"user-icon\", \"$img\");\n</script>";
         unset($logged_user);
         unset($mode);
         unset($checked);

@@ -1,15 +1,15 @@
 // there's some uses of the http://localhost/ if you don't want it then just change't
 
+/**
+ * Resets the values at the localStorage.
+ * The values are:
+ *    logged-user => if there's a user logged ("true" or "false")
+ *    user_mode   => if the logged user is a proprietary or a normal user ("null", 1, 0). null if there's no user logged. 0 if is a normal, 1 if is a proprietary;
+ *    checked     => if the user email was checked ("true", "false", "null")
+ *    dark-room   => if the screen will use the dark mode or the light mode (true, false)
+ *    switcher_dk => if the switcher of the dark room will be dark or not
+ */
 function resetVals(){
-    /**
-     * Resets the values at the localStorage.
-     * The values are:
-     *    logged-user => if there's a user logged ("true" or "false")
-     *    user_mode   => if the logged user is a proprietary or a normal user ("null", 1, 0). null if there's no user logged. 0 if is a normal, 1 if is a proprietary;
-     *    checked     => if the user email was checked ("true", "false", "null")
-     *    dark-room   => if the screen will use the dark mode or the light mode (true, false)
-     *    switcher_dk => if the switcher of the dark room will be dark or not
-     */
     localStorage.setItem("logged-user", "false");
     localStorage.setItem("user_mode", "null");
     localStorage.setItem("checked", "null");
@@ -58,6 +58,15 @@ function setAccountOpts(){
         local_opts.appendChild(config_opt);
         local_opts.appendChild(logoff_opt);
         local_opts.appendChild(account_opt);
+        var img = document.createElement("img");
+        img.width = 40;
+        img.height = 40;
+        var local_opt_btn = document.querySelector("#account-opts");
+        var ls = localStorage.getItem("user-icon").split("/");
+        img.src = ls[ls.length - 2] + "/" + ls[ls.length -1];
+        img.classList.add("user-icon");
+        local_opt_btn.appendChild(img);
+        document.querySelector("#account-opts span").remove();
     }
     else{
         var login_opt = document.createElement("a");

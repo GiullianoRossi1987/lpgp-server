@@ -85,6 +85,11 @@
             $("#upload-img-input").hide();
         });
 
+        $(document).on("click", "#upload-img-btn", function(){
+            $("#upload-img-input").show();
+            $("#default-img").attr("checked", false);
+        });
+
         $(document).scroll(function(){
             $(".header-container").toggleClass("scrolled", $(this).scrollTop() > $(".header-container").height());
             $(".default-btn-header").toggleClass("default-btn-header-scrolled", $(this).scrollTop() > $(".header-container").height());
@@ -204,7 +209,7 @@
                             </label>
                         </div>
                         <br>
-                        <button type="button" class="btn btn-primary btn-lg" data-toggle="collapse" data-target="#upload-img-input" aria-expanded="false" aria-controls="upload-img-input">
+                        <button type="button" class="btn btn-primary btn-lg" data-toggle="collapse" id="upload-img-btn" data-target="#upload-img-input" aria-expanded="false" aria-controls="upload-img-input">
                             Upload a local image
                         </button>
                         <br>

@@ -26,6 +26,11 @@
     position: absolute;
 }
 
+.user-icon{
+    padding: 2px 3px;
+    border: 1px white solid;
+}
+
 .default-btn-header-scrolled{
     border-color: rgb(51, 51, 71);
     color: white !important;
@@ -238,4 +243,8 @@
 .img-radio-default:hover input ~.checkmark{
     background-color: #ccc;
     transition: background-color 200ms linear;
+}
+
+.img-radio-default ~ input[type='radio']:checked{
+    background-color: green !important;
 }
