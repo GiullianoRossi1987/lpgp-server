@@ -4,7 +4,6 @@ namespace Core;
 require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Exceptions.php";
 // add the logs manager after.
 
-// Session system.
 use mysqli;
 use mysqli_result;
 
@@ -29,6 +28,9 @@ use SignaturesExceptions\SignatureAuthError;
 use SignaturesExceptions\SignatureNotFound;
 use SignaturesExceptions\SignatureFileNotFound;
 use SignaturesExceptions\VersionError;
+
+use RegistersExceptions\InvalidSuccessValue;
+use RegistersExceptions\RegisterNotFound;
 
 define("DEFAULT_HOST", "localhost");
 define("DEFAULT_DB", "LPGP_WEB");
@@ -1006,6 +1008,7 @@ class SignaturesData extends DatabaseConnection{
         while($row = $all_prop->fetch_array()) mail($row['vl_email'], "Signature Update", $content_full, $headers);
     }
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Added after
 namespace templateSystem;
 require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Exceptions.php";
