@@ -151,3 +151,8 @@ function hideError(){
     var error_lbs = document.querySelector(".error-lb");
     error_lbs.setAttribute("style", "visibility: hidden;");
 }
+
+function getLinkedUserIcon(){
+    var ls  = localStorage.getItem("user-icon").split("/");
+    return "https://localhost/lpgp-server/" + ls[ls.length - 2] + "/" + ls[ls.length - 1];
+}

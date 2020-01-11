@@ -1,4 +1,16 @@
-<?php session_start(); ?>
+<?php 
+if(session_status() == PHP_SESSION_NONE) session_start();
+require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
+use function JSHandler\lsSignaturesMA;
+use Core\ProprietariesData;
+use Core\UsersData;
+
+
+$prp = new ProprietariesData("giulliano_php", "");
+$usr = new UsersData("giulliano_php", "");
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,6 +41,7 @@
         $(document).ready(function(){   
             setAccountOpts();
             setSignatureOpts();
+            $("#img-user").css("background-image", "url(" + getLinkedUserIcon() + ")");
         });
 
         var pas1 = "text";
@@ -123,12 +136,41 @@
     <hr>
     <div class="container-fluid container-content" style="position: absolute;">
         <div class="row-main row">
-            <div class="col-7 clear-content" style="position: absolute; margin-left: 21%;">
-                <div class="container sidebar user-data-con">
+            <div class="col-12 clear-content" style="position: relative; margin-left: 0;">
+                <div class="container user-data-con">
 					<div class="main-row row">
-						<div class="main-col col-3">
-							asd
-						</div>
+						<div class="main-col col-12" style="margin-left: 0 !important;">
+							<div class="img-user" id="img-user">
+                            </div>
+                            <br>
+                            <?php
+
+if($_SESSION['mode'] == "prop"){
+    $dt = $prp->getPropData($_SESSION['user']);
+    echo "<h1 class=\"user-name\"> " . $dt['nm_proprietary'] . "</h1>\n";
+    echo "<h4 class=\"mode\">Proprietary</h4>\n";
+    echo "<h4 class=\"email\">" . $dt['vl_email'] . "</h3>\n";
+    echo "<h5 class=\"date-creation\">" . $dt['dt_creation'] . "</h3>\n";
+
+}
+else{
+    $dt = $usr->getUserData($_SESSION['user']);
+}
+                            ?>
+                        </div>
+                        <div class="signatures-col col-12">
+                        <?php
+                            if($_SESSION['mode'] == "prop"){
+                                echo "<h1>Your signatures!</h1>";
+                                $prp = new ProprietariesData("giulliano_php", "");
+                                echo lsSignaturesMA($prp->getPropID($_SESSION['user']));
+                            }
+                            else{
+                                echo "";
+                            }
+                        ?>
+                        <a href="https://localhost/lpgp-server/create_signature.html" role="button" class="btn btn-success btn-lg">Create a new signature</a>
+                        </div>
 					</div>
 				</div>
             </div>

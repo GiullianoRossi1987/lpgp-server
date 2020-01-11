@@ -424,6 +424,18 @@ class UsersData extends DatabaseConnection{
         while($row = $qr->fetch_array()) array_push($arr, $row['nm_user']);
         return $arr;
     }
+
+    /**
+     * Returns all the data of a specific user in the database.
+     * @param string $user The name of the user to get in the database.
+     * @throws UserNotFound If there's no user with such name.
+     * @return array
+     */
+    public function getUserData(string $user){
+        $this->checkNotConnected();
+        if(!$this->checkUserExists($user)) throw new UserNotFound("There's no user '$user'", 1);
+        return $this->connection->query("SELECT * FROM tb_users WHERE nm_user = \"$user\";")->fetch_array();
+    }
 }
 
 class ProprietariesData extends DatabaseConnection{
@@ -547,6 +559,18 @@ class ProprietariesData extends DatabaseConnection{
         unset($auth);   // min use of memory
         return $arr_info;
      }
+
+     /**
+      * Returns the primary key of a proprietary, using him name.
+      * @param string $proprietary_nm The name of the proprietary to search
+      * @return integer
+      */
+    public function getPropID(string $proprietary_nm){
+        $this->checkNotConnected();
+        if(!$this->checkProprietaryExists($proprietary_nm)) throw new ProprietaryNotFound("There's no proprietary '$proprietary_nm'", 1);
+        $qr = $this->connection->query("SELECT cd_proprietary FROM tb_proprietaries WHERE nm_proprietary = \"$proprietary_nm\";")->fetch_array();
+        return $qr['cd_proprietary'];
+    }
 
      /**
       * Adds a proprietary account in the database, that will be automaticly commited to the MySQL database.
@@ -725,6 +749,19 @@ class ProprietariesData extends DatabaseConnection{
         while($row = $qr->fetch_array()) array_push($results, $row['nm_proprietary']);
         return $results;
      }
+
+     /**
+      * That metohod gets all the data at the database about a specific proprietary;
+      *
+      * @param string $proprietary_nm The name of the proprietary to get the data
+      * @throws ProprietaryNotFound If there's no one proprietary with the name at the main parameter
+      * @return array
+      */
+     public function getPropData(string $proprietary_nm){
+        $this->checkNotConnected();
+        if(!$this->checkProprietaryExists($proprietary_nm)) throw new ProprietaryNotFound("There's no proprietary #$proprietary_nm!", 1);
+        return $this->connection->query("SELECT * FROM tb_proprietaries WHERE nm_proprietary = \"$proprietary_nm\";")->fetch_array();
+     }
     
 }
 
@@ -760,6 +797,7 @@ class SignaturesData extends DatabaseConnection{
         unset($qr);
         return false;
     }
+
     /**
      * Returns all the options of codes in the HTML format, it can be on input mode, using the select tag, or in the list mode, if the param
      * of the input mode is false. In both case it will return a string with the codes options in HTML.
@@ -786,8 +824,6 @@ class SignaturesData extends DatabaseConnection{
             return $main;
         }
     }
-
-
     /**
      * Get all the fields of a signature and return it in a array
      *

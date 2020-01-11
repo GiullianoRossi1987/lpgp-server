@@ -1,5 +1,6 @@
 <?php
 namespace JSHandler;
+session_start();
 require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
 
 use Core\SignaturesData;
@@ -61,7 +62,7 @@ function lsSignaturesMA(int $proprietary){
     foreach($signatures as $cd){
         $sig_data = $sig->getSignatureData($cd);
         $card = "<div class=\"card signature-card\">\n<div class=\"card-body\">\n<h3 class=\"card-title\"> Signature #$cd</h3>\n<h5 class=\"card-subtitle\">" . $sig_data['dt_creation'] . "\n</h5><div class=\"card-text\"><a href=\"https://localhost/lpgp-server/cgi-actions/get_my_signature.php?id=$cd\">Download</a><br><a href=\"https://localhost/lpgp-server/cgi-actions/signature_config.php?id=$cd\">Configurations</a></div>";
-        $all += "\n$card\n";
+        $all .= "\n$card\n";
     }
     return $all;
 }
@@ -74,7 +75,10 @@ function lsSignaturesMA(int $proprietary){
 function inputsGets(int $signature){
     $sign = new SignaturesData("giulliano_php", "");
     $dt = $sign->getSignatureData($signature);
-    $main_str = "";
-    
+    $main_str = "<h1>Signature #" . $dt['cd_signature'] . "</h1>\n";
+    $passwd = $dt['vl_password'];
+    $main_str .= "<input value=\"$passwd\" name=\"vl-passwd\" class=\"form-control\" label=\"The raw signature\">\n";
+    $main_str .= $sign->getCodesHTML(true, (int)$dt['vl_code']) . "\n";
+    return $main_str;
 }
 ?>

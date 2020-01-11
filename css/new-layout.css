@@ -263,3 +263,20 @@
 .img-radio-default ~ input[type='radio']:checked{
     background-color: green !important;
 }
+
+
+.main-col{
+    border: 1px solid black;
+    border-top: none;
+    padding: 30px 33px;
+    margin-top: 10px;
+    margin-bottom: 40px;
+}
+
+#img-user{
+    border: 1px black solid;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 200px;
+    height: 200px;
+}
