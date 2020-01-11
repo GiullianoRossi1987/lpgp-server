@@ -761,6 +761,34 @@ class SignaturesData extends DatabaseConnection{
         return false;
     }
     /**
+     * Returns all the options of codes in the HTML format, it can be on input mode, using the select tag, or in the list mode, if the param
+     * of the input mode is false. In both case it will return a string with the codes options in HTML.
+     *
+     * @param boolean $input_mode If the codes will be in the select tag.
+     * @param integer|null $spc_ind If the select tag will have a specific code.
+     * @return string
+     */
+    public function getCodesHTML(bool $input_mode = false, int $spc_ind = null){
+        if($input_mode){
+            $main = "<select class=\"form-control default-select\">";
+            for($i=0; $i < count(self::CODES); $i++){
+                // using it, the value will be the index of the array
+                if(!is_null($spc_ind) && $i == $spc_ind){
+                    $main += "\n<option value=\"$i\" selected> " . self::CODES[$i] . "</option>\n";
+                }
+                else $main += "\n<option value=\"$i\"> " . self::CODES[$i] . "</option>\n";
+            }
+            return $main;
+        }
+        else{
+            $main = "<ul>";
+            for($i = 0; $i < count(self::CODES); $i++) $main += "\n<li>" . self::CODES[$i] . "[$i]</li>\n";
+            return $main;
+        }
+    }
+
+
+    /**
      * Get all the fields of a signature and return it in a array
      *
      * @throws SignatureNotFound If there's no signature with such primary key

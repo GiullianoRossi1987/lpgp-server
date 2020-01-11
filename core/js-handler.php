@@ -1,8 +1,7 @@
 <?php
 namespace JSHandler;
-require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
 
-use mysqli_result;
 use Core\SignaturesData;
 
 /**
@@ -61,7 +60,21 @@ function lsSignaturesMA(int $proprietary){
     if(is_null($signatures)){ return "<h1>You don't have any signature yet!</h1>";}
     foreach($signatures as $cd){
         $sig_data = $sig->getSignatureData($cd);
-        
+        $card = "<div class=\"card signature-card\">\n<div class=\"card-body\">\n<h3 class=\"card-title\"> Signature #$cd</h3>\n<h5 class=\"card-subtitle\">" . $sig_data['dt_creation'] . "\n</h5><div class=\"card-text\"><a href=\"https://localhost/lpgp-server/cgi-actions/get_my_signature.php?id=$cd\">Download</a><br><a href=\"https://localhost/lpgp-server/cgi-actions/signature_config.php?id=$cd\">Configurations</a></div>";
+        $all += "\n$card\n";
     }
+    return $all;
+}
+
+/**
+ * That method sets all the values of a signature, it is used for the configurations of the signature, at the file signature_config.php
+ * @param integer $signature The Primary key reference of the signature at the database.
+ * @return string The string with all the inputs of the signature data.
+ */
+function inputsGets(int $signature){
+    $sign = new SignaturesData("giulliano_php", "");
+    $dt = $sign->getSignatureData($signature);
+    $main_str = "";
+    
 }
 ?>
