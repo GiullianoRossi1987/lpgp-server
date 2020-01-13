@@ -139,24 +139,45 @@ $usr = new UsersData("giulliano_php", "");
             <div class="col-12 clear-content" style="position: relative; margin-left: 0;">
                 <div class="container user-data-con">
 					<div class="main-row row">
-						<div class="main-col col-12" style="margin-left: 0 !important;">
-							<div class="img-user" id="img-user">
+                        <div class="main-col col-12" style="margin-left: 0 !important;">
+                            <div class="container data-container">
+                                <div class="main-row row">
+                                    <div class="img-cont">
+                                        <div id="img-user"></div>
+                                    </div>
+                                    <div class="col-6 usr-data">
+                                        <?php
+                                        if($_SESSION['mode'] == "prop"){
+                                            $dt = $prp->getPropData($_SESSION['user']);
+                                            echo "<h1 class=\"user-name\"> " . $dt['nm_proprietary'] . "</h1>\n";
+                                            echo "<h4 class=\"mode\">Proprietary</h4>\n";
+                                            echo "<h4 class=\"email\">Email: " . $dt['vl_email'] . "</h3>\n";
+                                            echo "<h5 class=\"date-creation\">Date of creation: " . $dt['dt_creation'] . "</h3>\n";
+
+                                        }
+                                        else{
+                                            $dt = $usr->getUserData($_SESSION['user']);
+                                            echo "<h1 class=\"user-name\"> " . $dt['nm_user'] . "</h1>\n";
+                                            echo "<h4 class=\"mode\">Normal User</h4>\n";
+                                            echo "<h4 class=\"email\">Email: " . $dt['vl_email'] . "</h3>\n";
+                                            echo "<h5 class=\"date-creation\">Date creation: " . $dt['dt_creation'] . "</h3>\n";
+                                        }
+                                        ?>
+                                        <a class="img-settings btn btn-secondary" href="https://localhost/cgi-actions/ch_my_data.php" id="img-settings" role="button">
+                                            Edit Account
+                                            <span>
+                                                <img src="../media/settings.png" alt="" width="50px" height="50px">
+                                            </span>
+                                        </a>
+                                        <a href="https://localhost/lpgp-server/cgi-actions/del_account.php" role="button" class="btn btn-danger">
+                                            Remove account
+                                            <span>
+                                                <img src="../media/delete-sign.png" alt="" width="50px" height="50px">
+                                            </span>
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
-                            <br>
-                            <?php
-
-if($_SESSION['mode'] == "prop"){
-    $dt = $prp->getPropData($_SESSION['user']);
-    echo "<h1 class=\"user-name\"> " . $dt['nm_proprietary'] . "</h1>\n";
-    echo "<h4 class=\"mode\">Proprietary</h4>\n";
-    echo "<h4 class=\"email\">" . $dt['vl_email'] . "</h3>\n";
-    echo "<h5 class=\"date-creation\">" . $dt['dt_creation'] . "</h3>\n";
-
-}
-else{
-    $dt = $usr->getUserData($_SESSION['user']);
-}
-                            ?>
                         </div>
                         <div class="signatures-col col-12">
                         <?php
@@ -164,12 +185,12 @@ else{
                                 echo "<h1>Your signatures!</h1>";
                                 $prp = new ProprietariesData("giulliano_php", "");
                                 echo lsSignaturesMA($prp->getPropID($_SESSION['user']));
+                                echo "<br>\n<a href=\"https://localhost/lpgp-server/create_signature.html\" role=\"button\" class=\"btn btn-lg btn-success\">Create a new signature</a>";
                             }
                             else{
                                 echo "";
                             }
                         ?>
-                        <a href="https://localhost/lpgp-server/create_signature.html" role="button" class="btn btn-success btn-lg">Create a new signature</a>
                         </div>
 					</div>
 				</div>
@@ -179,11 +200,11 @@ else{
     <br>
     <div class="footer-container container">
         <div class="footer-row row">
-            <div class="footer col-12" style="height: 150px; background-color: black; top: 190%; position: absolute; max-width: 100%; left: 0;">
+            <div class="footer col-12" style="height: 150px; background-color: black; margin-top: 100%; position: absolute; max-width: 100%; left: 0;">
                 <div class="social-options-grp">
                     <div class="social-option">
                         <a href="https://github.com/GiullianoRossi1987/lpgp-server" target="_blanck" id="github" class="social-option-footer">
-                        <img src="./media/github.png" alt="" width="50px" height="30px"></a>
+                        <img src="../media/github.png" alt="" width="50px" height="30px"></a>
                     </div>
                     <div class="social-option-footer">
                         <a href="https://" target='_blanck' id="facebook">

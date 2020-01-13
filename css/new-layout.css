@@ -105,8 +105,6 @@
 
 .clear-content{
     background-color: white;
-    border-radius: 3%;
-    border: 1px black solid;
 }
 
 /* .social-group{
@@ -279,4 +277,10 @@
     background-size: cover;
     width: 200px;
     height: 200px;
+    margin-right: 10px;
+}
+
+
+.img-cont{
+    border-right: 2px black solid;
 }
