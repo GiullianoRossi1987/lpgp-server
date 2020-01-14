@@ -138,7 +138,79 @@ namespace ExctemplateSystem{
     class NotLoadedFile extends Exception{
         public function showMessage(){ return "The class need a HTML document parsed!";}
     }
+}
 
-    
+/**
+ * Exceptions used for the UsersCheckHistory on the Core.php
+ */
+namespace CheckHistory{
+    use Exception;
+
+    /**
+     * Exception thrown when the error code of a register is not in range(0, 3)
+     */
+    class InvalidErrorCode extends Exception{
+        public function __construct(int $code_vl, int $code = 1){
+            parent::__construct("The error code '$code_vl' is invalid, expecting a number in 0, 1, 2 or 3", $code);
+        }
+    }
+
+    /**
+     * That exception is thrown when the signatures history class try to send a relatory but there's no register with the primary key reference
+     */
+    class RelatoryError extends Exception{
+        // no special methods
+    }
+
+    /**
+     * Exception thrown when the class try to get some register using a primary key reference, but that reference don't exist at the database table.
+     */
+    class RegisterNotFound extends Exception{
+
+        /**
+         * Personalized class constructor, standardize the error message.
+         * @param integer $vl_ref The value of the primary key reference
+         * @param integer $code The standard parameter of the parent::
+         * @return void
+         */
+        public function _construct(int $vl_ref, int $code = 1){ parent::__construct("Can't find the register using the PK reference #$vl_ref!", $code);}
+    }
+}
+/**
+ * Exceptions for the ProprietariesCheckHistory class on the Core.php
+ */
+namespace PropCheckHistory{
+    use Exception;
+
+    /**
+     * Exception thrown when the error code of a register is not in range(0, 3)
+     */
+    class InvalidErrorCode extends Exception{
+        public function __construct(int $code_vl = null, int $code = 1){
+            $vl = is_null($code_vl) ? "null_value" : $code_vl;
+            parent::__construct("The error code '$vl' is invalid, expecting a number in 0, 1, 2 or 3", $code);
+        }
+    }
+
+    /**
+     * That exception is thrown when the signatures history class try to send a relatory but there's no register with the primary key reference
+     */
+    class RelatoryError extends Exception{
+        // no special methods
+    }
+
+    /**
+     * Exception thrown when the class try to get some register using a primary key reference, but that reference don't exist at the database table.
+     */
+    class RegisterNotFound extends Exception{
+
+        /**
+         * Personalized class constructor, standardize the error message.
+         * @param integer $vl_ref The value of the primary key reference
+         * @param integer $code The standard parameter of the parent::
+         * @return void
+         */
+        public function _construct(int $vl_ref, int $code = 1){ parent::__construct("Can't find the register using the PK reference #$vl_ref!", $code);}
+    }
 }
 ?>

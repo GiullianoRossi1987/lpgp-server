@@ -6,6 +6,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Exceptions.php";
 
 use mysqli;
 use mysqli_result;
+use mysqli_sql_exception;
 
 // Exceptions
 use DatabaseActionsExceptions\AlreadyConnectedError;
@@ -29,14 +30,22 @@ use SignaturesExceptions\SignatureNotFound;
 use SignaturesExceptions\SignatureFileNotFound;
 use SignaturesExceptions\VersionError;
 
-use RegistersExceptions\InvalidSuccessValue;
-use RegistersExceptions\RegisterNotFound;
+use CheckHistory\InvalidErrorCode;
+use CheckHistory\RelatoryError;
+use CheckHistory\RegisterNotFound;
+
+
+use PropCheckHistory\InvalidErrorCode as PropInvalidCode;
+use PropCheckHistory\RelatoryError as PropRelatoryError;
+use PropCheckHistory\RegisterNotFound as PropRegisterNotFound;
 
 define("DEFAULT_HOST", "localhost");
 define("DEFAULT_DB", "LPGP_WEB");
 define("ROOT_VAR", $_SERVER['DOCUMENT_ROOT']);
 define("EMAIL_USING", "lpgp@gmail.com");
 define("DEFAULT_USER_ICON", $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/media/user-icon.png");
+define("DEFAULT_DATETIME_F", "Y-m-d H:M:I");
+
 class DatabaseConnection{
     /**
      * That class contains the main connection to the database and him universal actions,
@@ -824,6 +833,7 @@ class SignaturesData extends DatabaseConnection{
             return $main;
         }
     }
+
     /**
      * Get all the fields of a signature and return it in a array
      *
@@ -866,11 +876,11 @@ class SignaturesData extends DatabaseConnection{
         if(!$this->checkSignatureExists($signature_id)) throw new SignatureNotFound("There's no signature #$signature_id !", 1);
         $sig_dt = $this->connection->query("SELECT prop.nm_proprietary, sig.vl_password, sig.vl_code FROM tb_signatures as sig INNER JOIN tb_proprietaries AS prop ON prop.cd_proprietary = sig.id_proprietary WHERE sig.cd_signature = $signature_id;")->fetch_array();
         $content = array(
-            "Version" => self::VERSION_ACT,
+            "Date-Creation" => date(DEFAULT_DATETIME_F),
             "Proprietary" => $sig_dt['nm_proprietary'],
             "ID" => $signature_id,
             "Signature" => $sig_dt['vl_password']
-        );   // encoded on JSON format after
+        );
         $to_json = json_encode($content);
         $arr_ord = array();
         for($char = 0; $char < strlen($to_json); $char++) array_push($arr_ord, "" . ord($to_json[$char]));
@@ -915,7 +925,6 @@ class SignaturesData extends DatabaseConnection{
         }
         $ascii_none_str = implode("", $ascii_none);
         $json_arr = json_decode(preg_replace("/[[[:cntrl:]]/", "", $ascii_none_str), true);
-        // if(!in_array($json_arr['Version'], self::VERSION_ALL)) throw new VersionError("The version used by the file is not valid!", 1);
         if(!$this->checkSignatureExists((int) $json_arr['ID'])) throw new SignatureNotFound("There's no signature #" . $json_arr['Signature'], 1);
         $signautre_data = $this->connection->query("SELECT vl_password FROM tb_signatures WHERE cd_signature = " . $json_arr['ID'])->fetch_array();
         if($signautre_data['vl_password'] != $json_arr['Signature']) throw new SignatureAuthError("The file signature is not valid.", 1);
@@ -1084,8 +1093,175 @@ class SignaturesData extends DatabaseConnection{
         while($row = $all_prop->fetch_array()) mail($row['vl_email'], "Signature Update", $content_full, $headers);
     }
 }
+
+// ** Ready for the tests! **
+/**
+ * That class manages the signature checking history table in the MySQL database. That table storages all the signatures checkeds in the website, but only
+ * signatures checkeds from normal users, for signatures checked by proprietaries history check the class PropCheckHistory. Those classes also creates relatories
+ * of the signatures checked in HTML.
+ * The authentications can have errors, all they are:
+ *      * 0 => There wasn't errors in the authentication
+ *      * 1 => The selected file is not a valid .lpgp file, it's checked verifing the extension and the structure
+ *      * 2 => Invalid proprietary, if the proprietary don't exists in the database no more.
+ *      * 3 => Invalid key (the most common), all is right, but the key is different then the original key
+ * 
+ * @var string ERR_CD_MSG1 The error message used in the HTML relatories when the authentication returns error code 1.
+ * @var string ERR_CD_MSG2 The error message used in the HTML relatories when the authentication returns error code 2.
+ * @var string ERR_CD_MSG3 The error message used in the HTML relatories when the authentication returns error code 3.
+ */
+class UsersCheckHistory extends DatabaseConnection{
+
+    const ERR_CD_MSG1 = "The file selected is not valid. It requires a .lpgp file and got {file_ext} in it. Or the structure of the file is not valid.\nPlease contact the software provider to check this error.\n";
+    const ERR_CD_MSG2 = "The proprietary referenced in the signature file doesn't exists!\n";
+    const ERR_CD_MSG3 = "The signature key in the file doesn't match with the original.\nPlease check if that is the updated version of the signature/software, if don't contact the proprietary or the provider of the software/signature\n";
+
+    /**
+     * That function checks if the primary key reference exists in the database. If don't will return false.
+     *
+     * @param integer $his_id The reference of the register to search
+     * @return bool
+     */
+    private function checkHisExists(int $his_id){
+        $this->checkNotConnected();
+        $qr_raw = $this->connection->query("SELECT cd_reg FROM tb_signature_check_history WHERE cd_reg = $his_id;");
+        while($row = $qr_raw->fetch_array()){
+            if($row['cd_reg'] == $his_id) return true;
+        }
+        unset($qr_raw);
+        return false;
+    }
+
+    /**
+     * That method adds a register in the database. If that have any MySQLI errors, then you should think about the integrity of the primary key references.
+     * 
+     * @param integer $usr_code The primary key reference of the user.
+     * @param integer $sig_code The primary key reference of the signature.
+     * @param integer $success If the signature is authentic. If it is, the the $error_cd will be null or 0.
+     * @param integer|null $error_cd The error code of the authentication result, it can only be between 0 and 3 (integers obiviously). If don't will throw error.
+     * 
+     * @throws InvalidErrorCode If the $err_code is not null, and there don't have errors. Or reverse.
+     */
+    public function addReg(int $usr_code, int $sig_code, int $success = 1, int $error_cd = null){
+        $this->checkNotConnected();
+        if($success == 1 && !is_null($error_cd)) throw new InvalidErrorCode($error_cd, 1);
+        if($success == 0 && is_null($error_cd)) throw new InvalidErrorCode((int) $error_cd, 1);
+        $err_vl = is_null($error_cd) ? 0 : $error_cd;
+        $qr_add = $this->connection->query("INSERT INTO tb_signature_check_history (id_user, id_signature, vl_valid, vl_code) VALUES ($usr_code, $sig_code, $success, $err_vl);");
+        $qr_add->close();  // TODO: Replace the unsets with closes in all the querys.
+        unset($err_vl);
+    }
+
+    /**
+     * That method returns the entire register in the database, using the primary key reference of the same.
+     *
+     * @param integer $ref The reference to the primary key
+     * @throws RegisterNotFound If the reference doesn't exist at the database.
+     * @return array Array of the tuple in the database of the register.
+     */
+    public function getRegByID(int $ref){
+        $this->checkNotConnected();
+        if(!$this->checkHisExists($ref)) throw new RegisterNotFound("There's no register #$ref!", 1);
+        $qr_rr = $this->connection->query("SELECT * FROM tb_signature_check_history WHERE cd_reg = $ref;");
+        $arr = $qr_rr->fetch_array();
+        $qr_rr->close();
+        return $arr;
+    }
+
+    /**
+     * That method gets all the registers of the signatures checkeds by one user. Returns array type if the user checked any signature, and null if he doesn't 
+     * checked a single signature yet.
+     * @param integer $usr_ref The primary key reference of the user.
+     * @return array|null
+     */
+    public function getRegByUsr(int $usr_ref){
+        $this->checkNotConnected();
+        $qr = $this->connection->query("SELECT * FROM tb_signature_check_history WHERE id_user = $usr_ref;");
+        $results = array();
+        while($row = $qr->fetch_array()) $results[] = $row;
+        return count($results) <= 0 ? null : $results;
+    }
+
+    /**
+     * That method gets all the registers of a single signature that was checked any time from anyone. Returns array type if the signature was checked anytime, and
+     * null if the signature wasn't checked yet.
+     * @param integer $sig_ref The reference of the primary key of the signature.
+     * @return array|null
+     */
+    public function getRegBySig(int $sig_ref){
+        $this->checkNotConnected();
+        $qr = $this->connection->query("SELECT * FROM tb_signature_check_history WHERE id_signature = $sig_ref;");
+        $results = array();
+        while($row = $qr->fetch_array()) $results[] = $row;
+        $qr->close();
+        return count($results) <= 0 ? null : $results;
+    }
+
+    /**
+     * That method gets all the registers of a specific date in the database table. Return array with the results, if there's no results then will return null.
+     * 
+     * @param string $tm_needle The datetime to search in the table.
+     * @return array|null
+     */
+    public function qrByDate(string $tm_needle){
+        $this->checkNotConnected();
+        $qr = $this->connection->query("SELECT * FROM tb_signature_check_history WHERE dt_reg LIKE \"%$tm_needle%\";");
+        $results = array();
+        while($row = $qr->fetch_array()) $results[] = $row;
+        $qr->close();
+        return count($results) < 1 ? null : $results;
+    }
+
+    /**
+     * That method sends the HTML relatory about the signature authentication. 
+     * @param integer $reg_ref The primary key reference of the register.
+     * @throws RegisterNotFound If the reference don't exists.
+     * @return string
+     */
+    public function generateRelatory(int $reg_ref){
+        $this->checkNotConnected();
+        if(!$this->checkHisExists($reg_ref)) throw new RegisterNotFound("There's no register #$reg_ref", 1);
+        $qr_data = $this->connection->query("SELECT * FROM tb_signature_check_history WHERE cd_reg = $reg_ref;");
+        $dt = $qr_data->fetch_array();
+        $qr_data->close();
+        $data_html = "<div class=\"relatory-php\">\n";
+        $img_src = $dt['vl_valid'] == 1 ? "src1" : "src2";  // TODO: Replace the 'src1' and 'src2' for the imgs sources
+        $data_html .= "<div class=\"img-relatory\">\n<img src=\"$img_src\" width=\"70px\" heigth=\"70px\">\n</div>\n";
+        $msg = "";
+        $ext_cls = "";
+        switch ($dt['vl_code']){
+            case (0): $msg = "The signature is valid!";
+            case (1): $msg = self::ERR_CD_MSG1;
+            case (2): $msg = self::ERR_CD_MSG2;
+            case (3): $msg = self::ERR_CD_MSG3;
+            default: throw new InvalidErrorCode($dt['vl_code']);
+        }
+        $ext_cls = $dt['vl_code'] != 0 ? "error-msg" : "";
+        $data_html .= "<div class=\"msg-code $ext_cls\">$msg</div>\n";
+        // creates the card of the signature if the authentication returned valid.
+        if($dt['vl_code'] == 0){
+            $signature_data_html = "<div class=\"card signature-card\">\n";
+            $sig_ref = $dt['id_signature'];
+            $sign_data = $this->connection->query("SELECT * FROM tb_signatures WHERE cd_signature = $sig_ref;")->fetch_array();
+            $prop_data = $this->connection->query("SELECT * FROM tb_proprietaries WHERE cd_proprietary = " . $sign_data['id_proprietary'] . ";")->fetch_array();
+            $signature_data_html .= "<div class=\"card-body\"><h1 class=\"card-title\">Signature #" . $sig_ref . "</h1>\n";
+            $signature_data_html .= "<div class=\"card-text\"><a href=\"https://localhost/cgi-actions/proprietary.php?id=" . $prop_data['cd_proprietary'] . "\">Proprietary: " . $prop_data['nm_proprietary'] . "</a>\n</div>\n";
+            $signature_data_html .= "<div class=\"card-footer text-muted\"> Created at: " . $sign_data['dt_creation'] . "</div>\n";
+            $data_html .= $signature_data_html;
+        }
+        return $data_html;
+    }
+}
+
+/**
+ * Manages the signatures checking by proprietaries table in the MySQL database. That table storages all the signatures authentications, valid or not, 
+ * made by proprietaries users. There's also other to manage the authentications made by the normal users.
+ */
+class PropCheckHistory extends DatabaseConnection{
+
+}
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Added after
 namespace templateSystem;
 require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Exceptions.php";
 

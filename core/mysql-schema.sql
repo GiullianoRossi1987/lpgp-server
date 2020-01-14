@@ -31,3 +31,26 @@ create table if not exists tb_signatures(
     dt_creation timestamp not null default current_timestamp(),
     foreign key (id_proprietary) references tb_proprietaries(cd_proprietary)
 );
+
+
+create table tb_signatures_check_history(
+    cd_reg integer primary key auto_increment not null unique,
+    id_user integer not null,
+    id_signature integer not null,
+    vl_valid integer default 1 not null check(vl_valid in (0, 1)),
+    dt_reg timestamp default current_timestamp() not null,
+    vl_code integer default 0 not null check(vl_code in (0, 1, 2, 3)),
+    foreign key (id_user) references tb_users(cd_user),
+    foreign key (id_signature) references tb_signatures(cd_signature);
+);
+
+create table tb_signatures_prop_check_h(
+    cd_reg integer primary key auto_increment not null unique,
+    id_prop integer not null,
+    id_signature integer not null,
+    vl_valid integer default 1 not null check(vl_valid in (0, 1)),
+    dt_reg timestamp default current_timestamp() not null,
+    vl_code integer default 0 not null check(vl_code in (0, 1, 2, 3)),
+    foreign key (id_prop) references tb_proprietareies(cd_proprietary),
+    foreign key (id_signature) references tb_signatures(cd_signature);
+);
