@@ -154,14 +154,6 @@ namespace CheckHistory{
             parent::__construct("The error code '$code_vl' is invalid, expecting a number in 0, 1, 2 or 3", $code);
         }
     }
-
-    /**
-     * That exception is thrown when the signatures history class try to send a relatory but there's no register with the primary key reference
-     */
-    class RelatoryError extends Exception{
-        // no special methods
-    }
-
     /**
      * Exception thrown when the class try to get some register using a primary key reference, but that reference don't exist at the database table.
      */
@@ -190,13 +182,6 @@ namespace PropCheckHistory{
             $vl = is_null($code_vl) ? "null_value" : $code_vl;
             parent::__construct("The error code '$vl' is invalid, expecting a number in 0, 1, 2 or 3", $code);
         }
-    }
-
-    /**
-     * That exception is thrown when the signatures history class try to send a relatory but there's no register with the primary key reference
-     */
-    class RelatoryError extends Exception{
-        // no special methods
     }
 
     /**

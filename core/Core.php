@@ -31,7 +31,7 @@ use SignaturesExceptions\SignatureFileNotFound;
 use SignaturesExceptions\VersionError;
 
 use CheckHistory\InvalidErrorCode;
-use CheckHistory\RelatoryError;
+
 use CheckHistory\RegisterNotFound;
 
 
@@ -104,6 +104,14 @@ class DatabaseConnection{
         $this->database_connected = "";
         $this->host_using = "";
         $this->got_connection = false;
+    }
+
+    /**
+     * Returns the protected attribute of the mysqli_connection. If it is connected, if doens't connected will return null.
+     * @return mysqli|null
+     */
+    public function getConnectionAttr(){
+        return $this->got_connection ? $this->connection : null;
     }
 }
 
@@ -1253,7 +1261,7 @@ class UsersCheckHistory extends DatabaseConnection{
             $sign_data = $this->connection->query("SELECT * FROM tb_signatures WHERE cd_signature = $sig_ref;")->fetch_array();
             $prop_data = $this->connection->query("SELECT * FROM tb_proprietaries WHERE cd_proprietary = " . $sign_data['id_proprietary'] . ";")->fetch_array();
             $signature_data_html .= "<div class=\"card-body\"><h1 class=\"card-title\">Signature #" . $sig_ref . "</h1>\n";
-            $signature_data_html .= "<div class=\"card-text\"><a href=\"https://localhost/cgi-actions/proprietary.php?id=" . $prop_data['cd_proprietary'] . "\">Proprietary: " . $prop_data['nm_proprietary'] . "</a>\n</div>\n";
+            $signature_data_html .= "<div class=\"card-subtitle\"><a href=\"https://localhost/cgi-actions/proprietary.php?id=" . $prop_data['cd_proprietary'] . "\">Proprietary: " . $prop_data['nm_proprietary'] . "</a>\n</div>\n";
             $signature_data_html .= "<div class=\"card-footer text-muted\"> Created at: " . $sign_data['dt_creation'] . "</div>\n";
             $data_html .= $signature_data_html;
         }
@@ -1264,9 +1272,137 @@ class UsersCheckHistory extends DatabaseConnection{
 /**
  * Manages the signatures checking by proprietaries table in the MySQL database. That table storages all the signatures authentications, valid or not, 
  * made by proprietaries users. There's also other to manage the authentications made by the normal users.
+ * 
+ * Those classes also creates relatories
+ * of the signatures checked in HTML.
+ * The authentications can have errors, all they are:
+ *      * 0 => There wasn't errors in the authentication
+ *      * 1 => The selected file is not a valid .lpgp file, it's checked verifing the extension and the structure
+ *      * 2 => Invalid proprietary, if the proprietary don't exists in the database no more.
+ *      * 3 => Invalid key (the most common), all is right, but the key is different then the original key
+ * ------------------------------------------------------------------------------------------------------------------
+ * @var string ERR_CD_MSG1 The error message used in the HTML relatories when the authentication returns error code 1.
+ * @var string ERR_CD_MSG2 The error message used in the HTML relatories when the authentication returns error code 2.
+ * @var string ERR_CD_MSG3 The error message used in the HTML relatories when the authentication returns error code 3.
  */
 class PropCheckHistory extends DatabaseConnection{
     
+
+    const ERR_CD_MSG1 = "The file selected is not valid. It requires a .lpgp file and got {file_ext} in it. Or the structure of the file is not valid.\nPlease contact the software provider to check this error.\n";
+    const ERR_CD_MSG2 = "The proprietary referenced in the signature file doesn't exists!\n";
+    const ERR_CD_MSG3 = "The signature key in the file doesn't match with the original.\nPlease check if that is the updated version of the signature/software, if don't contact the proprietary or the provider of the software/signature\n";
+
+    /**
+     * Checks if a register exists in the database table using the primary key reference of the register.
+     *
+     * @param integer $reg_ref The primary key reference of the register.
+     * @return bool
+     */
+    private function checkHisExists(int $reg_ref){
+        $this->checkNotConnected();
+        $qr_raw = $this->connection->query("SELECT cd_reg FROM tb_signatures_prop_h WHERE cd_reg = $reg_ref;");
+        while($row = $qr_raw->fetch_array()){
+            if($row['cd_reg'] == $reg_ref) return true;
+        }
+        $qr_raw->close();
+        return false;
+    }
+
+    /**
+     * Adds a register in the database table with the requested data. If you had a mysqli_sql_exception, then i suggest you to check the
+     * primary/foreign key references of the parameters.
+     * @param integer $id_prop The primary key reference of the proprietary that checked the signature.
+     * @param integer $id_sign The primary key reference of the signature thet was checked.
+     * @param integer $success If there wasn't errors in the authentication.
+     * @param integer $error_code If there was a error the code need to be bettween 0 and 3. That code will be storaged as the vl_code in the database table.
+     * @throws PropInvalidCode If the error code is more then 0 but there wasn't errors in the authentication, or the code is 0 but the authentication returned errors.
+     * @return void
+     */
+    public function addReg(int $id_prop, int $id_sign, int $success = 0, int $error_code = 0){
+        // I didn't maked the null option at the $error_code, same as the same method in the UsersCheckHistory 'cause I was lazy
+        $this->checkNotConnected();
+        // errors checking
+        if($success == 0 && $error_code != 0) throw new  PropInvalidCode($error_code, 1);
+        if($success != 0 && $error_code == 0) throw new PropInvalidCode($error_code, 1);
+        // end checking 
+        $qr_add = $this->connection->query("INSERT INTO tb_signatures_prop_h (id_proprietary, id_signature, vl_valid, vl_code) VALUES ($id_prop, $id_sign, $success, $error_code);");
+        $qr_add->close();
+    }
+
+    /**
+     * Searches all the times when a specific signature was checked by any proprietary user. It returns a array with the tuples, or return null if there're
+     * no results.
+     * 
+     * @param integer $sig_ref The primary key reference of the signature to search.
+     * @return array|null
+     */
+    public function getRegBySig(int $sig_ref){
+        $this->checkNotConnected();
+        $qr = $this->connection->query("SELECT * FROM tb_signatures_prop_h WHERE id_signature = $sig_ref;");
+        $results = array();
+        while($row = $qr->fetch_array()) $results[] = $row;
+        $qr->close();
+        return count($results) <= 0 ? null : $results;
+    }
+
+    /**
+     * Searches all the times when a specific proprietary user checked any signature. It returns a array with the tuples, or return null if there're no results.
+     * 
+     * @param integer $prop_ref The primary key reference of the proprietary user account.
+     * @return array|null
+     */
+    public function getRegByProp(int $prop_ref){
+        $this->checkNotConnected();
+        $qr = $this->connection->query("SELECT * FROM tb_signatures_prop_h WHERE id_proprietary = $prop_ref;");
+        $results = array();
+        while($row = $qr->fetch_array()) $results[] = $row;
+        $qr->close();
+        return count($results) <= 0 ? null : $results;
+    }
+
+    /**
+     * Generates the string with the HTML code of the relatory of the authentication register.
+     * @param integer $reg_ref The primary key reference of the register.
+     * @return string.
+     */
+    public function generateRelatory(int $reg_ref){
+        $this->checkNotConnected();
+        if(!$this->checkHisExists($reg_ref = $reg_ref)) throw new PropRegisterNotFound("There's no register #$reg_ref", 1);
+        $reg_data = $this->connection->query("SELECT * FROM tb_signatures_prop_h WHERE cd_reg = $reg_ref;")->fetch_array();
+        $error_msg = "";
+        $extra_cls = $reg_data['vl_code'] == 0 ? "" : "error-msg";
+        $main_data_html = "\n<div class=\"relatory-container\">\n";
+        $img_src = $reg_data['vl_code'] == 0 ? "src1" : "src2"; // TODO: change the sources of the images to the real images.
+        $main_data_html .= "<img src=\"$img_src\" width=\"70px\" height=\"70px\">\n";
+        switch ( (int) $reg_data['vl_code']){
+            case 0:
+                $error_msg = "Signature valid!";
+            break;
+            case 1:
+                $error_msg = self::ERR_CD_MSG1;
+            break;
+            case 2:
+                $error_msg = self::ERR_CD_MSG2;
+            break;
+            case 3:
+                $error_msg = self::ERR_CD_MSG3;
+            break;
+            default: throw new PropInvalidCode($reg_data);
+        }
+        $main_data_html .= "<div class=\"message-relatory $extra_cls\">$error_msg</div>\n";
+        // generates the card if there wasn't errors in the authentication
+        if($error_msg == "Signature_valid!"){
+            $card_div = "<div class=\"card signature-card\">\n<div class=\"card-body\">\n";
+            $sig_dt = $this->connection->query("SELECT * FROM tb_signatures WHERE cd_signature = " . $reg_data['id_signature'] . ";")->fetch_array();
+            $prop_dt = $this->connection->query("SELECT * FROM tb_proprietaries WHERE cd_proprietary = " . $sig_dt['id_proprietary'] . ";")->fetch_array();
+            $id_prop = $prop_dt['cd_proprietary'];
+            $card_div .= "<h1 class=\"card-title\"> Signature #" . $sig_dt['cd_signature'] . "</h1>\n";
+            $card_div .= "<h4 class=\"card-subtitle\"> Proprietary: <a href=\"https://localhost/lpgp-server/proprietary.php?id=$id_prop\" target=\"_blanck\"> " . $prop_dt['nm_proprietary'] . "</a></div>\n";
+            $card_div .= "<div class=\"card-footer\">Created at: " . $sig_dt['dt_creation'] . "</div>\n</div>\n";
+            $main_data_html .= $card_div;
+        }
+        return $main_data_html;
+    }
 }
 
 
