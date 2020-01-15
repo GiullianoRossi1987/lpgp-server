@@ -1228,11 +1228,20 @@ class UsersCheckHistory extends DatabaseConnection{
         $data_html .= "<div class=\"img-relatory\">\n<img src=\"$img_src\" width=\"70px\" heigth=\"70px\">\n</div>\n";
         $msg = "";
         $ext_cls = "";
-        switch ($dt['vl_code']){
-            case (0): $msg = "The signature is valid!";
-            case (1): $msg = self::ERR_CD_MSG1;
-            case (2): $msg = self::ERR_CD_MSG2;
-            case (3): $msg = self::ERR_CD_MSG3;
+        
+        switch ((int) $dt['vl_code']){
+            case 0: 
+                $msg = "The signature is valid!";
+            break;
+            case 1: 
+                $msg = self::ERR_CD_MSG1;
+            break;
+            case 2: 
+                $msg = self::ERR_CD_MSG2;
+            break;
+            case 3: 
+                $msg = self::ERR_CD_MSG3;
+            break;
             default: throw new InvalidErrorCode($dt['vl_code']);
         }
         $ext_cls = $dt['vl_code'] != 0 ? "error-msg" : "";
