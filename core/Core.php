@@ -1267,6 +1267,55 @@ class UsersCheckHistory extends DatabaseConnection{
         }
         return $data_html;
     }
+
+    /**
+     * Returns all the HTML of the history from a user, using the cards to represents the relatories. That method was created for make faster the 
+     * development of the profile account page, wich have that history of the checked signatures in both types of accounts.
+     * 
+     * @param string $nm_user The name of the user, normally used with the $_SESSION['user'].
+     * @return string
+     */
+    public function getUsrHistory(string $nm_user){
+        $this->checkNotConnected();
+        $usr_id = $this->connection->query("SELECT cd_user FROM tb_users WHERE nm_user = \"$nm_user\";")->fetch_array();
+        $all_hs = $this->getRegByUsr((int) $usr_id['cd_user']);
+        if(is_null($all_hs)) return "<h1>You don't have checked any signature yet!</h1>\n";
+        $main_pg = "";
+        for($i = 0; $i < count($all_hs); $i++){
+            $card_main = "<div class=\"card signaturep-card\">\n<div class=\"card-header\">\n<span class=\"img-card\">\n";
+            $dt = $all_hs[$i];
+            $sign_data = $this->connection->query("SELECT * FROM tb_signatures WHERE cd_signature = " . $dt['id_signature'] . ";")->fetch_array();
+            $img_span = $dt['vl_code'] == 0 ? "src1" : "src2"; // TODO Also change the images sources. Different image pls
+            $card_main .= "<img src=\"$img_span\" width=\"40px\" height=\"40px\">\n</span>\n<h2>Signature #" . $sign_data['cd_signature'] . "</h2>\n</div>\n";
+            $msg_title = $dt['vl_code'] == 0 ? "<h1 class=\"valid-title\">Valid</h1>\n" : "<h1 class=\"invalid-title\">Invalid</h1>\n";
+            $sub_msg = "";
+            switch ((int) $dt['vl_code']){
+                case 0:
+                    $sub_msg = "<h4 class=\"card-subtitle no-err\">Valid signature!</h4>\n";
+                break;
+                case 1:
+                    $sub_msg = "<h4 class=\"card-subtitle err\">" . self::ERR_CD_MSG1 . "</h4>\n";
+                break;
+                case 2:
+                    $sub_msg = "<h4 class=\"card-subtitle err\">" . self::ERR_CD_MSG2 . "</h4>\n";
+                break;
+                case 3:
+                    $sub_msg = "<h4 class=\"card-subtitle err\">" . self::ERR_CD_MSG3 . "</h4>\n";
+                break;
+                default: throw new PropInvalidCode($dt['vl_code']);
+            }
+            $card_main .= $msg_title . $sub_msg;
+            $card_main .= "<div class=\"card-body\">";
+            $prop_dt = $this->connection->query("SELECT * FROM tb_proprietaries WHERE cd_proprietary = " . $sign_data['id_proprietary'] . ";")->fetch_array();
+            $id = $prop_dt['cd_proprietary'];
+            $prop_data_html = is_null($prop_dt) ? "<div class=\"prop-nf-err\">(We can't find the proprietary, probabily he deleted him account)</div>\n" : "<a href=\"https://localhost/lpgp-server/cgi-actions/proprietary.php?id=$id\" target=\"_blanck\" class=\"prop-link\">" . $prop_dt['nm_proprietary'] . "</a>\n";
+            $card_main .= "Proprietary: " . $prop_data_html;
+            $card_main .= "<a href=\"https://localhost/lpgp-server/cgi-actions/relatory.php?id=" . $dt['cd_reg'] . "\" target=\"__blanck\" role=\"button\" class=\"btn btn-secondary\">Check the relatory</a>\n";
+            $card_main .= "<div class=\"card-footer text-muted\">Checked signature at: " . $dt['dt_reg'] . "</div>\n</div>";
+            $main_pg .= $card_main;
+        }
+        return $main_pg;
+    }
 }
 
 /**
@@ -1353,7 +1402,7 @@ class PropCheckHistory extends DatabaseConnection{
      */
     public function getRegByProp(int $prop_ref){
         $this->checkNotConnected();
-        $qr = $this->connection->query("SELECT * FROM tb_signatures_prop_h WHERE id_proprietary = $prop_ref;");
+        $qr = $this->connection->query("SELECT * FROM tb_signatures_prop_h WHERE id_prop = $prop_ref;");
         $results = array();
         while($row = $qr->fetch_array()) $results[] = $row;
         $qr->close();
@@ -1402,6 +1451,56 @@ class PropCheckHistory extends DatabaseConnection{
             $main_data_html .= $card_div;
         }
         return $main_data_html;
+    }
+
+
+    /**
+     * Returns all the HTML of the history from a proprietary user, using the cards to represents the relatories. That method was created for make faster the 
+     * development of the profile account page, wich have that history of the checked signatures in both types of accounts.
+     * 
+     * @param string $nm_proprietary The name of the user, normally used with the $_SESSION['user'].
+     * @return string
+     */
+    public function getPropHistory(string $nm_proprietary){
+        $this->checkNotConnected();
+        $usr_id = $this->connection->query("SELECT cd_proprietary FROM tb_proprietaries WHERE nm_proprietary = \"$nm_proprietary\";")->fetch_array();
+        $all_hs = $this->getRegByProp((int) $usr_id['cd_proprietary']);
+        if(is_null($all_hs)) return "<h1>You don't have checked any signature yet!</h1>\n";
+        $main_pg = "";
+        for($i = 0; $i < count($all_hs); $i++){
+            $card_main = "<div class=\"card signaturep-card\">\n<div class=\"card-header\">\n<span class=\"img-card\">\n";
+            $dt = $all_hs[$i];
+            $sign_data = $this->connection->query("SELECT * FROM tb_signatures WHERE cd_signature = " . $dt['id_signature'] . ";")->fetch_array();
+            $img_span = $dt['vl_code'] == 0 ? "src1" : "src2"; // TODO Also change the images sources. Different image pls
+            $card_main .= "<img src=\"$img_span\" width=\"40px\" height=\"40px\">\n</span>\n<h2>Signature #" . $sign_data['cd_signature'] . "</h2>\n</div>\n";
+            $msg_title = $dt['vl_code'] == 0 ? "<h1 class=\"valid-title\">Valid</h1>\n" : "<h1 class=\"invalid-title\">Invalid</h1>\n";
+            $sub_msg = "";
+            switch ((int) $dt['vl_code']){
+                case 0:
+                    $sub_msg = "<h4 class=\"card-subtitle no-err\">Valid signature!</h4>\n";
+                break;
+                case 1:
+                    $sub_msg = "<h4 class=\"card-subtitle err\">" . self::ERR_CD_MSG1 . "</h4>\n";
+                break;
+                case 2:
+                    $sub_msg = "<h4 class=\"card-subtitle err\">" . self::ERR_CD_MSG2 . "</h4>\n";
+                break;
+                case 3:
+                    $sub_msg = "<h4 class=\"card-subtitle err\">" . self::ERR_CD_MSG3 . "</h4>\n";
+                break;
+                default: throw new PropInvalidCode($dt['vl_code']);
+            }
+            $card_main .= $msg_title . $sub_msg;
+            $card_main .= "<div class=\"card-body\">";
+            $prop_dt = $this->connection->query("SELECT * FROM tb_proprietaries WHERE cd_proprietary = " . $sign_data['id_proprietary'] . ";")->fetch_array();
+            $id = $prop_dt['cd_proprietary'];
+            $prop_data_html = is_null($prop_dt) ? "<div class=\"prop-nf-err\">(We can't find the proprietary, probabily he deleted him account)</div>\n" : "<a href=\"https://localhost/lpgp-server/cgi-actions/proprietary.php?id=$id\" target=\"_blanck\" class=\"prop-link\">" . $prop_dt['nm_proprietary'] . "</a>\n";
+            $card_main .= "Proprietary: " . $prop_data_html;
+            $card_main .= "<a href=\"https://localhost/lpgp-server/cgi-actions/relatory.php?id=" . $dt['cd_reg'] . "\" target=\"__blanck\" role=\"button\" class=\"btn btn-secondary\">Check the relatory</a>\n";
+            $card_main .= "<div class=\"card-footer text-muted\">Checked signature at: " . $dt['dt_reg'] . "</div>\n</div>";
+            $main_pg .= $card_main;
+        }
+        return $main_pg;
     }
 }
 

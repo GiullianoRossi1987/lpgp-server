@@ -1,7 +1,7 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
 
-$obj = new Core\UsersCheckHistory("giulliano_php", "");
+$obj = new Core\PropCheckHistory("giulliano_php", "");
 ?>
 <!doctype html>
 <html lang="en">
@@ -19,7 +19,7 @@ $obj = new Core\UsersCheckHistory("giulliano_php", "");
   </head>
   <body>
 	<?php
-		echo $obj->generateRelatory(1);
+		echo $obj->getPropHistory("Giulliano1987");
 	?>
 	<!-- Optional JavaScript -->
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
