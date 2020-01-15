@@ -46,30 +46,30 @@ define("EMAIL_USING", "lpgp@gmail.com");
 define("DEFAULT_USER_ICON", $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/media/user-icon.png");
 define("DEFAULT_DATETIME_F", "Y-m-d H:M:I");
 
+/**
+ * That class contains the main connection to the database and him universal actions,
+ * such as connect, disconnect and get connection info.
+ * @var mysqli $connection The main connection with the database.
+ * @var string $database_connected The database wich is connected.
+ * @var string $host_using The host/IP using for the database server connection.
+ * @var bool $got_connection If the class is connected to a MySQL database
+ * @var string $user_connected The user that's doing the connection.
+ * @author Giulliano Ross <giulliano.scatalon.rossi@gmail.com>
+ */
 class DatabaseConnection{
-    /**
-     * That class contains the main connection to the database and him universal actions,
-     * such as connect, disconnect and get connection info.
-     * @var mysqli $connection The main connection with the database.
-     * @var string $database_connected The database wich is connected.
-     * @var string $host_using The host/IP using for the database server connection.
-     * @var bool $got_connection If the class is connected to a MySQL database
-     * @var string $user_connected The user that's doing the connection.
-     * @author Giulliano Ross <giulliano.scatalon.rossi@gmail.com>
-     */
     protected $connection;
     protected $database_connected;
     protected $host_using;
     protected $got_connection;
     protected $user_connected;
 
+    /**
+     * Checks if the class's connected to a database.
+     * @param bool $auto_throw If there's no connection, if the method will throw the error by default.
+     * @throws NotConnectedError If there's no connection, and the method is allowed to throw that exception.
+     * @return bool|void
+     */ 
     public function checkNotConnected(bool $auto_throw = true){
-        /**
-         * Checks if the class's connected to a database.
-         * @param bool $auto_throw If there's no connection, if the method will throw the error by default.
-         * @throws NotConnectedError If there's no connection, and the method is allowed to throw that exception.
-         * @return bool|void
-         */ 
         if(!$this->got_connection){
             if($auto_throw) throw new NotConnectedError("There's no connection with a MySQL database!", 1);
             else return false;
@@ -77,15 +77,15 @@ class DatabaseConnection{
         else return true;
     }
 
+    /**
+     * Starts the class and the connection with a MySQL database.
+     * @param string $user The user using for the connection.
+     * @param string $passwd The user password.
+     * @param string $host The host/IP to connect.
+     * @param string $db The database to connect.
+     * @throws AlreadyConnectedError If the class already haves a connection running.
+     */
     public function __construct(string $user, string $passwd, string $host = DEFAULT_HOST, string $db = DEFAULT_DB){
-        /**
-         * Starts the class and the connection with a MySQL database.
-         * @param string $user The user using for the connection.
-         * @param string $passwd The user password.
-         * @param string $host The host/IP to connect.
-         * @param string $db The database to connect.
-         * @throws AlreadyConnectedError If the class already haves a connection running.
-         */
         if($this->got_connection) throw new AlreadyConnectedError("There's a connection with a MySQL database already", 1);
         $this->connection = new mysqli($host, $user, $passwd, $db);
         $this->database_connected = $db;
@@ -95,10 +95,10 @@ class DatabaseConnection{
         $this->connection->autocommit(true);
     }
 
+    /**
+     * Destrois the class and also closes the connection to a MySQL database.
+     */
     public function __destruct(){
-        /**
-         * Destrois the class and also closes the connection to a MySQL database.
-         */
         mysqli_close($this->connection);
         $this->user = "";
         $this->database_connected = "";
@@ -115,37 +115,38 @@ class DatabaseConnection{
     }
 }
 
+/**
+ * That class contains the main actions for the users database.
+ * @var string DATETIME_FORMAT The format for the date in the database.
+ * @var string EMAIL_USING The e-mail address using.
+ */
 class UsersData extends DatabaseConnection{
-    /**
-     * That class contains the main actions for the users database.
-     * @const DATETIME_FORMAT The format for the date in the database.
-     */
     const DATETIME_FORMAT = "H:m:i Y-j-d";
     const EMAIL_USING     = "lpgp@gmail.com";
 
+    /**
+     * Starts the class and the connection with the session handler.
+     * The params are the same then at the parent::__construct().
+     */
     public function __construct(string $usr, string $passwd, string $host = DEFAULT_HOST, string $db = DEFAULT_DB){
-        /**
-         * Starts the class and the connection with the session handler.
-         * The params are the same then at the parent::__construct().
-         */
         parent::__construct($usr, $passwd, $host, $db);
     }
 
+    /**
+     * Just the same thing then the parent::__destruct, but implemented the session_handler destructor.
+     */
     public function __destruct(){
-        /**
-         * Just the same thing then the parent::__destruct, but implemented the session_handler destructor.
-         */
         parent::__destruct();
     }
 
+    /**
+     * Checks if a user exists in the database. 
+     * @param string $username The user to search in the database.
+     * @param bool $auto_throw If the method will throw a exception if the user don't exists.
+     * @throws UserNotFound If there's no such user in the database, and the method's allowed to throw the exception.
+     * @return bool
+     */
     private function checkUserExists(string $username, bool $auto_throw = false){
-        /**
-         * Checks if a user exists in the database. 
-         * @param string $username The user to search in the database.
-         * @param bool $auto_throw If the method will throw a exception if the user don't exists.
-         * @throws UserNotFound If there's no such user in the database, and the method's allowed to throw the exception.
-         * @return bool
-         */
         $this->checkNotConnected();
         $qr_all = $this->connection->query("SELECT nm_user FROM tb_users WHERE nm_user = \"$username\";");
         while($row = $qr_all->fetch_array()){
@@ -155,16 +156,16 @@ class UsersData extends DatabaseConnection{
         else return false;
     }
 
+    /**
+     * Authenticate a user password, for login or another simple authentication.
+     * @param string $user The user to authenticate
+     * @param string $password The user password
+     * @param bool $encoded_password If the user password's encoded on the database.
+     * @throws PasswordAuthError If the passwords doesn't matches
+     * @throws UserNotFound If the selected user don't exists.
+     * @return bool
+     */
     public function authPassword(string $user, string $password, bool $encoded_password = true){
-        /**
-         * Authenticate a user password, for login or another simple authentication.
-         * @param string $user The user to authenticate
-         * @param string $password The user password
-         * @param bool $encoded_password If the user password's encoded on the database.
-         * @throws PasswordAuthError If the passwords doesn't matches
-         * @throws UserNotFound If the selected user don't exists.
-         * @return bool
-         */
         $this->checkNotConnected();
         if(!$this->checkUserExists($user, false)) throw new UserNotFound("There's no user '$user' in the database", 1);
         $usr_dt  = $this->connection->query("SELECT vl_password FROM tb_users WHERE nm_user = \"$user\";")->fetch_array();
@@ -187,14 +188,14 @@ class UsersData extends DatabaseConnection{
         return $key == $usr_data['vl_key'];
     }
 
+    /**
+     * Makes the login with a user in the database, with a password authentication and login setup.
+     * @param string $user The user to make login.
+     * @param string $password The user password.
+     * @param bool $encoded_password If the user password is encoded in the database.
+     * @return array
+     */
     public function login(string $user, string $password, bool $encoded_password = true){
-        /**
-         * Makes the login with a user in the database, with a password authentication and login setup.
-         * @param string $user The user to make login.
-         * @param string $password The user password.
-         * @param bool $encoded_password If the user password is encoded in the database.
-         * @return array
-         */
         $rcv = $this->authPassword($user, $password, $encoded_password);
         $checked_usr = $this->connection->query("SELECT checked FROM tb_users WHERE nm_user = \"$user\";")->fetch_array();
         $img_path = $this->connection->query("SELECT vl_img FROM tb_users WHERE nm_user = \"$user\";")->fetch_array();
@@ -207,13 +208,13 @@ class UsersData extends DatabaseConnection{
         return $arr_info;
     }
 
+    /**
+     * Checks if a key already haves a user, important to checking user key with email and for the creation of another key.
+     * @param string $key The key to search.
+     * @author Giulliano Rossi <giulliano.scatalon.rossi@gmail.com>
+     * @return bool
+     */
     public function checkUserKeyExists(string $key){
-        /**
-         * Checks if a key already haves a user, important to checking user key with email and for the creation of another key.
-         * @param string $key The key to search.
-         * @author Giulliano Rossi <giulliano.scatalon.rossi@gmail.com>
-         * @return bool
-         */
         $this->checkNotConnected();
         $qr_wt = $this->connection->query("SELECT vl_key FROM tb_users WHERE vl_key = \"$key\";");
         while($row = $qr_wt->fetch_array()){
@@ -223,11 +224,11 @@ class UsersData extends DatabaseConnection{
         return false;
     }
 
+    /**
+     * Generate a user key for the database.
+     * @return void
+     */
     public function createUserKey(){
-        /**
-         * Generate a user key for the database.
-         * @return void
-         */
         $rand_len = mt_rand(1, 5);
         $key = "";
         while(true){
@@ -242,17 +243,17 @@ class UsersData extends DatabaseConnection{
             else continue;
         }
     }
-
+    
+    /**
+     * Adds a user for the database. Normally made for be used in HTML forms
+     * @param string $user The name for the user.
+     * @param string $password The user password.
+     * @param string $email The user email.
+     * @param bool $encode_password If the password needs to be encoded or is already encoded.
+     * @throws UserAlreadyExists If there's a user with that name already in the database.
+     * @return void
+     */
     public function addUser(string $user, string $password, string $email, bool $encode_password = true, string $img){
-        /**
-         * Adds a user for the database. Normally made for be used in HTML forms
-         * @param string $user The name for the user.
-         * @param string $password The user password.
-         * @param string $email The user email.
-         * @param bool $encode_password If the password needs to be encoded or is already encoded.
-         * @throws UserAlreadyExists If there's a user with that name already in the database.
-         * @return void
-         */
         $this->checkNotConnected();
         if($this->checkUserExists($user, false)) throw new UserAlreadyExists("There's already a user with the name '$user'", 1);
         $to_db = $encode_password ? base64_encode($password) : $password;
@@ -261,28 +262,28 @@ class UsersData extends DatabaseConnection{
         if(!$qr) echo mysqli_error($this->connection);
     }
 
+    /**
+     * Removes a user from the database.
+     * @param string $user the user to remove.
+     * @throws UserNotFound If the user selected don't exists in the database.
+     * @return void
+    */
     public function deleteUser(string $user){
-        /**
-         * Removes a user from the database.
-         * @param string $user the user to remove.
-         * @throws UserNotFound If the user selected don't exists in the database.
-         * @return void
-         */
         $this->checkNotConnected();
         if(!$this->checkUserExists($user)) throw new UserNotFound("There's no user with the name '$user'!", 1);
         $qr_dl = $this->connection->query("DELETE FROM tb_users WHERE nm_user = \"$user\";");
         unset($qr_dl);
     }
     
+    /**
+     * Changes a user name in the database.
+     * @param string $user THe user to change the name
+     * @param string $newname The new name of the user
+     * @throws UserNotFound If the user selected don't exists.
+     * @throws UserAlreadyExists If the name selected is already in use from another user.
+     * @return void
+     */
     public function chUserName(string $user, string $newname){
-        /**
-         * Changes a user name in the database.
-         * @param string $user THe user to change the name
-         * @param string $newname The new name of the user
-         * @throws UserNotFound If the user selected don't exists.
-         * @throws UserAlreadyExists If the name selected is already in use from another user.
-         * @return void
-         */
         $this->checkNotConnected();
         if(!$this->checkUserExists($user)) throw new UserNotFound("There's no user '$user'", 1);
         if($this->checkUserExists($newname)) throw new UserAlreadyExists("The name '$newname' is already in use", 1);
@@ -290,29 +291,29 @@ class UsersData extends DatabaseConnection{
         unset($qr);
     }
     
+    /**
+     * Changes a user email in the database.
+     * @param string $user The user to change the email.
+     * @param string $email The new user email.
+     * @throws UserNotFound If the user don't exists in the database.
+     * @return void
+     */
     public function chUserEmail(string $user, string $new_email){
-        /**
-         * Changes a user email in the database.
-         * @param string $user The user to change the email.
-         * @param string $email The new user email.
-         * @throws UserNotFound If the user don't exists in the database.
-         * @return void
-         */
         $this->checkNotConnected();
         if(!$this->checkUserExists($user)) throw new UserNotFound("There's no user '$user'", 1);
         $qr = $this->connection->query("UPDATE tb_users SET vl_email = \"$new_email\" WHERE nm_user = \"$user\";");
         unset($qr);
     }
     
+    /**
+     * Changes the user password, but it need to be authenticated by the user password.
+     * @param string $user The user to change the password
+     * @param string $new_passwd The new password.
+     * @param bool $encode If the method will need to encode the password before updating it, if don't the password need to be encoded on base64
+     * @throws UserNotFound If there's no user such the selected in the database.
+     * @return void
+     */
     public function chUserPasswd(string $user, string $new_passwd, bool $encode = true){
-        /**
-         * Changes the user password, but it need to be authenticated by the user password.
-         * @param string $user The user to change the password
-         * @param string $new_passwd The new password.
-         * @param bool $encode If the method will need to encode the password before updating it, if don't the password need to be encoded on base64
-         * @throws UserNotFound If there's no user such the selected in the database.
-         * @return void
-         */
         $this->checkNotConnected();
         if(!$this->checkUserExists($user)) throw new UserNotFound("There's no user '$user'", 1);
         $to_db = $encode ? base64_encode($new_passwd) : $new_passwd;
@@ -335,10 +336,10 @@ class UsersData extends DatabaseConnection{
         unset($qr);
     }
     
+    /**
+     * Sets if a user haves the email checked in the database.   
+     */
     public function setUserChecked(string $user, bool $checked = true){
-        /**
-         * Sets if a user haves the email checked in the database.   
-	     */
 	    $this->checkNotConnected();
         if(!$this->checkUserExists($user)) throw new UserNotFound("There's no user '$user'!", 1);
         $to_db = $checked ? 1 : 0;
@@ -347,44 +348,44 @@ class UsersData extends DatabaseConnection{
         unset($to_db);
     }
 
+    /**
+     * Checks if the user haves the email checked on the database.
+     * Checking the field 'checked' on the MySQL Database.
+     * @param string $user The user to check
+     * @throws UserNotFound If the user don't exists
+     * @return bool
+     */
     public function checkUserCheckedEmail(string $user){
-        /**
-         * Checks if the user haves the email checked on the database.
-         * Checking the field 'checked' on the MySQL Database.
-         * @param string $user The user to check
-         * @throws UserNotFound If the user don't exists
-         * @return bool
-         */
         $this->checkNotConnected();
         if(!$this->checkUserExists($user)) throw new UserNotFound("There's no user '$user'!", 1);
         $usr_data = $this->connection->query("SELECT checked FROM tb_users WHERE nm_user = \"$user\";")->fetch_array();
         return $usr_data['checked'] == 1;
     }
 
+    /**
+     * That function returns the content of the email template to send in HTML.
+     * Wich template will be used to send the checking email, it will replace
+     * The username and the user key.
+     *
+     * @param string $user The user that the server will send the email.
+     * @param string $key The user key, storaged at the database.
+     * @return string
+     */
     public function fetchTemplateEmail(string $user, string $key){
-        /**
-         * That function returns the content of the email template to send in HTML.
-         * Wich template will be used to send the checking email, it will replace
-         * The username and the user key.
-         *
-         * @param string $user The user that the server will send the email.
-         * @param string $key The user key, storaged at the database.
-         * @return string
-         */
         $raw_content = file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/templates/template-email.html");
         $cont1 = str_replace("%user%", $user, $raw_content);
         return str_replace("%key%", $key, $cont1);
     }
 
 
+    /**
+     * Sends a email to the selected user.
+     * That email will contain the users key storaged on the database.
+     * @param string $user The user to send the checking email
+     * @throws UserNotFound If the selected/referencied user don't exists.
+     * @return bool
+     */
     public function sendCheckEmail(string $user){
-        /**
-         * Sends a email to the selected user.
-         * That email will contain the users key storaged on the database.
-         * @param string $user The user to send the checking email
-         * @throws UserNotFound If the selected/referencied user don't exists.
-         * @return bool
-         */
         $this->checkNotConnected();
         if(!$this->checkUserExists($user)) throw new UserNotFound("There's no user '$user'!", 1);
         $usr_data = $this->connection->query("SELECT vl_key, vl_email, checked FROM tb_users WHERE nm_user = \"$user\";")->fetch_array();
@@ -397,13 +398,13 @@ class UsersData extends DatabaseConnection{
         return mail($usr_data['vl_email'], "Your LPGP account!", $content, $headers);
     }
 
+    /**
+     * Query all the users by the name.
+     * @param string $name_needle The string to search
+     * @param bool $exactly If the method will search for te exact string in the database.
+     * @return array  in that array will have all the names.
+     */
     public function qrUserByName(string $name_needle, bool $exactly = false){
-        /**
-         * Query all the users by the name.
-         * @param string $name_needle The string to search
-         * @param bool $exactly If the method will search for te exact string in the database.
-         * @return array  in that array will have all the names.
-         */
         $this->checkNotConnected();
         $arr = array();
         if($exactly) $qr = $this->connection->query("SELECT nm_user FROM tb_users WHERE nm_user = \"$name_needle\";");
@@ -412,13 +413,13 @@ class UsersData extends DatabaseConnection{
         return $arr;
     }
 
+    /**
+     * Searchs all the users with a string in the email.
+     * @param string $email_needle The string to search on the email field
+     * @param bool $exactly Searchs for the exact string in the email.
+     * @return array
+     */
     public function qrUserByEmail(string $email_needle, bool $exactly = false){
-        /**
-         * Searchs all the users with a string in the email.
-         * @param string $email_needle The string to search on the email field
-         * @param bool $exactly Searchs for the exact string in the email.
-         * @return array
-         */
         $this->checkNotConnected();
         $arr = array();
         if($exactly) $qr = $this->connection->query("SELECT nm_user FROM tb_users WHERE vl_email = \"$email_needle\";");
@@ -426,14 +427,14 @@ class UsersData extends DatabaseConnection{
         while($row = $qr->fetch_array()) array_push($arr, $row['nm_user']);
         return $arr;
     }
-
+    
+    /**
+     * Searches the user name by a string on him key, it'll be used at the web, but at the admin on the server.
+     * @param string $key_needle The string to search on the key field;
+     * @param bool $exactly If the search will be the exactly the string.
+     * @return array.
+     */
     public function qrUserByKey(string $key_needle, bool $exactly = false){
-        /**
-         * Searches the user name by a string on him key, it'll be used at the web, but at the admin on the server.
-         * @param string $key_needle The string to search on the key field;
-         * @param bool $exactly If the search will be the exactly the string.
-         * @return array.
-         */
         $this->checkNotConnected();
         $arr = array();
         if($exactly) $qr = $this->connection->query("SELECT nm_user FROM tb_users WHERE vl_key = \"$key_needle\";");
@@ -455,22 +456,25 @@ class UsersData extends DatabaseConnection{
     }
 }
 
+/**
+ * That class contains the main actions with the propriearies on the system.
+ * The main methods to manage the proprietaries accounts in the database are here.
+ * The constants are the same then the in UsersData class.
+ * 
+ * @var string DATETIME_FORMAT The format of the date and time using in the method.
+ * @var string EMAIL_USING The email address used to send the emails.
+ */
 class ProprietariesData extends DatabaseConnection{
-    /**
-     * That class contains the main actions with the propriearies on the system.
-     * The main methods to manage the proprietaries accounts in the database are here.
-     * The constants are the same then the in UsersData class
-     */
 
     const DATETIME_FORMAT = "H:m:i Y-M-d";
     const EMAIL_USING     = "lpgp@gmail.com";
 
+    /**
+     * Checks if a proprietary account exists in the database.
+     * @param string $nm_proprietary The name of the proprietary to search.
+     * @return bool
+     */
      private function checkProprietaryExists(string $nm_proprietary){
-         /**
-          * Checks if a proprietary account exists in the database.
-          * @param string $nm_proprietary The name of the proprietary to search.
-          * @return bool
-          */
           $this->checkNotConnected();
           $qr = $this->connection->query("SELECT nm_proprietary FROM tb_proprietaries WHERE nm_proprietary = \"$nm_proprietary\";");
           while($row = $qr->fetch_array()){
@@ -481,13 +485,13 @@ class ProprietariesData extends DatabaseConnection{
      }
 
 
+     /**
+      * Checks if a key already haves a user, important to checking user key with email and for the creation of another key.
+      * @param string $key The key to search.
+      * @author Giulliano Rossi <giulliano.scatalon.rossi@gmail.com>
+      * @return bool
+      */
     public function checkProprietaryKeyExists(string $key){
-        /**
-         * Checks if a key already haves a user, important to checking user key with email and for the creation of another key.
-         * @param string $key The key to search.
-         * @author Giulliano Rossi <giulliano.scatalon.rossi@gmail.com>
-         * @return bool
-         */
         $this->checkNotConnected();
         $qr_wt = $this->connection->query("SELECT vl_key FROM tb_proprietaries WHERE vl_key = \"$key\";");
         while($row = $qr_wt->fetch_array()){
@@ -497,11 +501,11 @@ class ProprietariesData extends DatabaseConnection{
         return false;
     }
 
+    /**
+     * Generate a user key for the database.
+     * @return void
+     */
     public function createProprietaryKey(){
-        /**
-         * Generate a user key for the database.
-         * @return void
-         */
         $rand_len = mt_rand(1, 5);
         $key = "";
         while(true){
@@ -534,16 +538,16 @@ class ProprietariesData extends DatabaseConnection{
         return $prop_data['vl_key'] == $key_rcv;
     }
 
+    /**
+     * Authenticates a proprietary user password, that will be used for every thing, even the user data change.
+     *
+     * @param string $proprietary The proprietary user to authenticate the password.
+     * @param string $password The proprietary password, from a input.
+     * @param bool $encoded_password If the password is enconded at the database, by default yes.
+     * @throws ProprietaryNotFound If the selected proprietary don't exists.
+     * @return bool
+     */
     public function authPasswd(string $proprietary, string $password, bool $encoded_password = true){
-         /**
-          * Authenticates a proprietary user password, that will be used for every thing, even the user data change.
-          *
-          * @param string $proprietary The proprietary user to authenticate the password.
-          * @param string $password The proprietary password, from a input.
-          * @param bool $encoded_password If the password is enconded at the database, by default yes.
-          * @throws ProprietaryNotFound If the selected proprietary don't exists.
-          * @return bool
-          */
         $this->checkNotConnected();
         if(!$this->checkProprietaryExists($proprietary)) throw new ProprietaryNotFound("There's no proprietary user '$proprietary'!", 1);
         $prop_data = $this->connection->query("SELECT vl_password FROM tb_proprietaries WHERE nm_proprietary = \"$proprietary\";")->fetch_array();
@@ -799,13 +803,13 @@ class SignaturesData extends DatabaseConnection{
     const DELIMITER   = "/";
 
 
+    /**
+     * Checks if a signature exists in the database. It uses the PK at the database.
+     * 
+     * @param int $signature_id The PK for search.
+     * @return bool
+     */
     private function checkSignatureExists(int $signature_id){
-        /**
-         * Checks if a signature exists in the database. It uses the PK at the database.
-         * 
-         * @param int $signature_id The PK for search.
-         * @return bool
-         */
         $this->checkNotConnected();
         $qr = $this->connection->query("SELECT cd_signature FROM tb_signatures WHERE cd_signature = $signature_id;");
         while($row = $qr->fetch_array()){
@@ -855,13 +859,13 @@ class SignaturesData extends DatabaseConnection{
         return $this->connection->query("SELECT * FROM tb_signatures WHERE cd_signature = $signature;")->fetch_array();
     }
 
+    /**
+     * Creates a filename for the signature file. 
+     *
+     * @param int $initial_counter The first contage of the filename (signature-file-$initial_counter)
+     * @return string
+     */
     public static function generateFileNm(int $initial_counter = 0){
-        /**
-         * Creates a filename for the signature file. 
-         *
-         * @param int $initial_counter The first contage of the filename (signature-file-$initial_counter)
-         * @return string
-         */
         $local_counter = $initial_counter;
         while(true){
             if(!file_exists($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/signatures.d/signature-file-". $local_counter . ".lpgp")) 
@@ -871,15 +875,15 @@ class SignaturesData extends DatabaseConnection{
         return "signature-file-".$local_counter . ".lpgp";
     }
 
+    /**
+     * Creates a signature file and return it link to the file.
+     * 
+     * @param string $signature_id The PK on the database.
+     * @param bool $HTML_mode If the method will return a HTML <a>
+     * @throws SignatureNotFound If there's no such PK in the database.
+     * @return string
+     */
     public function createsSignatureFile(int $signature_id, bool $HTML_mode = false, string $file_name){
-        /**
-         * Creates a signature file and return it link to the file.
-         * 
-         * @param string $signature_id The PK on the database.
-         * @param bool $HTML_mode If the method will return a HTML <a>
-         * @throws SignatureNotFound If there's no such PK in the database.
-         * @return string
-         */
         $this->checkNotConnected();
         if(!$this->checkSignatureExists($signature_id)) throw new SignatureNotFound("There's no signature #$signature_id !", 1);
         $sig_dt = $this->connection->query("SELECT prop.nm_proprietary, sig.vl_password, sig.vl_code FROM tb_signatures as sig INNER JOIN tb_proprietaries AS prop ON prop.cd_proprietary = sig.id_proprietary WHERE sig.cd_signature = $signature_id;")->fetch_array();
@@ -899,29 +903,29 @@ class SignaturesData extends DatabaseConnection{
     }
 
 
+    /**
+     * Checks if the signature file is a .lpgp file.
+     *
+     * @param string $file_name The file to verify
+     * @return bool
+     */
     private static function checkFileValid(string $file_name){
-        /**
-         * Checks if the signature file is a .lpgp file.
-         *
-         * @param string $file_name The file to verify
-         * @return bool
-         */
         $sp = explode(".", $file_name);
         return $sp[count($sp) - 1] == "lpgp";
     }
 
+    /**
+     * Checks a uploaded signature file. It needs to have the extension .lpgp.
+     * All the uploaded signatures files stay at the usignatures.d.
+     * 
+     * @param string $file_path The signature file uploaded path.
+     * @throws InvalidSignatureFile if the file is not a .lpgp
+     * @throws VersionError if the signature file version is not allowed.
+     * @throws SignatureNotFound if the ID of the signature on the file don't exists 
+     * @throws SignatureAuthError If the file is not valid
+     * @return true
+     */
     public function checkSignatureFile(string $file_name){
-        /**
-         * Checks a uploaded signature file. It needs to have the extension .lpgp.
-         * All the uploaded signatures files stay at the usignatures.d.
-         * 
-         * @param string $file_path The signature file uploaded path.
-         * @throws InvalidSignatureFile if the file is not a .lpgp
-         * @throws VersionError if the signature file version is not allowed.
-         * @throws SignatureNotFound if the ID of the signature on the file don't exists 
-         * @throws SignatureAuthError If the file is not valid
-         * @return true
-         */
         $this->checkNotConnected();
         if(!$this->checkFileValid($file_name)) throw new InvalidSignatureFile("", 1);
         if(!file_exists($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/usignatures.d/$file_name")) throw new SignatureFileNotFound("There's no file '$file_name' on the uploaded signatures folder.", 1);
@@ -939,14 +943,14 @@ class SignaturesData extends DatabaseConnection{
         return true;
     }
 
+    /**
+     * Does the same thing then the checkProprietaryExists on the class ProprietariesData, 
+     * But this time it uses the PK not the name.
+     *
+     * @param int $id The PK of the proprietary
+     * @return bool
+     */
     private function checkProprietaryExists(int $id){
-        /**
-         * Does the same thing then the checkProprietaryExists on the class ProprietariesData, 
-         * But this time it uses the PK not the name.
-         *
-         * @param int $id The PK of the proprietary
-         * @return bool
-         */
         $this->checkNotConnected();
         $all_rt = $this->connection->query("SELECT cd_proprietary FROM tb_proprietaries WHERE cd_proprietary = $id;");
         while($row = $all_rt->fetch_array()){
@@ -956,16 +960,16 @@ class SignaturesData extends DatabaseConnection{
         return false;
     }
 
+    /**
+     * Creates a new signature on the database.
+     * @param int $id_proprietary The PK of the signature proprietary.
+     * @param string $password The word used to be the signature.
+     * @param int $code The algo index on the constant self::CODES
+     * @param bool $encode_word If the method will encode the signature
+     * @throws ProprietaryNotFound if the $id_proprietary don't exists as a proprietary
+     * @return void
+     */
     public function addSignature(int $id_proprietary, string $password, int $code, bool $encode_word = true){
-        /**
-         * Creates a new signature on the database.
-         * @param int $id_proprietary The PK of the signature proprietary.
-         * @param string $password The word used to be the signature.
-         * @param int $code The algo index on the constant self::CODES
-         * @param bool $encode_word If the method will encode the signature
-         * @throws ProprietaryNotFound if the $id_proprietary don't exists as a proprietary
-         * @return void
-         */
         $this->checkNotConnected();
         if(!$this->checkProprietaryExists($id_proprietary)) throw new ProprietaryNotFound("There's no proprietary with the ID #$id_proprietary", 1);
         $to_db = $encode_word ? hash(self::CODES[$code], $password) : $password;
@@ -974,30 +978,30 @@ class SignaturesData extends DatabaseConnection{
         unset($to_db);
     }
 
+    /**
+     * Removes a signature from the database. It uses the PK of the signature tuple at the MySQL database.
+     * 
+     * @param int $signature_id The signature PK on the database.
+     * @throws SignatureNotFound If the PK don't exists in the database.
+     * @return void
+     */
     public function delSignature(int $signature_id){
-        /**
-         * Removes a signature from the database. It uses the PK of the signature tuple at the MySQL database.
-         * 
-         * @param int $signature_id The signature PK on the database.
-         * @throws SignatureNotFound If the PK don't exists in the database.
-         * @return void
-         */
         $this->checkNotConnected();
         if(!$this->checkSignatureExists($signature_id)) throw new SignatureNotFound("There's no signature with the PK #$signature_id", 1);
         $qr_rm = $this->connection->query("DELETE FROM tb_signatures WHERE cd_signature = $signature_id;");
         unset($qr_rm);
     }
 
+    /**
+     * Changes the FK of the database, that contains the proprietary that owns the signature.
+     * 
+     * @param int $signature The PK of the signature.
+     * @param int $new_proprietary The new Proprietary ID
+     * @throws ProprietaryNotFound If the new ID don't exists has a proprietary
+     * @throws SignatureNotFound If the PK don't exists.
+     * @return void
+     */
     public function chProprietaryId(int $signature, int $new_proprietary){
-        /**
-         * Changes the FK of the database, that contains the proprietary that owns the signature.
-         * 
-         * @param int $signature The PK of the signature.
-         * @param int $new_proprietary The new Proprietary ID
-         * @throws ProprietaryNotFound If the new ID don't exists has a proprietary
-         * @throws SignatureNotFound If the PK don't exists.
-         * @return void
-         */
         $this->checkNotConnected();
         if(!$this->checkSignatureExists($signature)) throw new SignatureNotFound("There's no signature #$signature;", 1);
         if(!$this->checkProprietaryExists($new_proprietary)) throw new ProprietaryNotFound("There's no proprietary with that id #$new_proprietary", 1);
@@ -1005,16 +1009,16 @@ class SignaturesData extends DatabaseConnection{
         unset($qr_ch);
     }
 
+    /**
+     * Changes the algo code used at the signature.
+     * 
+     * @param int $signature The PK for the signature.
+     * @param int $code The index of the constant array self::CODES.
+     * @param string $word_same The same word in the database. To reupdate the word too. It don't have to be encoded before.
+     * @throws SignatureNotFound If the PK don't exists 
+     * @return void
+     */
     public function chSignatureCode(int $signature, int $code, string $word_same){
-        /**
-         * Changes the algo code used at the signature.
-         * 
-         * @param int $signature The PK for the signature.
-         * @param int $code The index of the constant array self::CODES.
-         * @param string $word_same The same word in the database. To reupdate the word too. It don't have to be encoded before.
-         * @throws SignatureNotFound If the PK don't exists 
-         * @return void
-         */
         $this->checkNotConnected();
         if(!$this->checkSignatureExists($signature)) throw new SignatureNotFound("There's no signature #$signature", 1);
         $act_code = $this->connection->query("SELECT vl_code FROM tb_signatures WHERE cd_signatures = $signature;")->fetch_array();
@@ -1024,17 +1028,17 @@ class SignaturesData extends DatabaseConnection{
         unset($qr_ch);
     }
 
+    /**
+     * It changes the main word of the signature. If the new word is not encoded at the same algo, the method
+     * will encode it.
+     * 
+     * @param int $signature The PK of the signature at the database;
+     * @param string $word The new word to set.
+     * @param bool $encode_here If the method will encode the word, if don't (false) the word must be encoded already.
+     * @throws SignatureNotFound If the PK don't exists.
+     * @return void
+     */
     public function chSignaturePassword(int $signature, string $word, bool $encode_here = true){
-        /**
-         * It changes the main word of the signature. If the new word is not encoded at the same algo, the method
-         * will encode it.
-         * 
-         * @param int $signature The PK of the signature at the database;
-         * @param string $word The new word to set.
-         * @param bool $encode_here If the method will encode the word, if don't (false) the word must be encoded already.
-         * @throws SignatureNotFound If the PK don't exists.
-         * @return void
-         */
         $this->checkNotConnected();
         if(!$this->checkSignatureExists($signature)) throw new SignatureNotFound("There's no signature #$signature", 1);
         $to_db = "";
@@ -1048,13 +1052,13 @@ class SignaturesData extends DatabaseConnection{
         unset($to_db);
     }
 
+    /**
+     * Searches in the database for a singature wich the proprietary FK is the same as the parameter
+     * 
+     * @param int $proprietary_needle The FK to search
+     * @return array|null
+     */
     public function qrSignatureProprietary(int $proprietary_neddle){
-        /**
-         * Searches in the database for a singature wich the proprietary FK is the same as the parameter
-         * 
-         * @param int $proprietary_needle The FK to search
-         * @return array|null
-         */
         $this->checkNotConnected();
         $qr_all = $this->connection->query("SELECT cd_signature FROM tb_signatures WHERE id_proprietary = $proprietary_neddle");
         $results = array();
@@ -1062,13 +1066,13 @@ class SignaturesData extends DatabaseConnection{
         return count($results) <= 0 ? null : $results;
     }
 
+    /**
+     * Searches in the database for a signature wich the vl_code is the same as the parameter
+     * 
+     * @param int $code The vl_code to search
+     * @return array|null
+     */
     public function qrSignatureAlgo(int $code){
-        /**
-         * Searches in the database for a signature wich the vl_code is the same as the parameter
-         * 
-         * @param int $code The vl_code to search
-         * @return array|null
-         */
         $this->checkNotConnected();
         $results = [];
         $qr_all = $this->connection->query("SELECT cd_signature FROM tb_signatures WHERE vl_code = $code");
