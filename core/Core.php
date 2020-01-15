@@ -1266,7 +1266,7 @@ class UsersCheckHistory extends DatabaseConnection{
  * made by proprietaries users. There's also other to manage the authentications made by the normal users.
  */
 class PropCheckHistory extends DatabaseConnection{
-
+    
 }
 
 
