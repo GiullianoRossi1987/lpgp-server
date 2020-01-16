@@ -1236,11 +1236,10 @@ class UsersCheckHistory extends DatabaseConnection{
         $dt = $qr_data->fetch_array();
         $qr_data->close();
         $data_html = "<div class=\"relatory-php\">\n";
-        $img_src = $dt['vl_valid'] == 1 ? "src1" : "src2";  // TODO: Replace the 'src1' and 'src2' for the imgs sources
+        $img_src = $dt['vl_valid'] == 1 ? "https://localhost/lpgp-server/media/checked-valid.png" : "https://localhost/lpgp-server/media/checked-invalid.png";
         $data_html .= "<div class=\"img-relatory\">\n<img src=\"$img_src\" width=\"70px\" heigth=\"70px\">\n</div>\n";
         $msg = "";
         $ext_cls = "";
-        
         switch ((int) $dt['vl_code']){
             case 0: 
                 $msg = "The signature is valid!";
@@ -1289,7 +1288,7 @@ class UsersCheckHistory extends DatabaseConnection{
             $card_main = "<div class=\"card signaturep-card\">\n<div class=\"card-header\">\n<span class=\"img-card\">\n";
             $dt = $all_hs[$i];
             $sign_data = $this->connection->query("SELECT * FROM tb_signatures WHERE cd_signature = " . $dt['id_signature'] . ";")->fetch_array();
-            $img_span = $dt['vl_code'] == 0 ? "src1" : "src2"; // TODO Also change the images sources. Different image pls
+            $img_span = $dt['vl_code'] == 0 ? "https://localhost/lpgp-server/media/checked-valid.png" : "https://localhost/lpgp-server/media/checked-invalid.png";
             $card_main .= "<img src=\"$img_span\" width=\"40px\" height=\"40px\">\n</span>\n<h2>Signature #" . $sign_data['cd_signature'] . "</h2>\n</div>\n";
             $msg_title = $dt['vl_code'] == 0 ? "<h1 class=\"valid-title\">Valid</h1>\n" : "<h1 class=\"invalid-title\">Invalid</h1>\n";
             $sub_msg = "";
@@ -1425,7 +1424,7 @@ class PropCheckHistory extends DatabaseConnection{
         $error_msg = "";
         $extra_cls = $reg_data['vl_code'] == 0 ? "" : "error-msg";
         $main_data_html = "\n<div class=\"relatory-container\">\n";
-        $img_src = $reg_data['vl_code'] == 0 ? "src1" : "src2"; // TODO: change the sources of the images to the real images.
+        $img_src = $reg_data['vl_code'] == 0 ? "https://localhost/lpgp-server/media/checked-valid.png" : "https://localhost/lpgp-server/media/checked-invalid.png";
         $main_data_html .= "<img src=\"$img_src\" width=\"70px\" height=\"70px\">\n";
         switch ( (int) $reg_data['vl_code']){
             case 0:
@@ -1475,7 +1474,7 @@ class PropCheckHistory extends DatabaseConnection{
             $card_main = "<div class=\"card signaturep-card\">\n<div class=\"card-header\">\n<span class=\"img-card\">\n";
             $dt = $all_hs[$i];
             $sign_data = $this->connection->query("SELECT * FROM tb_signatures WHERE cd_signature = " . $dt['id_signature'] . ";")->fetch_array();
-            $img_span = $dt['vl_code'] == 0 ? "src1" : "src2"; // TODO Also change the images sources. Different image pls
+            $img_span = $dt['vl_code'] == 0 ? "https://localhost/lpgp-server/media/checked-valid.png" : "https://localhost/lpgp-server/media/checked-invalid.png";
             $card_main .= "<img src=\"$img_span\" width=\"40px\" height=\"40px\">\n</span>\n<h2>Signature #" . $sign_data['cd_signature'] . "</h2>\n</div>\n";
             $msg_title = $dt['vl_code'] == 0 ? "<h1 class=\"valid-title\">Valid</h1>\n" : "<h1 class=\"invalid-title\">Invalid</h1>\n";
             $sub_msg = "";
