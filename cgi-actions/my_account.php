@@ -2,14 +2,16 @@
 if(session_status() == PHP_SESSION_NONE) session_start();
 require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
 require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
+
 use function JSHandler\lsSignaturesMA;
 use Core\ProprietariesData;
 use Core\UsersData;
+use Core\PropCheckHistory;
+use Core\UsersCheckHistory;
 
 
 $prp = new ProprietariesData("giulliano_php", "");
 $usr = new UsersData("giulliano_php", "");
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -179,18 +181,32 @@ $usr = new UsersData("giulliano_php", "");
                                 </div>
                             </div>
                         </div>
-                        <div class="signatures-col col-12">
+                        <div class="others-col col-12">
                         <?php
+                            // Signatures
+                            /////////////////////////////////////////////////////////////////////////////////////////////////
                             if($_SESSION['mode'] == "prop"){
                                 echo "<h1>Your signatures!</h1>";
                                 $prp = new ProprietariesData("giulliano_php", "");
                                 echo lsSignaturesMA($prp->getPropID($_SESSION['user']));
                                 echo "<br>\n<a href=\"https://localhost/lpgp-server/create_signature.html\" role=\"button\" class=\"btn btn-lg btn-success\">Create a new signature</a>";
                             }
-                            else{
-                                echo "";
-                            }
                         ?>
+                        </div>
+                        <div class="history-col col-12">
+                            <?php
+                            // History
+                            ///////////////////////////////////////////////////////////////////////////////////////////////
+                            if($_SESSION['mode'] == "prop"){
+                                $obj = new PropCheckHistory("giulliano_php", "");
+                                echo $obj->getPropHistory($_SESSION['user']);
+                            }
+                            else{
+                                $obj = new UsersCheckHistory("giulliano_php", "");
+                                echo $obj->getUsrHistory($_SESSION['user']);
+                            }
+                            ?>
+                            
                         </div>
 					</div>
 				</div>

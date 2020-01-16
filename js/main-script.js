@@ -59,8 +59,8 @@ function setAccountOpts(){
         local_opts.appendChild(logoff_opt);
         local_opts.appendChild(account_opt);
         var img = document.createElement("img");
-        img.width = 40;
-        img.height = 40;
+        img.width = 30;
+        img.height = 30;
         var local_opt_btn = document.querySelector("#account-opts");
         var ls = localStorage.getItem("user-icon").split("/");
         img.src = "https://localhost/lpgp-server/" + ls[ls.length - 2] + "/" + ls[ls.length - 1];

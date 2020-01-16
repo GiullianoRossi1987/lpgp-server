@@ -1,6 +1,6 @@
 <?php
 namespace Core;
-// TODO: Fix the php docs (they're upside down)
+// TODO Replace the paths to the original path
 require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Exceptions.php";
 // add the logs manager after.
 
@@ -1315,7 +1315,7 @@ class UsersCheckHistory extends DatabaseConnection{
             $card_main .= "Proprietary: " . $prop_data_html;
             $card_main .= "<a href=\"https://localhost/lpgp-server/cgi-actions/relatory.php?id=" . $dt['cd_reg'] . "\" target=\"__blanck\" role=\"button\" class=\"btn btn-secondary\">Check the relatory</a>\n";
             $card_main .= "<div class=\"card-footer text-muted\">Checked signature at: " . $dt['dt_reg'] . "</div>\n</div>";
-            $main_pg .= $card_main;
+            $main_pg .= $card_main . "<br><br>";
         }
         return $main_pg;
     }
@@ -1501,7 +1501,7 @@ class PropCheckHistory extends DatabaseConnection{
             $card_main .= "Proprietary: " . $prop_data_html;
             $card_main .= "<a href=\"https://localhost/lpgp-server/cgi-actions/relatory.php?id=" . $dt['cd_reg'] . "\" target=\"__blanck\" role=\"button\" class=\"btn btn-secondary\">Check the relatory</a>\n";
             $card_main .= "<div class=\"card-footer text-muted\">Checked signature at: " . $dt['dt_reg'] . "</div>\n</div>";
-            $main_pg .= $card_main;
+            $main_pg .= $card_main . "<br>";
         }
         return $main_pg;
     }
