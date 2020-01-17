@@ -41,9 +41,9 @@ $usr = new UsersData("giulliano_php", "");
 <body>
     <script>
         $(document).ready(function(){   
-            setAccountOpts();
+            setAccountOpts(true);
             setSignatureOpts();
-            $("#img-user").css("background-image", "url(" + getLinkedUserIcon() + ")");
+            $("#img-user").css("background-image", "url(" + "." + getLinkedUserIcon() + ")");
         });
 
         $(document).scroll(function(){

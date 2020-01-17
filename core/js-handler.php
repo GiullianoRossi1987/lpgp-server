@@ -69,6 +69,39 @@ function lsSignaturesMA(int $proprietary){
 }
 
 /**
+ * Do the same thing then the lsSignaturesMA, but from a different proprietary and without the Download & Configurations options in the 
+ * Signature card.
+ *
+ * @param integer $proprietary The primary key reference of the other proprietary
+ * @return string
+ */
+function lsExtSignatures(int $proprietary){
+    $all = "";
+    $sig = new SignaturesData("giulliano_php", "");
+    $signatures = $sig->qrSignatureProprietary($proprietary);
+    if(is_null($signatures)){ return "<h1>You don't have any signature yet!</h1>";}
+    foreach($signatures as $cd){
+        $sig_data = $sig->getSignatureData($cd);
+        // TODO Upgrade the layout of the signature card
+        $card = "<div class=\"card signature-card\">\n<div class=\"card-body\">\n<h3 class=\"card-title\"> Signature #$cd</h3>\n<h5 class=\"card-subtitle\">" . $sig_data['dt_creation'] . "\n</h5></div>";
+        $all .= "\n$card\n";
+    }
+    return $all;
+}
+
+/**
+ * Returns a valid path to the image file of any user/proprietary.
+ *
+ * @param string $raw_path The raw path of the image.
+ * @param bool $ext_root If the script that's calling the method is in the server root.
+ * @return string
+ */
+function getImgPath(string $raw_path, bool $ext_root = true){
+    $exp = explode("/", $raw_path);
+    return $ext_root ? "../" . $exp[count($exp) - 2] . "/" . $exp[count($exp) - 1] : "./" . $exp[count($exp) - 2] . "/" . $exp[count($exp) - 1];
+}
+
+/**
  * That method sets all the values of a signature, it is used for the configurations of the signature, at the file signature_config.php
  * @param integer $signature The Primary key reference of the signature at the database.
  * @return string The string with all the inputs of the signature data.

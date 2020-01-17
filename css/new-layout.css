@@ -284,3 +284,19 @@
 .img-cont{
     border-right: 2px black solid;
 }
+
+.prop-data{
+    border: 1px solid black;
+    border-top: none;
+    padding: 30px 33px;
+    margin-top: 10px;
+    margin-bottom: 40px;
+}
+
+.usr-data{
+    border: 1px solid black;
+    border-top: none;
+    padding: 30px 33px;
+    margin-top: 10px;
+    margin-bottom: 40px;
+}

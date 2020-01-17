@@ -1,6 +1,6 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
-
+session_start();
 $obj = new Core\PropCheckHistory("giulliano_php", "");
 ?>
 <!doctype html>
@@ -18,7 +18,10 @@ $obj = new Core\PropCheckHistory("giulliano_php", "");
 	
   </head>
   <body>
-	<button class="btn btn-lg" onclick="window.location.replace('./cgi-actions/proprietary.php?id=1');">Test</button>
+	<?php
+	print_r($_SESSION);
+	?>
+	<script> document.write(localStorage.getItem['user-icon']);</script>
 	<!-- Optional JavaScript -->
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
