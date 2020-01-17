@@ -454,6 +454,32 @@ class UsersData extends DatabaseConnection{
         if(!$this->checkUserExists($user)) throw new UserNotFound("There's no user '$user'", 1);
         return $this->connection->query("SELECT * FROM tb_users WHERE nm_user = \"$user\";")->fetch_array();
     }
+
+    /**
+     * Returns all the data of a specific user in the database using him primary key (ID);
+     * 
+     * @param integer $usr_pk The primary key reference of the user
+     * @throws UserNotFound If there's no user with such primary key
+     * @return array
+     */
+    public function getUserDataByID(int $usr_pk){
+        $this->checkNotConnected();
+        // error checking
+        $qr_tmp = $this->connection->query("SELECT cd_user FROM tb_users WHERE cd_user = $usr_pk;");
+        $exists = false;
+        while($row = $qr_tmp->fetch_array()){
+            if($row['cd_user'] == $usr_pk){
+                $exists = true;
+                break;
+            }
+        }
+        if(!$exists) throw new UserNotFound("There's no user with primary key #$usr_pk", 1);
+        $qr_tmp->close();
+        $dt_qr = $this->connection->query("SELECT * FROM tb_users WHERE cd_user = $usr_pk;");
+        $data = $dt_qr->fetch_array();
+        $dt_qr->close();
+        return $data;
+    }
 }
 
 /**
