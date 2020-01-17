@@ -46,61 +46,6 @@ $usr = new UsersData("giulliano_php", "");
             $("#img-user").css("background-image", "url(" + getLinkedUserIcon() + ")");
         });
 
-        var pas1 = "text";
-        var pas2 = "text";
-        var vb = "visible";
-
-        $(document).on("click", "#show-passwd1", function(){
-            $("#password1").attr("type", pas1);
-            if(pas1 == "text") pas1 = "password";
-            else pas1 = "text";
-        });
-
-        $(document).on("click", "#show-passwd2", function(){
-            $("#password2").attr("type", pas1);
-            if(pas2 == "text") pas2 = "password";
-            else pas2 = "text";
-        });
-
-        $(document).on("change", "#password1", function(){
-            var content = $(this).val();
-            if(content.length <= 7){
-                $("#err-lb-passwd1").text("Please choose a password with more then 7 characters.");
-                $("#err-lb-passwd1").show();
-            }
-            else if(content != $("#password2").val()){
-                $("#err-lb-passwd1").text("The passwords doesn't match");
-                $("#err-lb-passwd1").show();
-            }
-            else $("#err-lb-passwd1").hide();
-        });
-
-        $(document).on("change", "#username", function(){
-            var content = $(this).val();
-            if(content.length <= 0){
-                $("#err-lb-username").text("Please choose a username!");
-                $("#err-lb-username").show();
-            }
-            else $("#err-lb-username").hide();
-        });
-
-        $(document).on("change", "#email", function(){
-            var content = $(this).val();
-            if(content.length <= 0){
-                $("#err-lb-email").text("Please choose a e-amil address");
-                $("#err-lb-email").show();
-            }
-            else if(content.search("@") < 0){
-                $("#err-lb-email").text("Please choose a valid e-mail address");
-                $("#err-lb-email").show();
-            }
-            else $("#err-lb-email").hide();
-        });
-
-        $(document).on("click", "#default-img", function(){
-            $("#upload-img-input").hide();
-        });
-
         $(document).scroll(function(){
             $(".header-container").toggleClass("scrolled", $(this).scrollTop() > $(".header-container").height());
             $(".default-btn-header").toggleClass("default-btn-header-scrolled", $(this).scrollTop() > $(".header-container").height());
@@ -186,27 +131,44 @@ $usr = new UsersData("giulliano_php", "");
                             // Signatures
                             /////////////////////////////////////////////////////////////////////////////////////////////////
                             if($_SESSION['mode'] == "prop"){
-                                echo "<h1>Your signatures!</h1>";
+                                echo "<h1 class=\"section-title\">My signatures</h1><br>";
                                 $prp = new ProprietariesData("giulliano_php", "");
                                 echo lsSignaturesMA($prp->getPropID($_SESSION['user']));
-                                echo "<br>\n<a href=\"https://localhost/lpgp-server/create_signature.html\" role=\"button\" class=\"btn btn-lg btn-success\">Create a new signature</a>";
+                                echo "<br>\n<a href=\"https://localhost/lpgp-server/create_signature.html\" role=\"button\" class=\"btn btn-block btn-success\">Create a new signature</a>";
                             }
                         ?>
                         </div>
+                        <hr>
                         <div class="history-col col-12">
+                            <h1 class="section-title">My History</h1>
                             <?php
                             // History
                             ///////////////////////////////////////////////////////////////////////////////////////////////
                             if($_SESSION['mode'] == "prop"){
                                 $obj = new PropCheckHistory("giulliano_php", "");
-                                echo $obj->getPropHistory($_SESSION['user']);
+                                $hist = $obj->getPropHistory($_SESSION['user']);
+                                $hist_e = explode("<br>", $hist);
+                                for($i = 0; $i <= 6; $i++){
+                                    if(isset($hist_e[$i])) echo $hist_e[$i] . "<br>";
+                                    else break;
+                                }
+                                $id = $prp->getPropID($_SESSION['user']);
+                                echo "<a href=\"https://localhost/lpgp-server/cgi-actions/get_my_hist.php?prop_id=$id\" role=\"button\" class=\"btn btn-block btn-primary\">See all my history</a><br>";
+                                unset($id);
                             }
                             else{
                                 $obj = new UsersCheckHistory("giulliano_php", "");
-                                echo $obj->getUsrHistory($_SESSION['user']);
+                                $hist = $obj->getUsrHistory($_SESSION['user']);
+                                $hist_e = explode("<br>", $hist);
+                                for($i = 0; $i <= 6; $i++){
+                                    if(isset($hist_e[$i])) echo $hist_e[$i] . "<br>";
+                                    else break;
+                                }
+                                $id = $usr->getUserData($_SESSION['user'])['cd_user'];
+                                echo "<a href=\"https://localhost/lpgp-server/cgi-actions/get_my_hist.php?usr_id=$id\" role=\"button\" class=\"btn btn-block btn-primary\">See all my history</a><br>";
+                                unset($id);
                             }
                             ?>
-                            
                         </div>
 					</div>
 				</div>

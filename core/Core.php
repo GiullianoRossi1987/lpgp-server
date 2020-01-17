@@ -1236,7 +1236,7 @@ class UsersCheckHistory extends DatabaseConnection{
         $dt = $qr_data->fetch_array();
         $qr_data->close();
         $data_html = "<div class=\"relatory-php\">\n";
-        $img_src = $dt['vl_valid'] == 1 ? "https://localhost/lpgp-server/media/checked-valid.png" : "https://localhost/lpgp-server/media/checked-invalid.png";
+        $img_src = $dt['vl_valid'] == 1 ? "../media/checked-valid.png" : "../media/checked-invalid.png";
         $data_html .= "<div class=\"img-relatory\">\n<img src=\"$img_src\" width=\"70px\" heigth=\"70px\">\n</div>\n";
         $msg = "";
         $ext_cls = "";
@@ -1314,7 +1314,7 @@ class UsersCheckHistory extends DatabaseConnection{
             $prop_data_html = is_null($prop_dt) ? "<div class=\"prop-nf-err\">(We can't find the proprietary, probabily he deleted him account)</div>\n" : "<a href=\"https://localhost/lpgp-server/cgi-actions/proprietary.php?id=$id\" target=\"_blanck\" class=\"prop-link\">" . $prop_dt['nm_proprietary'] . "</a>\n";
             $card_main .= "Proprietary: " . $prop_data_html;
             $card_main .= "<a href=\"https://localhost/lpgp-server/cgi-actions/relatory.php?id=" . $dt['cd_reg'] . "\" target=\"__blanck\" role=\"button\" class=\"btn btn-secondary\">Check the relatory</a>\n";
-            $card_main .= "<div class=\"card-footer text-muted\">Checked signature at: " . $dt['dt_reg'] . "</div>\n</div>";
+            $card_main .= "<div class=\"card-footer text-muted\">Checked signature at: " . $dt['dt_reg'] . "</div>\n</div>\n<div>";
             $main_pg .= $card_main . "<br><br>";
         }
         return $main_pg;
@@ -1500,7 +1500,7 @@ class PropCheckHistory extends DatabaseConnection{
             $prop_data_html = is_null($prop_dt) ? "<div class=\"prop-nf-err\">(We can't find the proprietary, probabily he deleted him account)</div>\n" : "<a href=\"https://localhost/lpgp-server/cgi-actions/proprietary.php?id=$id\" target=\"_blanck\" class=\"prop-link\">" . $prop_dt['nm_proprietary'] . "</a>\n";
             $card_main .= "Proprietary: " . $prop_data_html;
             $card_main .= "<a href=\"https://localhost/lpgp-server/cgi-actions/relatory.php?id=" . $dt['cd_reg'] . "\" target=\"__blanck\" role=\"button\" class=\"btn btn-secondary\">Check the relatory</a>\n";
-            $card_main .= "<div class=\"card-footer text-muted\">Checked signature at: " . $dt['dt_reg'] . "</div>\n</div>";
+            $card_main .= "<div class=\"card-footer text-muted\">Checked signature at: " . $dt['dt_reg'] . "</div>\n</div>\n</div>";
             $main_pg .= $card_main . "<br>";
         }
         return $main_pg;
