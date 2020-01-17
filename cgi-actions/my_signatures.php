@@ -1,14 +1,15 @@
-<?php 
+<?php
+if(session_status() == PHP_SESSION_NONE) session_start();
 require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
 require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
-use Core\SignaturesData;
-use function JSHandler\sendUserLogged;
 
-sendUserLogged();
-$sign = new SignaturesData("giulliano_php", "");
+
+use Core\ProprietariesData;
+use function JSHandler\lsSignaturesMA;
+
+$prp = new ProprietariesData("giulliano_php", "");
+$id = $prp->getPropID($_SESSION['user']);
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -121,30 +122,26 @@ $sign = new SignaturesData("giulliano_php", "");
                     Help
                 </button>
                 <div class="dropdown-menu opts" aria-labelledby="help-opt">
-                    <a href="http://localhost/lpgp-server/docs/" class="dropdown-item">Documentation</a>
-                    <a href="http://localhost/lpgp-server/about.html" class="dropdown-item">About Us</a>
-                    <a href="http://localhost/lpgp-server/contact-us.html" class="dropdown-item">Contact Us</a>
+                    <a href="./docs/index.html" class="dropdown-item">Documentation</a>
+                    <a href="./about.html" class="dropdown-item">About Us</a>
+                    <a href="./contact-us.html" class="dropdown-item">Contact Us</a>
                 </div>
             </div>
         </div>
-
     </div>
     <br>
     <hr>
     <div class="container-fluid container-content" style="position: absolute;">
         <div class="row-main row">
             <div class="col-7 clear-content" style="position: absolute; margin-left: 21%;">
-				<?php
-					if(isset($_GET['id'])) echo $sign->createsSignatureFile((int)$_GET['id'], true, $sign->generateFileNm(0));
-				?>
-                <br>
+				<?php echo lsSignaturesMA($id); ?>
             </div>
         </div>
     </div>
     <br>
     <div class="footer-container container">
         <div class="footer-row row">
-            <div class="footer col-12" style="height: 150px; background-color: black; top: 190%; position: absolute; max-width: 100%; left: 0;">
+            <div class="footer col-12" style="height: 150px; background-color: black; margin-top: 120%; position: absolute; max-width: 100%; left: 0;">
                 <div class="social-options-grp">
                     <div class="social-option">
                         <a href="https://github.com/GiullianoRossi1987/lpgp-server" target="_blanck" id="github" class="social-option-footer">

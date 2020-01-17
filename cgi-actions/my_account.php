@@ -92,7 +92,7 @@ $usr = new UsersData("giulliano_php", "");
                                     <div class="img-cont">
                                         <div id="img-user"></div>
                                     </div>
-                                    <div class="col-6 usr-data">
+                                    <div class="col-6 data">
                                         <?php
                                         if($_SESSION['mode'] == "prop"){
                                             $dt = $prp->getPropData($_SESSION['user']);
@@ -122,6 +122,18 @@ $usr = new UsersData("giulliano_php", "");
                                                 <img src="../media/delete-sign.png" alt="" width="50px" height="50px">
                                             </span>
                                         </a>
+                                        <br>
+                                        <hr>
+                                        <?php
+                                        if($_SESSION['mode'] == "prop"){
+                                            $id = $dt['cd_proprietary'];
+                                            echo "<a href=\"https://localhost/lpgp-server/cgi-actions/proprietary.php?id=$id\" role=\"button\" target=\"_blanck\" class=\"btn btn-lg bt-primary\">See as another one</a>";
+                                        }
+                                        else{
+                                            $id = $dt['cd_user'];
+                                            echo "<a href=\"https://localhost/lpgp-server/cgi-actions/user.php?id=$id\" role=\"button\" target=\"_blanck\" class=\"btn  btn-primary\">See as another one</a>";
+                                        }
+                                        ?>
                                     </div>
                                 </div>
                             </div>
@@ -134,7 +146,7 @@ $usr = new UsersData("giulliano_php", "");
                                 echo "<h1 class=\"section-title\">My signatures</h1><br>";
                                 $prp = new ProprietariesData("giulliano_php", "");
                                 echo lsSignaturesMA($prp->getPropID($_SESSION['user']));
-                                echo "<br>\n<a href=\"https://localhost/lpgp-server/create_signature.html\" role=\"button\" class=\"btn btn-block btn-success\">Create a new signature</a>";
+                                echo "<br>\n<a href=\"https://localhost/lpgp-server/cgi-actions/create_signature.php\" role=\"button\" class=\"btn btn-block btn-success\">Create a new signature</a>";
                             }
                         ?>
                         </div>

@@ -10,6 +10,7 @@ use function JSHandler\sendUserLogged;
 
 sendUserLogged();  // Just for fixing a error that i don't know why is going on. 
 $usr = new UsersData("giulliano_php", "");
+if(isset($_GET['id'])) $data = $usr->getUserDataByID($_GET['id']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -88,14 +89,15 @@ $usr = new UsersData("giulliano_php", "");
                                 <div class="main-row row">
                                     <div class="img-cont">
                                         <?php 
-
+											$img = getImgPath($data['vl_img'], true);
+											echo "<img src=\"$img\" alt=\"\" width=\"200px\" height=\"200px\">";
                                         ?>
                                     </div>
                                     <div class="col-6 data">
                                         <?php
                                         
-                                        echo "<h1 class=\"user-name\"> " . $data['nm_proprietary'] . "</h1>\n";
-                                        echo "<h4 class=\"mode\">Proprietary</h4>\n";
+                                        echo "<h1 class=\"user-name\"> " . $data['nm_user'] . "</h1>\n";
+                                        echo "<h4 class=\"mode\">Normal user</h4>\n";
                                         echo "<h4 class=\"email\">Email: " . $data['vl_email'] . "</h3>\n";
                                         echo "<h5 class=\"date-creation\">Date of creation: " . $data['dt_creation'] . "</h3>\n";
                                         ?>
@@ -105,20 +107,13 @@ $usr = new UsersData("giulliano_php", "");
                             </div>
                         </div>
                         <hr>
-                        <div class="others-col col-12">
-                        <?php
-                            // Signatures
-                            ////////////////////////////////////////////////////////////////////////////////////////////////
-                            $nm = $data['nm_proprietary'];
-                            echo "<h1 class=\"section-title\">Signatures of $nm</h1><br>";
-                        ?>
-                        </div>
-						</div>
 					</div>
 				</div>
-        </div>
-            </div>
-        </div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
     </div>
     <br>
     <div class="footer-container container">

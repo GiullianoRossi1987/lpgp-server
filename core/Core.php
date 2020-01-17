@@ -947,7 +947,7 @@ class SignaturesData extends DatabaseConnection{
         $content_file = implode(self::DELIMITER, $arr_ord);
         $root = $_SERVER['DOCUMENT_ROOT'];
         file_put_contents($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/signatures.d/" . $file_name, $content_file);
-        return $HTML_mode ? "<a href=\"http://localhost/lpgp-server/signatures.d/$file_name\" download>Get your signature #$signature_id here!</a>" : "$root/lpgp-server/signatures.d/$file_name";
+        return $HTML_mode ? "<a href=\"https://localhost/lpgp-server/signatures.d/$file_name\" download=\"$file_name\" role=\"button\" class=\"btn btn-lg downloads-btn btn-primary\">Get your signature #$signature_id here!</a>" : "$root/lpgp-server/signatures.d/$file_name";
     }
 
 
@@ -1151,6 +1151,22 @@ class SignaturesData extends DatabaseConnection{
         $headers = "MIME-Version: 1.0\nContent-type: text/html; charset=iso-8859-1\nFrom: " . EMAIL_USING . "\n";
         while($row = $all_usr->fetch_array()) mail($row['vl_email'],"Signature Update", $content_full, $headers);
         while($row = $all_prop->fetch_array()) mail($row['vl_email'], "Signature Update", $content_full, $headers);
+    }
+
+    /**
+     * Returns all the database data of a specific signature, got from a file. Obviously after checking the signature file it will return the data.
+     * If the signature is invalid then it will return null, if the checkSignatureFile doesn't throw a Exception before
+     * @param string $file_name The name of the file, wich need to be at the /usignatures.d folder at the root.
+     * @return array|null
+     */
+    public function getSignatureFData(string $file_name){
+        $this->checkNotConnected();
+        if($this->checkSignatureFile($file_name)){
+            $content_file = file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/usignatures.d/" . $file_name);
+            $exp_content = explode(self::DELIMITER, $content_file);
+            
+        }
+        else return null;
     }
 }
 

@@ -1,14 +1,17 @@
-<?php 
+<?php
 require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
+
 use Core\SignaturesData;
-use function JSHandler\sendUserLogged;
+use templateSystem\ErrorTemplate;
 
-sendUserLogged();
-$sign = new SignaturesData("giulliano_php", "");
+$sig = new SignaturesData("giulliano_php", "");
+try{
+	$sig->addSignature((int) $_POST['prop-id'], $_POST['password'], (int) $_POST['encoding']);
+}
+catch(Exception $e){
+	die($e->getMessage());
+}
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,7 +27,7 @@ $sign = new SignaturesData("giulliano_php", "");
     <link rel="stylesheet" href="../bootstrap/font-awesome.min.css">
     <script src="../bootstrap/jquery-3.3.1.slim.min.js"></script>
     <script src="../bootstrap/bootstrap.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
@@ -121,9 +124,9 @@ $sign = new SignaturesData("giulliano_php", "");
                     Help
                 </button>
                 <div class="dropdown-menu opts" aria-labelledby="help-opt">
-                    <a href="http://localhost/lpgp-server/docs/" class="dropdown-item">Documentation</a>
-                    <a href="http://localhost/lpgp-server/about.html" class="dropdown-item">About Us</a>
-                    <a href="http://localhost/lpgp-server/contact-us.html" class="dropdown-item">Contact Us</a>
+                    <a href="./docs/index.html" class="dropdown-item">Documentation</a>
+                    <a href="./about.html" class="dropdown-item">About Us</a>
+                    <a href="./contact-us.html" class="dropdown-item">Contact Us</a>
                 </div>
             </div>
         </div>
@@ -134,10 +137,9 @@ $sign = new SignaturesData("giulliano_php", "");
     <div class="container-fluid container-content" style="position: absolute;">
         <div class="row-main row">
             <div class="col-7 clear-content" style="position: absolute; margin-left: 21%;">
-				<?php
-					if(isset($_GET['id'])) echo $sign->createsSignatureFile((int)$_GET['id'], true, $sign->generateFileNm(0));
-				?>
-                <br>
+				<h1>Your signature was created successfully!</h1>
+                <a href="https://localhost/lpgp-server/cgi-actions/my_signatures.php" role="button" class="btn btn-lg bt-primary">See my signatures</a>
+				<a href="https://localhost/lpgp-server/index.html" role="button" class="btn btn-block btn-success">Get back to the home</a>
             </div>
         </div>
     </div>
