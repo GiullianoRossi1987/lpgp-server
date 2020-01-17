@@ -783,7 +783,29 @@ class ProprietariesData extends DatabaseConnection{
         if(!$this->checkProprietaryExists($proprietary_nm)) throw new ProprietaryNotFound("There's no proprietary #$proprietary_nm!", 1);
         return $this->connection->query("SELECT * FROM tb_proprietaries WHERE nm_proprietary = \"$proprietary_nm\";")->fetch_array();
      }
-    
+     
+     /**
+      * Return all the data of the proprietary by him primary key reference (PK);
+      * @param integer $prop_id The primary key reference of the proprietary
+      * @throws ProprietaryNotFound If the primary key reference don't exists in the database.
+      * @return array;
+      */
+      public function getPropDataByID(int $prop_id){
+          $this->checkNotConnected();
+          // checking the primary key
+          $qr_check = $this->connection->query("SELECT cd_proprietary FROM tb_proprietaries WHERE cd_proprietary = $prop_id;");
+          $valid = false;
+          while($row = $qr_check->fetch_array()){
+              if($row['cd_proprietary'] == $prop_id) $valid = true;
+          }
+          if(!$valid) throw new ProprietaryNotFound("There's no proprietary with the ID #$prop_id!", 1);
+          // end of checking.
+          $dt_qr = $this->connection->query("SELECT * FROM tb_proprietaries WHERE cd_proprietary = $prop_id;");
+          $re = $dt_qr->fetch_array();
+          $dt_qr->close();
+          $qr_check->close();
+          return $re;
+      }
 }
 
 /**
