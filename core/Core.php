@@ -977,7 +977,7 @@ class SignaturesData extends DatabaseConnection{
         $this->checkNotConnected();
         if(!$this->checkFileValid($file_name)) throw new InvalidSignatureFile("", 1);
         if(!file_exists($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/usignatures.d/$file_name")) throw new SignatureFileNotFound("There's no file '$file_name' on the uploaded signatures folder.", 1);
-        $content_file = utf8_encode(file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/usignatures.d/" . $file_name));
+        $content_file = utf8_encode(file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/signatures.d/" . $file_name));
         $sp_content = explode(self::DELIMITER, $content_file);
         $ascii_none = array();
         for($i = 0; $i <= count($sp_content); $i++) {
@@ -1155,7 +1155,9 @@ class SignaturesData extends DatabaseConnection{
 
     /**
      * Returns all the database data of a specific signature, got from a file. Obviously after checking the signature file it will return the data.
-     * If the signature is invalid then it will return null, if the checkSignatureFile doesn't throw a Exception before
+     * If the signature is invalid then it will return null, if the checkSignatureFile doesn't throw a Exception before.
+     * In the array will be the data of the JSON in the signature file.
+     * -------------------------------------------------------------------------------------------------------------------------------------------
      * @param string $file_name The name of the file, wich need to be at the /usignatures.d folder at the root.
      * @return array|null
      */
@@ -1164,7 +1166,11 @@ class SignaturesData extends DatabaseConnection{
         if($this->checkSignatureFile($file_name)){
             $content_file = file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/usignatures.d/" . $file_name);
             $exp_content = explode(self::DELIMITER, $content_file);
-            
+            $ascii_pr = array();
+            for($i = 0; $i < count($exp_content); $i++) $ascii_pr[] = chr((int) $exp_content[$i]);
+            $fn_json = implode("", $ascii_pr);
+            $parsed_json = json_decode($fn_json, true);
+            return $parsed_json;
         }
         else return null;
     }
@@ -1216,6 +1222,7 @@ class UsersCheckHistory extends DatabaseConnection{
      * @param integer|null $error_cd The error code of the authentication result, it can only be between 0 and 3 (integers obiviously). If don't will throw error.
      * 
      * @throws InvalidErrorCode If the $err_code is not null, and there don't have errors. Or reverse.
+     * @return integer The primary key reference of the added register.
      */
     public function addReg(int $usr_code, int $sig_code, int $success = 1, int $error_cd = null){
         $this->checkNotConnected();
@@ -1223,8 +1230,11 @@ class UsersCheckHistory extends DatabaseConnection{
         if($success == 0 && is_null($error_cd)) throw new InvalidErrorCode((int) $error_cd, 1);
         $err_vl = is_null($error_cd) ? 0 : $error_cd;
         $qr_add = $this->connection->query("INSERT INTO tb_signature_check_history (id_user, id_signature, vl_valid, vl_code) VALUES ($usr_code, $sig_code, $success, $err_vl);");
-        $qr_add->close();  // TODO: Replace the unsets with closes in all the querys.
         unset($err_vl);
+        $pk_qr = $this->connection->query("SELECT MAX(cd_reg) FROM tb_signature_check_history;");
+        $id = (int) $pk_qr->fetch_array()[0];
+        $pk_qr->close();
+        return $id;
     }
 
     /**
@@ -1432,9 +1442,9 @@ class PropCheckHistory extends DatabaseConnection{
      * @param integer $success If there wasn't errors in the authentication.
      * @param integer $error_code If there was a error the code need to be bettween 0 and 3. That code will be storaged as the vl_code in the database table.
      * @throws PropInvalidCode If the error code is more then 0 but there wasn't errors in the authentication, or the code is 0 but the authentication returned errors.
-     * @return void
+     * @return int The primary key reference of the added register.
      */
-    public function addReg(int $id_prop, int $id_sign, int $success = 0, int $error_code = 0){
+    public function addReg(int $id_prop, int $id_sign, int $success = 1, int $error_code = 0){
         // I didn't maked the null option at the $error_code, same as the same method in the UsersCheckHistory 'cause I was lazy
         $this->checkNotConnected();
         // errors checking
@@ -1443,6 +1453,10 @@ class PropCheckHistory extends DatabaseConnection{
         // end checking 
         $qr_add = $this->connection->query("INSERT INTO tb_signatures_prop_h (id_proprietary, id_signature, vl_valid, vl_code) VALUES ($id_prop, $id_sign, $success, $error_code);");
         $qr_add->close();
+        $qr_id = $this->connection->query("SELECT MAX(cd_reg) FROM tb_signatures_prop_h;");
+        $id = (int) $qr_id->fetch_array()[0];
+        $qr_id->close();
+        return $id;
     }
 
     /**

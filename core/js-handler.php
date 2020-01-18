@@ -3,6 +3,7 @@ namespace JSHandler;
 session_start();
 require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
 
+use Core\ProprietariesData;
 use Core\SignaturesData;
 
 /**
@@ -114,5 +115,62 @@ function inputsGets(int $signature){
     $main_str .= "<input value=\"$passwd\" name=\"vl-passwd\" class=\"form-control\" label=\"The raw signature\">\n";
     $main_str .= $sign->getCodesHTML(true, (int)$dt['vl_code']) . "\n";
     return $main_str;
+}
+
+/**
+ * Returns the HTML code of a signature card after the validation.
+ * @param integer $sign_ref The primary key reference of the signature to create the card.
+ * @param bool $valid If the signature is valid, used after the authentication.
+ * @return string The HTML code. 
+ */
+function createSignatureCardAuth(int $sign_ref, bool $valid){
+    $sign_obj = new SignaturesData("giulliano_php", "");
+    $data = $sign_obj->getSignatureData($sign_ref);
+    $prp_obj = new ProprietariesData("giulliano_php", "");
+    $prop_nm = $prp_obj->getPropDataByID($data['id_proprietary'])['nm_proprietary'];
+    $card_str = "<div class=\"card signature-vl-card\">\n";
+    if($valid){
+        $card_str .= "<div class=\"card-header\">\n";
+        $card_str .= "<span class=\"span-card-vl\">\n<img src=\"https://localhost/lpgp-server/media/checked-valid.png\" width=\"50px\" height=\"50px\">\n</span>\n";
+        $card_str .= "<h1 class=\"card-title\">Signature #$sign_ref</h1>\n";
+        $card_str .= "</div>\n";
+        // end of the header (card)
+        // start of the body (card)
+        $card_str .= "<div class=\"card-body\">\n";
+        $card_str .= "<h3>Proprietary: ";
+        $id = $data['id_proprietary'];
+        $prp_a = "<a href=\"https://localhost/lpgp-server/cgi-actions/proprietary.php?id=$id\" target=\"_blanck\">$prop_nm</a>";
+        $card_str .= $prp_a . "</h3>\n";
+        unset($prp_a);
+        $card_str .= "<h3>Created in: " . $data['dt_creation'] . "</h3>\n";
+        $card_str .= "</div>";
+        // end of the body
+        // start of the footer
+        $card_str .= "<div class=\"card-footer\"></div>";
+        // end of the card
+        $card_str .= "</div>";
+    }
+    else{
+        $card_str .= "<div class=\"card-header\">\n";
+        $card_str .= "<span class=\"span-card-vl\">\n<img src=\"https://localhost/lpgp-server/media/checked-invalid.png\" width=\"50px\" height=\"50px\">\n</span>\n";
+        $card_str .= "<h1 class=\"card-title\">Signature #$sign_ref</h1>\n";
+        $card_str .= "</div>\n";
+        // end of the header (card)
+        // start of the body (card)
+        $card_str .= "<div class=\"card-body\">\n";
+        $card_str .= "<h3>Proprietary: ";
+        $id = $data['id_proprietary'];
+        $prp_a = "<a href=\"https://localhost/lpgp-server/cgi-actions/proprietary.php?id=$id\" target=\"_blanck\">$prop_nm</a>";
+        $card_str .= $prp_a . "</h3>\n";
+        unset($prp_a);
+        $card_str .= "<h3>Created in: " . $data['dt_creation'] . "</h3>\n";
+        $card_str .= "</div>";
+        // end of the body
+        // start of the footer
+        $card_str .= "<div class=\"card-footer\"></div>";
+        // end of the card
+        $card_str .= "</div>";
+    }
+    return $card_str;
 }
 ?>

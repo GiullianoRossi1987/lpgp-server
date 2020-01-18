@@ -1,7 +1,12 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
-session_start();
-$obj = new Core\PropCheckHistory("giulliano_php", "");
+require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
+
+use Core\SignaturesData;
+use mysqli;
+use function JSHandler\createSignatureCardAuth;
+
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -19,9 +24,10 @@ $obj = new Core\PropCheckHistory("giulliano_php", "");
   </head>
   <body>
 	<?php
-	print_r($_SESSION);
+		echo createSignatureCardAuth(3, true);
+		echo "<br>";
+		echo createSignatureCardAuth(4, false);
 	?>
-	<script> document.write(localStorage.getItem['user-icon']);</script>
 	<!-- Optional JavaScript -->
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
