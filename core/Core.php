@@ -1338,7 +1338,7 @@ class UsersCheckHistory extends DatabaseConnection{
             $sign_data = $this->connection->query("SELECT * FROM tb_signatures WHERE cd_signature = $sig_ref;")->fetch_array();
             $prop_data = $this->connection->query("SELECT * FROM tb_proprietaries WHERE cd_proprietary = " . $sign_data['id_proprietary'] . ";")->fetch_array();
             $signature_data_html .= "<div class=\"card-body\"><h1 class=\"card-title\">Signature #" . $sig_ref . "</h1>\n";
-            $signature_data_html .= "<div class=\"card-subtitle\"><a href=\"https://localhost/cgi-actions/proprietary.php?id=" . $prop_data['cd_proprietary'] . "\">Proprietary: " . $prop_data['nm_proprietary'] . "</a>\n</div>\n";
+            $signature_data_html .= "<div class=\"card-subtitle\"><a href=\"https://localhost/lpgp-server/cgi-actions/proprietary.php?id=" . $prop_data['cd_proprietary'] . "\">Proprietary: " . $prop_data['nm_proprietary'] . "</a>\n</div>\n";
             $signature_data_html .= "<div class=\"card-footer text-muted\"> Created at: " . $sign_data['dt_creation'] . "</div>\n";
             $data_html .= $signature_data_html;
         }
@@ -1387,8 +1387,8 @@ class UsersCheckHistory extends DatabaseConnection{
             $id = $prop_dt['cd_proprietary'];
             $prop_data_html = is_null($prop_dt) ? "<div class=\"prop-nf-err\">(We can't find the proprietary, probabily he deleted him account)</div>\n" : "<a href=\"https://localhost/lpgp-server/cgi-actions/proprietary.php?id=$id\" target=\"_blanck\" class=\"prop-link\">" . $prop_dt['nm_proprietary'] . "</a>\n";
             $card_main .= "Proprietary: " . $prop_data_html;
-            $card_main .= "<a href=\"https://localhost/lpgp-server/cgi-actions/relatory.php?id=" . $dt['cd_reg'] . "\" target=\"__blanck\" role=\"button\" class=\"btn btn-secondary\">Check the relatory</a>\n";
-            $card_main .= "<div class=\"card-footer text-muted\">Checked signature at: " . $dt['dt_reg'] . "</div>\n</div>\n<div>";
+            $card_main .= "<a href=\"https://localhost/lpgp-server/cgi-actions/relatory.php?rel=" . $dt['cd_reg'] . "\" target=\"__blanck\" role=\"button\" class=\"btn btn-secondary\">Check the relatory</a>\n";
+            $card_main .= "<div class=\"card-footer text-muted\">Checked signature at: " . $dt['dt_reg'] . "</div>\n</div>\n<div>\n<div>\n";
             $main_pg .= $card_main . "<br><br>";
         }
         return $main_pg;
@@ -1440,22 +1440,23 @@ class PropCheckHistory extends DatabaseConnection{
      * @param integer $id_prop The primary key reference of the proprietary that checked the signature.
      * @param integer $id_sign The primary key reference of the signature thet was checked.
      * @param integer $success If there wasn't errors in the authentication.
-     * @param integer $error_code If there was a error the code need to be bettween 0 and 3. That code will be storaged as the vl_code in the database table.
+     * @param integer|null $error_code If there was a error the code need to be bettween 0 and 3. That code will be storaged as the vl_code in the database table.
      * @throws PropInvalidCode If the error code is more then 0 but there wasn't errors in the authentication, or the code is 0 but the authentication returned errors.
-     * @return int The primary key reference of the added register.
+     * @return integer The primary key reference of the added register.
      */
-    public function addReg(int $id_prop, int $id_sign, int $success = 1, int $error_code = 0){
+    public function addReg(int $id_prop, int $id_sign, int $success = 1, ?int $error_code = NULL){
         // I didn't maked the null option at the $error_code, same as the same method in the UsersCheckHistory 'cause I was lazy
         $this->checkNotConnected();
         // errors checking
-        if($success == 0 && $error_code != 0) throw new  PropInvalidCode($error_code, 1);
-        if($success != 0 && $error_code == 0) throw new PropInvalidCode($error_code, 1);
+        if($success == 0 && !is_null($error_code)) throw new  PropInvalidCode($error_code, 1);
+        if($success == 1 && is_null($error_code)) throw new PropInvalidCode(0, 1);
         // end checking 
-        $qr_add = $this->connection->query("INSERT INTO tb_signatures_prop_h (id_proprietary, id_signature, vl_valid, vl_code) VALUES ($id_prop, $id_sign, $success, $error_code);");
-        $qr_add->close();
+        $vl = is_null($error_code) ? 0 : (int) $error_code;
+        $qr_add = $this->connection->query("INSERT INTO tb_signatures_prop_h (id_prop, id_signature, vl_valid, vl_code) VALUES ($id_prop, $id_sign, $success, $vl);");
         $qr_id = $this->connection->query("SELECT MAX(cd_reg) FROM tb_signatures_prop_h;");
         $id = (int) $qr_id->fetch_array()[0];
-        $qr_id->close();
+        unset($qr_add);
+        unset($qr_id);
         return $id;
     }
 
@@ -1504,31 +1505,34 @@ class PropCheckHistory extends DatabaseConnection{
         $main_data_html = "\n<div class=\"relatory-container\">\n";
         $img_src = $reg_data['vl_code'] == 0 ? "https://localhost/lpgp-server/media/checked-valid.png" : "https://localhost/lpgp-server/media/checked-invalid.png";
         $main_data_html .= "<img src=\"$img_src\" width=\"70px\" height=\"70px\">\n";
+        $err = false;
         switch ( (int) $reg_data['vl_code']){
             case 0:
                 $error_msg = "Signature valid!";
             break;
             case 1:
                 $error_msg = self::ERR_CD_MSG1;
+                $err = true;
             break;
             case 2:
                 $error_msg = self::ERR_CD_MSG2;
+                $err = true;
             break;
             case 3:
                 $error_msg = self::ERR_CD_MSG3;
+                $err = true;
             break;
             default: throw new PropInvalidCode($reg_data);
         }
         $main_data_html .= "<div class=\"message-relatory $extra_cls\">$error_msg</div>\n";
-        // generates the card if there wasn't errors in the authentication
-        if($error_msg == "Signature_valid!"){
+        if(!$err){
             $card_div = "<div class=\"card signature-card\">\n<div class=\"card-body\">\n";
             $sig_dt = $this->connection->query("SELECT * FROM tb_signatures WHERE cd_signature = " . $reg_data['id_signature'] . ";")->fetch_array();
             $prop_dt = $this->connection->query("SELECT * FROM tb_proprietaries WHERE cd_proprietary = " . $sig_dt['id_proprietary'] . ";")->fetch_array();
             $id_prop = $prop_dt['cd_proprietary'];
             $card_div .= "<h1 class=\"card-title\"> Signature #" . $sig_dt['cd_signature'] . "</h1>\n";
-            $card_div .= "<h4 class=\"card-subtitle\"> Proprietary: <a href=\"https://localhost/lpgp-server/proprietary.php?id=$id_prop\" target=\"_blanck\"> " . $prop_dt['nm_proprietary'] . "</a></div>\n";
-            $card_div .= "<div class=\"card-footer\">Created at: " . $sig_dt['dt_creation'] . "</div>\n</div>\n";
+            $card_div .= "<h4 class=\"card-subtitle\"> Proprietary: <a href=\"https://localhost/lpgp-server/cgi-actions/proprietary.php?id=$id_prop\" target=\"_blanck\"> " . $prop_dt['nm_proprietary'] . "</a></div>\n";
+            $card_div .= "<div class=\"card-footer\">Created at: " . $sig_dt['dt_creation'] . "</div>\n</div>\n<div>\n";
             $main_data_html .= $card_div;
         }
         return $main_data_html;
@@ -1577,8 +1581,8 @@ class PropCheckHistory extends DatabaseConnection{
             $id = $prop_dt['cd_proprietary'];
             $prop_data_html = is_null($prop_dt) ? "<div class=\"prop-nf-err\">(We can't find the proprietary, probabily he deleted him account)</div>\n" : "<a href=\"https://localhost/lpgp-server/cgi-actions/proprietary.php?id=$id\" target=\"_blanck\" class=\"prop-link\">" . $prop_dt['nm_proprietary'] . "</a>\n";
             $card_main .= "Proprietary: " . $prop_data_html;
-            $card_main .= "<a href=\"https://localhost/lpgp-server/cgi-actions/relatory.php?id=" . $dt['cd_reg'] . "\" target=\"__blanck\" role=\"button\" class=\"btn btn-secondary\">Check the relatory</a>\n";
-            $card_main .= "<div class=\"card-footer text-muted\">Checked signature at: " . $dt['dt_reg'] . "</div>\n</div>\n</div>";
+            $card_main .= "<a href=\"https://localhost/lpgp-server/cgi-actions/relatory.php?rel=" . $dt['cd_reg'] . "\" target=\"__blanck\" role=\"button\" class=\"btn btn-secondary\">Check the relatory</a>\n";
+            $card_main .= "<div class=\"card-footer text-muted\">Checked signature at: " . $dt['dt_reg'] . "</div>\n</div>\n</div>\n<div>\n";
             $main_pg .= $card_main . "<br>";
         }
         return $main_pg;

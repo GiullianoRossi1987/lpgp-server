@@ -1,33 +1,24 @@
 <?php
 if(session_status() == PHP_SESSION_NONE) session_start();
 require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
 
-use Core\ProprietariesData;
-use Core\UsersData;
-use function JSHandler\sendUserLogged;
+use Core\UsersCheckHistory;
+use Core\PropCheckHistory;
 
-if(isset($_GET['confirm'])){
-	if($_GET['confirm'] == "y"){
-		if($_SESSION['mode'] == 'prop'){
-			$prp = new ProprietariesData("giulliano_php", "");
-			$prp->delProprietary($_SESSION['user']);
-		}
-		else{
-			$usr = new UsersData("giulliano_php", "");
-			$usr->deleteUser($_SESSION['user']);
-		}
-		session_unset();
-		session_destroy();
-        sendUserLogged();
-        echo "<script>resetVals();</script>";
+$relatory_bd = "";
+
+if(isset($_GET['rel'])){
+	if($_SESSION['mode'] == "prop"){
+		$prp_c = new PropCheckHistory("giulliano_php", "");
+		$relatory_bd = $prp_c->generateRelatory((int) $_GET['rel']);
 	}
 	else{
-		echo "<script>window.location.replace(\"https://localhost/lpgp-server/cgi-actions/my_account.php\");</script>";
+		$usr_c = new UsersCheckHistory("giulliano_php", "");
+		$relatory_bd = $usr_c->generateRelatory((int) $_GET['rel']);
 	}
 }
-?>
 
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -153,18 +144,27 @@ if(isset($_GET['confirm'])){
     <div class="container-fluid container-content" style="position: absolute;">
         <div class="row-main row">
             <div class="col-7 clear-content" style="position: absolute; margin-left: 21%;">
-				<h1>Your account was deleted successfully!</h1>
-				<h4>Please make login or create a new account if you want to stay in LPGP site!</h4>
-				<a href="https://localhost/lpgp-server/login.html" role="button" class="btn btn-lg btn-primary">Make Login</a>
-				<a href="https://localhost/lpgp-server/create_account.html" role="button" class="btn btn-lg btn-success">Create a new account</a>
+				<?php
+					if(isset($_GET['rel'])){
+                        if($_SESSION['mode'] == "prop"){
+                            $prp_c = new PropCheckHistory("giulliano_php", "");
+                            echo $prp_c->generateRelatory((int) $_GET['rel']);
+                        }
+                        else{
+                            $usr_c = new UsersCheckHistory("giulliano_php", "");
+                            echo $usr_c->generateRelatory((int) $_GET['rel']);
+                        }
+                    }
+				?>
                 <br>
             </div>
         </div>
-    </div>
+	</div>
+	</div>
     <br>
     <div class="footer-container container">
         <div class="footer-row row">
-            <div class="footer col-12" style="height: 150px; background-color: black; top: 190%; position: absolute; max-width: 100%; left: 0;">
+            <div class="footer col-12" style="height: 150px; background-color: black; margin-top: 190%; position: absolute !important; max-width: 100%; left: 0;">
                 <div class="social-options-grp">
                     <div class="social-option">
                         <a href="https://github.com/GiullianoRossi1987/lpgp-server" target="_blanck" id="github" class="social-option-footer">

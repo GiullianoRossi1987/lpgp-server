@@ -33,7 +33,7 @@ move_uploaded_file($_FILES['signature-ext']['tmp_name'][0], $_SERVER['DOCUMENT_R
 if($_SESSION['mode'] == 'prop'){
 	$prp_c = new PropCheckHistory("giulliano_php", "");
 	$sig = new SignaturesData("giulliano_php", "");
-	$pop_id = $prp_obj->getPropID($_SESSION['user']);
+    $prop_id = $prp_obj->getPropID($_SESSION['user']);
 	$vl = false;
 	try{
 		if($sig->checkSignatureFile($_FILES['signature-ext']['name'][0])){
@@ -70,7 +70,7 @@ if($_SESSION['mode'] == 'prop'){
 		$signature_msg = "The signature is invalid!";
 	}
 	finally{
-		$domAdd .= "<a href=\"https://localhost/lpgp-server/cgi-actions/relatory.php?prp_rel=$rel_id\" role=\"button\" class=\"btn btn-lg btn-primary\">See relatory</a><br><hr>";
+		$domAdd .= "<a href=\"https://localhost/lpgp-server/cgi-actions/relatory.php?rel=$rel_id\" role=\"button\" class=\"btn btn-lg btn-primary\">See relatory</a><br><hr>";
 		$signature_img = $rp1;
 		unset($rp);
 		unset($rp1);

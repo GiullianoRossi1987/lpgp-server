@@ -1,10 +1,11 @@
 <?php
 namespace JSHandler;
-session_start();
+if(session_status() == PHP_SESSION_NONE)session_start();
 require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
 
 use Core\ProprietariesData;
 use Core\SignaturesData;
+use ProprietariesExceptions\ProprietaryNotFound;
 
 /**
  * That method sends the $_SESSION vars about the logged user to the localStorage. In a inexisting session
@@ -13,6 +14,7 @@ use Core\SignaturesData;
  * @return void
  */
 function sendUserLogged(){
+    if(session_status() == PHP_SESSION_NONE) session_start();
     if(session_status() == PHP_SESSION_NONE || session_status() == PHP_SESSION_DISABLED){
         // if there's no one logged.
         echo "<script>\nlocalStorage.setItem(\"logged-user\", \"false\");\nlocalStorage.setItem(\"user_mode\", \"null\");\nlocalStorage.setItem(\"checked\", \"null\");\nlocalStorage.setItem(\"user-icon\", \"null\");</script>";
@@ -127,7 +129,12 @@ function createSignatureCardAuth(int $sign_ref, bool $valid){
     $sign_obj = new SignaturesData("giulliano_php", "");
     $data = $sign_obj->getSignatureData($sign_ref);
     $prp_obj = new ProprietariesData("giulliano_php", "");
-    $prop_nm = $prp_obj->getPropDataByID($data['id_proprietary'])['nm_proprietary'];
+    try{
+        $prop_nm = $prp_obj->getPropDataByID($data['id_proprietary'])['nm_proprietary'];
+    }
+    catch(ProprietaryNotFound $e){
+        $prop_nm = "(Proprietary not found)";
+    }
     $card_str = "<div class=\"card signature-vl-card\">\n";
     if($valid){
         $card_str .= "<div class=\"card-header\">\n";

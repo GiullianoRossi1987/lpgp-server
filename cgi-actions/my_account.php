@@ -116,12 +116,29 @@ $usr = new UsersData("giulliano_php", "");
                                                 <img src="../media/settings.png" alt="" width="50px" height="50px">
                                             </span>
                                         </a>
-                                        <a href="https://localhost/lpgp-server/cgi-actions/del_account.php" role="button" class="btn btn-danger">
+                                        <button class="btn btn-danger" id="del-btn" data-toggle="modal" data-target="#modal-delete" type="button">
                                             Remove account
                                             <span>
                                                 <img src="../media/delete-sign.png" alt="" width="50px" height="50px">
                                             </span>
-                                        </a>
+                                        </button>
+                                        <div class="modal" id="modal-delete" tabindex="-1" aria-labelledby="del-btn" aria-hidden="true" role="dialog">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h3 class="modal-title">Are you sure about delete your account?</h3>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="modal-body">
+                                                        <a href="https://localhost/lpgp-server/cgi-actions/del_account.php?confirm=y" role="button" class="btn btn-lg btn-danger">Yes, delete my account</a>
+                                                        <a href="#" role="button" class="btn btn-lg btn-secondary" data-dismiss="modal">Cancel</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <br>
                                         <hr>
                                         <?php
@@ -164,9 +181,6 @@ $usr = new UsersData("giulliano_php", "");
                                     if(isset($hist_e[$i])) echo $hist_e[$i] . "<br>";
                                     else break;
                                 }
-                                $id = $prp->getPropID($_SESSION['user']);
-                                echo "<a href=\"https://localhost/lpgp-server/cgi-actions/get_my_hist.php?prop_id=$id\" role=\"button\" class=\"btn btn-block btn-primary\">See all my history</a><br>";
-                                unset($id);
                             }
                             else{
                                 $obj = new UsersCheckHistory("giulliano_php", "");
@@ -176,16 +190,15 @@ $usr = new UsersData("giulliano_php", "");
                                     if(isset($hist_e[$i])) echo $hist_e[$i] . "<br>";
                                     else break;
                                 }
-                                $id = $usr->getUserData($_SESSION['user'])['cd_user'];
-                                echo "<a href=\"https://localhost/lpgp-server/cgi-actions/get_my_hist.php?usr_id=$id\" role=\"button\" class=\"btn btn-block btn-primary\">See all my history</a><br>";
-                                unset($id);
                             }
+                            echo "<a href=\"https://localhost/lpgp-server/cgi-actions/my-history.php\" role=\"button\" class=\"btn btn-block btn-primary\">See all my history</a><br>";
                             ?>
                         </div>
 					</div>
 				</div>
             </div>
         </div>
+    </div>
     </div>
     <br>
     <div class="footer-container container">
