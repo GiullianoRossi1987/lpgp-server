@@ -302,6 +302,7 @@ class UsersData extends DatabaseConnection{
         $this->checkNotConnected();
         if(!$this->checkUserExists($user)) throw new UserNotFound("There's no user '$user'", 1);
         $qr = $this->connection->query("UPDATE tb_users SET vl_email = \"$new_email\" WHERE nm_user = \"$user\";");
+        $this->setUserChecked($user, false);
         unset($qr);
     }
     
@@ -665,6 +666,21 @@ class ProprietariesData extends DatabaseConnection{
         $qr_ch = $this->connection->query("UPDATE tb_proprietaries SET nm_proprietary = \"$new_name\" WHERE nm_proprietary = \"$proprietary\";");
         unset($qr_ch);
      }
+
+     /**
+      * Changes the avatar image of the proprietary.
+      * @param string $proprietary The name of the proprietary
+      * @param string $img_new The path of the new avatar.
+      * @throws ProprietaryNotFound If the proprietary don't exists 
+      * @return void
+      */
+    public function chProprietaryImg(string $proprietary, string $img_new){
+        $this->checkNotConnected();
+        if(!$this->checkProprietaryExists($proprietary)) throw new ProprietaryNotFound("The proprietary '$proprietary' don't exists!", 1);
+        $qr_ch = $this->connection->query("UPDATE tb_proprietaries SET vl_img = \"$img_new\" WHERE nm_proprietary = \"$proprietary\";");
+        
+        return ;
+    }
 
      /**
       * Changes a proprietary email account.
@@ -1448,8 +1464,8 @@ class PropCheckHistory extends DatabaseConnection{
         // I didn't maked the null option at the $error_code, same as the same method in the UsersCheckHistory 'cause I was lazy
         $this->checkNotConnected();
         // errors checking
-        if($success == 0 && !is_null($error_code)) throw new  PropInvalidCode($error_code, 1);
-        if($success == 1 && is_null($error_code)) throw new PropInvalidCode(0, 1);
+        if($success == 1 && !is_null($error_code)) throw new  PropInvalidCode($error_code, 1);
+        if($success == 0 && is_null($error_code)) throw new PropInvalidCode(0, 1);
         // end checking 
         $vl = is_null($error_code) ? 0 : (int) $error_code;
         $qr_add = $this->connection->query("INSERT INTO tb_signatures_prop_h (id_prop, id_signature, vl_valid, vl_code) VALUES ($id_prop, $id_sign, $success, $vl);");

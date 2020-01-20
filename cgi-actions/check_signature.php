@@ -41,7 +41,7 @@ if($_SESSION['mode'] == 'prop'){
 			$rp = str_replace("%path%", "src1", $signature_img);
 			$rp1 = str_replace("%alt%", "valid signature", $rp);
 			$signature_msg = "The signature is valid!";
-			$rel_id = $prp_c->addReg($prop_id, $data['ID'], 1);
+			$rel_id = $prp_c->addReg($prop_id, $data['ID'], 1, null);
 			$vl = true;
 		}
 	}

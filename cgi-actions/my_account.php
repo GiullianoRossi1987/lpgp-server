@@ -4,11 +4,14 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
 require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
 
 use function JSHandler\lsSignaturesMA;
+use function JSHandler\sendUserLogged;
+
 use Core\ProprietariesData;
 use Core\UsersData;
 use Core\PropCheckHistory;
 use Core\UsersCheckHistory;
 
+sendUserLogged(); // preventing bugs
 
 $prp = new ProprietariesData("giulliano_php", "");
 $usr = new UsersData("giulliano_php", "");
@@ -26,13 +29,13 @@ $usr = new UsersData("giulliano_php", "");
     <script src="../js/main-script.js"></script>
     <link rel="stylesheet" href="./bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="./bootstrap/font-awesome.min.css">
-    <script src="./bootstrap/jquery-3.3.1.slim.min.js"></script>
-    <script src="./bootstrap/bootstrap.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="../bootstrap/jquery-3.3.1.slim.min.js"></script>
+    <script src="../bootstrap/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <link rel="shortcut icon" href="./media/logo-lpgp.png" type="image/x-icon">
+    <link rel="shortcut icon" href="../media/logo-lpgp.png" type="image/x-icon">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.2/popper.min.js"></script>
 </head>
@@ -55,29 +58,29 @@ $usr = new UsersData("giulliano_php", "");
     <div class="container-fluid header-container" role="banner" style="position: fixed;">
         <div class="col-12 header" style="height: 71px; transition: background-color 200ms linear;">
             <div class="opt-dropdown dropdown login-dropdown">
-                <button type="button" class="btn btn-lg default-btn-header dropdown-toggle" data-toggle="dropdown" id="account-opts" aria-haspopup="true" aria-expanded="false">
-                    <span class="nm-tmp">Account</span>
-                </button>
-                <div class="dropdown-menu opts" aria-labelledby="account-opts"></div>
-            </div>
-            <div class="opt-dropdown dropdown after-opt signatures-dropdown">
-                <button class="dropdown-toggle btn btn-lg default-btn-header" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true" id="signature-opts">
-                    Signatures
-                </button>
-                <div class="dropdown-menu opts" aria-labelledby="signature-opts"></div>
-            </div>
-            <div class="opt-dropdown dropdown after-opt help-dropdown">
-                <button class="dropdown-toggle btn btn-lg default-btn-header" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true" id="help-opt">
-                    Help
-                </button>
-                <div class="dropdown-menu opts" aria-labelledby="help-opt">
-                    <a href="http://localhost/lpgp-server/docs/" class="dropdown-item">Documentation</a>
-                    <a href="http://localhost/lpgp-server/about.html" class="dropdown-item">About Us</a>
-                    <a href="http://localhost/lpgp-server/contact-us.html" class="dropdown-item">Contact Us</a>
+                    <button type="button" class="btn btn-lg default-btn-header dropdown-toggle" data-toggle="dropdown" id="account-opts" aria-haspopup="true" aria-expanded="false">
+                        <span class="nm-tmp">Account</span>
+                    </button>
+                    <div class="dropdown-menu opts" aria-labelledby="account-opts"></div>
+                </div>
+                <div class="opt-dropdown dropdown after-opt signatures-dropdown">
+                    <button class="dropdown-toggle btn btn-lg default-btn-header" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true" id="signature-opts">
+                        Signatures
+                    </button>
+                    <div class="dropdown-menu opts" aria-labelledby="signature-opts"></div>
+                </div>
+                <div class="opt-dropdown dropdown after-opt help-dropdown">
+                    <button class="dropdown-toggle btn btn-lg default-btn-header" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true" id="help-opt">
+                        Help
+                    </button>
+                    <div class="dropdown-menu opts" aria-labelledby="help-opt">
+                        <a href="http://localhost/lpgp-server/docs/" class="dropdown-item">Documentation</a>
+                        <a href="http://localhost/lpgp-server/about.html" class="dropdown-item">About Us</a>
+                        <a href="http://localhost/lpgp-server/contact-us.html" class="dropdown-item">Contact Us</a>
+                    </div>
                 </div>
             </div>
         </div>
-
     </div>
     <br>
     <hr>
@@ -110,7 +113,7 @@ $usr = new UsersData("giulliano_php", "");
                                             echo "<h5 class=\"date-creation\">Date creation: " . $dt['dt_creation'] . "</h3>\n";
                                         }
                                         ?>
-                                        <a class="img-settings btn btn-secondary" href="https://localhost/cgi-actions/ch_my_data.php" id="img-settings" role="button">
+                                        <a class="img-settings btn btn-secondary" href="https://localhost/lpgp-server/cgi-actions/ch_my_data.php" id="img-settings" role="button">
                                             Edit Account
                                             <span>
                                                 <img src="../media/settings.png" alt="" width="50px" height="50px">
@@ -198,7 +201,6 @@ $usr = new UsersData("giulliano_php", "");
 				</div>
             </div>
         </div>
-    </div>
     </div>
     <br>
     <div class="footer-container container">

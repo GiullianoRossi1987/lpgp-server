@@ -26,7 +26,7 @@
 <body>
     <script>
         $(document).ready(function(){   
-            setAccountOpts();
+            setAccountOpts(true);
             setSignatureOpts();
         });
 
