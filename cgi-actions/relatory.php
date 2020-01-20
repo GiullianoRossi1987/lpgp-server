@@ -1,126 +1,23 @@
 <?php
 if(session_status() == PHP_SESSION_NONE) session_start();
 require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Exceptions.php";
 
-
-use Core\SignaturesData;
-use function JSHandler\sendUserLogged;
-use function JSHandler\createSignatureCardAuth;
-use Core\PropCheckHistory;
 use Core\UsersCheckHistory;
-use Core\ProprietariesData;
-use Core\UsersData;
+use Core\PropCheckHistory;
 
-use SignaturesExceptions\InvalidSignatureFile;
-use SignaturesExceptions\SignatureAuthError;
-use SignaturesExceptions\SignatureFileNotFound;
-use SignaturesExceptions\SignatureNotFound;
-use SignaturesExceptions\VersionError;
+$relatory_bd = "";
 
-sendUserLogged();   // Just preventing any error in the localStorage.
-$signature_img = "<img src=\"%path%\" alt=\"%alt%\">";
-$signature_msg = "";
-$prp_obj = new ProprietariesData("giulliano_php", "");
-$usr_obj = new UsersData("giulliano_php", "");
-$domAdd = "";
-
-// uploads the file
-move_uploaded_file($_FILES['signature-ext']['tmp_name'][0], $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/usignatures.d/" . $_FILES['signature-ext']['name'][0]);
-
-
-if($_SESSION['mode'] == 'prop'){
-	$prp_c = new PropCheckHistory("giulliano_php", "");
-	$sig = new SignaturesData("giulliano_php", "");
-    $prop_id = $prp_obj->getPropID($_SESSION['user']);
-	$vl = false;
-	try{
-		if($sig->checkSignatureFile($_FILES['signature-ext']['name'][0])){
-			$data = $sig->getSignatureFData($_FILES['signature-ext']['name'][0]);
-			$rp = str_replace("%path%", "src1", $signature_img);
-			$rp1 = str_replace("%alt%", "valid signature", $rp);
-			$signature_msg = "The signature is valid!";
-			$rel_id = $prp_c->addReg($prop_id, $data['ID'], 1, null);
-			$vl = true;
-		}
+if(isset($_GET['rel'])){
+	if($_SESSION['mode'] == "prop"){
+		$prp_c = new PropCheckHistory("giulliano_php", "");
+		$relatory_bd = $prp_c->generateRelatory((int) $_GET['rel']);
 	}
-	catch(InvalidSignatureFile $e){
-		$rel_id = $prp_c->addReg($prop_id, $data['ID'], 0, 1);
-		$rp = str_replace("%path%", "src2", $signature_img);
-		$rp1 = str_replace("%alt%", "invalid signature", $rp);
-		$signature_msg = "The signature is invalid!";
-	}
-	catch(SignatureNotFound $e){
-		$rel_id = $prp_c->addReg($prop_id, $data['ID'], 0, 2);
-		$rp = str_replace("%path%", "src2", $signature_img);
-		$rp1 = str_replace("%alt%", "invalid signature", $rp);
-		$signature_msg = "The signature is invalid!";
-	}
-	catch(SignatureFileNotFound $e) {
-		$rel_id = $prp_c->addReg($prop_id, $data['ID'], 0, 1);
-		$rp = str_replace("%path%", "src2", $signature_img);
-		$rp1 = str_replace("%alt%", "invalid signature", $rp);
-		$signature_msg = "The signature is invalid!";
-	}
-	catch(SignatureAuthError $e){
-		$rel_id = $prp_c->addReg($prop_id, $data['ID'], 0, 3);
-		$rp = str_replace("%path%", "src2", $signature_img);
-		$rp1 = str_replace("%alt%", "invalid signature", $rp);
-		$signature_msg = "The signature is invalid!";
-	}
-	finally{
-		$domAdd .= "<a href=\"https://localhost/lpgp-server/cgi-actions/relatory.php?rel=$rel_id\" role=\"button\" class=\"btn btn-lg btn-primary\">See relatory</a><br><hr>";
-		$signature_img = $rp1;
-		unset($rp);
-		unset($rp1);
-		$domAdd .= createSignatureCardAuth($data['ID'], $vl);
+	else{
+		$usr_c = new UsersCheckHistory("giulliano_php", "");
+		$relatory_bd = $usr_c->generateRelatory((int) $_GET['rel']);
 	}
 }
-else{
-	$usr_c = new UsersCheckHistory("giulliano_php", "");
-	$sig = new SignaturesData("giulliano_php", "");
-	$usr_id = $usr_obj->getUserData($_SESSION['user'])['cd_user'];
-	$vl = false;
-	try{
-		if($sig->checkSignatureFile($_FILES['signature-ext']['name'][0])){
-			$data = $sig->getSignatureFData($_FILES['signature-ext']['name'][0]);
-			$rp = str_replace("%path%", "src1", $signature_img);
-			$rp1 = str_replace("%alt%", "valid signature", $rp);
-			$signature_msg = "Valid signature";
-			$rel_id = $usr_c->addReg($usr_id, $data['ID']);
-			$vl = true;
-		}
-	}
-	catch(InvalidSignatureFile $e){
-		$rel_id = $usr_c->addReg($usr_id, $data['ID'], 0, 1);
-		$rp = str_replace("%path%", "src2", $signature_img);
-		$rp1 = str_replace("%alt%", "invalid signature", $rp);
-		$signature_msg = "The signature is invalid!";
-	}
-	catch(SignatureNotFound $e){
-		$rel_id = $usr_c->addReg($usr_id, $data['ID'], 0, 2);
-		$rp = str_replace("%path%", "src2", $signature_img);
-		$rp1 = str_replace("%alt%", "invalid signature", $rp);
-		$signature_msg = "The signature is invalid!";
-	}
-	catch(SignatureFileNotFound $e){
-		$rel_id = $usr_c->addReg($usr_id, $data['ID'], 0, 1);
-		$rp = str_replace("%path%", "src2", $signature_img);
-		$rp1 = str_replace("%alt%", "invalid signature", $rp);
-		$signature_msg = "The signature is invalid!";
-	}
-	catch(SignatureAuthError $e){
-		$rel_id = $usr_c->addReg($usr_id, $data['ID'], 0, 3);
-	}
-	finally{
-		$domAdd .= "<a href=\"https://localhost/lpgp-server/cgi-actions/relatory.php?prp_rel=$rel_id\" role=\"button\" class=\"btn btn-lg btn-primary\">See relatory</a><br><hr>";
-		$signature_img = $rp1;
-		unset($rp);
-		unset($rp1);
-		$domAdd .= createSignatureCardAuth($data['ID'], $vl);
-	}
-}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -248,16 +145,26 @@ else{
         <div class="row-main row">
             <div class="col-7 clear-content" style="position: absolute; margin-left: 21%;">
 				<?php
-					echo $domAdd;
+					if(isset($_GET['rel'])){
+                        if($_SESSION['mode'] == "prop"){
+                            $prp_c = new PropCheckHistory("giulliano_php", "");
+                            echo $prp_c->generateRelatory((int) $_GET['rel']);
+                        }
+                        else{
+                            $usr_c = new UsersCheckHistory("giulliano_php", "");
+                            echo $usr_c->generateRelatory((int) $_GET['rel']);
+                        }
+                    }
 				?>
                 <br>
             </div>
         </div>
-    </div>
+	</div>
+	</div>
     <br>
     <div class="footer-container container">
         <div class="footer-row row">
-            <div class="footer col-12" style="height: 150px; background-color: black; top: 190%; position: absolute; max-width: 100%; left: 0;">
+            <div class="footer col-12" style="height: 150px; background-color: black; margin-top: 190%; position: absolute !important; max-width: 100%; left: 0;">
                 <div class="social-options-grp">
                     <div class="social-option">
                         <a href="https://github.com/GiullianoRossi1987/lpgp-server" target="_blanck" id="github" class="social-option-footer">

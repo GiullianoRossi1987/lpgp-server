@@ -1,7 +1,10 @@
 <?php 
-require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
 use Core\SignaturesData;
+use function JSHandler\sendUserLogged;
 
+sendUserLogged();
 $sign = new SignaturesData("giulliano_php", "");
 ?>
 
@@ -15,17 +18,17 @@ $sign = new SignaturesData("giulliano_php", "");
     <title>LPGP Oficial Server</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="./css/new-layout.css">
-    <script src="./js/main-script.js"></script>
-    <link rel="stylesheet" href="./bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" href="./bootstrap/font-awesome.min.css">
-    <script src="./bootstrap/jquery-3.3.1.slim.min.js"></script>
-    <script src="./bootstrap/bootstrap.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="../css/new-layout.css">
+    <script src="../js/main-script.js"></script>
+    <link rel="stylesheet" href="../bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../bootstrap/font-awesome.min.css">
+    <script src="../bootstrap/jquery-3.3.1.slim.min.js"></script>
+    <script src="../bootstrap/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <link rel="shortcut icon" href="./media/logo-lpgp.png" type="image/x-icon">
+    <link rel="shortcut icon" href="../media/logo-lpgp.png" type="image/x-icon">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.2/popper.min.js"></script>
 </head>
@@ -34,7 +37,7 @@ $sign = new SignaturesData("giulliano_php", "");
 <body>
     <script>
         $(document).ready(function(){   
-            setAccountOpts();
+            setAccountOpts(true);
             setSignatureOpts();
         });
 
@@ -132,7 +135,7 @@ $sign = new SignaturesData("giulliano_php", "");
         <div class="row-main row">
             <div class="col-7 clear-content" style="position: absolute; margin-left: 21%;">
 				<?php
-					if(isset($_GET['signature_id'])) echo $sign->createsSignatureFile((int)$_GET['signature_id'], true, $sign->generateFileNm(0));
+					if(isset($_GET['id'])) echo $sign->createsSignatureFile((int)$_GET['id'], true, $sign->generateFileNm(0));
 				?>
                 <br>
             </div>

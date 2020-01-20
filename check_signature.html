@@ -1,127 +1,3 @@
-<?php
-if(session_status() == PHP_SESSION_NONE) session_start();
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Exceptions.php";
-
-
-use Core\SignaturesData;
-use function JSHandler\sendUserLogged;
-use function JSHandler\createSignatureCardAuth;
-use Core\PropCheckHistory;
-use Core\UsersCheckHistory;
-use Core\ProprietariesData;
-use Core\UsersData;
-
-use SignaturesExceptions\InvalidSignatureFile;
-use SignaturesExceptions\SignatureAuthError;
-use SignaturesExceptions\SignatureFileNotFound;
-use SignaturesExceptions\SignatureNotFound;
-use SignaturesExceptions\VersionError;
-
-sendUserLogged();   // Just preventing any error in the localStorage.
-$signature_img = "<img src=\"%path%\" alt=\"%alt%\">";
-$signature_msg = "";
-$prp_obj = new ProprietariesData("giulliano_php", "");
-$usr_obj = new UsersData("giulliano_php", "");
-$domAdd = "";
-
-// uploads the file
-move_uploaded_file($_FILES['signature-ext']['tmp_name'][0], $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/usignatures.d/" . $_FILES['signature-ext']['name'][0]);
-
-
-if($_SESSION['mode'] == 'prop'){
-	$prp_c = new PropCheckHistory("giulliano_php", "");
-	$sig = new SignaturesData("giulliano_php", "");
-    $prop_id = $prp_obj->getPropID($_SESSION['user']);
-	$vl = false;
-	try{
-		if($sig->checkSignatureFile($_FILES['signature-ext']['name'][0])){
-			$data = $sig->getSignatureFData($_FILES['signature-ext']['name'][0]);
-			$rp = str_replace("%path%", "src1", $signature_img);
-			$rp1 = str_replace("%alt%", "valid signature", $rp);
-			$signature_msg = "The signature is valid!";
-			$rel_id = $prp_c->addReg($prop_id, $data['ID'], 1, null);
-			$vl = true;
-		}
-	}
-	catch(InvalidSignatureFile $e){
-		$rel_id = $prp_c->addReg($prop_id, $data['ID'], 0, 1);
-		$rp = str_replace("%path%", "src2", $signature_img);
-		$rp1 = str_replace("%alt%", "invalid signature", $rp);
-		$signature_msg = "The signature is invalid!";
-	}
-	catch(SignatureNotFound $e){
-		$rel_id = $prp_c->addReg($prop_id, $data['ID'], 0, 2);
-		$rp = str_replace("%path%", "src2", $signature_img);
-		$rp1 = str_replace("%alt%", "invalid signature", $rp);
-		$signature_msg = "The signature is invalid!";
-	}
-	catch(SignatureFileNotFound $e) {
-		$rel_id = $prp_c->addReg($prop_id, $data['ID'], 0, 1);
-		$rp = str_replace("%path%", "src2", $signature_img);
-		$rp1 = str_replace("%alt%", "invalid signature", $rp);
-		$signature_msg = "The signature is invalid!";
-	}
-	catch(SignatureAuthError $e){
-		$rel_id = $prp_c->addReg($prop_id, $data['ID'], 0, 3);
-		$rp = str_replace("%path%", "src2", $signature_img);
-		$rp1 = str_replace("%alt%", "invalid signature", $rp);
-		$signature_msg = "The signature is invalid!";
-	}
-	finally{
-		$domAdd .= "<a href=\"https://localhost/lpgp-server/cgi-actions/relatory.php?rel=$rel_id\" role=\"button\" class=\"btn btn-lg btn-primary\">See relatory</a><br><hr>";
-		$signature_img = $rp1;
-		unset($rp);
-		unset($rp1);
-		$domAdd .= createSignatureCardAuth($data['ID'], $vl);
-	}
-}
-else{
-	$usr_c = new UsersCheckHistory("giulliano_php", "");
-	$sig = new SignaturesData("giulliano_php", "");
-	$usr_id = $usr_obj->getUserData($_SESSION['user'])['cd_user'];
-	$vl = false;
-	try{
-		if($sig->checkSignatureFile($_FILES['signature-ext']['name'][0])){
-			$data = $sig->getSignatureFData($_FILES['signature-ext']['name'][0]);
-			$rp = str_replace("%path%", "src1", $signature_img);
-			$rp1 = str_replace("%alt%", "valid signature", $rp);
-			$signature_msg = "Valid signature";
-			$rel_id = $usr_c->addReg($usr_id, $data['ID']);
-			$vl = true;
-		}
-	}
-	catch(InvalidSignatureFile $e){
-		$rel_id = $usr_c->addReg($usr_id, $data['ID'], 0, 1);
-		$rp = str_replace("%path%", "src2", $signature_img);
-		$rp1 = str_replace("%alt%", "invalid signature", $rp);
-		$signature_msg = "The signature is invalid!";
-	}
-	catch(SignatureNotFound $e){
-		$rel_id = $usr_c->addReg($usr_id, $data['ID'], 0, 2);
-		$rp = str_replace("%path%", "src2", $signature_img);
-		$rp1 = str_replace("%alt%", "invalid signature", $rp);
-		$signature_msg = "The signature is invalid!";
-	}
-	catch(SignatureFileNotFound $e){
-		$rel_id = $usr_c->addReg($usr_id, $data['ID'], 0, 1);
-		$rp = str_replace("%path%", "src2", $signature_img);
-		$rp1 = str_replace("%alt%", "invalid signature", $rp);
-		$signature_msg = "The signature is invalid!";
-	}
-	catch(SignatureAuthError $e){
-		$rel_id = $usr_c->addReg($usr_id, $data['ID'], 0, 3);
-	}
-	finally{
-		$domAdd .= "<a href=\"https://localhost/lpgp-server/cgi-actions/relatory.php?prp_rel=$rel_id\" role=\"button\" class=\"btn btn-lg btn-primary\">See relatory</a><br><hr>";
-		$signature_img = $rp1;
-		unset($rp);
-		unset($rp1);
-		$domAdd .= createSignatureCardAuth($data['ID'], $vl);
-	}
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -131,17 +7,17 @@ else{
     <title>LPGP Oficial Server</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="../css/new-layout.css">
-    <script src="../js/main-script.js"></script>
-    <link rel="stylesheet" href="../bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" href="../bootstrap/font-awesome.min.css">
-    <script src="../bootstrap/jquery-3.3.1.slim.min.js"></script>
-    <script src="../bootstrap/bootstrap.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="./css/new-layout.css">
+    <script src="./js/main-script.js"></script>
+    <link rel="stylesheet" href="./bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="./bootstrap/font-awesome.min.css">
+    <script src="./bootstrap/jquery-3.3.1.slim.min.js"></script>
+    <script src="./bootstrap/bootstrap.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <link rel="shortcut icon" href="../media/logo-lpgp.png" type="image/x-icon">
+    <link rel="shortcut icon" href="./media/logo-lpgp.png" type="image/x-icon">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.2/popper.min.js"></script>
 </head>
@@ -150,7 +26,7 @@ else{
 <body>
     <script>
         $(document).ready(function(){   
-            setAccountOpts(true);
+            setAccountOpts();
             setSignatureOpts();
         });
 
@@ -234,9 +110,9 @@ else{
                     Help
                 </button>
                 <div class="dropdown-menu opts" aria-labelledby="help-opt">
-                    <a href="http://localhost/lpgp-server/docs/" class="dropdown-item">Documentation</a>
-                    <a href="http://localhost/lpgp-server/about.html" class="dropdown-item">About Us</a>
-                    <a href="http://localhost/lpgp-server/contact-us.html" class="dropdown-item">Contact Us</a>
+                    <a href="./docs/index.html" class="dropdown-item">Documentation</a>
+                    <a href="./about.html" class="dropdown-item">About Us</a>
+                    <a href="./contact-us.html" class="dropdown-item">Contact Us</a>
                 </div>
             </div>
         </div>
@@ -247,9 +123,12 @@ else{
     <div class="container-fluid container-content" style="position: absolute;">
         <div class="row-main row">
             <div class="col-7 clear-content" style="position: absolute; margin-left: 21%;">
-				<?php
-					echo $domAdd;
-				?>
+				<form action="./cgi-actions/check_signature.php" method="post" enctype="multipart/form-data">
+					<label for="uq-input" class="form-label"><h1>Please put here your .lpgp file.</h1></label>
+					<input type="file" name="signature-ext[]" id="uq-input" class="form-control">
+					<br>
+					<button type="submit" class="btn btn-block btn-success">Check the signature</button>
+				</form>
                 <br>
             </div>
         </div>

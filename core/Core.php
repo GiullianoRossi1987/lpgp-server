@@ -302,6 +302,7 @@ class UsersData extends DatabaseConnection{
         $this->checkNotConnected();
         if(!$this->checkUserExists($user)) throw new UserNotFound("There's no user '$user'", 1);
         $qr = $this->connection->query("UPDATE tb_users SET vl_email = \"$new_email\" WHERE nm_user = \"$user\";");
+        $this->setUserChecked($user, false);
         unset($qr);
     }
     
@@ -453,6 +454,32 @@ class UsersData extends DatabaseConnection{
         $this->checkNotConnected();
         if(!$this->checkUserExists($user)) throw new UserNotFound("There's no user '$user'", 1);
         return $this->connection->query("SELECT * FROM tb_users WHERE nm_user = \"$user\";")->fetch_array();
+    }
+
+    /**
+     * Returns all the data of a specific user in the database using him primary key (ID);
+     * 
+     * @param integer $usr_pk The primary key reference of the user
+     * @throws UserNotFound If there's no user with such primary key
+     * @return array
+     */
+    public function getUserDataByID(int $usr_pk){
+        $this->checkNotConnected();
+        // error checking
+        $qr_tmp = $this->connection->query("SELECT cd_user FROM tb_users WHERE cd_user = $usr_pk;");
+        $exists = false;
+        while($row = $qr_tmp->fetch_array()){
+            if($row['cd_user'] == $usr_pk){
+                $exists = true;
+                break;
+            }
+        }
+        if(!$exists) throw new UserNotFound("There's no user with primary key #$usr_pk", 1);
+        $qr_tmp->close();
+        $dt_qr = $this->connection->query("SELECT * FROM tb_users WHERE cd_user = $usr_pk;");
+        $data = $dt_qr->fetch_array();
+        $dt_qr->close();
+        return $data;
     }
 }
 
@@ -641,6 +668,21 @@ class ProprietariesData extends DatabaseConnection{
      }
 
      /**
+      * Changes the avatar image of the proprietary.
+      * @param string $proprietary The name of the proprietary
+      * @param string $img_new The path of the new avatar.
+      * @throws ProprietaryNotFound If the proprietary don't exists 
+      * @return void
+      */
+    public function chProprietaryImg(string $proprietary, string $img_new){
+        $this->checkNotConnected();
+        if(!$this->checkProprietaryExists($proprietary)) throw new ProprietaryNotFound("The proprietary '$proprietary' don't exists!", 1);
+        $qr_ch = $this->connection->query("UPDATE tb_proprietaries SET vl_img = \"$img_new\" WHERE nm_proprietary = \"$proprietary\";");
+        
+        return ;
+    }
+
+     /**
       * Changes a proprietary email account.
       * 
       * @param string $proprietary The proprietary to change the email.
@@ -783,7 +825,29 @@ class ProprietariesData extends DatabaseConnection{
         if(!$this->checkProprietaryExists($proprietary_nm)) throw new ProprietaryNotFound("There's no proprietary #$proprietary_nm!", 1);
         return $this->connection->query("SELECT * FROM tb_proprietaries WHERE nm_proprietary = \"$proprietary_nm\";")->fetch_array();
      }
-    
+     
+     /**
+      * Return all the data of the proprietary by him primary key reference (PK);
+      * @param integer $prop_id The primary key reference of the proprietary
+      * @throws ProprietaryNotFound If the primary key reference don't exists in the database.
+      * @return array;
+      */
+      public function getPropDataByID(int $prop_id){
+          $this->checkNotConnected();
+          // checking the primary key
+          $qr_check = $this->connection->query("SELECT cd_proprietary FROM tb_proprietaries WHERE cd_proprietary = $prop_id;");
+          $valid = false;
+          while($row = $qr_check->fetch_array()){
+              if($row['cd_proprietary'] == $prop_id) $valid = true;
+          }
+          if(!$valid) throw new ProprietaryNotFound("There's no proprietary with the ID #$prop_id!", 1);
+          // end of checking.
+          $dt_qr = $this->connection->query("SELECT * FROM tb_proprietaries WHERE cd_proprietary = $prop_id;");
+          $re = $dt_qr->fetch_array();
+          $dt_qr->close();
+          $qr_check->close();
+          return $re;
+      }
 }
 
 /**
@@ -899,7 +963,7 @@ class SignaturesData extends DatabaseConnection{
         $content_file = implode(self::DELIMITER, $arr_ord);
         $root = $_SERVER['DOCUMENT_ROOT'];
         file_put_contents($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/signatures.d/" . $file_name, $content_file);
-        return $HTML_mode ? "<a href=\"http://localhost/lpgp-server/signatures.d/$file_name\" download>Get your signature #$signature_id here!</a>" : "$root/lpgp-server/signatures.d/$file_name";
+        return $HTML_mode ? "<a href=\"https://localhost/lpgp-server/signatures.d/$file_name\" download=\"$file_name\" role=\"button\" class=\"btn btn-lg downloads-btn btn-primary\">Get your signature #$signature_id here!</a>" : "$root/lpgp-server/signatures.d/$file_name";
     }
 
 
@@ -929,7 +993,7 @@ class SignaturesData extends DatabaseConnection{
         $this->checkNotConnected();
         if(!$this->checkFileValid($file_name)) throw new InvalidSignatureFile("", 1);
         if(!file_exists($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/usignatures.d/$file_name")) throw new SignatureFileNotFound("There's no file '$file_name' on the uploaded signatures folder.", 1);
-        $content_file = utf8_encode(file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/usignatures.d/" . $file_name));
+        $content_file = utf8_encode(file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/signatures.d/" . $file_name));
         $sp_content = explode(self::DELIMITER, $content_file);
         $ascii_none = array();
         for($i = 0; $i <= count($sp_content); $i++) {
@@ -1021,7 +1085,7 @@ class SignaturesData extends DatabaseConnection{
     public function chSignatureCode(int $signature, int $code, string $word_same){
         $this->checkNotConnected();
         if(!$this->checkSignatureExists($signature)) throw new SignatureNotFound("There's no signature #$signature", 1);
-        $act_code = $this->connection->query("SELECT vl_code FROM tb_signatures WHERE cd_signatures = $signature;")->fetch_array();
+        $act_code = $this->connection->query("SELECT vl_code FROM tb_signatures WHERE cd_signature = $signature;")->fetch_array();
         $to_db = hash(self::CODES[(int) $act_code['vl_code']], $word_same);
         $qr_ch = $this->connection->query("UPDATE tb_signatures SET vl_code = $code WHERE cd_signature = $signature;");
         $qr_ch = $this->connection->query("UPDATE tb_signatures SET vl_password = \"$to_db\" WHERE cd_signature = $signature;");
@@ -1104,6 +1168,28 @@ class SignaturesData extends DatabaseConnection{
         while($row = $all_usr->fetch_array()) mail($row['vl_email'],"Signature Update", $content_full, $headers);
         while($row = $all_prop->fetch_array()) mail($row['vl_email'], "Signature Update", $content_full, $headers);
     }
+
+    /**
+     * Returns all the database data of a specific signature, got from a file. Obviously after checking the signature file it will return the data.
+     * If the signature is invalid then it will return null, if the checkSignatureFile doesn't throw a Exception before.
+     * In the array will be the data of the JSON in the signature file.
+     * -------------------------------------------------------------------------------------------------------------------------------------------
+     * @param string $file_name The name of the file, wich need to be at the /usignatures.d folder at the root.
+     * @return array|null
+     */
+    public function getSignatureFData(string $file_name){
+        $this->checkNotConnected();
+        if($this->checkSignatureFile($file_name)){
+            $content_file = file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/usignatures.d/" . $file_name);
+            $exp_content = explode(self::DELIMITER, $content_file);
+            $ascii_pr = array();
+            for($i = 0; $i < count($exp_content); $i++) $ascii_pr[] = chr((int) $exp_content[$i]);
+            $fn_json = implode("", $ascii_pr);
+            $parsed_json = json_decode($fn_json, true);
+            return $parsed_json;
+        }
+        else return null;
+    }
 }
 
 // ** Ready for the tests! **
@@ -1152,6 +1238,7 @@ class UsersCheckHistory extends DatabaseConnection{
      * @param integer|null $error_cd The error code of the authentication result, it can only be between 0 and 3 (integers obiviously). If don't will throw error.
      * 
      * @throws InvalidErrorCode If the $err_code is not null, and there don't have errors. Or reverse.
+     * @return integer The primary key reference of the added register.
      */
     public function addReg(int $usr_code, int $sig_code, int $success = 1, int $error_cd = null){
         $this->checkNotConnected();
@@ -1159,8 +1246,11 @@ class UsersCheckHistory extends DatabaseConnection{
         if($success == 0 && is_null($error_cd)) throw new InvalidErrorCode((int) $error_cd, 1);
         $err_vl = is_null($error_cd) ? 0 : $error_cd;
         $qr_add = $this->connection->query("INSERT INTO tb_signature_check_history (id_user, id_signature, vl_valid, vl_code) VALUES ($usr_code, $sig_code, $success, $err_vl);");
-        $qr_add->close();  // TODO: Replace the unsets with closes in all the querys.
         unset($err_vl);
+        $pk_qr = $this->connection->query("SELECT MAX(cd_reg) FROM tb_signature_check_history;");
+        $id = (int) $pk_qr->fetch_array()[0];
+        $pk_qr->close();
+        return $id;
     }
 
     /**
@@ -1236,7 +1326,7 @@ class UsersCheckHistory extends DatabaseConnection{
         $dt = $qr_data->fetch_array();
         $qr_data->close();
         $data_html = "<div class=\"relatory-php\">\n";
-        $img_src = $dt['vl_valid'] == 1 ? "https://localhost/lpgp-server/media/checked-valid.png" : "https://localhost/lpgp-server/media/checked-invalid.png";
+        $img_src = $dt['vl_valid'] == 1 ? "../media/checked-valid.png" : "../media/checked-invalid.png";
         $data_html .= "<div class=\"img-relatory\">\n<img src=\"$img_src\" width=\"70px\" heigth=\"70px\">\n</div>\n";
         $msg = "";
         $ext_cls = "";
@@ -1264,7 +1354,7 @@ class UsersCheckHistory extends DatabaseConnection{
             $sign_data = $this->connection->query("SELECT * FROM tb_signatures WHERE cd_signature = $sig_ref;")->fetch_array();
             $prop_data = $this->connection->query("SELECT * FROM tb_proprietaries WHERE cd_proprietary = " . $sign_data['id_proprietary'] . ";")->fetch_array();
             $signature_data_html .= "<div class=\"card-body\"><h1 class=\"card-title\">Signature #" . $sig_ref . "</h1>\n";
-            $signature_data_html .= "<div class=\"card-subtitle\"><a href=\"https://localhost/cgi-actions/proprietary.php?id=" . $prop_data['cd_proprietary'] . "\">Proprietary: " . $prop_data['nm_proprietary'] . "</a>\n</div>\n";
+            $signature_data_html .= "<div class=\"card-subtitle\"><a href=\"https://localhost/lpgp-server/cgi-actions/proprietary.php?id=" . $prop_data['cd_proprietary'] . "\">Proprietary: " . $prop_data['nm_proprietary'] . "</a>\n</div>\n";
             $signature_data_html .= "<div class=\"card-footer text-muted\"> Created at: " . $sign_data['dt_creation'] . "</div>\n";
             $data_html .= $signature_data_html;
         }
@@ -1313,8 +1403,8 @@ class UsersCheckHistory extends DatabaseConnection{
             $id = $prop_dt['cd_proprietary'];
             $prop_data_html = is_null($prop_dt) ? "<div class=\"prop-nf-err\">(We can't find the proprietary, probabily he deleted him account)</div>\n" : "<a href=\"https://localhost/lpgp-server/cgi-actions/proprietary.php?id=$id\" target=\"_blanck\" class=\"prop-link\">" . $prop_dt['nm_proprietary'] . "</a>\n";
             $card_main .= "Proprietary: " . $prop_data_html;
-            $card_main .= "<a href=\"https://localhost/lpgp-server/cgi-actions/relatory.php?id=" . $dt['cd_reg'] . "\" target=\"__blanck\" role=\"button\" class=\"btn btn-secondary\">Check the relatory</a>\n";
-            $card_main .= "<div class=\"card-footer text-muted\">Checked signature at: " . $dt['dt_reg'] . "</div>\n</div>";
+            $card_main .= "<a href=\"https://localhost/lpgp-server/cgi-actions/relatory.php?rel=" . $dt['cd_reg'] . "\" target=\"__blanck\" role=\"button\" class=\"btn btn-secondary\">Check the relatory</a>\n";
+            $card_main .= "<div class=\"card-footer text-muted\">Checked signature at: " . $dt['dt_reg'] . "</div>\n</div>\n<div>\n<div>\n";
             $main_pg .= $card_main . "<br><br>";
         }
         return $main_pg;
@@ -1366,19 +1456,24 @@ class PropCheckHistory extends DatabaseConnection{
      * @param integer $id_prop The primary key reference of the proprietary that checked the signature.
      * @param integer $id_sign The primary key reference of the signature thet was checked.
      * @param integer $success If there wasn't errors in the authentication.
-     * @param integer $error_code If there was a error the code need to be bettween 0 and 3. That code will be storaged as the vl_code in the database table.
+     * @param integer|null $error_code If there was a error the code need to be bettween 0 and 3. That code will be storaged as the vl_code in the database table.
      * @throws PropInvalidCode If the error code is more then 0 but there wasn't errors in the authentication, or the code is 0 but the authentication returned errors.
-     * @return void
+     * @return integer The primary key reference of the added register.
      */
-    public function addReg(int $id_prop, int $id_sign, int $success = 0, int $error_code = 0){
+    public function addReg(int $id_prop, int $id_sign, int $success = 1, ?int $error_code = NULL){
         // I didn't maked the null option at the $error_code, same as the same method in the UsersCheckHistory 'cause I was lazy
         $this->checkNotConnected();
         // errors checking
-        if($success == 0 && $error_code != 0) throw new  PropInvalidCode($error_code, 1);
-        if($success != 0 && $error_code == 0) throw new PropInvalidCode($error_code, 1);
+        if($success == 1 && !is_null($error_code)) throw new  PropInvalidCode($error_code, 1);
+        if($success == 0 && is_null($error_code)) throw new PropInvalidCode(0, 1);
         // end checking 
-        $qr_add = $this->connection->query("INSERT INTO tb_signatures_prop_h (id_proprietary, id_signature, vl_valid, vl_code) VALUES ($id_prop, $id_sign, $success, $error_code);");
-        $qr_add->close();
+        $vl = is_null($error_code) ? 0 : (int) $error_code;
+        $qr_add = $this->connection->query("INSERT INTO tb_signatures_prop_h (id_prop, id_signature, vl_valid, vl_code) VALUES ($id_prop, $id_sign, $success, $vl);");
+        $qr_id = $this->connection->query("SELECT MAX(cd_reg) FROM tb_signatures_prop_h;");
+        $id = (int) $qr_id->fetch_array()[0];
+        unset($qr_add);
+        unset($qr_id);
+        return $id;
     }
 
     /**
@@ -1426,31 +1521,34 @@ class PropCheckHistory extends DatabaseConnection{
         $main_data_html = "\n<div class=\"relatory-container\">\n";
         $img_src = $reg_data['vl_code'] == 0 ? "https://localhost/lpgp-server/media/checked-valid.png" : "https://localhost/lpgp-server/media/checked-invalid.png";
         $main_data_html .= "<img src=\"$img_src\" width=\"70px\" height=\"70px\">\n";
+        $err = false;
         switch ( (int) $reg_data['vl_code']){
             case 0:
                 $error_msg = "Signature valid!";
             break;
             case 1:
                 $error_msg = self::ERR_CD_MSG1;
+                $err = true;
             break;
             case 2:
                 $error_msg = self::ERR_CD_MSG2;
+                $err = true;
             break;
             case 3:
                 $error_msg = self::ERR_CD_MSG3;
+                $err = true;
             break;
             default: throw new PropInvalidCode($reg_data);
         }
         $main_data_html .= "<div class=\"message-relatory $extra_cls\">$error_msg</div>\n";
-        // generates the card if there wasn't errors in the authentication
-        if($error_msg == "Signature_valid!"){
+        if(!$err){
             $card_div = "<div class=\"card signature-card\">\n<div class=\"card-body\">\n";
             $sig_dt = $this->connection->query("SELECT * FROM tb_signatures WHERE cd_signature = " . $reg_data['id_signature'] . ";")->fetch_array();
             $prop_dt = $this->connection->query("SELECT * FROM tb_proprietaries WHERE cd_proprietary = " . $sig_dt['id_proprietary'] . ";")->fetch_array();
             $id_prop = $prop_dt['cd_proprietary'];
             $card_div .= "<h1 class=\"card-title\"> Signature #" . $sig_dt['cd_signature'] . "</h1>\n";
-            $card_div .= "<h4 class=\"card-subtitle\"> Proprietary: <a href=\"https://localhost/lpgp-server/proprietary.php?id=$id_prop\" target=\"_blanck\"> " . $prop_dt['nm_proprietary'] . "</a></div>\n";
-            $card_div .= "<div class=\"card-footer\">Created at: " . $sig_dt['dt_creation'] . "</div>\n</div>\n";
+            $card_div .= "<h4 class=\"card-subtitle\"> Proprietary: <a href=\"https://localhost/lpgp-server/cgi-actions/proprietary.php?id=$id_prop\" target=\"_blanck\"> " . $prop_dt['nm_proprietary'] . "</a></div>\n";
+            $card_div .= "<div class=\"card-footer\">Created at: " . $sig_dt['dt_creation'] . "</div>\n</div>\n<div>\n";
             $main_data_html .= $card_div;
         }
         return $main_data_html;
@@ -1499,8 +1597,8 @@ class PropCheckHistory extends DatabaseConnection{
             $id = $prop_dt['cd_proprietary'];
             $prop_data_html = is_null($prop_dt) ? "<div class=\"prop-nf-err\">(We can't find the proprietary, probabily he deleted him account)</div>\n" : "<a href=\"https://localhost/lpgp-server/cgi-actions/proprietary.php?id=$id\" target=\"_blanck\" class=\"prop-link\">" . $prop_dt['nm_proprietary'] . "</a>\n";
             $card_main .= "Proprietary: " . $prop_data_html;
-            $card_main .= "<a href=\"https://localhost/lpgp-server/cgi-actions/relatory.php?id=" . $dt['cd_reg'] . "\" target=\"__blanck\" role=\"button\" class=\"btn btn-secondary\">Check the relatory</a>\n";
-            $card_main .= "<div class=\"card-footer text-muted\">Checked signature at: " . $dt['dt_reg'] . "</div>\n</div>";
+            $card_main .= "<a href=\"https://localhost/lpgp-server/cgi-actions/relatory.php?rel=" . $dt['cd_reg'] . "\" target=\"__blanck\" role=\"button\" class=\"btn btn-secondary\">Check the relatory</a>\n";
+            $card_main .= "<div class=\"card-footer text-muted\">Checked signature at: " . $dt['dt_reg'] . "</div>\n</div>\n</div>\n<div>\n";
             $main_pg .= $card_main . "<br>";
         }
         return $main_pg;

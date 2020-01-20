@@ -1,6 +1,5 @@
 <?php
 if(session_status() == PHP_SESSION_NONE) session_start();
-
 require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
 require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
 
@@ -8,21 +7,28 @@ use Core\SignaturesData;
 use function JSHandler\sendUserLogged;
 sendUserLogged();
 
-if(isset($_GET['sig_id'])){
-	$sig = new SignaturesData("giulliano_php", "");
-	$data = $sig->getSignatureData($_GET['sig_id']);
-	$select_vl = "<select name=\"code\" id=\"code-sel\">";
-	$opt = "<option value=\"" . $data['vl_code'] . "\" selected>" . $sig::CODES[$data['vl_code']] . "</option>";
-	// others options
-	$opts_o = [];
-	for($i = 0; $i < count($sig::CODES); $i++){
-		if($i != $data['vl_code']){
-			$opts_o[] = "<option value=\"" . $i . "\">" . $sig::CODES[$i] . "</option>";
+if(isset($_POST['cancel-btn'])) echo "<script>window.location.replace(\"https://localhost/lpgp-server/cgi-actions/my_account.php\");</script>";
+
+if(isset($_POST['rm-btn'])){
+	if(isset($_POST['sig_id'])){
+		$si = new SignaturesData("giulliano_php", "");
+		$si->delSignature((int) $_POST['sig_id']);
+		echo "<script>window.location.replace(\"https://localhost/lpgp-server/cgi-actions/my_account.php\");</script>";
+	}
+}
+
+if(isset($_POST['save-btn'])){
+	if(isset($_POST['sig_id'])){
+		$sig = new SignaturesData("giulliano_php", "");
+		// checks the password field;
+		if(isset($_POST['passcode']) && strlen($_POST['passcode']) > 0){
+			$sig->chSignaturePassword((int) $_POST['sig_id'], (string) $_POST['passcode']);
+		}
+		$sig_code = (int) $sig->getSignatureData((int) $_POST['sig_id'])['vl_code'];
+		if(isset($_POST['code']) && $_POST['code'] != $sig_code && isset($_POST['conf-pass'])){
+			$sig->chSignatureCode((int) $_POST['sig_id'], (int) $_POST['code'], $_POST['conf-pass']);
 		}
 	}
-	$hidden = "<input type=\"hidden\" value=\"" . $_GET['sig_id'] . "\" name=\"sig_id\">";
-	echo "<script> const code = " . $data['vl_code'] . ";</script>";
-	$raw_inpt = "<input readonly=\"true\" value=\"" . $data['vl_password'] . "\" id=\"raw_code\" style=\"visibility: hidden;\" class=\"form-control\">";
 }
 ?>
 
@@ -68,6 +74,12 @@ if(isset($_GET['sig_id'])){
             else pas1 = "text";
         });
 
+        $(document).on("click", "#show-passwd2", function(){
+            $("#password2").attr("type", pas1);
+            if(pas2 == "text") pas2 = "password";
+            else pas2 = "text";
+        });
+
         $(document).on("change", "#password1", function(){
             var content = $(this).val();
             if(content.length <= 7){
@@ -86,13 +98,6 @@ if(isset($_GET['sig_id'])){
 				$("#confirm-passcode").css("visibility", "visible");
 			}
 			else $("#confirm-passcode").css("visibility", "hidden");
-		});
-
-		$(document).on("click", "#see-raw", function(){
-			if($("#raw_code").css("visibility") == "hidden"){
-				$("#raw_code").css("visibility", "visible");
-			}
-			else $("#raw_code").css("visibility", "hidden");
 		});
 
         $(document).scroll(function(){
@@ -134,38 +139,6 @@ if(isset($_GET['sig_id'])){
     <div class="container-fluid container-content" style="position: absolute;">
         <div class="row-main row">
             <div class="col-7 clear-content" style="position: absolute; margin-left: 21%;">
-				<form action="./change_signature_data.php" method="post" class="form-group">
-                    <label for="passcode" class="form-label">The code</label>
-					<br>
-					<input type="password" name="passcode" id="passcode" class="form-control">
-					<label for="passcode" class="form-label">
-						<small>If you don't want to change the code, then just leave the field empty</small>
-					</label>
-					<br>
-					<label for="passcode" class="form-label">
-						<button type="button" class="btn btn-sm btn-secondary" id="show-code">Show the code</button>
-					</label>
-					<br>
-					<?php
-						echo $select_vl;
-						echo $opt;
-						foreach($opts_o as $o) echo $o;
-						echo "</select>";
-						echo "<br>";
-						echo $raw_inpt;
-					?>
-					<br>
-					<label for="raw_code" class="form-label">
-						<button type="button" class="btn btn-secondary" id="see-raw">See raw key</button>
-					</label>
-					<br>
-					<input type="password" name="conf-pass" id="confirm-passcode" class="form-control" placeholder="Confirm the passcode" style="visibility: hidden;">
-					<button type="submit" class="btn btn-lg btn-success" name="save-btn">Save changes</button>
-					<button type="button" class="btn btn-lg btn-secondary" name="cancel-btn">Cancel</button>
-					<button class="btn btn-lg btn-danger" type="submit" name="rm-btn">Delete signature</button>
-					<br>
-					<?php echo $hidden; ?>
-				</form>
             </div>
 		</div>
 	</div>

@@ -1,5 +1,6 @@
 <?php
 session_start();
+session_cache_expire(1024);
 require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
 require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
 

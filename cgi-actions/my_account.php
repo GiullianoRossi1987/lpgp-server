@@ -4,11 +4,14 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
 require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
 
 use function JSHandler\lsSignaturesMA;
+use function JSHandler\sendUserLogged;
+
 use Core\ProprietariesData;
 use Core\UsersData;
 use Core\PropCheckHistory;
 use Core\UsersCheckHistory;
 
+sendUserLogged(); // preventing bugs
 
 $prp = new ProprietariesData("giulliano_php", "");
 $usr = new UsersData("giulliano_php", "");
@@ -26,13 +29,13 @@ $usr = new UsersData("giulliano_php", "");
     <script src="../js/main-script.js"></script>
     <link rel="stylesheet" href="./bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="./bootstrap/font-awesome.min.css">
-    <script src="./bootstrap/jquery-3.3.1.slim.min.js"></script>
-    <script src="./bootstrap/bootstrap.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="../bootstrap/jquery-3.3.1.slim.min.js"></script>
+    <script src="../bootstrap/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <link rel="shortcut icon" href="./media/logo-lpgp.png" type="image/x-icon">
+    <link rel="shortcut icon" href="../media/logo-lpgp.png" type="image/x-icon">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.2/popper.min.js"></script>
 </head>
@@ -41,64 +44,9 @@ $usr = new UsersData("giulliano_php", "");
 <body>
     <script>
         $(document).ready(function(){   
-            setAccountOpts();
+            setAccountOpts(true);
             setSignatureOpts();
-            $("#img-user").css("background-image", "url(" + getLinkedUserIcon() + ")");
-        });
-
-        var pas1 = "text";
-        var pas2 = "text";
-        var vb = "visible";
-
-        $(document).on("click", "#show-passwd1", function(){
-            $("#password1").attr("type", pas1);
-            if(pas1 == "text") pas1 = "password";
-            else pas1 = "text";
-        });
-
-        $(document).on("click", "#show-passwd2", function(){
-            $("#password2").attr("type", pas1);
-            if(pas2 == "text") pas2 = "password";
-            else pas2 = "text";
-        });
-
-        $(document).on("change", "#password1", function(){
-            var content = $(this).val();
-            if(content.length <= 7){
-                $("#err-lb-passwd1").text("Please choose a password with more then 7 characters.");
-                $("#err-lb-passwd1").show();
-            }
-            else if(content != $("#password2").val()){
-                $("#err-lb-passwd1").text("The passwords doesn't match");
-                $("#err-lb-passwd1").show();
-            }
-            else $("#err-lb-passwd1").hide();
-        });
-
-        $(document).on("change", "#username", function(){
-            var content = $(this).val();
-            if(content.length <= 0){
-                $("#err-lb-username").text("Please choose a username!");
-                $("#err-lb-username").show();
-            }
-            else $("#err-lb-username").hide();
-        });
-
-        $(document).on("change", "#email", function(){
-            var content = $(this).val();
-            if(content.length <= 0){
-                $("#err-lb-email").text("Please choose a e-amil address");
-                $("#err-lb-email").show();
-            }
-            else if(content.search("@") < 0){
-                $("#err-lb-email").text("Please choose a valid e-mail address");
-                $("#err-lb-email").show();
-            }
-            else $("#err-lb-email").hide();
-        });
-
-        $(document).on("click", "#default-img", function(){
-            $("#upload-img-input").hide();
+            $("#img-user").css("background-image", "url(" + "." + getLinkedUserIcon() + ")");
         });
 
         $(document).scroll(function(){
@@ -110,29 +58,29 @@ $usr = new UsersData("giulliano_php", "");
     <div class="container-fluid header-container" role="banner" style="position: fixed;">
         <div class="col-12 header" style="height: 71px; transition: background-color 200ms linear;">
             <div class="opt-dropdown dropdown login-dropdown">
-                <button type="button" class="btn btn-lg default-btn-header dropdown-toggle" data-toggle="dropdown" id="account-opts" aria-haspopup="true" aria-expanded="false">
-                    <span class="nm-tmp">Account</span>
-                </button>
-                <div class="dropdown-menu opts" aria-labelledby="account-opts"></div>
-            </div>
-            <div class="opt-dropdown dropdown after-opt signatures-dropdown">
-                <button class="dropdown-toggle btn btn-lg default-btn-header" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true" id="signature-opts">
-                    Signatures
-                </button>
-                <div class="dropdown-menu opts" aria-labelledby="signature-opts"></div>
-            </div>
-            <div class="opt-dropdown dropdown after-opt help-dropdown">
-                <button class="dropdown-toggle btn btn-lg default-btn-header" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true" id="help-opt">
-                    Help
-                </button>
-                <div class="dropdown-menu opts" aria-labelledby="help-opt">
-                    <a href="http://localhost/lpgp-server/docs/" class="dropdown-item">Documentation</a>
-                    <a href="http://localhost/lpgp-server/about.html" class="dropdown-item">About Us</a>
-                    <a href="http://localhost/lpgp-server/contact-us.html" class="dropdown-item">Contact Us</a>
+                    <button type="button" class="btn btn-lg default-btn-header dropdown-toggle" data-toggle="dropdown" id="account-opts" aria-haspopup="true" aria-expanded="false">
+                        <span class="nm-tmp">Account</span>
+                    </button>
+                    <div class="dropdown-menu opts" aria-labelledby="account-opts"></div>
+                </div>
+                <div class="opt-dropdown dropdown after-opt signatures-dropdown">
+                    <button class="dropdown-toggle btn btn-lg default-btn-header" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true" id="signature-opts">
+                        Signatures
+                    </button>
+                    <div class="dropdown-menu opts" aria-labelledby="signature-opts"></div>
+                </div>
+                <div class="opt-dropdown dropdown after-opt help-dropdown">
+                    <button class="dropdown-toggle btn btn-lg default-btn-header" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true" id="help-opt">
+                        Help
+                    </button>
+                    <div class="dropdown-menu opts" aria-labelledby="help-opt">
+                        <a href="http://localhost/lpgp-server/docs/" class="dropdown-item">Documentation</a>
+                        <a href="http://localhost/lpgp-server/about.html" class="dropdown-item">About Us</a>
+                        <a href="http://localhost/lpgp-server/contact-us.html" class="dropdown-item">Contact Us</a>
+                    </div>
                 </div>
             </div>
         </div>
-
     </div>
     <br>
     <hr>
@@ -147,7 +95,7 @@ $usr = new UsersData("giulliano_php", "");
                                     <div class="img-cont">
                                         <div id="img-user"></div>
                                     </div>
-                                    <div class="col-6 usr-data">
+                                    <div class="col-6 data">
                                         <?php
                                         if($_SESSION['mode'] == "prop"){
                                             $dt = $prp->getPropData($_SESSION['user']);
@@ -165,18 +113,47 @@ $usr = new UsersData("giulliano_php", "");
                                             echo "<h5 class=\"date-creation\">Date creation: " . $dt['dt_creation'] . "</h3>\n";
                                         }
                                         ?>
-                                        <a class="img-settings btn btn-secondary" href="https://localhost/cgi-actions/ch_my_data.php" id="img-settings" role="button">
+                                        <a class="img-settings btn btn-secondary" href="https://localhost/lpgp-server/cgi-actions/ch_my_data.php" id="img-settings" role="button">
                                             Edit Account
                                             <span>
                                                 <img src="../media/settings.png" alt="" width="50px" height="50px">
                                             </span>
                                         </a>
-                                        <a href="https://localhost/lpgp-server/cgi-actions/del_account.php" role="button" class="btn btn-danger">
+                                        <button class="btn btn-danger" id="del-btn" data-toggle="modal" data-target="#modal-delete" type="button">
                                             Remove account
                                             <span>
                                                 <img src="../media/delete-sign.png" alt="" width="50px" height="50px">
                                             </span>
-                                        </a>
+                                        </button>
+                                        <div class="modal" id="modal-delete" tabindex="-1" aria-labelledby="del-btn" aria-hidden="true" role="dialog">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h3 class="modal-title">Are you sure about delete your account?</h3>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="modal-body">
+                                                        <a href="https://localhost/lpgp-server/cgi-actions/del_account.php?confirm=y" role="button" class="btn btn-lg btn-danger">Yes, delete my account</a>
+                                                        <a href="#" role="button" class="btn btn-lg btn-secondary" data-dismiss="modal">Cancel</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <hr>
+                                        <?php
+                                        if($_SESSION['mode'] == "prop"){
+                                            $id = $dt['cd_proprietary'];
+                                            echo "<a href=\"https://localhost/lpgp-server/cgi-actions/proprietary.php?id=$id\" role=\"button\" target=\"_blanck\" class=\"btn btn-lg bt-primary\">See as another one</a>";
+                                        }
+                                        else{
+                                            $id = $dt['cd_user'];
+                                            echo "<a href=\"https://localhost/lpgp-server/cgi-actions/user.php?id=$id\" role=\"button\" target=\"_blanck\" class=\"btn  btn-primary\">See as another one</a>";
+                                        }
+                                        ?>
                                     </div>
                                 </div>
                             </div>
@@ -186,27 +163,39 @@ $usr = new UsersData("giulliano_php", "");
                             // Signatures
                             /////////////////////////////////////////////////////////////////////////////////////////////////
                             if($_SESSION['mode'] == "prop"){
-                                echo "<h1>Your signatures!</h1>";
+                                echo "<h1 class=\"section-title\">My signatures</h1><br>";
                                 $prp = new ProprietariesData("giulliano_php", "");
                                 echo lsSignaturesMA($prp->getPropID($_SESSION['user']));
-                                echo "<br>\n<a href=\"https://localhost/lpgp-server/create_signature.html\" role=\"button\" class=\"btn btn-lg btn-success\">Create a new signature</a>";
+                                echo "<br>\n<a href=\"https://localhost/lpgp-server/cgi-actions/create_signature.php\" role=\"button\" class=\"btn btn-block btn-success\">Create a new signature</a>";
                             }
                         ?>
                         </div>
+                        <hr>
                         <div class="history-col col-12">
+                            <h1 class="section-title">My History</h1>
                             <?php
                             // History
                             ///////////////////////////////////////////////////////////////////////////////////////////////
                             if($_SESSION['mode'] == "prop"){
                                 $obj = new PropCheckHistory("giulliano_php", "");
-                                echo $obj->getPropHistory($_SESSION['user']);
+                                $hist = $obj->getPropHistory($_SESSION['user']);
+                                $hist_e = explode("<br>", $hist);
+                                for($i = 0; $i <= 6; $i++){
+                                    if(isset($hist_e[$i])) echo $hist_e[$i] . "<br>";
+                                    else break;
+                                }
                             }
                             else{
                                 $obj = new UsersCheckHistory("giulliano_php", "");
-                                echo $obj->getUsrHistory($_SESSION['user']);
+                                $hist = $obj->getUsrHistory($_SESSION['user']);
+                                $hist_e = explode("<br>", $hist);
+                                for($i = 0; $i <= 6; $i++){
+                                    if(isset($hist_e[$i])) echo $hist_e[$i] . "<br>";
+                                    else break;
+                                }
                             }
+                            echo "<a href=\"https://localhost/lpgp-server/cgi-actions/my-history.php\" role=\"button\" class=\"btn btn-block btn-primary\">See all my history</a><br>";
                             ?>
-                            
                         </div>
 					</div>
 				</div>

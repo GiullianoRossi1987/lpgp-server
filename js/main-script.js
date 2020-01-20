@@ -13,6 +13,7 @@ function resetVals(){
     localStorage.setItem("logged-user", "false");
     localStorage.setItem("user_mode", "null");
     localStorage.setItem("checked", "null");
+    localStorage.setItem("user-icon", "null");
 }
 
 function clsLoginOpts(){
@@ -31,7 +32,7 @@ function clsSignOpts(){
     catch(ex){}  // do nothing;
 }
 
-function setAccountOpts(){
+function setAccountOpts(ext_fls = false){
     /**
      * 
      */
@@ -61,9 +62,9 @@ function setAccountOpts(){
         var img = document.createElement("img");
         img.width = 30;
         img.height = 30;
-        var local_opt_btn = document.querySelector("#account-opts");
-        var ls = localStorage.getItem("user-icon").split("/");
-        img.src = "https://localhost/lpgp-server/" + ls[ls.length - 2] + "/" + ls[ls.length - 1];
+        var local_opt_btn = document.querySelector("#account-opts");    
+        if(ext_fls) img.src = "." + getLinkedUserIcon();
+        else img.src = getLinkedUserIcon();
         img.classList.add("user-icon");
         local_opt_btn.appendChild(img);
         document.querySelector("#account-opts span").remove();
@@ -154,5 +155,5 @@ function hideError(){
 
 function getLinkedUserIcon(){
     var ls  = localStorage.getItem("user-icon").split("/");
-    return "https://localhost/lpgp-server/" + ls[ls.length - 2] + "/" + ls[ls.length - 1];
+    return "./" + ls[ls.length - 2] + "/" + ls[ls.length - 1];
 }
