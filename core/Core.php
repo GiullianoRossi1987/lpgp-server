@@ -1085,7 +1085,7 @@ class SignaturesData extends DatabaseConnection{
     public function chSignatureCode(int $signature, int $code, string $word_same){
         $this->checkNotConnected();
         if(!$this->checkSignatureExists($signature)) throw new SignatureNotFound("There's no signature #$signature", 1);
-        $act_code = $this->connection->query("SELECT vl_code FROM tb_signatures WHERE cd_signatures = $signature;")->fetch_array();
+        $act_code = $this->connection->query("SELECT vl_code FROM tb_signatures WHERE cd_signature = $signature;")->fetch_array();
         $to_db = hash(self::CODES[(int) $act_code['vl_code']], $word_same);
         $qr_ch = $this->connection->query("UPDATE tb_signatures SET vl_code = $code WHERE cd_signature = $signature;");
         $qr_ch = $this->connection->query("UPDATE tb_signatures SET vl_password = \"$to_db\" WHERE cd_signature = $signature;");
