@@ -113,16 +113,11 @@ function setSignatureOpts(){
     }
     else if(localStorage.getItem("user_mode") == "normie"){
         var chk_signature = document.createElement("a");
-        var fdb_proprietary = document.createElement("a");
 
         chk_signature.innerText = "Check a Signature";
-        fdb_proprietary.innerText = "Contact a Proprietary";
         chk_signature.href = "http://localhost/lpgp-server/check_signature.html";
-        fdb_proprietary.href = "http://localhost/lpgp-server/contact_prop.html";
         chk_signature.classList.add("dropdown-item");
-        fdb_proprietary.classList.add("dropdown-item");
 
-        local_opts.appendChild(fdb_proprietary);
         local_opts.appendChild(chk_signature);
     }
     else{
