@@ -9,17 +9,26 @@ if($_POST['account-mode'] == "normal"){
     // setting up the image to the server
     if(isset($_FILES)){
         move_uploaded_file($_FILES['img-user']['tmp_name'][0], $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/u.images/" . $_FILES['img-user']['name'][0]);
+    
+        $usr_obj = new UsersData("giulliano_php", "");
+        $usr_obj->addUser($_POST['username'], $_POST['password1'], $_POST['email'], true,$_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/u.images/" . $_FILES['img-user']['name'][0]);
     }
-    $usr_obj = new UsersData("giulliano_php", "");
-    $usr_obj->addUser($_POST['username'], $_POST['password1'], $_POST['email'], true,$_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/u.images/" . $_FILES['img-user']['name'][0]);
+    else{
+        $usr_obj = new UsersData("giulliano_php", "");
+        $usr_obj->addUser($_POST['username'], $_POST['password1'], $_POST['email'], true,$_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/media/usr-icon.png");
+    }
     $usr_obj->sendCheckEmail($_POST['username']);
 }
 else if($_POST['account-mode'] == "proprietary"){
     if(isset($_FILES)){
         move_uploaded_file($_FILES['img-user']['tmp_name'][0], $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/u.images/" . $_FILES['img-user']['name'][0]);
+        $prop_obj = new ProprietariesData("giulliano_php", "");
+        $prop_obj->addProprietary($_POST['username'], $_POST['password1'], $_POST['email'], true, $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/u.images/" . $_FILES['img-user']['name'][0]);
     }
-    $prop_obj = new ProprietariesData("giulliano_php", "");
-    $prop_obj->addProprietary($_POST['username'], $_POST['password1'], $_POST['email'], true, $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/u.images/" . $_FILES['img-user']['name'][0]);
+    else{
+        $prop_obj = new ProprietariesData("giulliano_php", "");
+        $prop_obj->addProprietary($_POST['username'], $_POST['password1'], $_POST['email'], true, $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/media/usr-icon.png");
+    }
     $prop_obj->sendCheckEmail($_POST['username']);
 }
 ?>
@@ -32,13 +41,13 @@ else if($_POST['account-mode'] == "proprietary"){
     <title>LPGP Oficial Server</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="./css/new-layout.css">
-    <script src="./js/main-script.js"></script>
-    <link rel="stylesheet" href="./bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" href="./bootstrap/font-awesome.min.css">
-    <script src="./bootstrap/jquery-3.3.1.slim.min.js"></script>
-    <script src="./bootstrap/bootstrap.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="../css/new-layout.css">
+    <script src="../js/main-script.js"></script>
+    <link rel="stylesheet" href="../bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../bootstrap/font-awesome.min.css">
+    <script src="../bootstrap/jquery-3.3.1.slim.min.js"></script>
+    <script src="../bootstrap/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
@@ -75,22 +84,22 @@ else if($_POST['account-mode'] == "proprietary"){
             var content = $(this).val();
             if(content.length <= 7){
                 $("#err-lb-passwd1").text("Please choose a password with more then 7 characters.");
-                $("#err-lb-passwd1").show();
+                $("#err-lb-passwd1").css("visibility", "visible");
             }
             else if(content != $("#password2").val()){
                 $("#err-lb-passwd1").text("The passwords doesn't match");
-                $("#err-lb-passwd1").show();
+                $("#err-lb-passwd1").css("visibility", "visible");
             }
-            else $("#err-lb-passwd1").hide();
+            else $("#err-lb-passwd1").css("visibility", "hidden");
         });
 
         $(document).on("change", "#username", function(){
             var content = $(this).val();
             if(content.length <= 0){
                 $("#err-lb-username").text("Please choose a username!");
-                $("#err-lb-username").show();
+                $("#err-lb-username").css("visibility", "visible");
             }
-            else $("#err-lb-username").hide();
+            else $("#err-lb-username").css("visibility", "hidden");
         });
 
         $(document).on("change", "#email", function(){

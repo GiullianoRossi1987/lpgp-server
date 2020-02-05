@@ -73,7 +73,7 @@
         <div class="row-main row">
             <div class="col-7 clear-content">
                 <h1>Check your email <?php echo $_SESSION['user'];?></h1>
-                <br>s
+                <br>
                 <form action="check_email.php" method="post">
                     <label for="code" class="form-label">
                         <h4>Insert your e-mail code</h4>

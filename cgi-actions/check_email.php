@@ -5,8 +5,6 @@ session_start();
 use Core\UsersData;
 use Core\ProprietariesData;
 
-
-
 if(array_key_exists('btn-resend', $_POST)){
     if($_SESSION['mode'] == "normie"){
         $usr_obj = new UsersData("giulliano_php", "");
@@ -39,8 +37,12 @@ else if(array_key_exists("bt-code", $_POST)){
         }
         else{
             echo "<script>showError(\"Invalid Code\");</script>";
+            echo "<h1>Error</h1>";
             echo "<button class=\"darkble-btn btn default-btn\" onclick=\"window.location.replace('https://localhost/lpgp-server/cgi-actions/check-email-stp1.php');\">Return</button>";
         }
     }
+}
+else{
+    echo "Error";
 }
 ?>

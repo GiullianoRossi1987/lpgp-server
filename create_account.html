@@ -50,13 +50,32 @@
             var content = $(this).val();
             if(content.length <= 7){
                 $("#err-lb-passwd1").text("Please choose a password with more then 7 characters.");
-                $("#err-lb-passwd1").show();
+                $("#err-lb-passwd1").css("visibility", "visible");
             }
             else if(content != $("#password2").val()){
                 $("#err-lb-passwd1").text("The passwords doesn't match");
-                $("#err-lb-passwd1").show();
+                $("#err-lb-passwd1").css("visibility", "visible");
             }
-            else $("#err-lb-passwd1").hide();
+            else{
+                $("#err-lb-passwd1").css("visibility", "hidden");
+                $("#err-lb-passwd2").css("visibility", "hidden");
+            }
+        });
+
+        $(document).on("change", "#password2", function(){
+            var content = $(this).val();
+            if(content.length <= 7){
+                $("#err-lb-passwd2").text("Please choose a password with more then 7 characters.");
+                $("#err-lb-passwd2").css("visibility", "visible");
+            }
+            else if(content != $("#password1").val()){
+                $("#err-lb-passwd2").text("The passwords doesn't match");
+                $("#err-lb-passwd2").css("visibility", "visible");
+            }
+            else {
+                $("#err-lb-passwd2").css("visibility", "hidden");
+                $("#err-lb-passwd1").css("visibility", "hidden");
+            }
         });
 
         $(document).on("change", "#username", function(){

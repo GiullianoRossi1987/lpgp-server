@@ -742,8 +742,6 @@ class ProprietariesData extends DatabaseConnection{
         if(!$this->checkProprietaryExists($proprietary)) throw new ProprietaryNotFound("There's no proprietary '$proprietary'", 1);
         $checked_vl = $checked ? 1: 0;
         $qr_ch = $this->connection->query("UPDATE tb_proprietaries SET checked = $checked_vl WHERE nm_proprietary = \"$proprietary\";");
-        unset($checked_vl);
-        unset($qr_ch);
      }
 
      /**
