@@ -24,6 +24,8 @@
     margin-left: 10px;
     margin-right: 20px;
     position: absolute;
+    transition: background-color 2.1s ease-in;
+    transition: color 1s ease;
 }
 
 .user-icon{
@@ -299,4 +301,44 @@
     padding: 30px 33px;
     margin-top: 10px;
     margin-bottom: 40px;
+}
+
+.default-btn{
+    background-color: initial;
+    border: 1px solid black !important;
+    font-family: Cantarell;
+}
+
+.error-btndft{
+    background-color: rgb(238, 66, 66) !important;
+    color: whitesmoke !important;
+    border-color: rgb(238, 66, 66);
+    border-radius: 10%;
+    padding: 10px 14px;
+    transition: padding 1s linear;
+}
+
+.error-btndft:hover{
+    transition: background-color 1s ease;
+    transition: color 2s ease-in;
+    transition: border-color 1s ease-out;
+    transition: padding 1s ease-in-out;
+    border-color: #ff0000;
+    background-color: #ff0000;
+    color: #ffffff;
+    padding: 14px 18px;
+}
+
+.carousel-item{
+    transition: all 2s ease;
+}
+
+.carousel-control-prev + .carousel-control-next + .carousel-indicators{
+    width: 50% !important;
+    position: relative !important;
+}
+
+#mainCarousel{
+    width: 80%;
+    background-color: rgb(51, 51, 71);
 }

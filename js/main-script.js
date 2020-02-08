@@ -82,7 +82,13 @@ function setAccountOpts(ext_fls = false){
 
         local_opts.appendChild(login_opt);
         local_opts.appendChild(ct_accopt);
-        document.querySelector("#account-opts img").remove();
+        try{
+            document.querySelector(".user-icon").remove();
+        }
+        catch(error){
+            console.log("There's no image to remove!");
+        }
+        document.querySelector("#nm-tmp").remove();
         var sp = document.createElement("span");
         sp.innerHTML = "Account";
         document.querySelector("#account-opts").appendChild(sp);
