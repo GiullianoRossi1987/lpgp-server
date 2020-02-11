@@ -82,8 +82,6 @@ use function JSHandler\sendUserLogged;
 
 sendUserLogged();
 
-die("<button class=\"btn default-btn error-btndft\"> Testing CSS</button>"); // tmp
-
 if(array_key_exists('btn-resend', $_POST)){
     if($_SESSION['mode'] == "normie"){
         $usr_obj = new UsersData("giulliano_php", "");

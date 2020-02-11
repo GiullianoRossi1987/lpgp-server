@@ -66,8 +66,8 @@ function setAccountOpts(ext_fls = false){
         if(ext_fls) img.src = "." + getLinkedUserIcon();
         else img.src = getLinkedUserIcon();
         img.classList.add("user-icon");
-        local_opt_btn.appendChild(img);
         document.querySelector("#account-opts span").remove();
+        local_opt_btn.appendChild(img);
     }
     else{
         var login_opt = document.createElement("a");
@@ -88,7 +88,7 @@ function setAccountOpts(ext_fls = false){
         catch(error){
             console.log("There's no image to remove!");
         }
-        document.querySelector("#nm-tmp").remove();
+        document.querySelector(".nm-tmp").remove();
         var sp = document.createElement("span");
         sp.innerHTML = "Account";
         document.querySelector("#account-opts").appendChild(sp);
@@ -137,7 +137,7 @@ function setSignatureOpts(){
         login_need.href = "http://localhost/lpgp-server/login.html";
         login_need.classList.add("dropdown-item");
         local_opts.appendChild(login_need);
-        
+        delete(login_need);
     }
 }
 

@@ -11,7 +11,7 @@ else{
     session_unset();
     session_destroy();
     echo "<script src=\"../js/main-script.js\"></script>";
-    echo "<script>resetVals();\nwindow.location.replace('http://localhost/lpgp-server/index.html');</script>";
+    echo "<script>resetVals();\nwindow.location.replace('https://localhost/lpgp-server/index.html');</script>";
 }
 ?>
 <!DOCTYPE html>

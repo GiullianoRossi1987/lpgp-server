@@ -333,12 +333,86 @@
     transition: all 2s ease;
 }
 
-.carousel-control-prev + .carousel-control-next + .carousel-indicators{
-    width: 50% !important;
-    position: relative !important;
-}
 
 #mainCarousel{
-    width: 80%;
     background-color: rgb(51, 51, 71);
+}
+
+.carousel-container{
+    background-color: rgb(51, 51, 71);
+}
+
+.carousel-indicators{
+    background-color: #000000;
+    opacity: .51;
+    transition: opacity 2000ms linear;
+}
+
+.carousel-indicators:hover{
+    opacity: 1;
+    transition-timing-function: ease-in;
+    transition-delay: 200ms;
+}
+
+
+.contitle {
+    transition: opacity 2s ease;
+    opacity: 0;
+    background-color: rgb(51, 51, 71);
+    color: #ffffff;
+    width: 80%;
+    font-size: 100px;
+    height: 100px;
+    transition: padding 1s linear;
+}
+
+.transitor:active{
+    padding: 10px 20px;
+    transition: padding 1s linear;
+}
+
+.oncontent{
+    margin-left: 10%;
+    text-align: center;
+}
+
+.carousel-control-prev ~ .carousel-control-next *{
+    opacity: .51 !important;
+    transition: opacity 2000ms linear;
+    background-color: #0000;
+}
+
+.carousel-control-prev ~ .carousel-control-next *:hover{
+    opacity: 1 !important;
+    transition: opacity 2000ms linear;
+}
+
+#headtitle{
+    position: relative;
+    margin-left: 40% !important;
+    font-size: 56px !important;
+    margin-top: 0;
+    color: #fff;
+}
+
+#next-carousel {
+    opacity: .26;
+    transition: opacity 1s linear;
+    background-color: #000000;
+}
+
+#prev-carousel{
+    opacity: .26;
+    transition: opacity 1s linear;
+    background-color: #000000;
+}
+
+#prev-carousel:hover{
+    opacity: .51;
+    transition-delay: 2s;
+}
+
+#next-carousel:hover{
+    opacity: .51;
+    transition-delay: 2s;
 }
