@@ -1,3 +1,10 @@
+<?php
+require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
+
+use function JSHandler\sendUserLogged;
+
+sendUserLogged();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

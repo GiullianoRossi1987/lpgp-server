@@ -81,7 +81,7 @@ namespace ServersExceptions{
 }
 
 namespace AppExceptions{
-	use FFI\Exception;
+	use Exception;
 
 	/**
 	 * <Exception> Thrown when the APP's manager class try to work with a APP at the database, however that APP doens't exists.
