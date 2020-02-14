@@ -210,12 +210,39 @@
                     <hr>
                     <h4>Choose a account type: </h4>
                     <br>
-                    <div class="form-check form-check-inline">
-                        <input type="radio" name="account-mode" class="form-check-input" value="normal" id="normie-rd">
-                        <label for="normie-rd" class="form-label">Normal user</label>
+                    <div class="form-check form-check-inline flex-opt-acc">
+                        <div class="types-opts">
+                            <div class="type-opt">
+                                <input type="radio" name="account-mode" class="form-check-input type-inp" value="proprietary" id="prop-rd">
+                                <label for="prop-rd" class="form-label prop opt-lb"></label>
+                            </div>
+                            <div class="type-opt">
+                                <input type="radio" name="account-mode" class="form-check-input type-inp" value="normal" id="normie-rd">
+                                <label for="normie-rd" class="form-label normie-flex-rb opt-lb"></label>
+                            </div>
+                        </div>
                         <br>
-                        <input type="radio" name="account-mode" class="form-check-input" value="proprietary" id="prop-rd">
-                        <label for="prop-rd" class="form-label">Proprietary</label>
+                        <a data-toggle="collapse" href="#typesTB" aria-expanded="false" aria-controls="typesTB" class="collapse-a" class="info">
+                        </a>
+                        <br>
+                        <div class="collapse" id="typesTB" aria-hidden="true" style="visibility: hidden;">
+                            <h3>What's account types?</h3>
+                            <hr>
+                            <p>
+                                The account types are the ways to control the actions of each type of user,
+                                There're two account types:
+                                <ol>
+                                    <li>
+                                    <h6>Normal account:</h6>
+                                    <p>
+                                        That account type's the more 
+                                    </p>
+                                    </li>
+                                </ol>
+                            </p>
+                            <table>
+                            </table>
+                        </div>
                     </div>
                     <br>
                     <h4>Choose your profile image</h4>
@@ -223,8 +250,7 @@
                     <div class="img-select-container">
                         <div class="img-radio-default">
                             <input type="radio" class="form-check" id="default-img" name="img-user" value="default-img" checked>
-                            <label for="default-img" id="default-img">
-                                <img src="./media/usr-icon.png" alt="default-image" width="80px" height="80px">
+                            <label for="default-img" id="default-img-lb">
                             </label>
                         </div>
                         <br>

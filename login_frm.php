@@ -1,3 +1,17 @@
+<?php
+require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
+
+use function JSHandler\sendUserLogged;
+use templateSystem\ErrorTemplate;
+
+sendUserLogged();
+if(isset($_SESSION['logged-user']) && $_SESSION['logged-user']){
+    $err = $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/templates/500-error-internal.html";
+    $tpl = new ErrorTemplate($err, "UNKNOWN ERROR: that page souldn't appear to a logged user!", "login_frm.php", null, "<a role=\"button\" class=\"default-btn-err btn\" href=\"https://localhost/lpgp-server\"></a>");
+    die($tpl->parseFile());
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,7 +27,7 @@
     <link rel="stylesheet" href="./bootstrap/font-awesome.min.css">
     <script src="./bootstrap/jquery-3.3.1.slim.min.js"></script>
     <script src="./bootstrap/bootstrap.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
@@ -35,6 +49,17 @@
             if(passwd_vl == "text") passwd_vl = "password";
             else passwd_vl = "text";
         });
+
+        $(document).on("change", "#password", function(){
+            var vl = $("#password").val();
+            if(vl.length <= 0){
+                $("#err-lb").text("Please choose a password!");
+                $("#err-lb").css("visibility", "visible");
+            }
+            else{
+                $("#err-lb").css("visibility", "none");
+            }
+        });
     </script>
     <div class="container-fluid header-container" role="banner" style="background-color: rgb(51, 51, 71); position: absolute;">
         <div class="col-12 header" style="height: 71px">
@@ -55,9 +80,9 @@
                     Help
                 </button>
                 <div class="dropdown-menu opts" aria-labelledby="help-opt">
-                    <a href="http://localhost/lpgp-server/docs/" class="dropdown-item">Documentation</a>
-                    <a href="http://localhost/lpgp-server/about.html" class="dropdown-item">About Us</a>
-                    <a href="http://localhost/lpgp-server/contact-us.html" class="dropdown-item">Contact Us</a>
+                    <a href="https://localhost/lpgp-server/docs/" class="dropdown-item">Documentation</a>
+                    <a href="https://localhost/lpgp-server/about.html" class="dropdown-item">About Us</a>
+                    <a href="https://localhost/lpgp-server/contact-us.html" class="dropdown-item">Contact Us</a>
                 </div>
             </div>
         </div>
@@ -83,6 +108,10 @@
                         <button class="btn btn-secondary" id="show-passwd" type="button">
                             Show Password
                         </button>
+                    </label>
+                    <label for="password">
+                        <small id="err-lb" style="visibility: none" class="error-lb">
+                        </small>
                     </label>
                     <br>
                     <hr>

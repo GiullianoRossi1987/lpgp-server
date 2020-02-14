@@ -109,12 +109,6 @@
     background-color: white;
 }
 
-/* .social-group{
-    position: absolute !important;
-    left: 90%;
-    height: 55px;
-} */
-
 #facebook-btn{
     background-image: url("../media/stand-by-facebook.png");
     background-repeat: no-repeat;
@@ -245,7 +239,7 @@
     display: inline !important;    
 }
 
-#default-img{
+#default-img-lb{
     background-image: url("../media/usr-icon.png");
     background-size: cover;
     background-repeat: no-repeat;
@@ -258,10 +252,6 @@
 .img-radio-default:hover input ~.checkmark{
     background-color: #ccc;
     transition: background-color 200ms linear;
-}
-
-.img-radio-default ~ input[type='radio']:checked{
-    background-color: green !important;
 }
 
 
@@ -415,4 +405,107 @@
 #next-carousel:hover{
     opacity: .51;
     transition-delay: 2s;
+}
+
+
+.types-opts * {
+    display: inline;
+}
+
+.type-opt{
+    border: 1px solid black;
+    height: 90px !important;
+    width: 150px !important;
+    margin-left: 10px;
+    margin-right: 10px;
+    box-sizing: border-box;
+    box-shadow: gray;
+    float: left;
+}
+
+.opt-lb{
+    display: block;
+    text-indent: 100%;
+    white-space: nowrap;
+    position: absolute;
+    background: no-repeat center center #ccc;
+    cursor: pointer;
+    margin-top: -25px;
+    width: 150px;
+    height: 90px;
+    opacity: 0.55;
+}
+
+.type-opt input{
+    opacity: 0.55;
+    visibility: hidden;
+}
+
+.prop{
+    background-image: url("../media/proprietary.png") !important;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.normie-flex-rb{
+    background-image: url("../media/usr.png") !important;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.type-opt input:hover ~ .opt-lb{
+    outline: 4px dotted blue !important;
+    opacity: 1;
+}
+
+.type-opt input:checked + .opt-lb{
+    outline: 5px solid blue !important;
+    opacity: 1;
+}
+
+.info{
+    background-image: url("../media/info-model.svg.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.info-sm{
+    width: 100px !important;
+    height: 100px !important;
+}
+
+.img-radio-default input:checked + #default-img{
+    outline: green solid 2px;
+    transition: outline 1s linear;
+}
+
+.img-radio-default{
+    margin-bottom: 40px;
+    padding: 10px 14px;
+}
+
+.img-radio-default input:hover + #default-img{
+    outline: green dotted 2px;
+}
+
+#default-img-lb{
+    position: absolute !important;
+    margin-top: -25px !important;
+    display: block;
+    box-sizing: border-box;
+    width: 80px;
+    height: 80px;
+    margin-left: -8px;
+    margin-bottom: 20px !important;
+    cursor: pointer;
+    padding: 10px 14px; 
+}
+
+
+#default-img-lb::before{
+    content: "The default image";
+    align-content: right;
+    clear: both;
+    position: relative;
+    margin-right: -10px;
 }

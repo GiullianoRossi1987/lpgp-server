@@ -131,7 +131,6 @@ sendUserLogged();
                     <a href="./docs/index.html" class="dropdown-item">Documentation</a>
                     <a href="./about.html" class="dropdown-item">About Us</a>
                     <a href="./contact-us.html" class="dropdown-item">Contact Us</a>
-                    <a href="./devcenter/" class="dropdown-item">DevCenter</a>
                 </div>
             </div>
             <h1 id="headtitle">Home page</h1>

@@ -1663,7 +1663,6 @@ class ErrorTemplate{
     /**
      * That function return the parsed values of the HTML file content. 
      *
-     * Beware it have a lot of IFs :'(
      * @throws NotLoadedFile If the class don't haves a file loaded.
      * @return string|null
      */

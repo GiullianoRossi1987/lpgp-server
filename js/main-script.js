@@ -43,7 +43,7 @@ function setAccountOpts(ext_fls = false){
         var logoff_opt = document.createElement("a");
         var config_opt = document.createElement("a");
 
-        config_opt.href = "http://localhost/lpgp-server/account_config.php";
+        config_opt.href = "http://localhost/lpgp-server/cgi-actions/ch_my_data.php";
         logoff_opt.href = "http://localhost/lpgp-server/cgi-actions/logoff.php";
         account_opt.href = "http://localhost/lpgp-server/cgi-actions/my_account.php";
 
@@ -73,8 +73,8 @@ function setAccountOpts(ext_fls = false){
         var login_opt = document.createElement("a");
         var ct_accopt = document.createElement("a");
 
-        login_opt.href = "http://localhost/lpgp-server/login.html";
-        ct_accopt.href = "http://localhost/lpgp-server/create_account.html";
+        login_opt.href = "http://localhost/lpgp-server/login_frm.php";
+        ct_accopt.href = "http://localhost/lpgp-server/create_account_frm.php";
         login_opt.classList.add("dropdown-item");
         ct_accopt.classList.add("dropdown-item");
         login_opt.innerText = "Make login";
@@ -82,16 +82,21 @@ function setAccountOpts(ext_fls = false){
 
         local_opts.appendChild(login_opt);
         local_opts.appendChild(ct_accopt);
+
+        var err = false;
         try{
             document.querySelector(".user-icon").remove();
+            document.querySelector(".nm-tmp").remove();
         }
         catch(error){
             console.log("There's no image to remove!");
+            err = true;
         }
-        document.querySelector(".nm-tmp").remove();
-        var sp = document.createElement("span");
-        sp.innerHTML = "Account";
-        document.querySelector("#account-opts").appendChild(sp);
+        if(!err){
+            var sp = document.createElement("span");
+            sp.innerHTML = "Account";
+            document.querySelector("#account-opts").appendChild(sp);
+        }
     }
 }
 

@@ -23,5 +23,5 @@ else if($_POST['account-type'] == "proprietary"){
     sendUserLogged();
 }
 if($_SESSION['checked'] == "false") echo "<script>window.location.replace(\"http://localhost/lpgp-server/cgi-actions/check-email-stp1.php\");</script>";
-else echo "<script>window.location.replace(\"http://localhost/lpgp-server/index.html\");</script>";
+else echo "<script>window.location.replace(\"http://localhost/lpgp-server/\");</script>";
 ?>
