@@ -222,10 +222,11 @@
                             </div>
                         </div>
                         <br>
-                        <a data-toggle="collapse" href="#typesTB" aria-expanded="false" aria-controls="typesTB" class="collapse-a" class="info">
+                        <a data-toggle="collapse info info-sm" href="#typesTB" aria-expanded="false" aria-controls="typesTB">
+                            a
                         </a>
                         <br>
-                        <div class="collapse" id="typesTB" aria-hidden="true" style="visibility: hidden;">
+                        <div class="collapse" id="typesTB" aria-hidden="true">
                             <h3>What's account types?</h3>
                             <hr>
                             <p>

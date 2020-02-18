@@ -412,6 +412,10 @@
     display: inline;
 }
 
+.types-opts{
+    margin-bottom: 100%;
+}
+
 .type-opt{
     border: 1px solid black;
     height: 90px !important;
@@ -464,9 +468,10 @@
 }
 
 .info{
-    background-image: url("../media/info-model.svg.png");
+    background-image: url("../media/info-model.svg.png") !important;
     background-repeat: no-repeat;
     background-size: cover;
+    display: grid;
 }
 
 .info-sm{

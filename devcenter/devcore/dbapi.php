@@ -180,7 +180,7 @@ class ServersManager extends DatabaseConnection{
 		$qr_del = $this->connection->query("DELETE FROM tb_servers WHERE nm_server = \"$server_nm\";");
 		unset($qr_del);
 	}
-
+	
 	/**
 	 * Removes a server registre from the database searching by the server IP address.
 	 * 
@@ -190,7 +190,6 @@ class ServersManager extends DatabaseConnection{
 	 */
 	public function rmServerIP(string $server_ip){
 		$this->checkNotConnected();
-		
 	}
 }
 
