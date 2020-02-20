@@ -18,9 +18,6 @@ use Core\DatabaseConnection;
 use ProprietariesExceptions\ProprietaryNotFound;
 use LogsSystem\Logger;
 
-use mysqli;
-use mysqli_result;
-
 if(!defined("GL_USR_ACCESS")) define("GL_USR_ACCESS", "server.oth");
 if(!defined("GL_PASS_ACCESS")) define("GL_PASS_ACCESS", "");
 

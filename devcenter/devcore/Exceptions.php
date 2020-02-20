@@ -89,5 +89,21 @@ namespace AppExceptions{
 	class TokenExistsError extends Exception{}
 }
 namespace ScktServerExceptions{
-	
+	// TODO: Document that namespace
+
+	use Exception;
+
+	class InvalidArgs extends Exception{}
+
+	class AcceptionError extends Exception{}
+
+	class CreationError extends Exception{}
+
+	class SocketReadingError extends Exception{}
+
+	class SocketWritingError extends Exception{}
+
+	class ServerNotStarted extends Exception{}
+
+	class ServerAlreadyStarted extends Exception{}
 }
