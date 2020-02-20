@@ -65,16 +65,6 @@ namespace ServersExceptions{
 	class InvalidPort extends Exception{}
 
 	/**
-	 * <Exception> Thrown when the XML configurations manager try to load a invalid server configurations file
-	 */
-	class ConfigXMLError extends Exception{}
-
-	/**
-	 * <Exception> Thrown when the XML configurations class try to export a server configurations file, but had errors with the server info
-	 */
-	class GenerationError extends Exception{}
-
-	/**
 	 * <Exception> Thrown when the XML configurations class try to work with a invalid server configurations file
 	 */
 	class InvalidXML extends Exception{}
@@ -97,14 +87,23 @@ namespace AppExceptions{
 	 * <Exception> Thrown when the APP's manager try to add a APP in the database with a token, but the app token already exists.
 	 */
 	class TokenExistsError extends Exception{}
+}
+namespace ScktServerExceptions{
+	// TODO: Document that namespace
 
-	/**
-	 * <Exception> Thrown when the APP's manager try to work with a APP configurations file, but the file's invalid.
-	 */
-	class ConfigXMLError extends Exception{}
+	use Exception;
 
-	/**
-	 * <Exception> Thrown when the APP's manager try to generate a APP configurations file, but there were errors at the generations.
-	 */
-	class GenerationError extends Exception{}
+	class InvalidArgs extends Exception{}
+
+	class AcceptionError extends Exception{}
+
+	class CreationError extends Exception{}
+
+	class SocketReadingError extends Exception{}
+
+	class SocketWritingError extends Exception{}
+
+	class ServerNotStarted extends Exception{}
+
+	class ServerAlreadyStarted extends Exception{}
 }

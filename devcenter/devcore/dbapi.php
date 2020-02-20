@@ -3,11 +3,10 @@
 namespace Database;
 require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/devcenter/devcore/Exceptions.php";
 require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Exception.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Exceptions.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/logs-system.php";
 
 use ServersExceptions\ServerNotFound;
-use ServersExceptions\ConfigXMLError;
-use ServersExceptions\GenerationError;
 use ServersExceptions\InvalidIP;
 use ServersExceptions\InvalidPort;
 use ServersExceptions\InvalidXML;
@@ -15,26 +14,19 @@ use ServersExceptions\ServerAlreadyExists;
 use ServersExceptions\TokenAuthError;
 use ServersExceptions\TokenExistsError;
 
-use AppExceptions\AppNotFound;
-use AppExceptions\ConfigXMLError as AppXMLConfigError;
-use AppExceptions\GenerationError as AppGenerationError;
-use AppExceptions\TokenAuthError as AppTokenAuthError;
-use AppExceptions\TokenExistsError as AppTokkenExistsError;
-
 use Core\DatabaseConnection;
-
 use ProprietariesExceptions\ProprietaryNotFound;
+use LogsSystem\Logger;
 
-use mysqli;
-use mysqli_result;
-
-define("GL_USR_ACCESS", "server.oth");
-define("GL_PASS_ACCESS", "");
+if(!defined("GL_USR_ACCESS")) define("GL_USR_ACCESS", "server.oth");
+if(!defined("GL_PASS_ACCESS")) define("GL_PASS_ACCESS", "");
 
 /**
  * That class manages all the registred servers at the MySQL database. That class just have new methods to manage all the servers.
  */
 class ServersManager extends DatabaseConnection{
+
+	const EMAIL_USING = "giulliano.scatalon.rossi@gmail.com";
 
 	/**
 	 * That function checks if a server exists in the database, the query's made using the server name. To check if the server exists
@@ -190,6 +182,80 @@ class ServersManager extends DatabaseConnection{
 	 */
 	public function rmServerIP(string $server_ip){
 		$this->checkNotConnected();
+		if(!$this->ckServerIPEx($server_ip)) throw new ServerNotFound($server_ip, 1);
+		$qr_del = $this->connection->query("DELETE FROM tb_servers WHERE vl_ip = \"$server_ip\";");
+		unset($qr_del);
+	}
+	
+	/**
+	 * Changes a server name. If the new name is already being used by another server will throw a error.
+	 * @param string $server_nm The server to change the name
+	 * @param string $new_name The new server name
+	 * @throws ServerNotFound If the selected server don't exist.
+	 * @throws ServerAlreadyExists If the new server's already in use.
+	 * @return void
+	 */
+	public function chServerName(string $server_nm, string $new_name){
+		$this->checkNotConnected();
+		if(!$this->ckServerEx($server_nm)) throw new ServerNotFound($server_nm, 1);
+		if($this->ckServerEx($new_name)) throw new ServerAlreadyExists($new_name, 1);
+		$qr_ch = $this->connection->query("UPDATE tb_servers SET nm_server = \"$new_name\" WHERE nm_server = \"$server_nm\";");
+		unset($qr_ch);
+	}
+
+	/**
+	 * Changes the server IP address. If the IP address is already in use, then will throw a exception.
+	 * 
+	 * @param string $server_nm The server name to change the IP address
+	 * @param string $ip The new IP address to the server
+	 * @throws ServerNotFound If the selected server don't exist
+	 * @throws ServerAlreadyExists If the new IP address is already in use.
+	 * @return void
+	 */
+	public function chServerIP(string $server_nm, string $ip){
+		$this->checkNotConnected();
+		if(!$this->ckServerEx($server_nm)) throw new ServerNotFound($server_nm, 1);
+		if($this->ckServerIPEx($ip)) throw new ServerAlreadyExists($ip, 1);
+		$ch_qr = $this->connection->query("UPDATE tb_servers SET vl_ip = \"$ip\" WHERE nm_server = \"$server_nm\";");
+		unset($ch_qr);
+	}
+
+	/**
+	 * Generates a new token for a server, and aply it to the server.
+	 * 
+	 * @param string $nm_server The server to generate the new token
+	 * @throws ServerNotFound If the selected server don't exist.
+	 * @return void
+	 */
+	public function regenServerTK(string $nm_server){
+		$this->checkNotConnected();
+		if(!$this->ckServerEx($nm_server)) throw new ServerNotFound($nm_server, 1);
+		$new_tk = $this->genToken();
+		$qr_ch = $this->connection->query("UPDATE tb_servers SET tk_server = \"$new_tk\" WHERE nm_server = \"$nm_server\";");
+		unset($qr_ch);
+		unset($new_tk);
+	}
+
+	/**
+	 * Sends the server token to the server Proprietary email. It will use a default template for sending the email.
+	 * @param string $nm_server The server name to send the token to the proprietary.
+	 * @throws ServerNotFound If the selected server don't exist.
+	 * @return void;
+	 */
+	public function sendSMPTTK(string $nm_server){
+		$this->checkNotConnected();
+		if(!$this->ckServerEx($nm_server)) throw new ServerNotFound($nm_server, 1);
+		$data = $this->connection->query("SELECT prp.nm_proprietary \"proprietary\", prp.vl_email \"email\", srv.tk_server \"token\" FROM tb_servers as srv INNER JOIN tb_proprietaries as prp ON srv.id_proprietary = prp.cd_proprietary WHERE nm_server = \"$nm_server\";")->fetch_array();
+		$headers = "MIME-Version: 1.0\n";
+		$headers .= "Content-type: text/html; charset=ISO-8859\n";
+		$headers .= "From: " . self::EMAIL_USING . "\n";
+		$headers .= "Cc: " . $data['email'] . "\n";
+		$content = "<body>\n";
+		$content .= "    <h1>Your server ($nm_server)</h1>\n";
+		$content .= "    <h3>That's the access token of your server, " . $data['proprietary'] . "</h3>\n";
+		$content .= "    <p>Your access token is: <b>" . $data['token'] . "</b></p>";
+		$content .= "</body>";
+		mail($data['email'], "Your server token [LPGP OFFICIAL]", $content, $headers);
 	}
 }
 
