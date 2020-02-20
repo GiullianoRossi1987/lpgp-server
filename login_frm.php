@@ -125,7 +125,7 @@ if(isset($_SESSION['logged-user']) && $_SESSION['logged-user']){
                     <hr>
                     <button type="submit" class="btn btn-success btn-block">Login</button>
                     <small>
-                        <a href="https://localhost/lpgp-server/create_account.html" target="_self">
+                        <a href="https://localhost/lpgp-server/create_account_frm.php" target="_self">
                             Don't have a account? Create one!
                         </a>
                     </small>

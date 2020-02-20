@@ -75,7 +75,7 @@ $inpt = "<input type=\"hidden\" name=\"prop-id\" value=\"$id\">";
                     Help
                 </button>
                 <div class="dropdown-menu opts" aria-labelledby="help-opt">
-                    <a href="./docs/index.html" class="dropdown-item">Documentation</a>
+                    <a href="./docs/index.php" class="dropdown-item">Documentation</a>
                     <a href="./about.html" class="dropdown-item">About Us</a>
                     <a href="./contact-us.html" class="dropdown-item">Contact Us</a>
                 </div>

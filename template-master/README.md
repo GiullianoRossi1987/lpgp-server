@@ -651,7 +651,7 @@ Agora vamos ao respectivo arquivo PHP:
   require_once("lib/raelgc/view/Template.php");
   use raelgc\view\Template;
 
-  $tpl = new Template("index.html");
+  $tpl = new Template("index.php");
 
   // Array de cidades
   $cidades = array(0 => "Cidade 0", 1 => "Cidade 1", 2 => "Cidade 2");
@@ -1011,7 +1011,7 @@ A segunda vantagem é poder gerenciar o erro, se desejarmos, e fazermos com que 
   require_once("lib/raelgc/view/Template.php");
   use raelgc\view\Template;
 
-  $tpl = new Template("index.html");
+  $tpl = new Template("index.php");
 
   // Tentando acessar variável que não existe
   try {

@@ -124,7 +124,7 @@ catch(Exception $e){
                     Help
                 </button>
                 <div class="dropdown-menu opts" aria-labelledby="help-opt">
-                    <a href="./docs/index.html" class="dropdown-item">Documentation</a>
+                    <a href="./docs/index.php" class="dropdown-item">Documentation</a>
                     <a href="./about.html" class="dropdown-item">About Us</a>
                     <a href="./contact-us.html" class="dropdown-item">Contact Us</a>
                 </div>
@@ -139,7 +139,7 @@ catch(Exception $e){
             <div class="col-7 clear-content" style="position: absolute; margin-left: 21%;">
 				<h1>Your signature was created successfully!</h1>
                 <a href="https://localhost/lpgp-server/cgi-actions/my_signatures.php" role="button" class="btn btn-lg bt-primary">See my signatures</a>
-				<a href="https://localhost/lpgp-server/index.html" role="button" class="btn btn-block btn-success">Get back to the home</a>
+				<a href="https://localhost/lpgp-server/index.php" role="button" class="btn btn-block btn-success">Get back to the home</a>
             </div>
         </div>
     </div>
