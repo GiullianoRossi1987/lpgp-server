@@ -84,3 +84,76 @@ namespace ClientConfGen{
 		}
 	}
 }
+
+namespace Server{
+	use Exception;
+
+	/**
+	 * <Exception> Thrown when the server class try to create a socket, but had errors when called socket_create method
+	 */
+	class ServerCreationError extends Exception{
+
+		/**
+		 * Starts the Exception setting the error message with a default model. 
+		 *
+		 * @param string $socket_err The error message of the socket method
+		 * @param integer $code The error code
+		 */
+		public function __construct(string $socket_err, int $code = 1){
+			parent::__construct("Can't start the server [Server::ServerSocket]. ERROR: $socket_err", $code);
+		}
+	}
+
+	/**
+	 * <Exception> Thrown when the server class have errors with any action at the loop method after accepting any connection
+	 * 
+	 */
+	class ServerRuntimeEror extends Exception{
+
+		public function __construct(string $sock_err, int $code = 1){
+			parent::__construct("A error occoured [Server::ServerSocket]. ERROR: $sock_err", $code);
+		}
+	}
+
+	/**
+	 * <Exception> Thrown when the server try to receive the client message, but had errors receiving
+	 */
+	class RecvError extends Exception{
+
+		public function __construct(string $sock_err, int $code = 1){
+			parent::__construct("Can't receive the client data [Server::ServerSocket]. ERROR: $sock_err", $code);
+		}
+	}
+
+	/**
+	 * <Exception> Thrown when the server try to send data to the client, but had errors sending
+	 */
+	class SendError extends Exception{
+
+		public function __construct(string $sock_err, int $code = 1){
+			parent::__construct("Can't send data [Server::ServerSocket]. ERROR: $sock_err", $code);
+		}
+	}
+
+	class ServerCreatedError extends Exception{
+
+	}
+
+	class ServerBindingError extends Exception{
+
+		public function __construct(string $sock_err, int $code = 1){
+			parent::__construct("Can't bind the server address [Server::ServerSocket]. ERROR: $sock_err", $code);
+		}
+	}
+
+	class ServerClosingError extends Exception{
+
+		public function __construct(string $sock_err, int $code = 1){
+			parent::__construct("Can't close the server [Server::ServerSocket]; ERROR: $sock_err", $code);
+		}
+	}
+
+	class ClientAuthError extends Exception{}
+
+	class DataRecvError extends Exception{}
+}

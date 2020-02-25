@@ -1,7 +1,15 @@
 <?php
 namespace ClientsDatabase{
-	require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/logs-system.php";
-	require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
+	use Exception;
+
+	try{
+		require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/logs-system.php";
+		require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
+	}
+	catch(Exception $e){
+		require_once "core/logs-system.php";
+		require_once "core/Core.php";
+	}
 
 	use LogsSystem\Logger;
 	use Core\DatabaseConnection;
@@ -167,6 +175,19 @@ namespace ClientsDatabase{
 			$qr = $this->connection->query("UPDATE tb_clients SET vl_root = $vl WHERE nm_client = \"$client\";");
 			unset($qr);
 			unset($vl);
+		}
+
+		/**
+		 * Authenticate the client data, normally received from the socket server.
+		 * @param string $client_nm The client name reference.
+		 * @param string $token The client token
+		 * @return bool
+		 */
+		public function authClient(string $client_nm, string $token){
+			$this->checkNotConnected();
+			if(!$this->ckClientEx($client_nm)) return false;  // the client doesn't exist
+			$or_tk = $this->connection->query("SELECT tk_client FROM tb_clients WHERE nm_client = \"$client_nm\";")->fetch_array();
+			return $or_tk['tk_client'] == $token;
 		}
 	}
 }

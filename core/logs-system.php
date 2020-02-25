@@ -1,7 +1,12 @@
 <?php
 namespace LogsSystem;
-
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Exceptions.php";
+use Exception;
+try{
+    require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Exceptions.php";
+}
+catch(Exception $e){
+    require_once "core/Exceptions.php";
+}
 
 use LogsErrors\InvalidFile;
 use LogsErrors\LogsFileNotLoaded;
