@@ -112,7 +112,7 @@ namespace Server{
 			if(!$this->started) throw new ServerCreatedError("The server hadn't created yet!", 1);
 			$dt_tm = date("Y-m-d H:i:s");
 			$sender = $ext ? "Client" : "Server";
-			$this->connection_logs[] = "[$dt_tm] {$sender} - $data";
+			array_push($this->connection_logs, "[$dt_tm] $sender -> $data");
 		}
 
 		/**
@@ -139,6 +139,29 @@ namespace Server{
 				$this->addLog($responce);
 				socket_close($accepted);
 			}
+		}
+
+		/**
+		 * Starts the class and start the server socket
+		 * @param string $ip The IP address to bind
+		 * @param integer $port The port to bind
+		 * @param integer $type The type of the IP address using, by default it's IPV4 (AF_INET)
+		 * @param integer $stream The stream using for the server.
+		 * @return void
+		 */
+		public function __construct(string $ip = "127.0.0.1", int $port = DFT_PORT_VL, int $type = DFT_TYPE_IP, int $stream = DFT_STREAM){
+			$this->start($ip, $port, $type, $stream);
+		}
+
+		/**
+		 * Destrois the server, after closing it.
+		 * @return void
+		 */
+		public function __destruct(){
+			if($this->started) $this->stop();
+			$this->sock = null;
+			$this->connection_logs = null;
+			$this->connection_info = null;
 		}
 	}
 }

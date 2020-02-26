@@ -13,7 +13,8 @@ namespace ClientsDatabase{
 
 	use LogsSystem\Logger;
 	use Core\DatabaseConnection;
-    use TypeError;
+	use TypeError;
+	use Core\SignaturesData;
 
 	if(!defined("ROOT_USR_ACCESS")) define("ROOT_USR_ACCESS", "client_root");
 	if(!defined("ROOT_PAS_ACCESS")) define("ROOT_PAS_ACCESS", "");
@@ -188,6 +189,55 @@ namespace ClientsDatabase{
 			if(!$this->ckClientEx($client_nm)) return false;  // the client doesn't exist
 			$or_tk = $this->connection->query("SELECT tk_client FROM tb_clients WHERE nm_client = \"$client_nm\";")->fetch_array();
 			return $or_tk['tk_client'] == $token;
+		}
+
+
+		/**
+		 * Creates a filename for the signature file. 
+		 *
+		 * @param int $initial_counter The first contage of the filename (signature-file-$initial_counter)
+		 * @return string
+		 */
+		public static function generateFileNm(int $initial_counter = 0, string $path){
+			$local_counter = $initial_counter;
+			while(true){
+				if(!file_exists("$path/signature-file-". $local_counter . ".lpgp"))
+					break;
+				else $local_counter++;
+			}
+			return "signature-file-".$local_counter . ".lpgp";
+		}
+
+		/**
+		 * Generate a client signature file, with the same script then the signatures generation script. But with a different structure of
+		 * the encoded JSON content.
+		 * 
+		 * @param string $client The client name reference for generate the auth.lpgp file for it
+		 * @param string $path The file path to generate the .lpgp file.
+		 * @param bool $HTML_mode If the file will be available for download. If it's true, then will return a <a> tag with the path to the download.
+		 * @throws ClientNotFound If the client referred doesn't exist.
+		 * @return string The path or the <a> tag for download, or whatever you would want to do with the lpgp file of that client.
+		 */
+		public function genAuth(string $client, string $path, bool $HTML_mode = false){
+			$this->checkNotConnected();
+			if(!$this->ckClientEx($client)) throw new ClientNotFound($client);
+			// generate the file name;
+			$nm = $this->generateFileNm(0, $path);
+			// create the content
+			$con = "";
+			$client_data = $this->connection->query("SELECT tk_client, id_proprietary FROM tb_clients WHERE nm_client = \"$client\";")->fetch_array();
+			$tmp_arr = array();
+			$json_arr = array(
+				"Client" => $client,
+				"Proprietary" => $client_data['id_proprietary'],
+				"Token" => $client_data['tk_client'],
+				"Dt" => date("Y-m-d H:i:s")
+			);
+			$json_con = json_encode($json_arr);
+			for($chr = 0; $chr < strlen($json_con); $chr++) array_push($tmp_arr, (string) ord($json_con[$chr]));
+			$con = implode(SignaturesData::DELIMITER, $tmp_arr);
+			file_put_contents($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/$path/$nm", $con);
+			return $HTML_mode ? "<a href=\"$path/$nm\" download class=\"dft-download-a\">Download</a>" : "$path/$nm";
 		}
 	}
 }
