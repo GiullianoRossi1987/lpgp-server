@@ -1,20 +1,21 @@
 <?php
 namespace Server{
 	use Exception;
-	try {
-		include $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/devcenter/devcore/dbapi.php";
-	}
-	catch(Exception $e){
-		require_once "devcenter/devcore/dbapi.php";
-	}
+	require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/devcenter/devcore/dbapi.php";
+	require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
 
 	use ClientsDatabase\ClientsManager;
+	use Core\SignaturesData;
 
-	if(!defined("MAX_LISTEN")) define("MAX_LISTEN", 5000);
-	if(!defined("PROTOCOLS_F")) define("PROTOCOLS_F", "devcenter/devcore/protocols.json");
-	if(!defined("DFT_TYPE_IP")) define("DFT_TYPE_IP", AF_INET);
-	if(!defined("DFT_STREAM")) define("DFT_STREAM", SOCK_STREAM);
-	if(!defined("DFT_PORT_VL")) define("DFT_PORT_VL", 1987);
+	if(!defined("MAX_LISTEN"))      define("MAX_LISTEN", 5000);
+	if(!defined("PROTOCOLS_F"))     define("PROTOCOLS_F", "devcenter/devcore/protocols.json");
+	if(!defined("DFT_TYPE_IP"))     define("DFT_TYPE_IP", AF_INET);
+	if(!defined("DFT_STREAM"))      define("DFT_STREAM", SOCK_STREAM);
+	if(!defined("DFT_PORT_VL"))     define("DFT_PORT_VL", 1987);
+	if(!defined("ROOT_USR_ACCESS")) define("ROOT_USR_ACCESS", "client_root");
+	if(!defined("NRML_USR_ACCESS")) define("NRML_USR_ACCESS", "client_normal");
+	if(!defined("ROOT_PAS_ACCESS")) define("ROOT_PAS_ACCESS", "");
+	if(!defined("NRML_PAS_ACCESS")) define("NRML_PAS_ACCESS", "");
 
 	/**
 	 * That class have the main functions and procedures for the socket server.
@@ -33,7 +34,7 @@ namespace Server{
 		const HANDSHAKE   = "Welcome to the LPGP official client authentication server.\nPlease send us your client information in the LPGP documents content format.\nExample: '192/168/0/11/98'";
 		const LOGS_FILE   = "logs/server.log";
 		const TALKBACK_EN = TRUE;
-		const DELIMITER   = "/";
+		const DELIMITER   = SignaturesData::DELIMITER;
 
 		/**
 		 * That method create the socket and set it as the $sock attribute.
@@ -101,6 +102,32 @@ namespace Server{
 		}
 
 		/**
+		 * Return the access data to send to the socket client connected.
+		 * @param string $data The same data received for the authentication
+		 * @param string|null $delimiter The delimiter for the username and the password to return. If it's null, then will use the same delimiter then the class delimiter
+		 * @throws DataRecvError If the data received have errors
+		 * @return string
+		 */
+		private function getAccess(string $data, string $delimiter = null){
+			if(!strpos($data, self::DELIMITER)) throw new DataRecvError("The received data isn't valid!", 1);
+			$exp = explode(self::DELIMITER, $data);
+			$json_data = "";
+			for($chr = 0; $chr < count($exp); $chr++) $json_data .= chr((int) $exp[$chr]);
+			$parsed = json_decode($json_data, true);
+			$manager = new ClientsManager("giulliano_php", "");
+			$root = $manager->getConnectionAttr()->query("SELECT vl_root FROM tb_clients WHERE nm_client = \"" . $parsed['ClientName'] . "\";")->fetch_array();
+			if($root['vl_root'] === 1){
+				$tmp = [ROOT_PAS_ACCESS, ROOT_USR_ACCESS];
+				return is_null($delimiter) ? implode(self::DELIMITER, $tmp) : implode($delimiter, $tmp);
+			}
+			else{
+				$tmp = [NRML_PAS_ACCESS, NRML_USR_ACCESS];
+				return is_null($delimiter) ? implode(self::DELIMITER, $tmp) : implode($delimiter, $tmp);
+			}
+
+		}
+
+		/**
 		 * Add a log to the connection_logs;
 		 *
 		 * @param string $data The data sended/received
@@ -134,6 +161,7 @@ namespace Server{
 				if($rtv === false) throw new RecvError(socket_strerror(socket_last_error()));
 				$this->addLog($client_data, true);
 				$responce = $this->authData($client_data) ? "1" : "0";
+				$responce .= "Access: " . $this->getAccess($client_data);
 				$snd = @socket_send($accepted, $responce, 1, 0);
 				if($snd === false) throw new SendError(socket_strerror(socket_last_error()));
 				$this->addLog($responce);

@@ -27,8 +27,8 @@ $usr = new UsersData("giulliano_php", "");
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link rel="stylesheet" href="../css/new-layout.css">
     <script src="../js/main-script.js"></script>
-    <link rel="stylesheet" href="./bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" href="./bootstrap/font-awesome.min.css">
+    <link rel="stylesheet" href="../bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../bootstrap/font-awesome.min.css">
     <script src="../bootstrap/jquery-3.3.1.slim.min.js"></script>
     <script src="../bootstrap/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
