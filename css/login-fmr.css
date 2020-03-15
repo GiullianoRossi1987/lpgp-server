@@ -1,0 +1,33 @@
+input{
+	border: none !important;
+	border-bottom: 1px black solid !important;
+	padding: 5px 8px;
+	transtion: padding 100ms linear;
+	font-family: Verdana;
+}
+
+input:hover{
+	padding: 10px 11px;
+	border: none !important;
+	border-bottom: 1px black solid !important;
+}
+
+#nrml-rd {
+	padding: 15px 18px !important;
+	border: 2px solid black !important;
+	background-color: #ccc;
+	width: 100px;
+	height: 100px;
+	box-sizing: border-box;
+	box-shadow: #ded600;
+	float: left;
+}
+
+#nrml-rd input{
+	visibility: hidden;
+	opacity: .56;
+}
+
+#nmrl-rd + [checked]{
+	background-color: #ded600;
+}

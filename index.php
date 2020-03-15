@@ -2,6 +2,7 @@
 require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
 
 use function JSHandler\sendUserLogged;
+use function JSHandler\setCon1Links;
 
 sendUserLogged();
 ?>
@@ -16,17 +17,20 @@ sendUserLogged();
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link rel="stylesheet" href="./css/new-layout.css">
     <script src="./js/main-script.js"></script>
+    <script src="./js/actions.js"></script>
     <link rel="stylesheet" href="./bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="./bootstrap/font-awesome.min.css">
+    <link rel="stylesheet" href="css/content-style.css">
     <script src="./bootstrap/jquery-3.3.1.slim.min.js"></script>
     <script src="./bootstrap/bootstrap.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <link rel="shortcut icon" href="./media/logo-lpgp.png" type="image/x-icon">
+    <link rel="shortcut icon" href="./media/new-logo.png" type="image/x-icon">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.2/popper.min.js"></script>
+    
 </head>
 <style>
 </style>
@@ -97,20 +101,13 @@ sendUserLogged();
             $("#upload-img-input").hide();
         });
 
-        $(document).scroll(function(){
-            $(".header-container").toggleClass("scrolled", $(this).scrollTop() > $(".header-container").height());
-            $(".default-btn-header").toggleClass("default-btn-header-scrolled", $(this).scrollTop() > $(".header-container").height());
-            $(".opts").toggleClass("opts-scrolled", $(this).scrollTop() > $(".header-container").height());
-
-        });
-
         $("#mainCarousel").carousel({
             interval: 2000,
             direction: left
         });
     </script>
-    <div class="container-fluid header-container" role="banner" style="position: fixed;">
-        <div class="col-12 header" style="height: 71px; transition: background-color 200ms linear;">
+    <div class="container-fluid header-container" role="banner" style="position: relative;">
+        <div class="col-md-12 header col-sm-12" style="height: 71px;">
             <div class="opt-dropdown dropdown login-dropdown">
                 <button type="button" class="btn btn-lg default-btn-header dropdown-toggle" data-toggle="dropdown" id="account-opts" aria-haspopup="true" aria-expanded="false">
                     <span class="nm-tmp">Account</span>
@@ -133,67 +130,38 @@ sendUserLogged();
                     <a href="./contact-us.html" class="dropdown-item">Contact Us</a>
                 </div>
             </div>
-            <h1 id="headtitle">Home page</h1>
-            <!-- TODO: Download the Pooper.js when i'm online -->
+            <br>
         </div>
     </div>
-
-    </div>
-    <br>
-    <hr>
-    <div class="container-fluid container-content" style="position: absolute;">
-        <div class="row-main row">
-            <div class="col-12 clear-content" style="position: absolute;">
-                <h1 id="title-page" class="oncontent transitor contitle" onclick="window.scrollTo(top);">Welcome to the LPGP</h1>
-                <br>
-                <div class="carousel-container col-12" aria-details="Carousel">
-                    <div id="mainCarousel" class="carousel slide" data-ride="carousel">
-                        <ol class="carousel-indicators">
-                            <li data-target="#mainCarousel" data-slide-to="0" class="active"></li>
-                            <li data-target="#mainCarousel" data-slide-to="1"></li>
-                            <li data-target="#mainCarousel" data-slide-to="2"></li>
-                            <li data-target="#mainCarousel" data-slide-to="3"></li>
-                            <li data-target="#mainCarousel" data-slide-to="4"></li>
-                        </ol>
-                        <div class="carousel-inner" role="listbox">
-                            <div class="carousel-item active">
-                                <img src="./media/carrousel/first.png" class="d-block carousel-img"  width="100%" height="900px" alt="First slide">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="./media/carrousel/img2.png" class="d-block carousel-img" width="100%" height="900px" alt="Second slide">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="./media/carrousel/img3.png" class="d-block carousel-img" width="100%" height="900px" alt="Third slide">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="./media/carrousel/img4.png" class="d-block carousel-img" width="100%" height="900px" alt="Fourth slide">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="./media/carrousel/building-sec.jpg" class="d-block carousel-img" width="100%" height="850px" alt="Fifty slide">
-                            </div>
-                        </div>
-                        <a class="carousel-control-prev ctrl-carousel" href="#mainCarousel" role="button" data-slide="prev" id="prev-carousel">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="sr-only">Previous</span>
-                        </a>
-                        <a class="carousel-control-next ctrl-carousel" href="#mainCarousel" role="button" data-slide="next" id="next-carousel">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="sr-only">Next</span>
-                        </a>
-                    </div>
-                </div>
-                <br>
+    <div class="content1 container content">
+        <div class="row rowcontent">
+            <div class="col-12 col-md-12 col-sm-12 col-ls-12 main-header" >
+                <h1 class="anim-appear masthead-heading text-uppercase mb-0" style="color: black; margin-top: 12%;"><u>LPGP</u></h1>
+                <h1 class="masthead-heading text-uppercase mb-0" style="color: black; text-align: center; margin-top: 1%;">Let the golden raven lead you</h1>
             </div>
         </div>
+        <div class="row rowcontentn">
+            <div class="col-12 col-md-12 col-sm-12 content-nrm" id="con2">
+                <div id="logo-ex"></div>
+                <h1>What's LPGP?</h1>
+                <p>
+                    LPGP is a online authenticated certificate. There're so many
+                    other 
+                </p>
+            </div>
+        </div>
+        <hr>
+        <div class="row rowcontentn">
+
+        </div>
     </div>
-    <br>
     <div class="footer-container container">
         <div class="footer-row row">
-            <div class="footer col-12" style="height: 150px; background-color: black; top: 190%; position: absolute; max-width: 100%; left: 0;">
+            <div class="footer col-12">
                 <div class="social-options-grp">
                     <div class="social-option">
                         <a href="https://github.com/GiullianoRossi1987/lpgp-server" target="_blanck" id="github" class="social-option-footer">
-                        <img src="./media/github.png" alt="" width="50px" height="30px"></a>
+                        <img src="./media/github.png" alt="" width="50px" height="30px">Visit our github</a>
                     </div>
                     <div class="social-option-footer">
                         <a href="https://" target='_blanck' id="facebook">

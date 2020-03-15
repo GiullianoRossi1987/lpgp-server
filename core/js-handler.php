@@ -17,9 +17,13 @@ use ProprietariesExceptions\ProprietaryNotFound;
  */
 function sendUserLogged(){
     if(session_status() == PHP_SESSION_NONE) session_start();
-    if(session_status() == PHP_SESSION_NONE || session_status() == PHP_SESSION_DISABLED){
+    if(session_status() == PHP_SESSION_NONE || session_status() == PHP_SESSION_DISABLED || empty($_SESSION) || !isset($_SESSION['user-logged']) || !$_SESSION['user-logged']){  
         // if there's no one logged.
         echo "<script>\nlocalStorage.setItem(\"logged-user\", \"false\");\nlocalStorage.setItem(\"user_mode\", \"null\");\nlocalStorage.setItem(\"checked\", \"null\");\nlocalStorage.setItem(\"user-icon\", \"null\");</script>";
+        $_SESSION['user-logged']  = true;
+        $_SESSION['mode']         = null;
+        $_SESSION['checked']      = null;
+        $_SESSION['user-icon']    = null;
     }
     else{
         $logged_user = $_SESSION['user-logged'];
@@ -67,7 +71,7 @@ function lsSignaturesMA(int $proprietary){
     foreach($signatures as $cd){
         $sig_data = $sig->getSignatureData($cd);
         // TODO Upgrade the layout of the signature card
-        $card = "<div class=\"card signature-card\">\n<div class=\"card-body\">\n<h3 class=\"card-title\"> Signature #$cd</h3>\n<h5 class=\"card-subtitle\">" . $sig_data['dt_creation'] . "\n</h5><div class=\"card-text\"><a href=\"https://localhost/lpgp-server/cgi-actions/get_my_signature.php?id=$cd\">Download</a><br><a href=\"https://localhost/lpgp-server/cgi-actions/ch_signature_data.php?sig_id=$cd\">Configurations</a>\n</div>\n</div><br>";
+        $card = "<div class=\"card signature-card\">\n<div class=\"card-body\">\n<h3 class=\"card-title\"> Signature #$cd</h3>\n<h5 class=\"card-subtitle\">" . $sig_data['dt_creation'] . "\n</h5><div class=\"card-text\"><a href=\"https://localhost/lpgp-server/cgi-actions/get_my_signature.php?id=$cd\">Download</a><br><a href=\"https://localhost/lpgp-server/cgi-actions/ch_signature_data.php?sig_id=$cd\">Configurations</a>\n</div>\n</div>\n</div><br>";
         $all .= "\n$card\n";
     }
     return $all;
@@ -181,5 +185,26 @@ function createSignatureCardAuth(int $sign_ref, bool $valid){
         $card_str .= "</div>";
     }
     return $card_str;
+}
+
+/**
+ * That method adds the links of the option content of the SDK's.
+ * The links can be right to the SDK download page or to the login page.
+ * 
+ * @return string
+ */
+function setCon1Links(){
+    if($_SESSION['user-logged'] && $_SESSION['mode'] == "prop"){
+        return "<ul>\n" .  
+                "   <li>\n<a href=\"./devcenter/sdks/sdks.php\">See our SDK'S</a>\n</li>\n" . 
+                "   <li>\n<a href=\"./devcenter/add-client.php\">First add a client for the System</a></li>\n" .
+                "   <li>\n>a href=\"./devcenter/help.php\">If you have any doubt about the clients</a></li>\n</ul>";
+    }
+    else{
+        return "<ul>\n" .  
+                "   <li>\n<a href=\"./login_frm.php\">See our SDK'S</a>\n</li>\n" . 
+                "   <li>\n<a href=\"./login_frm.php\">First add a client for the System</a></li>\n" .
+                "   <li>\n><a href=\"./login_frm.php\">If you have any doubt about the clients</a></li>\n</ul>\n<h1> But before accessing it you'll need to make login with a proprietary account</h1>\n";
+    }
 }
 ?>

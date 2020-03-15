@@ -1,8 +1,10 @@
 
 .header-container{
-    background-color: rgb(51, 51, 71);
+    background-color: black;
     position: fixed !important;
     z-index: 99;
+    border-bottom-right-radius: 5%;
+    opacity: 1;
 }
 
 .scrolled{
@@ -26,6 +28,9 @@
     position: absolute;
     transition: background-color 2.1s ease-in;
     transition: color 1s ease;
+    border-radius: 5% !important;
+    opacity: 1 !important;
+    fill-opacity: 1;
 }
 
 .user-icon{
@@ -45,7 +50,7 @@
 }
 
 .default-btn-header-scrolled:hover{
-    color: gold !important;
+    color: rgb(222, 214, 0) !important;
     border: 1px white solid !important;
     transition: background-color 200ms linear;
 }
@@ -55,7 +60,7 @@
 .default-btn-header:hover{
     background-color: #ffffff;
     border-color: rgb(51, 51, 71);
-    color: rgb(51, 51, 71) !important;
+    color: black !important;
 }
 
 .default-btn-header-split{
@@ -66,26 +71,21 @@
 .after-opt{ margin-left: 9%;}
 
 .opts{
-    background-color: rgb(51, 51, 71) !important;
+    background-color: black !important;
 }
 
 .opts .dropdown-item{
-    color: white;
+    color: #ded600;
     font-family: Arial;
-    background-color: rgb(51, 51, 71);
+    background-color:  black;
 
 }
 
 .opts .dropdown-item:hover{
     background-color: white;
-    color: rgb(51, 51, 71);
+    color: black;
     transition: background-color 200ms linear;
     transition: color 200ms linear;
-}
-
-.opts-scrolled{
-    background-color: black !important;
-    transition: background-color 200ms linear;
 }
 
 .opts-scrolled .dropdown-item{
@@ -101,8 +101,8 @@
 }   
 
 .container-content{
-    position: absolute;
-    top: 20%;
+    position: relative;
+    
 }
 
 .clear-content{
@@ -267,15 +267,16 @@
     border: 1px black solid;
     background-repeat: no-repeat;
     background-size: cover;
-    width: 200px;
-    height: 200px;
+    background-position: center;
+    height: 300px;
+    width: 300px;
     margin-right: 10px;
+    max-width: 500px !important;
+    max-height: 500px !important;
 }
 
 
-.img-cont{
-    border-right: 2px black solid;
-}
+
 
 .prop-data{
     border: 1px solid black;
@@ -318,49 +319,6 @@
     color: #ffffff;
     padding: 14px 18px;
 }
-
-.carousel-item{
-    transition: all 2s ease;
-}
-
-
-#mainCarousel{
-    background-color: rgb(51, 51, 71);
-}
-
-.carousel-container{
-    background-color: rgb(51, 51, 71);
-}
-
-.carousel-indicators{
-    background-color: #000000;
-    opacity: .51;
-    transition: opacity 2000ms linear;
-}
-
-.carousel-indicators:hover{
-    opacity: 1;
-    transition-timing-function: ease-in;
-    transition-delay: 200ms;
-}
-
-
-.contitle {
-    transition: opacity 2s ease;
-    opacity: 0;
-    background-color: rgb(51, 51, 71);
-    color: #ffffff;
-    width: 80%;
-    font-size: 100px;
-    height: 100px;
-    transition: padding 1s linear;
-}
-
-.transitor:active{
-    padding: 10px 20px;
-    transition: padding 1s linear;
-}
-
 .oncontent{
     margin-left: 10%;
     text-align: center;
@@ -379,32 +337,10 @@
 
 #headtitle{
     position: relative;
-    margin-left: 40% !important;
-    font-size: 56px !important;
+    margin-left: 80% !important;
+    font-size: 36px !important;
     margin-top: 0;
     color: #fff;
-}
-
-#next-carousel {
-    opacity: .26;
-    transition: opacity 1s linear;
-    background-color: #000000;
-}
-
-#prev-carousel{
-    opacity: .26;
-    transition: opacity 1s linear;
-    background-color: #000000;
-}
-
-#prev-carousel:hover{
-    opacity: .51;
-    transition-delay: 2s;
-}
-
-#next-carousel:hover{
-    opacity: .51;
-    transition-delay: 2s;
 }
 
 
@@ -513,4 +449,54 @@
     clear: both;
     position: relative;
     margin-right: -10px;
+}
+
+
+/**
+    Footer fix
+*/
+.footer-container{
+    max-width: 100% !important;
+    position: relative !important;
+    margin-top: 100%;
+}
+
+.footer{
+    position: relative !important;
+    background-color: black;
+    height: 150px;
+}
+
+.container-default{
+    max-width: 100% !important;
+
+}
+
+.data-container{
+    background-color: white;
+    border: 3px solid gold;
+}
+
+.user-data-con .main-col{
+
+    border: 1px solid black;
+}
+
+.user-data-con .main-col{
+    border-radius: 7%;
+}
+
+.account-separator * {
+    border: 1px solid black;
+    border-radius: 3%;
+    padding: 10px 12px;
+    color: black;
+    font-family: Verdana;
+}
+
+.section{
+    border: 1px solid black;
+    border-radius: 5%;
+    padding: 15px 22px;
+    border-top: none !important;
 }

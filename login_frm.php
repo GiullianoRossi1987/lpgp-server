@@ -34,7 +34,8 @@ if(isset($_SESSION['logged-user']) && $_SESSION['logged-user']){
     <link rel="shortcut icon" href="./media/logo-lpgp.png" type="image/x-icon">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.2/popper.min.js"></script>
-
+    <link href="./css/content-style.css" rel="stylesheet">
+    <link rel="stylesheet" href="./css/login-fmr.css">
 </head>
 <body>
     <script>
@@ -61,46 +62,23 @@ if(isset($_SESSION['logged-user']) && $_SESSION['logged-user']){
             }
         });
     </script>
-    <div class="container-fluid header-container" role="banner" style="background-color: rgb(51, 51, 71); position: absolute;">
-        <div class="col-12 header" style="height: 71px">
-            <div class="opt-dropdown dropdown login-dropdown">
-                <button type="button" class="btn btn-lg default-btn-header dropdown-toggle" data-toggle="dropdown" id="account-opts" aria-haspopup="true" aria-expanded="false">
-                    Account
-                </button>
-                <div class="dropdown-menu opts" aria-labelledby="account-opts"></div>
-            </div>
-            <div class="opt-dropdown dropdown after-opt signatures-dropdown">
-                <button class="dropdown-toggle btn btn-lg default-btn-header" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true" id="signature-opts">
-                    Signatures
-                </button>
-                <div class="dropdown-menu opts" aria-labelledby="signature-opts"></div>
-            </div>
-            <div class="opt-dropdown dropdown after-opt help-dropdown" style="margin-left: 12%; position: absolute !important;">
-                <button class="dropdown-toggle btn btn-lg default-btn-header" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true" id="help-opt">
-                    Help
-                </button>
-                <div class="dropdown-menu opts" aria-labelledby="help-opt">
-                    <a href="https://localhost/lpgp-server/docs/" class="dropdown-item">Documentation</a>
-                    <a href="https://localhost/lpgp-server/about.html" class="dropdown-item">About Us</a>
-                    <a href="https://localhost/lpgp-server/contact-us.html" class="dropdown-item">Contact Us</a>
-                </div>
-            </div>
-        </div>
-    </div>
     <br>
-
-    <div class="container-fluid container-content" style="position: absolute;">
+    <div class="container-fluid container-content" style="position: relative;">
         <div class="row-main row">
-            <div class="col-4 clear-content center-content" style="position: absolute; left: 32% !important; top: 30% !important;">
+            <div class="col-4 clear-content center-content" style="position: relative; margin-left: 32% !important; margin-top: 5% !important; border-radius: 6%;">
+                <div id="logo-ex" style="margin-left: 42% !important;"></div>
                 <form action="./cgi-actions/login.php" method="POST">
-                    <h1>Login</h1>
+                    <h1 style="margin-left: 42%;" class="masthead-heading mb-0">Login</h1>
                     <br>
-                    <hr>
-                    <label for="username">Your User Name</label>
+                    <label for="username">
+                        <h5>Your name</h5>
+                    </label>
                     <br>
                     <input type="text" class="form-control" id="username" name="username" placeholder="Username">
                     <br>
-                    <label for="password">Your Password</label>
+                    <label for="password">
+                        <h5>Your Password</h5>
+                    </label>
                     <br>
                     <input type="password" class="form-control default-input" id="password" name="password" placeholder="Password">
                     <br>
@@ -115,17 +93,22 @@ if(isset($_SESSION['logged-user']) && $_SESSION['logged-user']){
                     </label>
                     <br>
                     <hr>
-                    <h3>Are you a: </h3>
+                    <h3>Account type</h3>
+                    <br>
                     <div class="form-check form-check-inline">
-                        <input type="radio" value="normal" name="account-type" class="form-check-input" id="normal-rd">
-                        <label for="normal-rd" class="form-check-label">Normal user</label>
-                        <input type="radio" value="proprietary" name="account-type" class="form-check-input" id="prop-rd" style="margin-left: 5px;">
-                        <label for="prop-rd" class="form-check-label">Proprietary</label>
+                        <div id="nrml-rd">
+                            <input type="radio" value="normal" name="account-type" class="form-check-input" id="normal-rd">
+                            <label for="normal-rd" class="form-check-label">Normal user</label>
+                        </div>
+                        <div class="propp-rd">
+                            <input type="radio" value="proprietary" name="account-type" class="form-check-input" id="prop-rd">
+                            <label for="prop-rd" class="form-check-label">Proprietary</label>
+                        </div>
                     </div>
                     <hr>
                     <button type="submit" class="btn btn-success btn-block">Login</button>
                     <small>
-                        <a href="https://localhost/lpgp-server/create_account_frm.php" target="_self">
+                        <a href="create_account_frm.php">
                             Don't have a account? Create one!
                         </a>
                     </small>

@@ -48,12 +48,6 @@ $usr = new UsersData("giulliano_php", "");
             setSignatureOpts();
             $("#img-user").css("background-image", "url(" + "." + getLinkedUserIcon() + ")");
         });
-
-        $(document).scroll(function(){
-            $(".header-container").toggleClass("scrolled", $(this).scrollTop() > $(".header-container").height());
-            $(".default-btn-header").toggleClass("default-btn-header-scrolled", $(this).scrollTop() > $(".header-container").height());
-            $(".opts").toggleClass("opts-scrolled", $(this).scrollTop() > $(".header-container").height());
-        });
     </script>
     <div class="container-fluid header-container" role="banner" style="position: fixed;">
         <div class="col-12 header" style="height: 71px; transition: background-color 200ms linear;">
@@ -84,118 +78,132 @@ $usr = new UsersData("giulliano_php", "");
     </div>
     <br>
     <hr>
-    <div class="container-fluid container-content" style="position: absolute;">
+    <div class="container-fluid container-content" style="position: relative; margin-top: 5%;">
         <div class="row-main row">
             <div class="col-12 clear-content" style="position: relative; margin-left: 0;">
                 <div class="container user-data-con">
 					<div class="main-row row">
-                        <div class="main-col col-12" style="margin-left: 0 !important;">
+                        <div class="main-col col-12 card" style="margin-left: 0 !important;">
                             <div class="container data-container">
-                                <div class="main-row row">
+                                <div class="main-row row card-header">
                                     <div class="img-cont">
                                         <div id="img-user"></div>
                                     </div>
-                                    <div class="col-6 data">
+                                    <div class="col-6 data-usr">
                                         <?php
                                         if($_SESSION['mode'] == "prop"){
                                             $dt = $prp->getPropData($_SESSION['user']);
                                             echo "<h1 class=\"user-name\"> " . $dt['nm_proprietary'] . "</h1>\n";
-                                            echo "<h4 class=\"mode\">Proprietary</h4>\n";
-                                            echo "<h4 class=\"email\">Email: " . $dt['vl_email'] . "</h3>\n";
-                                            echo "<h5 class=\"date-creation\">Date of creation: " . $dt['dt_creation'] . "</h3>\n";
+                                            echo "<h3 class=\"mode\">Proprietary</h4>\n";
+                                            echo "<h3 class=\"email\">Email: " . $dt['vl_email'] . "</h3>\n";
+                                            echo "<h3 class=\"date-creation\">Date of creation: " . $dt['dt_creation'] . "</h3>\n";
 
                                         }
                                         else{
                                             $dt = $usr->getUserData($_SESSION['user']);
                                             echo "<h1 class=\"user-name\"> " . $dt['nm_user'] . "</h1>\n";
-                                            echo "<h4 class=\"mode\">Normal User</h4>\n";
-                                            echo "<h4 class=\"email\">Email: " . $dt['vl_email'] . "</h3>\n";
-                                            echo "<h5 class=\"date-creation\">Date creation: " . $dt['dt_creation'] . "</h3>\n";
+                                            echo "<h3 class=\"mode\">Normal User</h4>\n";
+                                            echo "<h3 class=\"email\">Email: " . $dt['vl_email'] . "</h3>\n";
+                                            echo "<h6 class=\"date-creation\">Date creation: " . $dt['dt_creation'] . "</h3>\n";
                                         }
                                         ?>
-                                        <a class="img-settings btn btn-secondary" href="https://localhost/lpgp-server/cgi-actions/ch_my_data.php" id="img-settings" role="button">
-                                            Edit Account
-                                            <span>
-                                                <img src="../media/settings.png" alt="" width="50px" height="50px">
-                                            </span>
+                                        <a class="account-separator" data-toggle="collapse" href="#moreoptions-section" aria-expanded="false" aria-controls="moreoptions-section">
+                                            <h2>More account options</h2>
                                         </a>
-                                        <button class="btn btn-danger" id="del-btn" data-toggle="modal" data-target="#modal-delete" type="button">
-                                            Remove account
-                                            <span>
-                                                <img src="../media/delete-sign.png" alt="" width="50px" height="50px">
-                                            </span>
-                                        </button>
-                                        <div class="modal" id="modal-delete" tabindex="-1" aria-labelledby="del-btn" aria-hidden="true" role="dialog">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h3 class="modal-title">Are you sure about delete your account?</h3>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <hr>
-                                                    <div class="modal-body">
-                                                        <a href="https://localhost/lpgp-server/cgi-actions/del_account.php?confirm=y" role="button" class="btn btn-lg btn-danger">Yes, delete my account</a>
-                                                        <a href="#" role="button" class="btn btn-lg btn-secondary" data-dismiss="modal">Cancel</a>
+                                        <div class="collapse section" id="moreoptions-section">
+                                            <br>
+                                            <a class="img-settings btn btn-secondary" href="https://localhost/lpgp-server/cgi-actions/ch_my_data.php" id="img-settings" role="button">
+                                                Edit Account
+                                                <span>
+                                                    <img src="../media/settings.png" alt="" width="50px" height="50px">
+                                                </span>
+                                            </a>
+                                            <button class="btn btn-danger" id="del-btn" data-toggle="modal" data-target="#modal-delete" type="button">
+                                                Remove account
+                                                <span>
+                                                    <img src="../media/delete-sign.png" alt="" width="50px" height="50px">
+                                                </span>
+                                            </button>
+                                            <div class="modal" id="modal-delete" tabindex="-1" aria-labelledby="del-btn" aria-hidden="true" role="dialog">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h3 class="modal-title">Are you sure about delete your account?</h3>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <hr>
+                                                        <div class="modal-body">
+                                                            <a href="https://localhost/lpgp-server/cgi-actions/del_account.php?confirm=y" role="button" class="btn btn-lg btn-danger">Yes, delete my account</a>
+                                                            <a href="#" role="button" class="btn btn-lg btn-secondary" data-dismiss="modal">Cancel</a>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
+                                            <br>
+                                            <?php
+                                            if($_SESSION['mode'] == "prop"){
+                                                $id = $dt['cd_proprietary'];
+                                                echo "<a href=\"https://localhost/lpgp-server/cgi-actions/proprietary.php?id=$id\" role=\"button\" target=\"_blanck\" class=\"btn btn-lg btn-primary\">See as another one</a>";
+                                            }
+                                            else{
+                                                $id = $dt['cd_user'];
+                                                echo "<a href=\"https://localhost/lpgp-server/cgi-actions/user.php?id=$id\" role=\"button\" target=\"_blanck\" class=\"btn  btn-primary\">See as another one</a>";
+                                            }
+                                            ?>
                                         </div>
-                                        <br>
-                                        <hr>
-                                        <?php
-                                        if($_SESSION['mode'] == "prop"){
-                                            $id = $dt['cd_proprietary'];
-                                            echo "<a href=\"https://localhost/lpgp-server/cgi-actions/proprietary.php?id=$id\" role=\"button\" target=\"_blanck\" class=\"btn btn-lg bt-primary\">See as another one</a>";
-                                        }
-                                        else{
-                                            $id = $dt['cd_user'];
-                                            echo "<a href=\"https://localhost/lpgp-server/cgi-actions/user.php?id=$id\" role=\"button\" target=\"_blanck\" class=\"btn  btn-primary\">See as another one</a>";
-                                        }
-                                        ?>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="others-col col-12">
-                        <?php
-                            // Signatures
-                            /////////////////////////////////////////////////////////////////////////////////////////////////
-                            if($_SESSION['mode'] == "prop"){
-                                echo "<h1 class=\"section-title\">My signatures</h1><br>";
-                                $prp = new ProprietariesData("giulliano_php", "");
-                                echo lsSignaturesMA($prp->getPropID($_SESSION['user']));
-                                echo "<br>\n<a href=\"https://localhost/lpgp-server/cgi-actions/create_signature.php\" role=\"button\" class=\"btn btn-block btn-success\">Create a new signature</a>";
-                            }
-                        ?>
+                        <div class="others-col col-md-12">
+                            <a href="#signatures-section" class="account-separator" aria-expanded="false" aria-controls="signatures-section" id="signature-sep" data-toggle="collapse">
+                                <h2 class="mainheader-heading mb-0">My Signatures</h2>
+                            </a>
+                            <div id="signatures-section" class="collapse section">
+                                <br>
+                                <?php
+                                // Signatures
+                                /////////////////////////////////////////////////////////////////////////////////////////////////
+                                if($_SESSION['mode'] == "prop"){
+                                    $prp = new ProprietariesData("giulliano_php", "");
+                                    echo lsSignaturesMA($prp->getPropID($_SESSION['user']));
+                                    echo "<br>\n<a href=\"https://localhost/lpgp-server/cgi-actions/create_signature.php\" role=\"button\" class=\"btn btn-block btn-success\">Create a new signature</a><br>";
+                                }
+                                ?>
+                            </div>
                         </div>
-                        <hr>
-                        <div class="history-col col-12">
-                            <h1 class="section-title">My History</h1>
-                            <?php
-                            // History
-                            ///////////////////////////////////////////////////////////////////////////////////////////////
-                            if($_SESSION['mode'] == "prop"){
-                                $obj = new PropCheckHistory("giulliano_php", "");
-                                $hist = $obj->getPropHistory($_SESSION['user']);
-                                $hist_e = explode("<br>", $hist);
-                                for($i = 0; $i <= 6; $i++){
-                                    if(isset($hist_e[$i])) echo $hist_e[$i] . "<br>";
-                                    else break;
+                        <div class="history-col col-12" style="position: relative; margin-top: 10%;">
+                            <a class="account-separator" href="#history-section" data-toggle="collapse" aria-expanded="false" aria-controls="history-section" id="history-sep">
+                                <h2 class="mainheader-heading mb-0"> My signature check history</h2>
+                            </a>
+                            <div class="collapse section" id="history-section">
+                                <br>
+                                <?php
+                                // History
+                                ///////////////////////////////////////////////////////////////////////////////////////////////
+                                if($_SESSION['mode'] == "prop"){
+                                    $obj = new PropCheckHistory("giulliano_php", "");
+                                    $hist = $obj->getPropHistory($_SESSION['user']);
+                                    $hist_e = explode("<br>", $hist);
+                                    for($i = 0; $i <= 6; $i++){
+                                        if(isset($hist_e[$i])) echo $hist_e[$i] . "<br>";
+                                        else break;
+                                    }
                                 }
-                            }
-                            else{
-                                $obj = new UsersCheckHistory("giulliano_php", "");
-                                $hist = $obj->getUsrHistory($_SESSION['user']);
-                                $hist_e = explode("<br>", $hist);
-                                for($i = 0; $i <= 6; $i++){
-                                    if(isset($hist_e[$i])) echo $hist_e[$i] . "<br>";
-                                    else break;
+                                else{
+                                    $obj = new UsersCheckHistory("giulliano_php", "");
+                                    $hist = $obj->getUsrHistory($_SESSION['user']);
+                                    $hist_e = explode("<br>", $hist);
+                                    for($i = 0; $i <= 6; $i++){
+                                        if(isset($hist_e[$i])) echo $hist_e[$i] . "<br>";
+                                        else break;
+                                    }
                                 }
-                            }
-                            echo "<a href=\"https://localhost/lpgp-server/cgi-actions/my-history.php\" role=\"button\" class=\"btn btn-block btn-primary\">See all my history</a><br>";
-                            ?>
+                                echo "<a href=\"https://localhost/lpgp-server/cgi-actions/my-history.php\" role=\"button\" class=\"btn btn-block btn-primary\">See all my history</a><br>";
+                                ?>
+                            </div>
                         </div>
 					</div>
 				</div>
@@ -203,9 +211,9 @@ $usr = new UsersData("giulliano_php", "");
         </div>
     </div>
     <br>
-    <div class="footer-container container">
+    <div class="footer-container container" style="max-width: 100% !important; position: relative; margin-left: 0;">
         <div class="footer-row row">
-            <div class="footer col-12" style="height: 150px; background-color: black; margin-top: 100%; position: absolute; max-width: 100%; left: 0;">
+            <div class="footer col-12" style="height: 150px; background-color: black; margin-top: 100%; position: relative; max-width: 100% !important; margin-left: 0;">
                 <div class="social-options-grp">
                     <div class="social-option">
                         <a href="https://github.com/GiullianoRossi1987/lpgp-server" target="_blanck" id="github" class="social-option-footer">

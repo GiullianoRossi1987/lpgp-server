@@ -951,7 +951,7 @@ class SignaturesData extends DatabaseConnection{
      * @throws SignatureNotFound If there's no such PK in the database.
      * @return string
      */
-    public function createsSignatureFile(int $signature_id, bool $HTML_mode = false, string $file_name){
+    public function createsSignatureFile(int $signature_id, bool $HTML_mode = true, string $file_name){
         $this->checkNotConnected();
         if(!$this->checkSignatureExists($signature_id)) throw new SignatureNotFound("There's no signature #$signature_id !", 1);
         $sig_dt = $this->connection->query("SELECT prop.nm_proprietary, sig.vl_password, sig.vl_code FROM tb_signatures as sig INNER JOIN tb_proprietaries AS prop ON prop.cd_proprietary = sig.id_proprietary WHERE sig.cd_signature = $signature_id;")->fetch_array();
