@@ -43,9 +43,9 @@ function setAccountOpts(ext_fls = false){
         var logoff_opt = document.createElement("a");
         var config_opt = document.createElement("a");
 
-        config_opt.href = "http://localhost/lpgp-server/cgi-actions/ch_my_data.php";
-        logoff_opt.href = "http://localhost/lpgp-server/cgi-actions/logoff.php";
-        account_opt.href = "http://localhost/lpgp-server/cgi-actions/my_account.php";
+        config_opt.href = "http://" + window.location.hostname + "/lpgp-server/cgi-actions/ch_my_data.php";
+        logoff_opt.href = "http://" + window.location.hostname + "/lpgp-server/cgi-actions/logoff.php";
+        account_opt.href = "http://"+ window.location.hostname + "/lpgp-server/cgi-actions/my_account.php";
 
         // classes
         config_opt.classList.add("dropdown-item");
@@ -63,7 +63,7 @@ function setAccountOpts(ext_fls = false){
         img.width = 30;
         img.height = 30;
         var local_opt_btn = document.querySelector("#account-opts");    
-        if(ext_fls) img.src = "." + getLinkedUserIcon();
+        if(ext_fls) img.src = getLinkedUserIcon();
         else img.src = getLinkedUserIcon();
         img.classList.add("user-icon");
         document.querySelector("#account-opts span").remove();
@@ -73,8 +73,8 @@ function setAccountOpts(ext_fls = false){
         var login_opt = document.createElement("a");
         var ct_accopt = document.createElement("a");
 
-        login_opt.href = "http://localhost/lpgp-server/login_frm.php";
-        ct_accopt.href = "http://localhost/lpgp-server/create_account_frm.php";
+        login_opt.href = "https://"+  window.location.hostname + "/lpgp-server/login_frm.php";
+        ct_accopt.href = "https://"+  window.location.hostname + "/lpgp-server/create_account_frm.php";
         login_opt.classList.add("dropdown-item");
         ct_accopt.classList.add("dropdown-item");
         login_opt.innerText = "Make login";
@@ -115,9 +115,9 @@ function setSignatureOpts(){
         my_sign.innerText = "My Signatures";
         che_sig.innerText = "Check a Signature";
         devcenter.innerText = "DevCenter";
-        my_sign.href = "https://localhost/lpgp-server/cgi-actions/my_signatures.php";
-        che_sig.href = "https://localhost/lpgp-server/check_signature.html";
-        devcenter.href = "https://localhost/lpgp-server/devcenter/";
+        my_sign.href = "https://" + window.location.hostname +"/lpgp-server/cgi-actions/my_signatures.php";
+        che_sig.href = "https://" + window.location.hostname +"/lpgp-server/check_signature.html";
+        devcenter.href = "https://" + window.location.hostname + "/lpgp-server/devcenter/";
         my_sign.classList.add("dropdown-item");
         che_sig.classList.add("dropdown-item");
         devcenter.classList.add("dropdown-item");
@@ -131,7 +131,7 @@ function setSignatureOpts(){
         var chk_signature = document.createElement("a");
 
         chk_signature.innerText = "Check a Signature";
-        chk_signature.href = "https://localhost/lpgp-server/check_signature.html";
+        chk_signature.href = "https://" + window.location.hostname + "/lpgp-server/check_signature.html";
         chk_signature.classList.add("dropdown-item");
 
         local_opts.appendChild(chk_signature);
@@ -139,7 +139,7 @@ function setSignatureOpts(){
     else{
         var login_need = document.createElement("a");
         login_need.innerText = "Make login for check a signature";
-        login_need.href = "https://localhost/lpgp-server/login.html";
+        login_need.href = "https://" + window.location.hostname +"/lpgp-server/login.html";
         login_need.classList.add("dropdown-item");
         local_opts.appendChild(login_need);
         delete(login_need);
@@ -166,5 +166,5 @@ function hideError(){
 
 function getLinkedUserIcon(){
     var ls  = localStorage.getItem("user-icon").split("/");
-    return "./" + ls[ls.length - 2] + "/" + ls[ls.length - 1];
+    return "https://" + window.location.hostname + "/lpgp-server/" + ls[ls.length - 2] + "/" + ls[ls.length - 1];
 }

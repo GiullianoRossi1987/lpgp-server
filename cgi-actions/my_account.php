@@ -24,20 +24,17 @@ $usr = new UsersData("giulliano_php", "");
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>LPGP Oficial Server</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link rel="stylesheet" href="../css/new-layout.css">
     <script src="../js/main-script.js"></script>
-    <link rel="stylesheet" href="../bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" href="../bootstrap/font-awesome.min.css">
-    <script src="../bootstrap/jquery-3.3.1.slim.min.js"></script>
-    <script src="../bootstrap/bootstrap.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <link rel="shortcut icon" href="../media/logo-lpgp.png" type="image/x-icon">
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
+    <link rel="shortcut icon" href="../media/new-logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.2/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+    <script src="../js/actions.js"></script>
 </head>
 <style>
 </style>
@@ -46,8 +43,15 @@ $usr = new UsersData("giulliano_php", "");
         $(document).ready(function(){   
             setAccountOpts(true);
             setSignatureOpts();
-            $("#img-user").css("background-image", "url(" + "." + getLinkedUserIcon() + ")");
+            applyToA();
+            applyToForms();
+            $("#img-user").css("background-image", "url(" + getLinkedUserIcon() + ")");
         });
+
+        $(document).ready(function(){
+            applyToA();
+        })
+
     </script>
     <div class="container-fluid header-container" role="banner" style="position: fixed;">
         <div class="col-12 header" style="height: 71px; transition: background-color 200ms linear;">
@@ -107,7 +111,7 @@ $usr = new UsersData("giulliano_php", "");
                                             echo "<h6 class=\"date-creation\">Date creation: " . $dt['dt_creation'] . "</h3>\n";
                                         }
                                         ?>
-                                        <a class="account-separator" data-toggle="collapse" href="#moreoptions-section" aria-expanded="false" aria-controls="moreoptions-section">
+                                        <a class="account-separator" id="accountopt-sep" href="#moreoptions-section" data-toggle="collapse" aria-expanded="false" aria-controls="moreoptions-section">
                                             <h2>More account options</h2>
                                         </a>
                                         <div class="collapse section" id="moreoptions-section">
@@ -145,11 +149,11 @@ $usr = new UsersData("giulliano_php", "");
                                             <?php
                                             if($_SESSION['mode'] == "prop"){
                                                 $id = $dt['cd_proprietary'];
-                                                echo "<a href=\"https://localhost/lpgp-server/cgi-actions/proprietary.php?id=$id\" role=\"button\" target=\"_blanck\" class=\"btn btn-lg btn-primary\">See as another one</a>";
+                                                echo "<a href=\"https://" . $_SERVER['REMOTE_ADDR'] . "/lpgp-server/cgi-actions/proprietary.php?id=$id\" role=\"button\" target=\"_blanck\" class=\"btn btn-lg btn-primary\">See as another one</a>";
                                             }
                                             else{
                                                 $id = $dt['cd_user'];
-                                                echo "<a href=\"https://localhost/lpgp-server/cgi-actions/user.php?id=$id\" role=\"button\" target=\"_blanck\" class=\"btn  btn-primary\">See as another one</a>";
+                                                echo "<a href=\"https://" . $_SERVER['REMOTE_ADDR'] . "/lpgp-server/cgi-actions/user.php?id=$id\" role=\"button\" target=\"_blanck\" class=\"btn  btn-primary\">See as another one</a>";
                                             }
                                             ?>
                                         </div>
@@ -158,7 +162,7 @@ $usr = new UsersData("giulliano_php", "");
                             </div>
                         </div>
                         <div class="others-col col-md-12">
-                            <a href="#signatures-section" class="account-separator" aria-expanded="false" aria-controls="signatures-section" id="signature-sep" data-toggle="collapse">
+                            <a href="#signatures-section" class="account-separator" id="signature-sep" aria-controls="signatures-section" aria-expanded="false" data-toggle="collapse">
                                 <h2 class="mainheader-heading mb-0">My Signatures</h2>
                             </a>
                             <div id="signatures-section" class="collapse section">
@@ -176,7 +180,7 @@ $usr = new UsersData("giulliano_php", "");
                         </div>
                         <div class="history-col col-12" style="position: relative; margin-top: 10%;">
                             <a class="account-separator" href="#history-section" data-toggle="collapse" aria-expanded="false" aria-controls="history-section" id="history-sep">
-                                <h2 class="mainheader-heading mb-0"> My signature check history</h2>
+                                <h2> My signature check history</h2>
                             </a>
                             <div class="collapse section" id="history-section">
                                 <br>
@@ -201,7 +205,7 @@ $usr = new UsersData("giulliano_php", "");
                                         else break;
                                     }
                                 }
-                                echo "<a href=\"https://localhost/lpgp-server/cgi-actions/my-history.php\" role=\"button\" class=\"btn btn-block btn-primary\">See all my history</a><br>";
+                                echo "<a href=\"my-history.php\" role=\"button\" class=\"btn btn-block btn-primary\">See all my history</a><br>";
                                 ?>
                             </div>
                         </div>

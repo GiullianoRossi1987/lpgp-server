@@ -1567,35 +1567,37 @@ class PropCheckHistory extends DatabaseConnection{
      * @return string
      */
     public function getPropHistory(string $nm_proprietary){
+
+        // TODO: refactor the code, turning the HTML card in a complete string.
+
         $this->checkNotConnected();
         $usr_id = $this->connection->query("SELECT cd_proprietary FROM tb_proprietaries WHERE nm_proprietary = \"$nm_proprietary\";")->fetch_array();
         $all_hs = $this->getRegByProp((int) $usr_id['cd_proprietary']);
-        if(is_null($all_hs)) return "<h1>You don't have checked any signature yet!</h1>\n";
-        $main_pg = "";
+        if(is_null($all_hs)) return "<h1>You don't have checked any signature yet!</h1>\n"; 
+        $main_pg = "";  // all the page content
         for($i = 0; $i < count($all_hs); $i++){
             $card_main = "<div class=\"card signaturep-card\">\n<div class=\"card-header\">\n<span class=\"img-card\">\n";
             $dt = $all_hs[$i];
             $sign_data = $this->connection->query("SELECT * FROM tb_signatures WHERE cd_signature = " . $dt['id_signature'] . ";")->fetch_array();
             $img_span = $dt['vl_code'] == 0 ? "https://localhost/lpgp-server/media/checked-valid.png" : "https://localhost/lpgp-server/media/checked-invalid.png";
-            $card_main .= "<img src=\"$img_span\" width=\"40px\" height=\"40px\">\n</span>\n<h2>Signature #" . $sign_data['cd_signature'] . "</h2>\n</div>\n";
-            $msg_title = $dt['vl_code'] == 0 ? "<h1 class=\"valid-title\">Valid</h1>\n" : "<h1 class=\"invalid-title\">Invalid</h1>\n";
+            $card_main .= "<h2>Signature #" . $sign_data['cd_signature'] . "</h2><span class=\"badge badge-light\"> <i class=\"fas fa-check\" style=\"color: green; font-size: 20px;\"></i>\n</span></div>\n";
             $sub_msg = "";
             switch ((int) $dt['vl_code']){
-                case 0:
-                    $sub_msg = "<h4 class=\"card-subtitle no-err\">Valid signature!</h4>\n";
+                case 0: 
+                    $sub_msg = " <h4 class=\"card-subtitle no-err\">Valid signature!</h4>\n";
                 break;
                 case 1:
-                    $sub_msg = "<h4 class=\"card-subtitle err\">" . self::ERR_CD_MSG1 . "</h4>\n";
+                    $sub_msg = " <h4 class=\"card-subtitle err\">" . self::ERR_CD_MSG1 . "</h4>\n";
                 break;
                 case 2:
-                    $sub_msg = "<h4 class=\"card-subtitle err\">" . self::ERR_CD_MSG2 . "</h4>\n";
+                    $sub_msg = " <h4 class=\"card-subtitle err\">" . self::ERR_CD_MSG2 . "</h4>\n";
                 break;
                 case 3:
-                    $sub_msg = "<h4 class=\"card-subtitle err\">" . self::ERR_CD_MSG3 . "</h4>\n";
+                    $sub_msg = " <h4 class=\"card-subtitle err\">" . self::ERR_CD_MSG3 . "</h4>\n";
                 break;
                 default: throw new PropInvalidCode($dt['vl_code']);
             }
-            $card_main .= $msg_title . $sub_msg;
+            $card_main .= "\n" . $sub_msg;
             $card_main .= "<div class=\"card-body\">";
             $prop_dt = $this->connection->query("SELECT * FROM tb_proprietaries WHERE cd_proprietary = " . $sign_data['id_proprietary'] . ";")->fetch_array();
             $id = $prop_dt['cd_proprietary'];

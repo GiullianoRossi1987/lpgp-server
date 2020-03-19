@@ -19,7 +19,7 @@
 
 /* default values*/
 .default-btn-header{
-    background-color: rgb(51, 51, 71);
+    background-color: black;
     color: white !important;
     font-family: Arial; 
     margin-top: 10px !important;
@@ -348,21 +348,6 @@
     display: inline;
 }
 
-.types-opts{
-    margin-bottom: 100%;
-}
-
-.type-opt{
-    border: 1px solid black;
-    height: 90px !important;
-    width: 150px !important;
-    margin-left: 10px;
-    margin-right: 10px;
-    box-sizing: border-box;
-    box-shadow: gray;
-    float: left;
-}
-
 .opt-lb{
     display: block;
     text-indent: 100%;
@@ -377,30 +362,8 @@
 }
 
 .type-opt input{
-    opacity: 0.55;
+    opacity: 0;
     visibility: hidden;
-}
-
-.prop{
-    background-image: url("../media/proprietary.png") !important;
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-
-.normie-flex-rb{
-    background-image: url("../media/usr.png") !important;
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-
-.type-opt input:hover ~ .opt-lb{
-    outline: 4px dotted blue !important;
-    opacity: 1;
-}
-
-.type-opt input:checked + .opt-lb{
-    outline: 5px solid blue !important;
-    opacity: 1;
 }
 
 .info{
@@ -443,14 +406,6 @@
 }
 
 
-#default-img-lb::before{
-    content: "The default image";
-    align-content: right;
-    clear: both;
-    position: relative;
-    margin-right: -10px;
-}
-
 
 /**
     Footer fix
@@ -465,6 +420,11 @@
     position: relative !important;
     background-color: black;
     height: 150px;
+}
+
+.footer a{
+    color: white;
+    font-family: Cantarell;
 }
 
 .container-default{

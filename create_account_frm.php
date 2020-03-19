@@ -9,17 +9,15 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link rel="stylesheet" href="./css/new-layout.css">
     <script src="./js/main-script.js"></script>
-    <link rel="stylesheet" href="./bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" href="./bootstrap/font-awesome.min.css">
-    <script src="./bootstrap/jquery-3.3.1.slim.min.js"></script>
-    <script src="./bootstrap/bootstrap.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <link rel="shortcut icon" href="./media/logo-lpgp.png" type="image/x-icon">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.2/popper.min.js"></script>
+    <link rel="stylesheet" href="css/account-creation.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
 </head>
 <style>
 </style>
@@ -36,14 +34,30 @@
 
         $(document).on("click", "#show-passwd1", function(){
             $("#password1").attr("type", pas1);
-            if(pas1 == "text") pas1 = "password";
-            else pas1 = "text";
+            if(pas1 == "text") {
+                pas1 = "password";
+                $("#show-passwd1 i").removeClass("fa-eye-slash");
+                $("#show-passwd1 i").addClass("fa-eye");
+            }
+            else {
+                pas1 = "text";
+                $("#show-passwd1 i").removeClass("fa-eye");
+                $("#show-passwd1 i").addClass("fa-eye-slash")
+            }
         });
 
         $(document).on("click", "#show-passwd2", function(){
             $("#password2").attr("type", pas1);
-            if(pas2 == "text") pas2 = "password";
-            else pas2 = "text";
+            if(pas2 == "text") {
+                pas2 = "password";
+                $("#show-passwd2 i").removeClass("fa-eye");
+                $("#show-passwd2 i").addClass("fa-eye-slash");
+            }
+            else {
+                pas2 = "text";
+                $("#show-passwd2 i").removeClass("fa-eye-slash");
+                $("#show-passwd2 i").addClass("fa-eye");
+            }
         });
 
         $(document).on("change", "#password1", function(){
@@ -108,14 +122,8 @@
             $("#upload-img-input").show();
             $("#default-img").attr("checked", false);
         });
-
-        $(document).scroll(function(){
-            $(".header-container").toggleClass("scrolled", $(this).scrollTop() > $(".header-container").height());
-            $(".default-btn-header").toggleClass("default-btn-header-scrolled", $(this).scrollTop() > $(".header-container").height());
-            $(".opts").toggleClass("opts-scrolled", $(this).scrollTop() > $(".header-container").height());
-        });
     </script>
-    <div class="container-fluid header-container" role="banner" style="position: fixed;">
+    <div class="container-fluid header-container" role="banner" style="position: relative !important">
         <div class="col-12 header" style="height: 71px; transition: background-color 200ms linear;">
             <div class="opt-dropdown dropdown login-dropdown">
                 <button type="button" class="btn btn-lg default-btn-header dropdown-toggle" data-toggle="dropdown" id="account-opts" aria-haspopup="true" aria-expanded="false">
@@ -146,7 +154,7 @@
     <hr>
     <div class="container-fluid container-content" style="position: absolute;">
         <div class="row-main row">
-            <div class="col-6 clear-content" style="position: absolute; margin-left: 23%;">
+            <div class="col-6 clear-content" style="position: relative; margin-left: 24%; margin-top: 5%;">
                 <br>
                 <div class="page-title-container container">
                     <div class="row">
@@ -158,12 +166,12 @@
                     </div>
                 </div>
                 <br>
-                <form action="https://localhost/lpgp-server/cgi-actions/create_account.php" method="post" enctype="multipart/form-data">
+                <form action="cgi-actions/create_account.php" method="post" enctype="multipart/form-data">
                     <label for="username" class="form-label">
                         <h4>Pick a Username</h4>
                     </label>
                     <br>
-                    <input type="text" name="username" class="form-control" id="username" placeholder="Username">
+                    <input type="text" name="username" id="username" class="form-control" placeholder="Username">
                     <br>
                     <label for="username" class="form-label" aria-hidden="true">
                         <small class="error-lb" id="err-lb-username"></small>
@@ -187,11 +195,14 @@
                         <small class="error-lb" id="err-lb-passwd1"></small>
                     </label>
                     <br>
-                    <input type="password" class="form-control" name="password1" id="password1" placeholder="Password">
-                    <br>
-                    <label for="password1" class="form-label">
-                        <button class="btn btn-secondary show-passwd-btn" id="show-passwd1" type="button">Show my password</button>
-                    </label>
+                    <div class="input-group mb-3">
+                        <input type="password" class="form-control" name="password1" id="password1" placeholder="Password">
+                        <div class="input-group-append">
+                            <button class="btn" id="show-passwd1" type="button" >
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
                     <br>
                     <label for="password-c" class="form-label">
                         <h4>Confirm the password</h4>
@@ -201,49 +212,37 @@
                         <small class="error-lb" id="err-lb-passwd2"></small>
                     </label>
                     <br>
-                    <input type="password" name="password2" class="form-control" id="password2" placeholder="Confirm the password">
-                    <br>
-                    <label for="password2" class="form-label">
-                        <button class="btn btn-secondary show-passwd-btn" id="show-passwd2" type="button">Show my password</button>
-                    </label>
+                    <div class="input-group mb-3">
+                        <input type="password" name="password2" class="form-control" id="password2" placeholder="Confirm the password">
+                        <div class="input-group-append">
+                            <button class="btn" id="show-passwd2" type="button">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
                     <br>
                     <hr>
                     <h4>Choose a account type: </h4>
                     <br>
-                    <div class="form-check form-check-inline flex-opt-acc">
-                        <div class="types-opts">
-                            <div class="type-opt">
-                                <input type="radio" name="account-mode" class="form-check-input type-inp" value="proprietary" id="prop-rd">
-                                <label for="prop-rd" class="form-label prop opt-lb"></label>
-                            </div>
-                            <div class="type-opt">
-                                <input type="radio" name="account-mode" class="form-check-input type-inp" value="normal" id="normie-rd">
-                                <label for="normie-rd" class="form-label normie-flex-rb opt-lb"></label>
-                            </div>
-                        </div>
-                        <br>
-                        <a data-toggle="collapse info info-sm" href="#typesTB" aria-expanded="false" aria-controls="typesTB">
-                            a
-                        </a>
-                        <br>
-                        <div class="collapse" id="typesTB" aria-hidden="true">
-                            <h3>What's account types?</h3>
-                            <hr>
-                            <p>
-                                The account types are the ways to control the actions of each type of user,
-                                There're two account types:
-                                <ol>
-                                    <li>
-                                    <h6>Normal account:</h6>
-                                    <p>
-                                        That account type's the more 
-                                    </p>
-                                    </li>
-                                </ol>
-                            </p>
-                            <table>
-                            </table>
-                        </div>
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        <label class="btn btn-lg btn-secondary">
+                            <input type="radio" name="account-mode" id="" value="proprietary" autocomplete="off">
+                            Proprietary
+                        </label>
+                        <label class="btn btn-lg btn-secondary active">
+                            <input type="radio" name="account-mode" id="" value="normal" autocomplete="off" checked>
+                            Normal user
+                        </label>
+                        <button type="button" class="btn btn-lg btn-secondary" data-toggle="collapse" aria-expanded="false" aria-controls="acc-help" data-target="#acc-help">
+                            Help
+                            <span>
+                                <i class="fas fa-info"></i>
+                            </span>
+                        </button>
+                    </div>
+                    <br>
+                    <div class="hidden-help collapse" id="acc-help">
+                        <h1>Test help</h1>
                     </div>
                     <br>
                     <h4>Choose your profile image</h4>
@@ -255,19 +254,24 @@
                             </label>
                         </div>
                         <br>
-                        <button type="button" class="btn btn-primary btn-lg" data-toggle="collapse" id="upload-img-btn" data-target="#upload-img-input" aria-expanded="false" aria-controls="upload-img-input">
-                            Upload a local image
-                        </button>
+                        <a href="#upload-img-input" class="btn btn-lg btn-primary" data-toggle="collapse" aria-expanded="false" aria-controls="uploaded-img-input" role="button">
+                            Upload a image
+                        </a>
                         <br>
-                        <div class="collapse" id="upload-img-input" aria-hidden="true"> 
+                        <div class="collapse" id="upload-img-input"> 
+                            <br>
                             <label for="img-uploaded" class="form-label">
-                                <h5>Upload a Image</h5>
+                                <h4>Send us a image from your device</h4>
                             </label>
+                            <br>
                             <input type="file" name="img-user[]" id="img-uploaded" class="form-control">
                         </div>
                     </div>
                     <br>
                     <button type="submit" class="btn btn-block btn-success">Create account</button>
+                    <small>
+                        <a href="login_frm.php">Already have a account? Sign In!</a>
+                    </small>
                 </form>
                 <br>
             </div>
@@ -276,11 +280,11 @@
     <br>
     <div class="footer-container container">
         <div class="footer-row row">
-            <div class="footer col-12" style="height: 150px; background-color: black; margin-top: 90%; position: absolute; max-width: 100%; left: 0;">
+            <div class="footer col-12" style="height: 150px; background-color: black; margin-top: 90%; max-width: 100%; left: 0;">
                 <div class="social-options-grp">
                     <div class="social-option">
                         <a href="https://github.com/GiullianoRossi1987/lpgp-server" target="_blanck" id="github" class="social-option-footer">
-                        <img src="./media/github.png" alt="" width="50px" height="30px"></a>
+                        <img src="./media/github.png" alt="<github image>" width="50px" height="30px" data-toggle="tooltip" title="Visit our github" data-placement="bottom">Visit our github</a>
                     </div>
                     <div class="social-option-footer">
                         <a href="https://" target='_blanck' id="facebook">

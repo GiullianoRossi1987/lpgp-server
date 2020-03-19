@@ -71,7 +71,12 @@ function lsSignaturesMA(int $proprietary){
     foreach($signatures as $cd){
         $sig_data = $sig->getSignatureData($cd);
         // TODO Upgrade the layout of the signature card
-        $card = "<div class=\"card signature-card\">\n<div class=\"card-body\">\n<h3 class=\"card-title\"> Signature #$cd</h3>\n<h5 class=\"card-subtitle\">" . $sig_data['dt_creation'] . "\n</h5><div class=\"card-text\"><a href=\"https://localhost/lpgp-server/cgi-actions/get_my_signature.php?id=$cd\">Download</a><br><a href=\"https://localhost/lpgp-server/cgi-actions/ch_signature_data.php?sig_id=$cd\">Configurations</a>\n</div>\n</div>\n</div><br>";
+        $card = "<div class=\"card signature-card\">\n";
+        $card .= "<div class=\"card-body\">\n";
+        $card .= "<h3 class=\"card-title\"> Signature #$cd</h3>\n";
+        $card .= "<h5 class=\"card-subtitle\">" . $sig_data['dt_creation'] . "</h5>\n";
+        $card .= "<div class=\"card-text\">\n";
+        $card .= "<a href=\"https://localhost/lpgp-server/cgi-actions/get_my_signature.php?id=$cd\">Download</a><br><a href=\"https://localhost/lpgp-server/cgi-actions/ch_signature_data.php?sig_id=$cd\">Configurations</a>\n</div>\n</div>\n</div><br>";
         $all .= "\n$card\n";
     }
     return $all;

@@ -39,6 +39,7 @@ sendUserLogged();
         $(document).ready(function(){   
             setAccountOpts();
             setSignatureOpts();
+            applyToA();
         });
 
         $(document).ready(function(){

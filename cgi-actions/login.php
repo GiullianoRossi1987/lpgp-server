@@ -10,6 +10,7 @@ use function JSHandler\sendUserLogged;
 
 
 
+
 if($_POST['account-type'] == "normal"){
     $user_obj = new UsersData("giulliano_php", "");  // trade for your username and password at MySQL
     $auth = $user_obj->login($_POST['username'], $_POST['password']);
@@ -22,6 +23,14 @@ else if($_POST['account-type'] == "proprietary"){
     $_SESSION = $auth;
     sendUserLogged();
 }
-if($_SESSION['checked'] == "false") echo "<script>window.location.replace(\"http://localhost/lpgp-server/cgi-actions/check-email-stp1.php\");</script>";
-else echo "<script>window.location.replace(\"http://localhost/lpgp-server/\");</script>";
+if($_SESSION['checked'] == "false"){
+     
+    header("Location: https://" . $_SERVER['REMOTE_ADDR'] . "/lpgp-server/cgi-actions/check_email_stp1.php");
+
+}
+else{
+
+    header("Location: https://" . $_SERVER['REMOTE_ADDR'] . "/lpgp-server/");
+
+}
 ?>
