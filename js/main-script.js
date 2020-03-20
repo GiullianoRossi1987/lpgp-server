@@ -116,7 +116,7 @@ function setSignatureOpts(){
         che_sig.innerText = "Check a Signature";
         devcenter.innerText = "DevCenter";
         my_sign.href = "https://" + window.location.hostname +"/lpgp-server/cgi-actions/my_signatures.php";
-        che_sig.href = "https://" + window.location.hostname +"/lpgp-server/check_signature.html";
+        che_sig.href = "https://" + window.location.hostname +"/lpgp-server/check_signature.php";
         devcenter.href = "https://" + window.location.hostname + "/lpgp-server/devcenter/";
         my_sign.classList.add("dropdown-item");
         che_sig.classList.add("dropdown-item");
@@ -131,7 +131,7 @@ function setSignatureOpts(){
         var chk_signature = document.createElement("a");
 
         chk_signature.innerText = "Check a Signature";
-        chk_signature.href = "https://" + window.location.hostname + "/lpgp-server/check_signature.html";
+        chk_signature.href = "https://" + window.location.hostname + "/lpgp-server/check_signature.php";
         chk_signature.classList.add("dropdown-item");
 
         local_opts.appendChild(chk_signature);
@@ -139,7 +139,7 @@ function setSignatureOpts(){
     else{
         var login_need = document.createElement("a");
         login_need.innerText = "Make login for check a signature";
-        login_need.href = "https://" + window.location.hostname +"/lpgp-server/login.html";
+        login_need.href = "https://" + window.location.hostname +"/lpgp-server/login_frm.php";
         login_need.classList.add("dropdown-item");
         local_opts.appendChild(login_need);
         delete(login_need);

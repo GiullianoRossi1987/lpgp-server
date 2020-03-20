@@ -49,5 +49,7 @@ else{
 	}
 }
 sendUserLogged();
-echo "<script>window.location.replace(\"https://localhost/lpgp-server/cgi-actions/my_account.php\");</script>";
+
+header("Location: my_account.php");
+
 ?>

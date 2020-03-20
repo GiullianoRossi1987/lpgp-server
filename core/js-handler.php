@@ -3,8 +3,6 @@ namespace JSHandler;
 if(session_status() == PHP_SESSION_NONE)session_start();
 require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
 
-// TODO Create a modal method. Just for the UX
-
 use Core\ProprietariesData;
 use Core\SignaturesData;
 use ProprietariesExceptions\ProprietaryNotFound;
@@ -70,13 +68,15 @@ function lsSignaturesMA(int $proprietary){
     if(is_null($signatures)){ return "<h1>You don't have any signature yet!</h1>";}
     foreach($signatures as $cd){
         $sig_data = $sig->getSignatureData($cd);
-        // TODO Upgrade the layout of the signature card
-        $card = "<div class=\"card signature-card\">\n";
-        $card .= "<div class=\"card-body\">\n";
+        $card = "<div class=\"card sig-card\">\n";
+        $card .= "<div class=\"card-header\">\n";
         $card .= "<h3 class=\"card-title\"> Signature #$cd</h3>\n";
         $card .= "<h5 class=\"card-subtitle\">" . $sig_data['dt_creation'] . "</h5>\n";
+        $card .= "</div> <div class=\"card-body\">";
         $card .= "<div class=\"card-text\">\n";
-        $card .= "<a href=\"https://localhost/lpgp-server/cgi-actions/get_my_signature.php?id=$cd\">Download</a><br><a href=\"https://localhost/lpgp-server/cgi-actions/ch_signature_data.php?sig_id=$cd\">Configurations</a>\n</div>\n</div>\n</div><br>";
+        $card .= "<a href=\"https://localhost/lpgp-server/cgi-actions/get_my_signature.php?id=$cd\">Download <i class=\"fas fa-file-download\"></i></a>" . "<br><br>". 
+                 "<a href=\"https://localhost/lpgp-server/cgi-actions/ch_signature_data.php?sig_id=$cd\">Configurations<i class=\"fas fa-cog\"></i></a>\n" 
+                . "</div>\n</div>\n</div><br>";
         $all .= "\n$card\n";
     }
     return $all;
@@ -97,7 +97,7 @@ function lsExtSignatures(int $proprietary){
     foreach($signatures as $cd){
         $sig_data = $sig->getSignatureData($cd);
         // TODO Upgrade the layout of the signature card
-        $card = "<div class=\"card signature-card\">\n<div class=\"card-body\">\n<h3 class=\"card-title\"> Signature #$cd</h3>\n<h5 class=\"card-subtitle\">" . $sig_data['dt_creation'] . "\n</h5></div>";
+        $card = "<div class=\"card sig-card\">\n<div class=\"card-header\">\n<h3 class=\"card-title\"> Signature #$cd</h3>\n<h5 class=\"card-subtitle\">" . $sig_data['dt_creation'] . "\n</h5></div>";
         $all .= "\n$card\n";
     }
     return $all;
@@ -132,6 +132,7 @@ function inputsGets(int $signature){
 
 /**
  * Returns the HTML code of a signature card after the validation.
+ * **WARNING**: all the anchor HTML links gonna work only at the check_signature.php page.
  * @param integer $sign_ref The primary key reference of the signature to create the card.
  * @param bool $valid If the signature is valid, used after the authentication.
  * @return string The HTML code. 
@@ -149,7 +150,7 @@ function createSignatureCardAuth(int $sign_ref, bool $valid){
     $card_str = "<div class=\"card signature-vl-card\">\n";
     if($valid){
         $card_str .= "<div class=\"card-header\">\n";
-        $card_str .= "<span class=\"span-card-vl\">\n<img src=\"https://localhost/lpgp-server/media/checked-valid.png\" width=\"50px\" height=\"50px\">\n</span>\n";
+        $card_str .= "<span class=\"span-card-vl\">\n<i class=\"fas fa-check\"></i>\n</span>\n";
         $card_str .= "<h1 class=\"card-title\">Signature #$sign_ref</h1>\n";
         $card_str .= "</div>\n";
         // end of the header (card)
@@ -157,7 +158,7 @@ function createSignatureCardAuth(int $sign_ref, bool $valid){
         $card_str .= "<div class=\"card-body\">\n";
         $card_str .= "<h3>Proprietary: ";
         $id = $data['id_proprietary'];
-        $prp_a = "<a href=\"https://localhost/lpgp-server/cgi-actions/proprietary.php?id=$id\" target=\"_blanck\">$prop_nm</a>";
+        $prp_a = "<a href=\"proprietary.php?id=$id\" target=\"_blanck\">$prop_nm</a>";
         $card_str .= $prp_a . "</h3>\n";
         unset($prp_a);
         $card_str .= "<h3>Created in: " . $data['dt_creation'] . "</h3>\n";
@@ -170,7 +171,7 @@ function createSignatureCardAuth(int $sign_ref, bool $valid){
     }
     else{
         $card_str .= "<div class=\"card-header\">\n";
-        $card_str .= "<span class=\"span-card-vl\">\n<img src=\"https://localhost/lpgp-server/media/checked-invalid.png\" width=\"50px\" height=\"50px\">\n</span>\n";
+        $card_str .= "<span class=\"span-card-vl\">\n<i class=\"fas fa-times\"></i>\n</span>\n";
         $card_str .= "<h1 class=\"card-title\">Signature #$sign_ref</h1>\n";
         $card_str .= "</div>\n";
         // end of the header (card)
@@ -178,7 +179,7 @@ function createSignatureCardAuth(int $sign_ref, bool $valid){
         $card_str .= "<div class=\"card-body\">\n";
         $card_str .= "<h3>Proprietary: ";
         $id = $data['id_proprietary'];
-        $prp_a = "<a href=\"https://localhost/lpgp-server/cgi-actions/proprietary.php?id=$id\" target=\"_blanck\">$prop_nm</a>";
+        $prp_a = "<a href=\"proprietary.php?id=$id\" target=\"_blanck\">$prop_nm</a>";
         $card_str .= $prp_a . "</h3>\n";
         unset($prp_a);
         $card_str .= "<h3>Created in: " . $data['dt_creation'] . "</h3>\n";

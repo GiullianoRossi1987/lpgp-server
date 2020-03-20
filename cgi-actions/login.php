@@ -25,12 +25,12 @@ else if($_POST['account-type'] == "proprietary"){
 }
 if($_SESSION['checked'] == "false"){
      
-    header("Location: https://" . $_SERVER['REMOTE_ADDR'] . "/lpgp-server/cgi-actions/check_email_stp1.php");
+    header("Location: check_email_stp1.php");
 
 }
 else{
 
-    header("Location: https://" . $_SERVER['REMOTE_ADDR'] . "/lpgp-server/");
+    header("Location: ../index.php");
 
 }
 ?>

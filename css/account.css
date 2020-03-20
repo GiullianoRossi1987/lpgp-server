@@ -1,0 +1,52 @@
+.signature-card{
+	padding: 10px 20px;
+	border: 1px solid black;
+}
+
+.signature-card .card-header{
+	margin-bottom: 10px;
+	text-align: center;
+}
+
+.signature-card .card-header i{
+	font-size: 20px;
+}
+
+.signature-card .card-footer{
+	margin-top: 10px;
+	text-align: center;
+}
+
+.signature-card .card-footer *{
+	font-family: Cantarell;
+}
+
+.signature-card .card-body *{
+	margin-left: 10px;
+	font-size: 20px;
+}
+
+.signature-card h4{
+	margin-left: 10px;
+}
+
+
+.sig-card{
+	border: 1px solid black;
+}
+
+.sig-card .card-body a{
+	font-size: 20px;
+	color: black;
+	padding: 4px 6px;
+	margin-bottom: 5px !important;
+	margin-top: 5px !important;
+	
+}
+
+.sig-card .card-body a:hover{
+	background-color: #ddd;
+}
+
+
+

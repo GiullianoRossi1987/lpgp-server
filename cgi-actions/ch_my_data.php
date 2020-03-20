@@ -148,7 +148,7 @@ else{
     <div class="container-fluid container-content" style="position: absolute;">
         <div class="row-main row">
             <div class="col-7 clear-content" style="position: absolute; margin-left: 21%;">
-				<form action="./change_account_data.php" method="post" class="form-group" enctype="multipart/form-data">
+				<form action="change_account_data.php" method="post" class="form-group" enctype="multipart/form-data">
                     <h1>Your configurations</h1>
                     <h6>If you don't want to change a field just leave it empty</h6>
                     <br>

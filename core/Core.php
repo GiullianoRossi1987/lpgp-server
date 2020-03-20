@@ -1576,11 +1576,12 @@ class PropCheckHistory extends DatabaseConnection{
         if(is_null($all_hs)) return "<h1>You don't have checked any signature yet!</h1>\n"; 
         $main_pg = "";  // all the page content
         for($i = 0; $i < count($all_hs); $i++){
-            $card_main = "<div class=\"card signaturep-card\">\n<div class=\"card-header\">\n<span class=\"img-card\">\n";
+            $card_main = "<div class=\"card signature-card\">\n<div class=\"card-header\">\n";
             $dt = $all_hs[$i];
             $sign_data = $this->connection->query("SELECT * FROM tb_signatures WHERE cd_signature = " . $dt['id_signature'] . ";")->fetch_array();
+            $i_font = $dt['vl_code'] == 0 ? "<i class=\"fas fa-check\" style=\"color: green;\"></i>" : "<i class=\"fas fa-times\" style=\"color: red;\"></i>";
             $img_span = $dt['vl_code'] == 0 ? "https://localhost/lpgp-server/media/checked-valid.png" : "https://localhost/lpgp-server/media/checked-invalid.png";
-            $card_main .= "<h2>Signature #" . $sign_data['cd_signature'] . "</h2><span class=\"badge badge-light\"> <i class=\"fas fa-check\" style=\"color: green; font-size: 20px;\"></i>\n</span></div>\n";
+            $card_main .= "<h2>Signature #" . $sign_data['cd_signature'] . "</h2><span class=\"badge badge-light\">$i_font\n</span></div>\n";
             $sub_msg = "";
             switch ((int) $dt['vl_code']){
                 case 0: 
@@ -1604,7 +1605,7 @@ class PropCheckHistory extends DatabaseConnection{
             $prop_data_html = is_null($prop_dt) ? "<div class=\"prop-nf-err\">(We can't find the proprietary, probabily he deleted him account)</div>\n" : "<a href=\"https://localhost/lpgp-server/cgi-actions/proprietary.php?id=$id\" target=\"_blanck\" class=\"prop-link\">" . $prop_dt['nm_proprietary'] . "</a>\n";
             $card_main .= "Proprietary: " . $prop_data_html;
             $card_main .= "<a href=\"https://localhost/lpgp-server/cgi-actions/relatory.php?rel=" . $dt['cd_reg'] . "\" target=\"__blanck\" role=\"button\" class=\"btn btn-secondary\">Check the relatory</a>\n";
-            $card_main .= "<div class=\"card-footer text-muted\">Checked signature at: " . $dt['dt_reg'] . "</div>\n</div>\n</div>\n<div>\n";
+            $card_main .= "<div class=\"card-footer text-muted\">Checked signature at: " . $dt['dt_reg'] . "</div>\n</div>\n</div>\n<div>\n</div>";
             $main_pg .= $card_main . "<br>";
         }
         return $main_pg;
