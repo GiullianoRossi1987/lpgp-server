@@ -5,6 +5,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
 
 use function JSHandler\lsSignaturesMA;
 use function JSHandler\sendUserLogged;
+use const MAX_SIGC;
 
 use Core\ProprietariesData;
 use Core\UsersData;
@@ -15,6 +16,7 @@ sendUserLogged(); // preventing bugs
 
 $prp = new ProprietariesData("giulliano_php", "");
 $usr = new UsersData("giulliano_php", "");
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -165,9 +167,10 @@ $usr = new UsersData("giulliano_php", "");
                             </div>
                         </div>
                         <div class="others-col col-md-12">
-                            <a href="#signatures-section" class="account-separator" id="signature-sep" aria-controls="signatures-section" aria-expanded="false" data-toggle="collapse">
-                                <h2 class="mainheader-heading mb-0">My Signatures</h2>
-                            </a>
+                            <?php if($_SESSION['mode'] == "prop") echo '<a href="#signatures-section" class="account-separator" id="signature-sep" aria-controls="signatures-section" aria-expanded="false" data-toggle="collapse">
+                                    <h2 class="mainheader-heading mb-0">My Signatures</h2>
+                                </a>';
+                            ?>
                             <div id="signatures-section" class="collapse section">
                                 <br>
                                 <?php
@@ -176,7 +179,9 @@ $usr = new UsersData("giulliano_php", "");
                                 if($_SESSION['mode'] == "prop"){
                                     $prp = new ProprietariesData("giulliano_php", "");
                                     echo lsSignaturesMA($prp->getPropID($_SESSION['user']));
-                                    echo "<br>\n<a href=\"https://localhost/lpgp-server/cgi-actions/create_signature.php\" role=\"button\" class=\"btn btn-block btn-success\">Create a new signature</a><br>";
+                                    echo "<br>\n<a href=\"create_signature.php\" role=\"button\" class=\"btn btn-block btn-success\">". 
+                                                "Create a new signature <span><i class=\"fas fa-id-card\"></i></span>". 
+                                                "</a><br>";
                                 }
                                 ?>
                             </div>
@@ -194,7 +199,7 @@ $usr = new UsersData("giulliano_php", "");
                                     $obj = new PropCheckHistory("giulliano_php", "");
                                     $hist = $obj->getPropHistory($_SESSION['user']);
                                     $hist_e = explode("<br>", $hist);
-                                    for($i = 0; $i <= 6; $i++){
+                                    for($i = 0; $i <= MAX_SIGC; $i++){
                                         if(isset($hist_e[$i])) echo $hist_e[$i] . "<br>";
                                         else break;
                                     }
@@ -203,13 +208,18 @@ $usr = new UsersData("giulliano_php", "");
                                     $obj = new UsersCheckHistory("giulliano_php", "");
                                     $hist = $obj->getUsrHistory($_SESSION['user']);
                                     $hist_e = explode("<br>", $hist);
-                                    for($i = 0; $i <= 6; $i++){
+                                    for($i = 0; $i <= MAX_SIGC; $i++){
                                         if(isset($hist_e[$i])) echo $hist_e[$i] . "<br>";
                                         else break;
                                     }
                                 }
-                                echo "<a href=\"my-history.php\" role=\"button\" class=\"btn btn-block btn-primary\">See all my history</a><br>";
                                 ?>
+                                <a href="my-history.php" role="button" class="btn btn-block btn-primary">
+                                    See my history
+                                    <span>
+                                        <i class="fas fa-history"></i>
+                                    </span>
+                                </a>
                             </div>
                         </div>
 					</div>

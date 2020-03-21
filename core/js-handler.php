@@ -7,6 +7,9 @@ use Core\ProprietariesData;
 use Core\SignaturesData;
 use ProprietariesExceptions\ProprietaryNotFound;
 
+
+if(!defined("MAX_SIGC")) define("MAX_SIGC", 5);   // the max number of the signatures checked card displayed at the my_account.php page
+
 /**
  * That method sends the $_SESSION vars about the logged user to the localStorage. In a inexisting session
  * It will set such as no one logged at the system.

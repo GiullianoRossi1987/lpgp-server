@@ -1330,8 +1330,8 @@ class UsersCheckHistory extends DatabaseConnection{
         $dt = $qr_data->fetch_array();
         $qr_data->close();
         $data_html = "<div class=\"relatory-php\">\n";
-        $img_src = $dt['vl_valid'] == 1 ? "../media/checked-valid.png" : "../media/checked-invalid.png";
-        $data_html .= "<div class=\"img-relatory\">\n<img src=\"$img_src\" width=\"70px\" heigth=\"70px\">\n</div>\n";
+        $i_tag = $dt['vl_valid'] == 1 ? "<i class=\"fas fa-check\"></i>" : "<i class\"fas fa-times\"></i>";
+        $data_html .= "<div class=\"img-relatory\">\n<span>$i_tag</span>\n</div>\n";
         $msg = "";
         $ext_cls = "";
         switch ((int) $dt['vl_code']){
@@ -1353,13 +1353,14 @@ class UsersCheckHistory extends DatabaseConnection{
         $data_html .= "<div class=\"msg-code $ext_cls\">$msg</div>\n";
         // creates the card of the signature if the authentication returned valid.
         if($dt['vl_code'] == 0){
-            $signature_data_html = "<div class=\"card signature-card\">\n";
+            $signature_data_html = "<div class=\"card relatory-card\">\n";
             $sig_ref = $dt['id_signature'];
             $sign_data = $this->connection->query("SELECT * FROM tb_signatures WHERE cd_signature = $sig_ref;")->fetch_array();
             $prop_data = $this->connection->query("SELECT * FROM tb_proprietaries WHERE cd_proprietary = " . $sign_data['id_proprietary'] . ";")->fetch_array();
-            $signature_data_html .= "<div class=\"card-body\"><h1 class=\"card-title\">Signature #" . $sig_ref . "</h1>\n";
+            $signature_data_html .= "<div class=\"card-header\"><h1 class=\"card-title\">Signature #" . $sig_ref . "</h1>\n";
+            $signature_data_html .= "<div class=\"card-body\">";
             $signature_data_html .= "<div class=\"card-subtitle\"><a href=\"https://localhost/lpgp-server/cgi-actions/proprietary.php?id=" . $prop_data['cd_proprietary'] . "\">Proprietary: " . $prop_data['nm_proprietary'] . "</a>\n</div>\n";
-            $signature_data_html .= "<div class=\"card-footer text-muted\"> Created at: " . $sign_data['dt_creation'] . "</div>\n";
+            $signature_data_html .= "<div class=\"card-footer text-muted\"> Created at: " . $sign_data['dt_creation'] . "</div>\n</div>\n";
             $data_html .= $signature_data_html;
         }
         return $data_html;
@@ -1522,9 +1523,9 @@ class PropCheckHistory extends DatabaseConnection{
         $reg_data = $this->connection->query("SELECT * FROM tb_signatures_prop_h WHERE cd_reg = $reg_ref;")->fetch_array();
         $error_msg = "";
         $extra_cls = $reg_data['vl_code'] == 0 ? "" : "error-msg";
+        $extra_card_cls = $reg_data['vl_code'] == 0 ? "valid-card" : "invalid-card";
         $main_data_html = "\n<div class=\"relatory-container\">\n";
-        $img_src = $reg_data['vl_code'] == 0 ? "https://localhost/lpgp-server/media/checked-valid.png" : "https://localhost/lpgp-server/media/checked-invalid.png";
-        $main_data_html .= "<img src=\"$img_src\" width=\"70px\" height=\"70px\">\n";
+        $i_tag = $reg_data['vl_code'] == 0 ? "<i class=\"fas fa-check\"></i>" : "<i class=\"fas fa-times\"></i>";
         $err = false;
         switch ( (int) $reg_data['vl_code']){
             case 0:
@@ -1544,15 +1545,16 @@ class PropCheckHistory extends DatabaseConnection{
             break;
             default: throw new PropInvalidCode($reg_data);
         }
-        $main_data_html .= "<div class=\"message-relatory $extra_cls\">$error_msg</div>\n";
         if(!$err){
-            $card_div = "<div class=\"card signature-card\">\n<div class=\"card-body\">\n";
+            $card_div = "<div class=\"card relatory-card\">\n";
             $sig_dt = $this->connection->query("SELECT * FROM tb_signatures WHERE cd_signature = " . $reg_data['id_signature'] . ";")->fetch_array();
             $prop_dt = $this->connection->query("SELECT * FROM tb_proprietaries WHERE cd_proprietary = " . $sig_dt['id_proprietary'] . ";")->fetch_array();
             $id_prop = $prop_dt['cd_proprietary'];
-            $card_div .= "<h1 class=\"card-title\"> Signature #" . $sig_dt['cd_signature'] . "</h1>\n";
+            $card_div .= "<div class=\"card-header\">\n";
+            $card_div .= "<h1 class=\"card-title\"> Signature #" . $sig_dt['cd_signature'] . "</h1><span>$i_tag</span>" . "\n<div class=\"message-relatory $extra_cls\">$error_msg</div>";
+            $card_div .= "</div>\n<div class=\"card-body\">\n";
             $card_div .= "<h4 class=\"card-subtitle\"> Proprietary: <a href=\"https://localhost/lpgp-server/cgi-actions/proprietary.php?id=$id_prop\" target=\"_blanck\"> " . $prop_dt['nm_proprietary'] . "</a></div>\n";
-            $card_div .= "<div class=\"card-footer\">Created at: " . $sig_dt['dt_creation'] . "</div>\n</div>\n<div>\n";
+            $card_div .= "<div class=\"card-footer\">Created at: " . $sig_dt['dt_creation'] . "</div>\n</div>\n<div>\n</div>";
             $main_data_html .= $card_div;
         }
         return $main_data_html;
