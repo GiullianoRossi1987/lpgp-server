@@ -159,3 +159,18 @@ namespace Server{
 
 	class LogsError extends Exception{}
 }
+
+namespace ClientHistory{
+	use Exception;
+
+	/**
+	 * Exception thrown when the class try to access a history register from a client wich doesn't exists or was deleted. In that case the error can be 
+	 * catched normally
+	 */
+	class ReferenceError extends Exception{}
+
+	/**
+	 * Exception thrown when the class try to access a history register wich doesn't exists.
+	 */
+	class HistoryRegNotFound extends Exception{}
+}

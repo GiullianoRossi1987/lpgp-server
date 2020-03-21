@@ -1,20 +1,23 @@
 <?php
 namespace ClientsDatabase{
-	use Exception;
 
+	use Exception;
+	
 	try{
 		require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/logs-system.php";
 		require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
+		require_once $_SERVER['DOCUMENT-ROOT'] . "/lpgp-server/devcenter/devcore/exceptions.php";
 	}
 	catch(Exception $e){
 		require_once "core/logs-system.php";
 		require_once "core/Core.php";
 	}
-
+	
 	use LogsSystem\Logger;
 	use Core\DatabaseConnection;
 	use TypeError;
 	use Core\SignaturesData;
+	use ClientHistory\ReferenceError;
 
 	if(!defined("ROOT_USR_ACCESS")) define("ROOT_USR_ACCESS", "client_root");
 	if(!defined("ROOT_PAS_ACCESS")) define("ROOT_PAS_ACCESS", "");
@@ -239,5 +242,47 @@ namespace ClientsDatabase{
 			file_put_contents($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/$path/$nm", $con);
 			return $HTML_mode ? "<a href=\"$path/$nm\" download class=\"btn btn-primary\" role=\"button\">Download</a>" : "$path/$nm";
 		}
+	}
+
+	/**
+	 * That class manages the history of the clients authentications. That history is a table at the
+	 * MySQL database, everytime a client's authenticated it creates a register to the 
+	 */
+	class ClientsHistory extends DatabaseConnection{
+
+		/** 
+		 * Checks if a client primary key reference exists in the history. It's too much necessary for the hole system, so don't broke it.
+		 * @param integer $ref The client primary key reference to search in the database.
+		 * @return bool
+		*/
+		private function ckRefEx(int $ref){
+			$this->checkNotConnected();
+			$res = $this->connection->query("SELECT COUNT(id_client) 'Num' FROM tb_access WHERE id_client = $ref;")->fetch_array();
+			return (int) $res['Num'] != 0;
+		}
+
+		/**
+		 * Return the client primary key reference using him name. Return null if the client doesn't exist.
+		 *
+		 * @param string $ref The client name (nm_client) reference
+		 * @return integer|null
+		 */
+		private function gtNmId(string $ref){
+			$this->checkNotConnected();
+			$qr1 = $this->connection->query("SELECT COUNT(nm_client) 'tot' FROM tb_clients WHERE nm_client = \"$ref\"")->fetch_array();
+			if($qr1['tot'] != 1) return null;
+			$qr = $this->connection->query("SELECT cd_client FROM tb_clients WHERE nm_client = \"$ref\";")->fetch_array();
+			return $qr['nm_client'];
+		}
+
+		/**
+		 * Add a register in the history, using a client reference (name or primary key), date reference (normally using the default) and if it was a success.
+		 * 
+		 * @param string|integer $client The client reference.
+		 * @param date|null $datetime The datetime value to use;
+		 * @param integer|bool $success If the authentication was successfull.
+		 * @throws ReferenceError
+		 * @return void
+		 */
 	}
 }

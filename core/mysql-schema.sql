@@ -54,3 +54,24 @@ create table tb_signatures_prop_check_h(
     foreign key (id_prop) references tb_proprietareies(cd_proprietary),
     foreign key (id_signature) references tb_signatures(cd_signature);
 );
+
+create table tb_clients(
+    cd_client integer primary key auto_increment not null unique,
+    nm_client varchar(200) not null unique,
+    tk_client varchar(255) not null unique,
+    id_proprietary integer not null,
+    vl_root integer default 0 not null check(vl_root in (0, 1)),
+    foreign key (id_proprietary) references tb_proprietaries(cd_proprietary)
+        on delete CASCADE
+        on update CASCADE
+);
+
+create table tb_access(
+    cd_access integer primary key auto_increment not null unique,
+    id_client integer not null,
+    dt_access timestamp default CURRENT_TIMESTAMP not null,
+    vl_success integer default 1 not null check(vl_success in (0, 1)),
+    foreign key (id_client) references tb_clients(cd_client)
+    on delete cascade
+    on update cascade
+);
