@@ -1194,6 +1194,23 @@ class SignaturesData extends DatabaseConnection{
         }
         else return null;
     }
+
+    /**
+     * Authenticate the signature content, only the signature file content.
+     * @param string $content The signature file content to authenticate;
+     * @return bool If the signature content is valid or not
+     */
+    public function authSignatureCon(string $content){
+        $this->checkNotConnected();
+        $con_k = explode(self::DELIMITER, $content);
+        $jsonr_con = "";
+        for($i = 0; $i < count($con_k); $i++){
+            $jsonr_con .= chr((int) $con_k[$i]);
+        }
+        $json_con = json_decode($jsonr_con, true);
+        $signature_data = $this->connection->query("SELECT vl_password FROM tb_signatures WHERE cd_signature = " . $json_con['ID'] . ";")->fetch_array();
+        return $signature_data['vl_password'] == $json_con['Signature'];
+    }
 }
 
 // ** Ready for the tests! **

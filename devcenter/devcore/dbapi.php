@@ -237,7 +237,7 @@ namespace ClientsDatabase{
 			for($chr = 0; $chr < strlen($json_con); $chr++) array_push($tmp_arr, (string) ord($json_con[$chr]));
 			$con = implode(SignaturesData::DELIMITER, $tmp_arr);
 			file_put_contents($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/$path/$nm", $con);
-			return $HTML_mode ? "<a href=\"$path/$nm\" download class=\"dft-download-a\">Download</a>" : "$path/$nm";
+			return $HTML_mode ? "<a href=\"$path/$nm\" download class=\"btn btn-primary\" role=\"button\">Download</a>" : "$path/$nm";
 		}
 	}
 }

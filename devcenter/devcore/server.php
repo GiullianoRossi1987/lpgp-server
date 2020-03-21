@@ -6,6 +6,7 @@ namespace Server{
 
 	use ClientsDatabase\ClientsManager;
 	use Core\SignaturesData;
+	use mysqli;
 
 	if(!defined("MAX_LISTEN"))      define("MAX_LISTEN", 5000);
 	if(!defined("PROTOCOLS_F"))     define("PROTOCOLS_F", "devcenter/devcore/protocols.json");
@@ -32,7 +33,8 @@ namespace Server{
 		private $connection_logs;
 
 		const HANDSHAKE   = "Welcome to the LPGP official client authentication server.\nPlease send us your client information in the LPGP documents content format.\nExample: '192/168/0/11/98'";
-		const LOGS_FILE   = "logs/server.log";
+		const SIGHANDSK   = "Now you can send us the signature content for authentication. Please send the content";
+		const LOGS_FILE   = "devcenter/logs/access.log";
 		const TALKBACK_EN = TRUE;
 		const DELIMITER   = SignaturesData::DELIMITER;
 
@@ -80,9 +82,9 @@ namespace Server{
 			$dt = date("Y-M-d H:i:s");
 			$this->connection_logs[] = "[$dt] Closing socket.";
 			$doc = implode("\n", $this->connection_logs);
-			$all_dt = file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/devcenter/devcore/talkback.dat");
+			$all_dt = file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/devcenter/logs/access.dat");
 			$document = $all_dt . "\n" . $doc;
-			file_put_contents($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/devcenter/devcore/talkback.dat", $document);
+			file_put_contents($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/devcenter/logs/access.dat", $document);
 		}
 
 		/**
@@ -139,7 +141,9 @@ namespace Server{
 			if(!$this->started) throw new ServerCreatedError("The server hadn't created yet!", 1);
 			$dt_tm = date("Y-m-d H:i:s");
 			$sender = $ext ? "Client" : "Server";
-			array_push($this->connection_logs, "[$dt_tm] $sender -> $data");
+			$fl = fopen(self::LOGS_FILE, "a");
+			fwrite($fl, "[$dt_tm] $sender -> $data");
+			fclose($fl);
 		}
 
 		/**

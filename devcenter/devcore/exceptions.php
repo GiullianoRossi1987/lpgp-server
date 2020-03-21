@@ -156,4 +156,6 @@ namespace Server{
 	class ClientAuthError extends Exception{}
 
 	class DataRecvError extends Exception{}
+
+	class LogsError extends Exception{}
 }
