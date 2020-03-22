@@ -284,5 +284,25 @@ namespace ClientsDatabase{
 		 * @throws ReferenceError
 		 * @return void
 		 */
+		public function addReg($client, $datetime = null, $success = 1){
+			$this->checkNotConnected();
+			if(is_string($client)){
+				$tmp = $this->gtNmId($client);   // int now
+				if(is_null($client)) throw new ReferenceError("There's no '$client' as a client reference", 1);
+				else $client = $tmp;
+			}
+			else if(is_int($client) && !$this->ckRefEx($client)) throw new ReferenceError("There's no ID #$client as a client reference", 1);
+			if(is_bool($success)) $success = $success ? 1 : 0;
+
+			if(is_null($datetime)) $qr = $this->connection->query("INSERT INTO tb_access (id_client, vl_success) VALUES ($client, $success);");
+			else $qr = $this->connection->query("INSERT INTO tb_access (id_client, vl_success, dt_access) VALUES ($client, $success, '$datetime');");
+			unset($qr);
+			return ; 
+		}
+
+		/**
+		 * Returns the total of registers wich have specific clients, used for calculating the percentual of clients accesses.
+		 * @param int[]|string[] $clients A clients array with the each client reference
+		 */
 	}
 }
