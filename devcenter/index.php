@@ -1,3 +1,12 @@
+<?php 
+require_once "devcore/dbapi.php";
+
+use ClientsDatabase\ClientsHistory;
+use ClientsDatabase\ClientsManager;
+
+$cl = new ClientsManager("giulliano_php", "");
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,7 +20,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 </head>
 <body>
-	<canvas id="chart-teste" width="10" height="10">
+	<canvas id="chart-teste" width="10" height="10" style="visibility: hidden;">
 		<script>
 			// test with charts
 			var to = document.getElementById("chart-teste").getContext('2d');

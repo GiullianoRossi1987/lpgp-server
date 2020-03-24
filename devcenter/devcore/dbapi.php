@@ -6,18 +6,18 @@ namespace ClientsDatabase{
 	try{
 		require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/logs-system.php";
 		require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
-		require_once $_SERVER['DOCUMENT-ROOT'] . "/lpgp-server/devcenter/devcore/exceptions.php";
+		require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/devcenter/devcore/exceptions.php";
 	}
 	catch(Exception $e){
 		require_once "core/logs-system.php";
 		require_once "core/Core.php";
 	}
-	
-	use LogsSystem\Logger;
+
 	use Core\DatabaseConnection;
 	use TypeError;
 	use Core\SignaturesData;
 	use ClientHistory\ReferenceError;
+    use SignaturesExceptions\InvalidSignatureFile;
 
 	if(!defined("ROOT_USR_ACCESS")) define("ROOT_USR_ACCESS", "client_root");
 	if(!defined("ROOT_PAS_ACCESS")) define("ROOT_PAS_ACCESS", "");
@@ -208,7 +208,7 @@ namespace ClientsDatabase{
 					break;
 				else $local_counter++;
 			}
-			return "signature-file-".$local_counter . ".lpgp";
+			return "client-file-".$local_counter . ".lpgp";
 		}
 
 		/**
@@ -239,8 +239,49 @@ namespace ClientsDatabase{
 			$json_con = json_encode($json_arr);
 			for($chr = 0; $chr < strlen($json_con); $chr++) array_push($tmp_arr, (string) ord($json_con[$chr]));
 			$con = implode(SignaturesData::DELIMITER, $tmp_arr);
-			file_put_contents($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/$path/$nm", $con);
-			return $HTML_mode ? "<a href=\"$path/$nm\" download class=\"btn btn-primary\" role=\"button\">Download</a>" : "$path/$nm";
+			$path = $_SERVER['REMOTE_HOST'] . "/lpgp-server/devcenter/l.clientf/$nm";
+			file_put_contents($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/devcenter/l.clientf/$nm", $con);
+			return $HTML_mode ? "<a href=\"$path\" download=\"$path\" class=\"btn btn-primary\" role=\"button\">Download</a>" : "$path";
+		}
+
+		/**
+		 * Authenticate a client .lpgp file. The authentication will check the file Client, Token and proprietary.
+		 * @param string $file The .lpgp file name to get and authenticate, all the uploaded .lpgp files are in the u.clientf folder
+		 * @throws InvalidSignatureFile If the file isn't valid.
+		 * @return true Only if the file is valid.
+		 */
+		public function authenticateClientF(string $file){
+			$this->checkNotConnected();
+			$raw_con = file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/devcenter/u.clientf/$file");
+			$exp_con = explode(SignaturesData::DELIMITER, $raw_con);
+			$json_con = "";
+			foreach($exp_con as $ascii) $json_con .= chr((int) $ascii);
+			$pure_content = json_decode($json_con, true);
+			// Authentication process ^W^
+			if(!$this->ckClientEx($pure_content['Client'])) throw new InvalidSignatureFile("There's no client such as in the file", 1);
+			if(!$this->ckPropRef((int) $pure_content['Proprietary'])) throw new InvalidSignatureFile("Proprietary reference error!", 1);
+			if(!$this->authClient($pure_content['Client'], $pure_content['Token'])) throw new InvalidSignatureFile("Token access error", 1);
+			return true;
+		}
+
+		/**
+		 * Authenticate a client .lpgp file content. That authentication is used **ONLY AT THE SERVER.PHP**.
+		 * 
+		 * @param string $content The .lpgp file content.
+		 * @throws InvalidSignatureFile If the .lpgp file isn't valid.
+		 * @return true
+		 */
+		public function authenticateContent(string $content){
+			$this->checkNotConnected();
+			$exp_con = explode(SignaturesData::DELIMITER, $content);
+			$json_con = "";
+			foreach($exp_con as $ascii) $json_con .= chr((int) $ascii);
+			$pure = json_decode($json_con, true);
+			////////////////////////////////////////////////////////////
+			if(!$this->ckClientEx($pure['Client'])) throw new InvalidSignatureFile("There's no client such as in the content!", 1);
+			if(!$this->ckPropRef((int) $pure['Proprietary'])) throw new InvalidSignatureFile("Proprietary Reference error!", 1);
+			if(!$this->authClient($pure['Client'], $pure['Token'])) throw new InvalidSignatureFile("Token access error", 1);
+			return true;
 		}
 	}
 
@@ -257,8 +298,8 @@ namespace ClientsDatabase{
 		*/
 		private function ckRefEx(int $ref){
 			$this->checkNotConnected();
-			$res = $this->connection->query("SELECT COUNT(id_client) 'Num' FROM tb_access WHERE id_client = $ref;")->fetch_array();
-			return (int) $res['Num'] != 0;
+			$res = $this->connection->query("SELECT COUNT(cd_client) 'Num' FROM tb_clients WHERE cd_client = $ref;")->fetch_array();
+			return $res['Num'] != 0;
 		}
 
 		/**
@@ -272,20 +313,21 @@ namespace ClientsDatabase{
 			$qr1 = $this->connection->query("SELECT COUNT(nm_client) 'tot' FROM tb_clients WHERE nm_client = \"$ref\"")->fetch_array();
 			if($qr1['tot'] != 1) return null;
 			$qr = $this->connection->query("SELECT cd_client FROM tb_clients WHERE nm_client = \"$ref\";")->fetch_array();
-			return $qr['nm_client'];
+			return $qr['cd_client'];
 		}
 
 		/**
 		 * Add a register in the history, using a client reference (name or primary key), date reference (normally using the default) and if it was a success.
 		 * 
 		 * @param string|integer $client The client reference.
-		 * @param date|null $datetime The datetime value to use;
+		 * @param string|null $datetime The datetime value to use;
 		 * @param integer|bool $success If the authentication was successfull.
 		 * @throws ReferenceError
 		 * @return void
 		 */
 		public function addReg($client, $datetime = null, $success = 1){
 			$this->checkNotConnected();
+			print($this->connection->error);
 			if(is_string($client)){
 				$tmp = $this->gtNmId($client);   // int now
 				if(is_null($client)) throw new ReferenceError("There's no '$client' as a client reference", 1);
@@ -301,8 +343,128 @@ namespace ClientsDatabase{
 		}
 
 		/**
-		 * Returns the total of registers wich have specific clients, used for calculating the percentual of clients accesses.
-		 * @param int[]|string[] $clients A clients array with the each client reference
+		 * Return true or false if all the array items are integer type.
+		 *
+		 * @param array $items The array to check the items
+		 * @return boolean
 		 */
+		private static function is_all_int(array $items){
+			for($i = 0; $i < count($items); $i++){
+				if(!is_int($items[$i])) return false;
+			}
+			return true;
+		}
+
+		/**
+		 * Return true or fals if all the array items are string type
+		 * 
+		 * @param array $items The array to check the items
+		 * @return boolean
+		 */
+		private static function is_all_str(array $items){
+			for($i = 0; $i < count($items); $i++){
+				if(!is_string($items[$i])) return false;
+			}
+			return true;
+		}
+
+		/**
+		 * Returns the total of registers wich have specific clients, used for calculating the percentual of clients accesses.
+		 * @param array $clients A clients array with the each client reference
+		 * @throws TypeError If the $clients array have a item wich isn't integer or string
+		 * @throws ReferenceError If any of those $clients refereds doesn't exist.
+		 * @return int The percent of the access of those clients.
+		 */
+		public function getClientsPercent(array $clients){
+			if($this->is_all_str($clients)){
+				$int_arr = array();
+				foreach($clients as $str_ref){
+					$tmp = $this->gtNmId($str_ref);
+					if(is_null($tmp)) throw new ReferenceError("There's no '$str_ref' as a client name reference!", 1);
+					else $int_arr[] = $tmp;
+				}
+				$tot_count = 0;
+				foreach($int_arr as $client){
+					$qr = $this->connection->query("SELECT COUNT(id_client) 'tt' FROM tb_access WHERE id_client = $client;")->fetch_array();
+					$tot_count += (int)$qr['tt'];
+				}
+				return $tot_count;
+			}
+			else if($this->is_all_int($clients)){
+				$tot_count = 0;
+				foreach($clients as $client){
+					if(!$this->ckRefEx($client)) throw new ReferenceError("There's no ID #$client as a client reference!", 1);
+					$qr = $this->connection->query("SELECT COUNT(id_client) 'tt' FROM tb_access WHERE id_client = $client;")->fetch_array();
+					$tot_count += (int)$qr['tt'];
+				}
+				return $tot_count;
+			}
+			else throw new TypeError("Expecting a array with string/integer items type", 1);
+		}
+
+		/**
+		 * Return the total access  of a client at all the access.
+		 * 
+		 * @param string|int $client The client reference
+		 * @throws ReferenceError If there's no such client reference as the received
+		 * @return integer
+		 */
+		public function calcPerClient($client){
+			$this->checkNotConnected();
+			if(is_string($client)) $client = $this->gtNmId($client);
+			$qr_client  = $this->connection->query("SELECT COUNT(id_client) 'tclient' FROM tb_access WHERE id_client = $client;")->fetch_array();
+			return (int)$qr_client['tclient'];
+		}
+
+		/**
+		 * Return the access percentage of the selected clients at all the access;
+		 * 
+		 * @param array $clients The clients to search
+		 * @throws ReferenceError If the client referred doesn't exist
+		 * @return array
+		 */
+		public function calcPerClients(array $clients){
+			$this->checkNotConnected();
+			$tot = [];
+			foreach($clients as $client) $tot["$client"] = $this->calcPerClient($client);
+			return $tot;
+		}
+
+
+		/**
+		 * Return the total access of a client, filtring by the year.
+		 * 
+		 * @param string|integer $client The client reference to search, it can be the client name or the client PK
+		 * @param string|integer|null $year The year to search, it can be the year value (string or integer) or the current year (null)
+		 * @throws ReferenceError If there're errors with the client reference
+		 * @return integer
+		 */
+		public function PerClientYear($client, $year = null){
+			$this->checkNotConnected();
+			if(is_string($client)) {
+				$client_tmp = $this->gtNmId($client);
+				if(is_null($client_tmp)) throw new ReferenceError("There's no client '$client' such the referred", 1);
+				else $client = $client_tmp;
+			}
+			$dt_sr = is_null($year) ? date("Y") : $year;
+			$qr = $this->connection->query("SELECT COUNT(cd_access) 'Data' FROM tb_access WHERE id_client = $client AND YEAR(dt_access) = $dt_sr;")->fetch_array();
+			return $qr['Data'];
+		}
+
+		/**
+		 * Return the access percent of selected clients and a year.
+		 * @param array $clients The array with all the clients references;
+		 * @param string|integer|null $year The search to filter.
+		 * @throws ReferenceError In case of errors with the client reference
+		 * @return array
+		 */
+		public function PerClientsYearMany($clients, $year = null){
+			$this->checkNotConnected();
+			$arr_tot = [];
+			foreach($clients as $client) $arr_tot["$client"] = $this->PerClientYear($client, $year);
+			return $arr_tot;
+		}
+
+
 	}
 }

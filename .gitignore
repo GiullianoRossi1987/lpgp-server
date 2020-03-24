@@ -1,3 +1,11 @@
 ./tests.php
 ./.vscode/*
 ./bootstrap-4.4.1
+./devcenter/u.clientf/*
+./devcenter/l.clientf/*
+./u.images/*
+./usignatures.d/*
+./signatures.d/*
+./logs/*
+./devcenter/logs/access.log
+./bootstrap/*

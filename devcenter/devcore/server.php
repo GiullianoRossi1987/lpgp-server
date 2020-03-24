@@ -6,7 +6,8 @@ namespace Server{
 
 	use ClientsDatabase\ClientsManager;
 	use Core\SignaturesData;
-	use mysqli;
+	use ClientsDatabase\ClientsHistory;
+    use SignaturesExceptions\InvalidSignatureFile;
 
 	if(!defined("MAX_LISTEN"))      define("MAX_LISTEN", 5000);
 	if(!defined("PROTOCOLS_F"))     define("PROTOCOLS_F", "devcenter/devcore/protocols.json");
@@ -17,19 +18,18 @@ namespace Server{
 	if(!defined("NRML_USR_ACCESS")) define("NRML_USR_ACCESS", "client_normal");
 	if(!defined("ROOT_PAS_ACCESS")) define("ROOT_PAS_ACCESS", "");
 	if(!defined("NRML_PAS_ACCESS")) define("NRML_PAS_ACCESS", "");
+	if(!defined("DFT_CONN_LOGS"))   define("DFT_CONN_LOGS", "devcenter/logs/connections.log");
 
 	/**
 	 * That class have the main functions and procedures for the socket server.
 	 * @var resource|null $sock The server socket, initialized using the __construct method
 	 * @var bool $started If the server started and created the socket ($sock)
-	 * @var array|null $connection_info The main info about the server connection, it have the IP address, the IP type, the port, 
 	 * @var array|null $connection_logs All the data received and sent of the server at any connections.
 	 * @var ClientsManager|null The client manager database of the connection.
 	 */
 	class ServerSocket{
 		private $sock;
 		private $started;
-		private $connection_info;
 		private $connection_logs;
 
 		const HANDSHAKE   = "Welcome to the LPGP official client authentication server.\nPlease send us your client information in the LPGP documents content format.\nExample: '192/168/0/11/98'";
@@ -82,9 +82,21 @@ namespace Server{
 			$dt = date("Y-M-d H:i:s");
 			$this->connection_logs[] = "[$dt] Closing socket.";
 			$doc = implode("\n", $this->connection_logs);
-			$all_dt = file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/devcenter/logs/access.dat");
+			$all_dt = file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/devcenter/logs/access.log");
 			$document = $all_dt . "\n" . $doc;
-			file_put_contents($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/devcenter/logs/access.dat", $document);
+			file_put_contents($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/devcenter/logs/access.log", $document);
+		}
+
+		/**
+		 * Return the decoded client data.
+		 * @param string $content The content to decode.
+		 * @return array
+		 */
+		private static function decodeData(string $content){
+			$exp = explode(ServerSocket::DELIMITER, $content);
+			$json_con = "";
+			foreach($exp as $ascii) $json_con .= chr((int) $ascii);
+			return json_decode($json_con, true);
 		}
 
 		/**
@@ -95,12 +107,30 @@ namespace Server{
 		 */
 		private function authData(string $data){
 			if(!strpos($data, self::DELIMITER)) throw new DataRecvError("The received data isn't valid!", 1);
-			$exp = explode(self::DELIMITER, $data);
-			$json_data = "";
-			for($chr = 0; $chr < count($exp); $chr++) $json_data .= chr((int) $exp[$chr]);
-			$parsed = json_decode($json_data, true);
-			$manager = new ClientsManager("giulliano_php", "");
-			return $manager->authClient($parsed['ClientName'], $parsed['Token']);
+			$clients_man = new ClientsManager("giulliano_php", "");
+			$history_obj = new ClientsHistory("giulliano_php", "");
+			$dt = $this->decodeData($data);
+			try{
+				$a = $clients_man->authenticateContent($data);
+				if($a){
+					$history_obj->addReg($dt['Client'], null, 1);
+					return true;
+				}
+				else{
+					$history_obj->addReg($dt['Client'], null, 0);
+					return false;
+				}
+			}
+			catch(Exception $error){ 
+				$history_obj->addReg($dt['Client'], null, 0);
+				return false;
+			}
+			catch(InvalidSignatureFile $error){
+				$history_obj->addReg($dt['Client'], null, 0);
+				return false;
+			}
+			// no errors;
+			return true;
 		}
 
 		/**
@@ -117,7 +147,7 @@ namespace Server{
 			for($chr = 0; $chr < count($exp); $chr++) $json_data .= chr((int) $exp[$chr]);
 			$parsed = json_decode($json_data, true);
 			$manager = new ClientsManager("giulliano_php", "");
-			$root = $manager->getConnectionAttr()->query("SELECT vl_root FROM tb_clients WHERE nm_client = \"" . $parsed['ClientName'] . "\";")->fetch_array();
+			$root = $manager->getConnectionAttr()->query("SELECT vl_root FROM tb_clients WHERE nm_client = \"" . $parsed['Client'] . "\";")->fetch_array();
 			if($root['vl_root'] === 1){
 				$tmp = [ROOT_PAS_ACCESS, ROOT_USR_ACCESS];
 				return is_null($delimiter) ? implode(self::DELIMITER, $tmp) : implode($delimiter, $tmp);
@@ -126,7 +156,6 @@ namespace Server{
 				$tmp = [NRML_PAS_ACCESS, NRML_USR_ACCESS];
 				return is_null($delimiter) ? implode(self::DELIMITER, $tmp) : implode($delimiter, $tmp);
 			}
-
 		}
 
 		/**
@@ -156,6 +185,7 @@ namespace Server{
 		 */
 		public function loop(){
 			if(!$this->started) throw new ServerCreatedError("The socket haven't started yet!", 1);
+			$history_obj = new ClientsHistory("giulliano_php", "");
 			while($accepted = socket_accept($this->sock)){
 				// starts if the server accepted any connection
 				$snd = @socket_send($accepted, self::HANDSHAKE, 1024, 0);
@@ -165,7 +195,7 @@ namespace Server{
 				if($rtv === false) throw new RecvError(socket_strerror(socket_last_error()));
 				$this->addLog($client_data, true);
 				$responce = $this->authData($client_data) ? "1" : "0";
-				$responce .= "Access: " . $this->getAccess($client_data);
+				if($responce == "1") $responce .= " Access: " . $this->getAccess($client_data);
 				$snd = @socket_send($accepted, $responce, 1, 0);
 				if($snd === false) throw new SendError(socket_strerror(socket_last_error()));
 				$this->addLog($responce);
