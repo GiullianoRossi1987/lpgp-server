@@ -43,9 +43,9 @@ function setAccountOpts(ext_fls = false){
         var logoff_opt = document.createElement("a");
         var config_opt = document.createElement("a");
 
-        config_opt.href = "http://" + window.location.hostname + "/lpgp-server/cgi-actions/ch_my_data.php";
-        logoff_opt.href = "http://" + window.location.hostname + "/lpgp-server/cgi-actions/logoff.php";
-        account_opt.href = "http://"+ window.location.hostname + "/lpgp-server/cgi-actions/my_account.php";
+        config_opt.href = "https://" + window.location.hostname + "/lpgp-server/cgi-actions/ch_my_data.php";
+        logoff_opt.href = "https://" + window.location.hostname + "/lpgp-server/cgi-actions/logoff.php";
+        account_opt.href = "https://"+ window.location.hostname + "/lpgp-server/cgi-actions/my_account.php";
 
         // classes
         config_opt.classList.add("dropdown-item");
@@ -62,9 +62,8 @@ function setAccountOpts(ext_fls = false){
         var img = document.createElement("img");
         img.width = 30;
         img.height = 30;
-        var local_opt_btn = document.querySelector("#account-opts");    
-        if(ext_fls) img.src = getLinkedUserIcon();
-        else img.src = getLinkedUserIcon();
+        var local_opt_btn = document.querySelector("#account-opts");
+        img.src = getLinkedUserIcon();
         img.classList.add("user-icon");
         document.querySelector("#account-opts span").remove();
         local_opt_btn.appendChild(img);

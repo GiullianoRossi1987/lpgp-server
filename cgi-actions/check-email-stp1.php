@@ -18,7 +18,7 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <link rel="shortcut icon" href="../media/logo-lpgp.png" type="image/x-icon">
+    <link rel="shortcut icon" href="../media/new-logo.png" type="image/x-icon">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.2/popper.min.js"></script>
 
@@ -39,7 +39,7 @@
             else $("#err-lb-code").hide();
         });
     </script>
-    <div class="container-fluid header-container" role="banner" style="background-color: rgb(51, 51, 71); position: absolute;">
+    <div class="container-fluid header-container" role="banner" style="background-color: rgb(51, 51, 71); position: relative;">
         <div class="col-12 header" style="height: 71px">
             <div class="opt-dropdown dropdown login-dropdown">
                 <button type="button" class="btn btn-lg default-btn-header dropdown-toggle" data-toggle="dropdown" id="account-opts" aria-haspopup="true" aria-expanded="false">
@@ -53,7 +53,7 @@
                 </button>
                 <div class="dropdown-menu opts" aria-labelledby="signature-opts"></div>
             </div>
-            <div class="opt-dropdown dropdown after-opt help-dropdown" style="left: 12%; position: absolute !important;">
+            <div class="opt-dropdown dropdown after-opt help-dropdown" style="left: 12%; position: relative !important;">
                 <button class="dropdown-toggle btn btn-lg default-btn-header" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true" id="help-opt">
                     Help
                 </button>
@@ -69,7 +69,7 @@
     </div>
     <br>
 
-    <div class="container-fluid container-content" style="position: absolute;margin-left: 23%;">
+    <div class="container-fluid container-content" style="position: relative;margin-left: 23%;">
         <div class="row-main row">
             <div class="col-7 clear-content">
                 <h1>Check your email <?php echo $_SESSION['user'];?></h1>

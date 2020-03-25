@@ -20,7 +20,7 @@ input{
     display: block;
     text-indent: 100%;
     white-space: nowrap;
-    position: absolute;
+    position: relative;
     background: no-repeat center center #ccc;
     cursor: pointer;
     margin-top: -25px;

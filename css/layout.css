@@ -33,7 +33,7 @@
 }
 
 .content-container{
-    position: absolute;
+    position: relative;
     left: 25%;
     top: 0;
 }
@@ -86,7 +86,7 @@
 }
 
 .content-container{
-    position: absolute;
+    position: relative;
     left: 25%;
     top: 0;
 }

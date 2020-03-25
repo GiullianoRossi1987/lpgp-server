@@ -11,7 +11,9 @@ else{
     session_unset();
     session_destroy();
     echo "<script src=\"../js/main-script.js\"></script>";
-    echo "<script>resetVals();\nwindow.location.replace('https://localhost/lpgp-server/');</script>";
+    echo "<script>resetVals();\n</script>";
+
+    header("Location: index.php");
 }
 ?>
 <!DOCTYPE html>

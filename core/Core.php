@@ -1,9 +1,8 @@
 <?php
 namespace Core;
-// TODO Replace the paths to the original path
 use Exception;
 try{
-    include_once  $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Exceptions.php";
+    require_once  $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Exceptions.php";
 }
 catch(Exception $e){
     require_once "core/Exceptions.php";

@@ -38,6 +38,7 @@ $usr = new UsersData("giulliano_php", "");
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
     <script src="../js/actions.js"></script>
     <link rel="stylesheet" href="../css/account.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
 </head>
 <style>
 </style>
@@ -115,7 +116,9 @@ $usr = new UsersData("giulliano_php", "");
                                         }
                                         ?>
                                         <a class="account-separator" id="accountopt-sep" href="#moreoptions-section" data-toggle="collapse" aria-expanded="false" aria-controls="moreoptions-section">
-                                            <h2>More account options</h2>
+                                            <h2>More account options<span>
+                                        <i class="fas fa-caret-down"></i>
+                                    </span></h2>
                                         </a>
                                         <div class="collapse section" id="moreoptions-section">
                                             <br>
@@ -168,7 +171,10 @@ $usr = new UsersData("giulliano_php", "");
                         </div>
                         <div class="others-col col-md-12">
                             <?php if($_SESSION['mode'] == "prop") echo '<a href="#signatures-section" class="account-separator" id="signature-sep" aria-controls="signatures-section" aria-expanded="false" data-toggle="collapse">
-                                    <h2 class="mainheader-heading mb-0">My Signatures</h2>
+                                    <h2 class="mainheader-heading mb-0">My Signatures<span>
+                                    <i class="fas fa-caret-down"></i>
+                                </span></h2>
+                                    
                                 </a>';
                             ?>
                             <div id="signatures-section" class="collapse section">
@@ -188,7 +194,12 @@ $usr = new UsersData("giulliano_php", "");
                         </div>
                         <div class="history-col col-12" style="position: relative; margin-top: 10%;">
                             <a class="account-separator" href="#history-section" data-toggle="collapse" aria-expanded="false" aria-controls="history-section" id="history-sep">
-                                <h2> My signature check history</h2>
+                                <h2> 
+                                    My signature check history
+                                    <span>
+                                        <i class="fas fa-caret-down"></i>
+                                    </span>
+                                </h2>
                             </a>
                             <div class="collapse section" id="history-section">
                                 <br>
@@ -234,7 +245,7 @@ $usr = new UsersData("giulliano_php", "");
                 <div class="social-options-grp">
                     <div class="social-option">
                         <a href="https://github.com/GiullianoRossi1987/lpgp-server" target="_blanck" id="github" class="social-option-footer">
-                        <img src="../media/github.png" alt="" width="50px" height="30px"></a>
+                        <span><i class="fab fa-github"></i></span>" alt="" width="50px" height="30px"></a>
                     </div>
                     <div class="social-option-footer">
                         <a href="https://" target='_blanck' id="facebook">

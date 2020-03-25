@@ -162,7 +162,7 @@ sendUserLogged();
                 <div class="social-options-grp">
                     <div class="social-option">
                         <a href="https://github.com/GiullianoRossi1987/lpgp-server" target="_blanck" id="github" class="social-option-footer">
-                        <img src="./media/github.png" alt="" width="50px" height="30px">Visit our github</a>
+                        <span><i class="fab fa-github"></i></span>" alt="" width="50px" height="30px">Visit our github</a>
                     </div>
                     <div class="social-option-footer">
                         <a href="https://" target='_blanck' id="facebook">
