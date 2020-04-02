@@ -150,11 +150,11 @@ namespace Server{
 			$root = $manager->getConnectionAttr()->query("SELECT vl_root FROM tb_clients WHERE nm_client = \"" . $parsed['Client'] . "\";")->fetch_array();
 			if($root['vl_root'] === 1){
 				$tmp = [ROOT_PAS_ACCESS, ROOT_USR_ACCESS];
-				return is_null($delimiter) ? implode(self::DELIMITER, $tmp) : implode($delimiter, $tmp);
+				return is_null($delimiter) ? ROOT_USR_ACCESS . self::DELIMITER . ROOT_PAS_ACCESS : ROOT_USR_ACCESS . $delimiter . ROOT_PAS_ACCESS;
 			}
 			else{
 				$tmp = [NRML_PAS_ACCESS, NRML_USR_ACCESS];
-				return is_null($delimiter) ? implode(self::DELIMITER, $tmp) : implode($delimiter, $tmp);
+				return is_null($delimiter) ? NRML_USR_ACCESS . self::DELIMITER . NRML_PAS_ACCESS : NRML_USR_ACCESS . $delimiter . NRML_PAS_ACCESS;
 			}
 		}
 
@@ -195,8 +195,8 @@ namespace Server{
 				if($rtv === false) throw new RecvError(socket_strerror(socket_last_error()));
 				$this->addLog($client_data, true);
 				$responce = $this->authData($client_data) ? "1" : "0";
-				if($responce == "1") $responce .= " Access: " . $this->getAccess($client_data);
-				$snd = @socket_send($accepted, $responce, 1, 0);
+				if($responce == "1") $responce .= "/" . $this->getAccess($client_data);
+				$snd = @socket_send($accepted, $responce, 1024, 0);
 				if($snd === false) throw new SendError(socket_strerror(socket_last_error()));
 				$this->addLog($responce);
 				socket_close($accepted);
