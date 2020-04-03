@@ -49,6 +49,8 @@ use ClientsExceptions\AuthenticationError as ClientAuthenticationError;
 use ClientsExceptions\ClientNotFound;
 use ClientsExceptions\ClientAlreadyExists;
 
+use ZipArchive;
+
 define("DEFAULT_HOST", "localhost");
 define("DEFAULT_DB", "LPGP_WEB");
 define("ROOT_VAR", $_SERVER['DOCUMENT_ROOT']);
@@ -57,8 +59,10 @@ define("DEFAULT_USER_ICON", $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/media/user
 define("DEFAULT_DATETIME_F", "Y-m-d H:M:I");
 
 // Clients constants
-if(!defined("U_CLIENTS_CONF")) define("U_CLIENTS_CONF", $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/u.clients");
-if(!defined("G_CLIENTS_CONF")) define("G_CLIENTS_CONF", $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/g.clients");
+if(!defined("U_CLIENTS_CONF")) define("U_CLIENTS_CONF", $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/u.clients/");
+if(!defined("G_CLIENTS_CONF")) define("G_CLIENTS_CONF", $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/g.clients/");
+if(!defined("TMP_GCLIENTS")) define("TMP_GCLIENTS", $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/g.clients/tmp/");
+if(!defined("TMP_UCLIENTS")) define("TMP_UCLIENTS", $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/u.clients/tmp/");
 
 /**
  * That class contains the main connection to the database and him universal actions,
@@ -1672,14 +1676,110 @@ class ClientsData extends DatabaseConnection{
     }
 
     /**
-     * That method generates a client configurations file, that file is normally a .lpgp file, but the
+     * That method generate the clients configurations file and the clients authentication file name and return the link for 
+     * those files in array form.
+     * 
+     * @return array
+     */
+    private static function pathZipGen(){
+        // Client config
+        $ind1 = 0;
+        $config_nm = "";
+        do{
+            $config_nm = "client_config_" . $ind1 . ".json";
+            $ind1++;
+        }while(file_exists(TMP_GCLIENTS . "/" . $config_nm) || strlen($config_nm) == 0);
+
+        // Client auth.
+        $ind2 = 0;
+        $auth_nm = "";
+        do{
+            $auth_nm = "auth_client_" . $ind2 . ".lpgp";
+            $ind2++;
+        }while(file_exists(TMP_GCLIENTS . "/" . $auth_nm) || strlen($auth_nm) == 0);
+
+        return [TMP_GCLIENTS . "$config_nm", TMP_GCLIENTS . "$auth_nm"];
+    }
+
+    /**
+     * That method generate a zip file with the client configurations file and client authentication
+     * file and return a link to the zip file. 
+     * ** Warning that method uses the ZipArchive class, if you don't have it just intall using 'sudo apt-get install php-zip'
+     * 
+     * @param string $config The client configurations file path
+     * @param string $auth The client authentication file path
+     * @param boolean $HTML_mode If the method will return the link in a anchor link tag
+     * @return string
+     */
+    private static function genZipFile(string $config, string $auth, bool $HTML_mode = true){
+        $zp = new ZipArchive();
+        // zip file name generation
+        $ind = 0;
+        $zip_nm = "";
+        do{
+            $zip_nm = G_CLIENTS_CONF . "zip_client_" . $ind . ".zip";
+            $ind++;
+        }while(file_exists($zip_nm) || strlen($zip_nm) == 0);
+
+        // Zip creation
+        if($zp->open($zip_nm, ZipArchive::CREATE)){
+            $zp->addFile($config, "client_config.json");
+            $zp->addFile($auth, "client_auth.lpgp");
+            $zp->close();
+        }
+
+        unlink($config);
+        unlink($auth);
+
+        $link_a = str_replace("/var/www/html/", "/", $zip_nm);
+
+        return $HTML_mode ? "<a href=\"$link_a\" download=\"$link_a\" class=\"dft-clients-lk\">$zip_nm</a>" : $zip_nm;
+    }
+
+    /**
+     * That method generates two clients files, the client configurations file and the .lpgp authentication file. 
+     * The difference between those files is the use for the system, the configurations file is used by the client
+     * (SDK) to him know what kind of client account it isit is.
      *
-     * @param integer $client_pk_ref
-     * @return void
+     * @param integer $client_pk_ref The client primary key reference to generate the file.
+     * @throws ClientNotFound If the reference doesn't exist.
+     * @return string The zip file with the clients files for downlaod.
      */
     public function genConfigClient(int $client_pk_ref){
-        
+        $this->checkNotConnected();
+        if(!$this->ckClientEx($client_pk_ref)) throw new ClientNotFound("There's no client #$client_pk_ref", 1);
+        $cldt = $this->connection->query("SELECT tk_client, vl_root, id_proprietary, nm_client FROM tb_clients WHERE cd_client = $client_pk_ref;")->fetch_array();
+        $files = $this->pathZipGen();
+        // Create and insert the content at the client config file.
+        $json_conf = array(
+            "RootMode" => (int)$cldt['vl_root'],
+            "Mode" => 0,
+            "LocalAccountId" => (int)$cldt['id_proprietary'],
+            "Dt-Generation" => date("Y-m-d H:M:i")
+        );
+        $dumped = json_encode($json_conf);
+        // writes the content, but before it make sure the folders are in 777 chmod;
+        file_put_contents($files[0], $dumped);
+
+        // Creates and write the content at the client authentication file
+        $json_aut = array(
+            "Client" => $client_pk_ref,
+            "Proprietary" => (int)$cldt['id_proprietary'],
+            "Token" => (int)$cldt['tk_client'],
+            "Dt" => date("Y-m-d H:M:i")
+        );
+        $dumped_a = json_encode($json_aut);
+        $encoded_ar = [];
+        $exp = str_split($dumped_a);
+        foreach($exp as $char) $encoded_ar[] = (string)ord($char);
+        $encoded = implode(self::DELIMITER, $encoded_ar);
+        file_put_contents($files[1], $encoded);
+        return $this->genZipFile($files[0], $files[1]);
     }
+
+    /**
+     * 
+     */
 }
 
 
