@@ -44,12 +44,21 @@ use PropCheckHistory\InvalidErrorCode as PropInvalidCode;
 use PropCheckHistory\RelatoryError as PropRelatoryError;
 use PropCheckHistory\RegisterNotFound as PropRegisterNotFound;
 
+use ClientsExceptions\AccountError;
+use ClientsExceptions\AuthenticationError as ClientAuthenticationError;
+use ClientsExceptions\ClientNotFound;
+use ClientsExceptions\ClientAlreadyExists;
+
 define("DEFAULT_HOST", "localhost");
 define("DEFAULT_DB", "LPGP_WEB");
 define("ROOT_VAR", $_SERVER['DOCUMENT_ROOT']);
 define("EMAIL_USING", "lpgp@gmail.com");
 define("DEFAULT_USER_ICON", $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/media/user-icon.png");
 define("DEFAULT_DATETIME_F", "Y-m-d H:M:I");
+
+// Clients constants
+if(!defined("U_CLIENTS_CONF")) define("U_CLIENTS_CONF", $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/u.clients");
+if(!defined("G_CLIENTS_CONF")) define("G_CLIENTS_CONF", $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/g.clients");
 
 /**
  * That class contains the main connection to the database and him universal actions,
@@ -1627,6 +1636,49 @@ class PropCheckHistory extends DatabaseConnection{
             $main_pg .= $card_main . "<br>";
         }
         return $main_pg;
+    }
+}
+
+/**
+ * That class manages the clients data, creating and authenticating clients files.
+ * @var string DELIMITER The standard constant used for the 
+ */
+class ClientsData extends DatabaseConnection{
+    const DELIMITER = "/";
+
+    /**
+     * That method checks if a client reference exist or not. That reference received as a parameter is the client
+     * primary key.
+     *
+     * @param integer $client_ref The primary key client reference 
+     * @return boolean
+     */
+    private function ckClientEx(int $client_ref){
+        $this->checkNotConnected();
+        $qr = $this->connection->query("SELECT COUNT(cd_client) FROM tb_clients WHERE cd_client = $client_ref;")->fetch_array();
+        return $qr[0] > 0;
+    }
+
+    /**
+     * That method check if a client reference exist or not, but using the client token.
+     *
+     * @param integer $token_cl The token reference to search.
+     * @return boolean
+     */
+    private function ckTokenClientEx(int $token_cl){
+        $this->checkNotConnected();
+        $qr = $this->connection->query("SELECT COUNT(cd_client) FROM tb_clients WHERE tk_client = $token_cl;")->fetch_array();
+        return $qr[0] > 0;
+    }
+
+    /**
+     * That method generates a client configurations file, that file is normally a .lpgp file, but the
+     *
+     * @param integer $client_pk_ref
+     * @return void
+     */
+    public function genConfigClient(int $client_pk_ref){
+        
     }
 }
 

@@ -198,4 +198,56 @@ namespace PropCheckHistory{
         public function _construct(int $vl_ref, int $code = 1){ parent::__construct("Can't find the register using the PK reference #$vl_ref!", $code);}
     }
 }
+namespace ClientsExceptions{
+    use Exception;
+
+    /**
+     * <Exception> thrown when the client database try to access a client, which the reference doesn't exists.
+     * Like a primary key of a client, but the client doesn't exist.
+     * @access public
+     */
+    class ClientNotFound extends Exception{
+        /**
+         * Starts the exception with the main info to throw with a good error message,
+         *
+         * @param integer $ref The client primary reference
+         * @param integer $code The error code to throw the exception, 1 is to fatal (by default)
+         * @return void
+         */
+        public function __contruct(int $ref, int $code = 1){
+            parent::__construct("The client #$ref doesn't exist.", $code);
+        }
+    }
+
+    /**
+     * <Exception> thrown when the class try to authenticate a client file but the authentication failed.
+     * The authentication can fail by many causes.
+     */
+    class AuthenticationError extends Exception{
+        // empty because there're so many possibilities to the error message that is better leave it blank.
+    }
+
+    /**
+     * <Exception> thrown when the logged user try to create a client, but he isn't a prorprietary, only
+     * proprietaries can create the clients.
+     */
+    class AccountError extends Exception{}
+
+    /**
+     * <Exception> thrown when the logged user try to create a client, but the client name is already in use.
+     * Also used when the logged user try to change the client name, but the new name is already in use.
+     */
+    class ClientAlreadyExists extends Exception{}
+
+    /**
+     * <Exception> thrown when the class try to access a client, or create a client using the proprietary reference,
+     * but the reference don't exists or isn't valid
+     */
+    class ProprietaryReferenceError extends Exception{}
+
+    /**
+     * <Exception> thrown when the clients class try to access a client using the token reference but the token doesn't exist.
+     */
+    class TokenReferenceError extends Exception{}
+}
 ?>
