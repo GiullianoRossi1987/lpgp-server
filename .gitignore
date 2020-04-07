@@ -8,4 +8,9 @@
 ./signatures.d/*
 ./logs/*
 ./devcenter/logs/access.log
-./bootstrap/*
+
+./g.clients/*.zip
+./g.clients/tmp/*
+
+./u.clients/tmp/*
+./u.clients/*.zip

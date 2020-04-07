@@ -48,7 +48,8 @@ use ClientsExceptions\AccountError;
 use ClientsExceptions\AuthenticationError as ClientAuthenticationError;
 use ClientsExceptions\ClientNotFound;
 use ClientsExceptions\ClientAlreadyExists;
-
+use ClientsExceptions\ProprietaryReferenceError;
+use ClientsExceptions\TokenReferenceError;
 use ZipArchive;
 
 define("DEFAULT_HOST", "localhost");
@@ -56,7 +57,9 @@ define("DEFAULT_DB", "LPGP_WEB");
 define("ROOT_VAR", $_SERVER['DOCUMENT_ROOT']);
 define("EMAIL_USING", "lpgp@gmail.com");
 define("DEFAULT_USER_ICON", $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/media/user-icon.png");
-define("DEFAULT_DATETIME_F", "Y-m-d H:M:I");
+define("DEFAULT_DATETIME_F", "Y-m-d H/**
+* That method generate the file names for the
+*/:M:I");
 
 // Clients constants
 if(!defined("U_CLIENTS_CONF")) define("U_CLIENTS_CONF", $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/u.clients/");
@@ -1676,6 +1679,18 @@ class ClientsData extends DatabaseConnection{
     }
 
     /**
+     * That method check if a proprietary primary key reference exists in the tb_proprietaries
+     * 
+     * @param integer $reference The primary key reference to check.
+     * @return boolean
+     */
+    private function ckPropRef(int $reference){
+        $this->checkNotConnected();
+        $qr_ref = $this->connection->query("SELECT COUNT(cd_proprietary) AS counted FROM tb_proprietaries WHERE cd_proprietary = $reference;")->fetch_array();
+        return (int)$qr_ref['counted'] > 0;
+    }
+
+    /**
      * That method generate the clients configurations file and the clients authentication file name and return the link for 
      * those files in array form.
      * 
@@ -1711,7 +1726,7 @@ class ClientsData extends DatabaseConnection{
      * @param boolean $HTML_mode If the method will return the link in a anchor link tag
      * @return string
      */
-    private static function genZipFile(string $config, string $auth, bool $HTML_mode = true){
+    private static function genZipFile(string $config, string $auth, bool $HTML_mode = true) : string{
         $zp = new ZipArchive();
         // zip file name generation
         $ind = 0;
@@ -1745,17 +1760,18 @@ class ClientsData extends DatabaseConnection{
      * @throws ClientNotFound If the reference doesn't exist.
      * @return string The zip file with the clients files for downlaod.
      */
-    public function genConfigClient(int $client_pk_ref){
+    public function genConfigClient(int $client_pk_ref): string{
         $this->checkNotConnected();
         if(!$this->ckClientEx($client_pk_ref)) throw new ClientNotFound("There's no client #$client_pk_ref", 1);
-        $cldt = $this->connection->query("SELECT tk_client, vl_root, id_proprietary, nm_client FROM tb_clients WHERE cd_client = $client_pk_ref;")->fetch_array();
+        $cldt = $this->connection->query("SELECT tk_client, vl_root, id_proprietary, nm_client, nm_client FROM tb_clients WHERE cd_client = $client_pk_ref;")->fetch_array();
         $files = $this->pathZipGen();
         // Create and insert the content at the client config file.
         $json_conf = array(
-            "RootMode" => (int)$cldt['vl_root'],
+            "RootMode" => (int)$cldt['vl_root'] == 1,
             "Mode" => 0,
+            "Client" => (int) $cldt['nm_client'],
             "LocalAccountId" => (int)$cldt['id_proprietary'],
-            "Dt-Generation" => date("Y-m-d H:M:i")
+            "Dt-Generation" => date("Y-m-d H:i:s")
         );
         $dumped = json_encode($json_conf);
         // writes the content, but before it make sure the folders are in 777 chmod;
@@ -1778,8 +1794,171 @@ class ClientsData extends DatabaseConnection{
     }
 
     /**
+     * That method return the client integer primary key reference quering by his name.
      * 
+     * @param string $name The client name to query
+     * @throws ClientNotFound If the client name doesn't exist.
+     * @return integer The client primary key reference.
      */
+    private function getClientID(string $name) : int{
+        $this->checkNotConnected();
+        $qr_all = $this->connection->query("SELECT COUNT(cd_client) AS exist, cd_client FROM tb_clients WHERE nm_client = \"$name\";")->fetch_array();
+        if($qr_all['exist'] == 0) throw new ClientNotFound("There's no client '$name'",1 );
+        return $qr_all['cd_client'];
+    }
+
+    /**
+     * That method authenticate a client authentication file. To be valid the data encoded on the file content 
+     * must be valid.
+     *
+     * @param string $auth_path The client authentication file path, normally located at the u.clients folder
+     * @throws ClientAuthenticationError If the authentication file isn't valid.
+     * @return true Only if the file is valid.
+     */
+    public function authClient(string $auth_path) : bool{
+        $this->checkNotConnected();
+        $content = file_get_contents($auth_path);
+        $exp = explode(self::DELIMITER, $content);
+        $json_con = "";
+        foreach($exp as $chr) $json_con .= chr((int) $chr);
+        $data = json_decode($json_con, true);
+        if(!$this->ckClientEx($data['Client'])) throw new ClientAuthenticationError("The client authentication file isn't valid. The client doesn't exists.", 1);
+        if(!$this->ckPropRef($data['Proprietary'])) throw new ClientAuthenticationError("The client authentication file isn't valid. The proprietary don't exist.", 1);
+        $qr_tk = $this->connection->query("SELECT tk_client FROM tb_clients WHERE cd_client = " . $data['Client'] . ";")->fetch_array();
+        if(!$qr_tk['tk_client'] != $data['Token']) throw new ClientAuthenticationError("The client isn't valid. Token error.", 1);
+        return true;
+    }
+
+    /**
+     * That method generates a client new token. Used when the class creates a new client or when changes the client token.
+     * It check if the random token already exists, if it exists will 
+     * 
+     * @return integer The new token generated.
+     */
+    private function genTk() : int{
+        $this->checkNotConnected();
+        do{
+            for($i = 0; $i < 4; $i++) $tk = random_int(0, 9);
+        }while($this->ckTokenClientEx($tk));
+        return $tk;
+    }
+
+    /**
+     * That method adds a new client to the clients database. To add the new client to the 
+     *
+     * @param string $client_name The client name
+     * @param integer $proprietary The client owner proprietary reference.
+     * @param boolean $root_mode If the client will have root permissions.
+     * @param integer|null $tk The client token, if null it will be generated.
+     * @throws ClientAlreadyExists If the client name is already in use by another client.
+     * @throws ProprietaryReferenceError If the proprietary referenced doesn't exist.
+     * @throws TokenReferenceError If the client token selected already exists in the database.
+     * @return void
+     */
+    public function addClient(string $client_name, int $proprietary, bool $root_mode = false, ?int $tk = null) : void{
+        $this->checkNotConnected();
+        if($this->ckClientEx($this->getClientID($client_name))) 
+            throw new ClientAlreadyExists("The name '$client_name' is already in use", 1);
+        if(!$this->ckPropRef($proprietary)) throw new ProprietaryReferenceError("There's no proprietary #$proprietary", 1);
+        $vl_root = $root_mode ? 1 : 0;
+        $tk_client = 0;
+        if(!is_null($tk)){
+            if($this->ckTokenClientEx($tk)) throw new TokenReferenceError("That token is already in use.", 1);
+            $tk_client = $tk;
+        }
+        else $tk_client = $this->genTk();
+        $qr_add = $this->connection->query("INSERT INTO tb_clients (nm_client, id_proprietary, vl_root, tk_client) VALUES (\"$client_name\", $proprietary, $vl_root, $tk_client);");
+        return ;
+    }
+    
+    /**
+     * Removes a client from the database.
+     * 
+     * @param string|integer $client The client reference, it can be the client name (string) or the client primary key (integer)
+     * @throws ClientNotFound If the reference isn't valid.
+     * @return void
+     */
+    public function rmClient($client) : void{
+        $this->checkNotConnected();
+        $client_vl = is_string($client) ? $this->getClientID($client) : $client;
+        if(!$this->ckClientEx($client_vl)) throw new ClientNotFound("The client referenced doesn't exist.", 1);
+        $qr_rm = $this->connection->query("DELETE FROM tb_clients WHERE cd_client = $client_vl;");
+        return ;
+    }
+
+    /**
+     * That method changes the client name.
+     * 
+     * @param string|integer $client The client reference, can be the actual name (string) or the client primary key (integer)
+     * @param string $new_name The new client name.
+     * @throws ClientAlreadyExists If the client name is already in use.
+     * @return void
+     */
+    public function chClientName($client, string $new_name) : void{
+        $this->checkNotConnected();
+        try{
+            $id = $this->getClientID($new_name);
+            unset($id);
+        }
+        catch(ClientNotFound $e){
+            $ref = is_string($client) ? $this->getClientID($client) : $client;
+            if(!$this->ckClientEx($ref)) throw new ClientNotFound("There's no client ($client)", 1);
+            $qr = $this->connection->query("UPDATE tb_clients SET nm_client = \"$new_name\" WHERE cd_client = $ref;");
+            unset($ref);
+            return ;
+        }
+        throw new ClientAlreadyExists("The name '$new_name' is already in use;", 1);
+    }
+
+    /**
+     * That method generates a new token for a client
+     * 
+     * @param string|integer $client The client reference, it can be the name (string) or the primary key (integer)
+     * @var integer $ref The client reference
+     * @throws ClientNotFound If the client reference doesn't exists.
+     * @return void
+     */
+    public function genNewTK($client) : void{
+        $this->checkNotConnected();
+        $ref = is_string($client) ? $this->getClientID($client) : $client;
+        if(!$this->ckClientEx($ref)) throw new ClientNotFound("There's no client ($client)", 1);
+        $new_tk = $this->genTk();
+        $qr_ch = $this->connection->query("UPDATE tb_clients SET tk_client = $new_tk WHERE cd_client = $client;");
+        unset($new_tk);
+    }
+
+    /**
+     * That method changes the root permissions value of the client selected.
+     * 
+     * @param string|integer $client The client reference, it can be the client name (string value) or the client primary key (integer value)
+     * @param boolean|integer $grant_root If the method will grant root permissions or revoke root permissions from the client.
+     * @throws ClientNotFound If the client reference isn't valid.
+     * @return void
+     */
+    public function chClientPermissions($client, $root = 0) : void{
+        $this->checkNotConnected();
+        $ref = is_string($client) ? $this->getClientID($client) : (integer) $client;
+        if(!$this->ckClientEx($ref)) throw new ClientNotFound("There's no client ($client)", 1);
+        $vl_root = is_bool($root) ? (int) $root : $root;
+        $qr_ch = $this->connection->query("UPDATE tb_clients SET vl_root = $vl_root WHERE cd_client = $ref;");
+        return ;
+    }
+
+    /**
+     * That method returns all the clients of a proprietary, in a normal array. The array will have the clients name and ID
+     * 
+     * @param integer $proprietary The proprietary primary key reference to search in the clients table
+     * @return array
+     */
+    public function getClientsByOwner(int $proprietary){
+        $this->checkNotConnected();
+        $qr_all = $this->connection->query("SELECT cd_client, nm_client FROM tb_clients WHERE id_proprietary = $proprietary;");
+        $rt_arr = [];
+        while($row = $qr_all->fetch_array()){
+            $rt_arr[] = $row;
+        }
+        return $rt_arr;
+    }
 }
 
 
