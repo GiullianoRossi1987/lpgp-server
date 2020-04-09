@@ -1872,9 +1872,10 @@ class ClientsData extends DatabaseConnection{
         try{
             if($this->ckClientEx($this->getClientID($client_name))) 
                 throw new ClientAlreadyExists("The name '$client_name' is already in use", 1);
-        }
+            }
         catch(ClientNotFound $e){
-            if(!$this->ckPropRef($proprietary)) throw new ProprietaryReferenceError("There's no proprietary #$proprietary", 1);
+            $prp = $this->rtPropID($proprietary);
+            if(!$this->ckPropRef($prp)) throw new ProprietaryReferenceError("There's no proprietary #$proprietary", 1);
             $vl_root = $root_mode ? 1 : 0;
             $tk_client = 0;
             if(!is_null($tk)){
@@ -1882,7 +1883,6 @@ class ClientsData extends DatabaseConnection{
                 $tk_client = $tk;
             }
             else $tk_client = $this->genTk();
-            $prp = $this->rtPropID($proprietary);
             $qr_add = $this->connection->query("INSERT INTO tb_clients (nm_client, id_proprietary, vl_root, tk_client) VALUES (\"$client_name\", $prp, $vl_root, $tk_client);");
             return ;
         }
