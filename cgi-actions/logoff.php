@@ -13,7 +13,7 @@ else{
     echo "<script src=\"../js/main-script.js\"></script>";
     echo "<script>resetVals();\n</script>";
 
-    header("Location: index.php");
+    header("Location: ../index.php");
 }
 ?>
 <!DOCTYPE html>
