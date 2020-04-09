@@ -1844,10 +1844,22 @@ class ClientsData extends DatabaseConnection{
     }
 
     /**
+     * Method created to get the proprietary reference by the name.
+     * 
+     * @param string $proprietary The proprietary name reference
+     * @return integer|null Null if the proprietary doesn't exist.
+     */
+    private function rtPropID(string $proprietary){
+        $this->checkNotConnected();
+        $qr_all = $this->connection->query("SELECT cd_proprietary, COUNT(cd_proprietary) AS exists_prop FROM tb_proprietaries WHERE nm_proprietary = \"$proprietary\";")->fetch_array();
+        return $qr_all['exists_prop'] > 0 ? (int) $qr_all['cd_proprietary'] : null;
+    }
+
+    /**
      * That method adds a new client to the clients database. To add the new client to the 
      *
      * @param string $client_name The client name
-     * @param integer $proprietary The client owner proprietary reference.
+     * @param string $proprietary The client owner proprietary name reference.
      * @param boolean $root_mode If the client will have root permissions.
      * @param integer|null $tk The client token, if null it will be generated.
      * @throws ClientAlreadyExists If the client name is already in use by another client.
@@ -1855,20 +1867,25 @@ class ClientsData extends DatabaseConnection{
      * @throws TokenReferenceError If the client token selected already exists in the database.
      * @return void
      */
-    public function addClient(string $client_name, int $proprietary, bool $root_mode = false, ?int $tk = null) : void{
+    public function addClient(string $client_name, string $proprietary, bool $root_mode = false, ?int $tk = null) : void{
         $this->checkNotConnected();
-        if($this->ckClientEx($this->getClientID($client_name))) 
-            throw new ClientAlreadyExists("The name '$client_name' is already in use", 1);
-        if(!$this->ckPropRef($proprietary)) throw new ProprietaryReferenceError("There's no proprietary #$proprietary", 1);
-        $vl_root = $root_mode ? 1 : 0;
-        $tk_client = 0;
-        if(!is_null($tk)){
-            if($this->ckTokenClientEx($tk)) throw new TokenReferenceError("That token is already in use.", 1);
-            $tk_client = $tk;
+        try{
+            if($this->ckClientEx($this->getClientID($client_name))) 
+                throw new ClientAlreadyExists("The name '$client_name' is already in use", 1);
         }
-        else $tk_client = $this->genTk();
-        $qr_add = $this->connection->query("INSERT INTO tb_clients (nm_client, id_proprietary, vl_root, tk_client) VALUES (\"$client_name\", $proprietary, $vl_root, $tk_client);");
-        return ;
+        catch(ClientNotFound $e){
+            if(!$this->ckPropRef($proprietary)) throw new ProprietaryReferenceError("There's no proprietary #$proprietary", 1);
+            $vl_root = $root_mode ? 1 : 0;
+            $tk_client = 0;
+            if(!is_null($tk)){
+                if($this->ckTokenClientEx($tk)) throw new TokenReferenceError("That token is already in use.", 1);
+                $tk_client = $tk;
+            }
+            else $tk_client = $this->genTk();
+            $prp = $this->rtPropID($proprietary);
+            $qr_add = $this->connection->query("INSERT INTO tb_clients (nm_client, id_proprietary, vl_root, tk_client) VALUES (\"$client_name\", $prp, $vl_root, $tk_client);");
+            return ;
+        }
     }
     
     /**
@@ -1950,9 +1967,10 @@ class ClientsData extends DatabaseConnection{
      * @param integer $proprietary The proprietary primary key reference to search in the clients table
      * @return array
      */
-    public function getClientsByOwner(int $proprietary){
+    public function getClientsByOwner(string $proprietary){
         $this->checkNotConnected();
-        $qr_all = $this->connection->query("SELECT cd_client, nm_client FROM tb_clients WHERE id_proprietary = $proprietary;");
+        $prp = $this->rtPropID($proprietary);
+        $qr_all = $this->connection->query("SELECT cd_client, nm_client FROM tb_clients WHERE id_proprietary = $prp;");
         $rt_arr = [];
         while($row = $qr_all->fetch_array()){
             $rt_arr[] = $row;
