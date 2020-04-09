@@ -116,16 +116,16 @@ namespace Server{
 					$history_obj->addReg($dt['Client'], null, 1);
 					return true;
 				}
-				else{
-					$history_obj->addReg($dt['Client'], null, 0);
-					return false;
-				}
 			}
 			catch(Exception $error){ 
 				$history_obj->addReg($dt['Client'], null, 0);
 				return false;
 			}
 			catch(InvalidSignatureFile $error){
+				$history_obj->addReg($dt['Client'], null, 0);
+				return false;
+			}
+			catch(Exception $sas){
 				$history_obj->addReg($dt['Client'], null, 0);
 				return false;
 			}

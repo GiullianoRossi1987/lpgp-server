@@ -250,4 +250,25 @@ namespace ClientsExceptions{
      */
     class TokenReferenceError extends Exception{}
 }
+
+namespace ClientsAccessExceptions{
+    use Exception;
+
+    /**
+     * That class is a exception, thrown when the clients access try to access a record on the database
+     * but the record isn't valid.
+     */
+    class RecordError extends Exception{}
+
+    /**
+     * That class is a exception, thrown when the clients access try to insert a value, but the success value 
+     * isn't valid, which must be integer or boolean
+     */
+    class SuccessValueError extends Exception{}
+
+    /**
+     * That exception is thrown when the client referred in the record isn't valid.
+     */
+    class ReferenceError extends Exception{}
+}
 ?>
