@@ -75,11 +75,3 @@ create table tb_access(
     on delete cascade
     on update cascade
 );
-
-CREATE OR REPLACE VIEW DistinctYearsAccess AS
-    SELECT
-    DISTINCT year(dt_access) AS Years,
-    COUNT(cd_access) AS total_access,
-    FROM tb_access
-    GROUP BY year(dt_access);
--- END View

@@ -2043,10 +2043,10 @@ class ClientsAccessData extends DatabaseConnection{
      * @throws ReferenceError If the client reference isn't valid
      * @return array
      */
-    public function getPlotAccess(int $client): array{
+    public function getPlotAccessData(int $client): array{
         $this->checkNotConnected();
         if(!$this->ckClientRef($client)) throw new ReferenceError("There's no client #$client", 1);
-        $raw_query = $this->connection->query("SELECT * FROM DistinctYearsAccess;");
+        $raw_query = $this->connection->query("SELECT Year(dt_access) AS Years, COUNT(cd_access) AS total_access FROM tb_access WHERE id_client = $client GROUP BY Years;");
         $rt = array();
         while($row = $raw_query->fetch_array()) $rt[$row['Years']] = $row['total_access'];
         return $rt;
