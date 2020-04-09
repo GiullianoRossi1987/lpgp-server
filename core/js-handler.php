@@ -216,4 +216,16 @@ function setCon1Links(){
                 "   <li>\n><a href=\"./login_frm.php\">If you have any doubt about the clients</a></li>\n</ul>\n<h1> But before accessing it you'll need to make login with a proprietary account</h1>\n";
     }
 }
+
+
+/**
+ * That function creates a bootstrap card for the clients that the proprietary have.
+ * That's a function like the CreateSignatureCard;
+ *
+ * @param array $clientData A array with the clients data.
+ * @return void
+ */
+function createClientCard(array $clientData){
+
+}
 ?>

@@ -11,6 +11,7 @@ use Core\ProprietariesData;
 use Core\UsersData;
 use Core\PropCheckHistory;
 use Core\UsersCheckHistory;
+use Core\ClientsData;
 
 sendUserLogged(); // preventing bugs
 
@@ -233,6 +234,32 @@ $usr = new UsersData("giulliano_php", "");
                                 </a>
                             </div>
                         </div>
+                        <div class="col-12 clients-col" style="margin-top: 10%;">
+                            <?php
+                            if($_SESSION['mode'] == "prop") echo '<a href="#clients-section" class="account-separator" data-toggle="collapse" aria-controls="clients-section" aria-expanded="false" id="client-sep">
+                                <h2>
+                                    My Clients
+                                    <span>
+                                        <i class="fas fa-caret-down"></i>
+                                    </span>
+                                </h2>
+                            </a>'
+                            ?>
+                            <div class="collapse section" id="clients-section">
+                                <?php
+                                if($_SESSION['mode'] == "prop"){
+                                    $obj = new ClientsData("giulliano_php", "");
+                                    $clients = $obj->getClientsByOwner($_SESSION['user']);
+                                    if(count($clients) == 0){
+                                        echo "<h1>You don't have any clients yet!</h1>";
+                                    }
+                                    else{
+                                        
+                                    }
+                                }
+                                ?>
+                            </div>
+                        </div>
 					</div>
 				</div>
             </div>
@@ -245,7 +272,7 @@ $usr = new UsersData("giulliano_php", "");
                 <div class="social-options-grp">
                     <div class="social-option">
                         <a href="https://github.com/GiullianoRossi1987/lpgp-server" target="_blanck" id="github" class="social-option-footer">
-                        <span><i class="fab fa-github"></i></span>" alt="" width="50px" height="30px"></a>
+                        <span><i class="fab fa-github"></i></span></a>
                     </div>
                     <div class="social-option-footer">
                         <a href="https://" target='_blanck' id="facebook">
