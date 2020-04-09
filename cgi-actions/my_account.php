@@ -6,12 +6,14 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
 use function JSHandler\lsSignaturesMA;
 use function JSHandler\sendUserLogged;
 use const MAX_SIGC;
+use function JSHandler\createClientCard;
 
 use Core\ProprietariesData;
 use Core\UsersData;
 use Core\PropCheckHistory;
 use Core\UsersCheckHistory;
 use Core\ClientsData;
+use Core\ClientsAccessData;
 
 sendUserLogged(); // preventing bugs
 
@@ -250,12 +252,20 @@ $usr = new UsersData("giulliano_php", "");
                                 if($_SESSION['mode'] == "prop"){
                                     $obj = new ClientsData("giulliano_php", "");
                                     $clients = $obj->getClientsByOwner($_SESSION['user']);
+                                    $hs = new ClientsAccessData("giulliano_php", "");
+                                    $dt = "";
                                     if(count($clients) == 0){
                                         echo "<h1>You don't have any clients yet!</h1>";
                                     }
                                     else{
-                                        
+                                        foreach($clients as $client){
+                                            $accs = $hs->getAccessClient($client['cd_client']);
+                                            $cldt = [$client['cd_client'], $client['nm_client'], count($accs)];
+                                            $dt .= createClientCard($cldt) . '<br>';
+                                        }
                                     }
+                                    $dt .= '<a href="create-client.php" role="button" class="btn btn-success btn-block">Create a new Client</a>';
+                                    echo $dt;
                                 }
                                 ?>
                             </div>

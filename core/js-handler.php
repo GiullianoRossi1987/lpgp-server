@@ -222,10 +222,31 @@ function setCon1Links(){
  * That function creates a bootstrap card for the clients that the proprietary have.
  * That's a function like the CreateSignatureCard;
  *
- * @param array $clientData A array with the clients data.
- * @return void
+ * @param array $clientData A array with the clients data. The array must be: 
+ *      [0] => The client ID
+ *      [1] => The client Name
+ *      [2] => The total of access
+ * @return string
  */
-function createClientCard(array $clientData){
-
+function createClientCard(array $clientData): string{
+    $link_change = '<a href="ch-client.php?client=' . base64_encode($clientData[0]) . '" class="dft-link">' .
+                    'Client configurations <span><i class="fas fa-cog"></i></span></a><br>';
+    $link_access = '<a href="client-accesses.php?client=' . base64_encode($clientData[0]) . '" class="dft-link">' .
+                    'Client Accesses <span><i class="fas fa-chart-bar"></i></span></a><br>';
+    $content_card = '<div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Client <b>' . $clientData[1] .'</b> </h4>
+            <h6 class="card-subtitle mb-2 client-subtitle">#' . $clientData[0] . '</h6>
+            <p class="card-text">
+                '. $link_change .'
+                <br>
+                '. $link_access .'
+            </p>
+        </div>
+        <div class="card-footer">
+            <h5>Access number: ' . $clientData[2] .'</h5>
+        </div>
+    </div>';
+    return $content_card;
 }
 ?>
