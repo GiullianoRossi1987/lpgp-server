@@ -91,21 +91,23 @@ $usr = new UsersData("giulliano_php", "");
     <hr>
     <div class="container-fluid container-content" style="position: relative; margin-top: 5%;">
         <div class="row-main row">
-            <div class="col-12 clear-content" style="position: relative; margin-left: 0;">
-                <div class="container user-data-con">
+            <div class="col-12 clear-content" style="position: relative; margin-left: 0; max-width: 100% !important">
+                <div class="container user-data-con" style="margin-left: 0; max-width: 100%;">
 					<div class="main-row row">
-                        <div class="main-col col-12 card" style="margin-left: 0 !important;">
+                        <div class="main-col col-5 card" style="margin-left: 0 !important; border: none;">
                             <div class="container data-container">
                                 <div class="main-row row card-header">
-                                    <div class="img-cont">
+                                    <div class="img-cont card-img-top" style="margin-left: 23%;">
                                         <div id="img-user"></div>
                                     </div>
-                                    <div class="col-6 data-usr">
+                                    <br>
+                                    <div class="col-12 data-usr">
+                                        <br>
                                         <?php
                                         if($_SESSION['mode'] == "prop"){
                                             $dt = $prp->getPropData($_SESSION['user']);
-                                            echo "<h1 class=\"user-name\"> " . $dt['nm_proprietary'] . "</h1>\n";
-                                            echo "<h3 class=\"mode\">Proprietary</h4>\n";
+                                            echo "<h1 class=\"user-name\">Name: " . $dt['nm_proprietary'] . "</h1>\n";
+                                            echo "<h3 class=\"mode\">Type: Proprietary</h4>\n";
                                             echo "<h3 class=\"email\">Email: " . $dt['vl_email'] . "</h3>\n";
                                             echo "<h3 class=\"date-creation\">Date of creation: " . $dt['dt_creation'] . "</h3>\n";
 
@@ -119,14 +121,12 @@ $usr = new UsersData("giulliano_php", "");
                                         }
                                         ?>
                                         <a class="account-separator" id="accountopt-sep" href="#moreoptions-section" data-toggle="collapse" aria-expanded="false" aria-controls="moreoptions-section">
-                                            <h2>More account options<span>
-                                        <i class="fas fa-caret-down"></i>
-                                    </span></h2>
+                                            <h2>More account options<span><i class="fas fa-caret-down"></i></span></h2>
                                         </a>
                                         <div class="collapse section" id="moreoptions-section">
                                             <br>
                                             <div class="btn-group">
-                                                <a class="img-settings btn btn-secondary" href="ch_my_data.php" role="button">
+                                                <a class="img-settings btn btn-dark" href="ch_my_data.php" role="button">
                                                     Edit Account
                                                     <span>
                                                         <i class="fas fa-cog"></i>
@@ -149,6 +149,7 @@ $usr = new UsersData("giulliano_php", "");
                                                             </div>
                                                             <hr>
                                                             <div class="modal-body">
+                                                                <h3>That action can't be undone!</h3>
                                                                 <a href="https://localhost/lpgp-server/cgi-actions/del_account.php?confirm=y" role="button" class="btn btn-lg btn-danger">Yes, delete my account</a>
                                                                 <a href="#" role="button" class="btn btn-lg btn-secondary" data-dismiss="modal">Cancel</a>
                                                             </div>
@@ -169,105 +170,111 @@ $usr = new UsersData("giulliano_php", "");
                                             </div>
                                         </div>
                                     </div>
+                                                
                                 </div>
                             </div>
                         </div>
-                        <div class="others-col col-md-12">
-                            <?php if($_SESSION['mode'] == "prop") echo '<a href="#signatures-section" class="account-separator" id="signature-sep" aria-controls="signatures-section" aria-expanded="false" data-toggle="collapse">
-                                    <h2 class="mainheader-heading mb-0">My Signatures<span>
-                                    <i class="fas fa-caret-down"></i>
-                                </span></h2>
-                                    
-                                </a>';
-                            ?>
-                            <div id="signatures-section" class="collapse section">
-                                <br>
-                                <?php
-                                // Signatures
-                                /////////////////////////////////////////////////////////////////////////////////////////////////
-                                if($_SESSION['mode'] == "prop"){
-                                    $prp = new ProprietariesData("giulliano_php", "");
-                                    echo lsSignaturesMA($prp->getPropID($_SESSION['user']));
-                                    echo "<br>\n<a href=\"create_signature.php\" role=\"button\" class=\"btn btn-block btn-success\">". 
-                                                "Create a new signature <span><i class=\"fas fa-id-card\"></i></span>". 
-                                                "</a><br>";
-                                }
-                                ?>
-                            </div>
-                        </div>
-                        <div class="history-col col-12" style="position: relative; margin-top: 10%;">
-                            <a class="account-separator" href="#history-section" data-toggle="collapse" aria-expanded="false" aria-controls="history-section" id="history-sep">
-                                <h2> 
-                                    My signature check history
-                                    <span>
+                        <div class="others-col col-md-7" style="margin-top: 3%;">
+                            <div class="signatures-col col-12">
+                                <?php if($_SESSION['mode'] == "prop") echo '<a href="#signatures-section" class="account-separator" id="signature-sep" aria-controls="signatures-section" aria-expanded="false" data-toggle="collapse">
+                                        <h2 class="mainheader-heading mb-0">My Signatures<span>
                                         <i class="fas fa-caret-down"></i>
-                                    </span>
-                                </h2>
-                            </a>
-                            <div class="collapse section" id="history-section">
-                                <br>
-                                <?php
-                                // History
-                                ///////////////////////////////////////////////////////////////////////////////////////////////
-                                if($_SESSION['mode'] == "prop"){
-                                    $obj = new PropCheckHistory("giulliano_php", "");
-                                    $hist = $obj->getPropHistory($_SESSION['user']);
-                                    $hist_e = explode("<br>", $hist);
-                                    for($i = 0; $i <= MAX_SIGC; $i++){
-                                        if(isset($hist_e[$i])) echo $hist_e[$i] . "<br>";
-                                        else break;
-                                    }
-                                }
-                                else{
-                                    $obj = new UsersCheckHistory("giulliano_php", "");
-                                    $hist = $obj->getUsrHistory($_SESSION['user']);
-                                    $hist_e = explode("<br>", $hist);
-                                    for($i = 0; $i <= MAX_SIGC; $i++){
-                                        if(isset($hist_e[$i])) echo $hist_e[$i] . "<br>";
-                                        else break;
-                                    }
-                                }
+                                    </span></h2>
+                                        
+                                    </a>';
                                 ?>
-                                <a href="my-history.php" role="button" class="btn btn-block btn-primary">
-                                    See my history
-                                    <span>
-                                        <i class="fas fa-history"></i>
-                                    </span>
+                                <div id="signatures-section" class="collapse section">
+                                    <br>
+                                    <?php
+                                    // Signatures
+                                    /////////////////////////////////////////////////////////////////////////////////////////////////
+                                    if($_SESSION['mode'] == "prop"){
+                                        $prp = new ProprietariesData("giulliano_php", "");
+                                        echo lsSignaturesMA($prp->getPropID($_SESSION['user']));
+                                        echo "<br>\n<a href=\"create_signature.php\" role=\"button\" class=\"btn btn-block btn-success\">". 
+                                                    "Create a new signature <span><i class=\"fas fa-id-card\"></i></span>". 
+                                                    "</a><br>";
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                            <div class="history-col col-12" style="position: relative; margin-top: 10%;">
+                                <a class="account-separator" href="#history-section" data-toggle="collapse" aria-expanded="false" aria-controls="history-section" id="history-sep">
+                                    <h2> 
+                                        My History
+                                        <span>
+                                            <i class="fas fa-caret-down"></i>
+                                        </span>
+                                    </h2>
                                 </a>
-                            </div>
-                        </div>
-                        <div class="col-12 clients-col" style="margin-top: 10%;">
-                            <?php
-                            if($_SESSION['mode'] == "prop") echo '<a href="#clients-section" class="account-separator" data-toggle="collapse" aria-controls="clients-section" aria-expanded="false" id="client-sep">
-                                <h2>
-                                    My Clients
-                                    <span>
-                                        <i class="fas fa-caret-down"></i>
-                                    </span>
-                                </h2>
-                            </a>'
-                            ?>
-                            <div class="collapse section" id="clients-section">
-                                <?php
-                                if($_SESSION['mode'] == "prop"){
-                                    $obj = new ClientsData("giulliano_php", "");
-                                    $clients = $obj->getClientsByOwner($_SESSION['user']);
-                                    $hs = new ClientsAccessData("giulliano_php", "");
-                                    $dt = "";
-                                    if(count($clients) == 0){
-                                        echo "<h1>You don't have any clients yet!</h1>";
-                                    }
-                                    else{
-                                        foreach($clients as $client){
-                                            $accs = $hs->getAccessClient($client['cd_client']);
-                                            $cldt = [$client['cd_client'], $client['nm_client'], count($accs)];
-                                            $dt .= createClientCard($cldt) . '<br>';
+                                <div class="collapse section" id="history-section">
+                                    <br>
+                                    <?php
+                                    // History
+                                    ///////////////////////////////////////////////////////////////////////////////////////////////
+                                    if($_SESSION['mode'] == "prop"){
+                                        $obj = new PropCheckHistory("giulliano_php", "");
+                                        $hist = $obj->getPropHistory($_SESSION['user']);
+                                        $hist_e = explode("<br>", $hist);
+                                        for($i = 0; $i <= MAX_SIGC; $i++){
+                                            if(isset($hist_e[$i])) echo $hist_e[$i] . "<br>";
+                                            else break;
                                         }
                                     }
-                                    $dt .= '<a href="create-client.php" role="button" class="btn btn-success btn-block">Create a new Client</a>';
-                                    echo $dt;
-                                }
+                                    else{
+                                        $obj = new UsersCheckHistory("giulliano_php", "");
+                                        $hist = $obj->getUsrHistory($_SESSION['user']);
+                                        $hist_e = explode("<br>", $hist);
+                                        for($i = 0; $i <= MAX_SIGC; $i++){
+                                            if(isset($hist_e[$i])) echo $hist_e[$i] . "<br>";
+                                            else break;
+                                        }
+                                    }
+                                    ?>
+                                    <a href="my-history.php" role="button" class="btn btn-block btn-primary">
+                                        See my history
+                                        <span>
+                                            <i class="fas fa-history"></i>
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-12 clients-col" style="margin-top: 10%;">
+                                <?php
+                                if($_SESSION['mode'] == "prop") echo '<a href="#clients-section" class="account-separator" data-toggle="collapse" aria-controls="clients-section" aria-expanded="false" id="client-sep">
+                                    <h2>
+                                        My Clients
+                                        <span>
+                                            <i class="fas fa-caret-down"></i>
+                                        </span>
+                                    </h2>
+                                </a>'
                                 ?>
+                                <div class="collapse section" id="clients-section">
+                                    <?php
+                                    if($_SESSION['mode'] == "prop"){
+                                        $obj = new ClientsData("giulliano_php", "");
+                                        $clients = $obj->getClientsByOwner($_SESSION['user']);
+                                        $hs = new ClientsAccessData("giulliano_php", "");
+                                        $dt = "";
+                                        if(count($clients) == 0){
+                                            echo "<h1>You don't have any clients yet!</h1>";
+                                        }
+                                        else{
+                                            $countLim = 0;
+                                            foreach($clients as $client){
+                                                $accs = $hs->getAccessClient($client['cd_client']);
+                                                $cldt = [$client['cd_client'], $client['nm_client'], count($accs)];
+                                                $dt .= createClientCard($cldt) . '<br>';
+                                                $countLim++;
+                                                if($countLim == 4) break;
+                                            }
+                                        }
+                                        $dt .= '<a href="create-client.php" role="button" class="btn btn-success btn-block">Create a new Client</a>';
+                                        echo $dt;
+                                    }
+                                    ?>
+                                </div>
                             </div>
                         </div>
 					</div>

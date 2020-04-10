@@ -37,6 +37,7 @@ function setAccountOpts(ext_fls = false){
      * 
      */
     clsLoginOpts();
+    rmClientDrop();
     var local_opts = document.querySelector(".login-dropdown .dropdown-menu");
     if(localStorage.getItem("logged-user") == "true"){
         var account_opt = document.createElement("a");
@@ -59,6 +60,7 @@ function setAccountOpts(ext_fls = false){
         local_opts.appendChild(config_opt);
         local_opts.appendChild(logoff_opt);
         local_opts.appendChild(account_opt);
+        setClientsDrop();
         var img = document.createElement("img");
         img.width = 30;
         img.height = 30;
@@ -97,6 +99,15 @@ function setAccountOpts(ext_fls = false){
             document.querySelector("#account-opts").appendChild(sp);
         }
     }
+}
+
+function rmClientDrop(){
+    try{
+        document.querySelector("#my-clients").remove();
+        document.querySelector("#add-client").remove();
+        document.querySelector("#check-client").remove();
+    }
+    catch($e) {}
 }
 
 /**
@@ -142,6 +153,35 @@ function setSignatureOpts(){
         login_need.classList.add("dropdown-item");
         local_opts.appendChild(login_need);
         delete(login_need);
+    }
+}
+
+function setClientsDrop(){
+    if(localStorage.getItem("user_mode") == "prop"){
+        var localTo = document.querySelector(".login-dropdown .dropdown-menu");
+        var optAdd = document.createElement("a");
+        var optMy = document.createElement("a");
+        var optCh = document.createElement("a");
+
+        optAdd.classList.add("dropdown-item");
+        optMy.classList.add("dropdown-item");
+        optCh.classList.add("dropdown-item");
+
+        optAdd.href = "https://" + window.location.hostname + "/lpgp-server/cgi-actions/create-client.php";
+        optAdd.innerText = "Create a Client";
+        optAdd.id = "add-client";
+
+        optMy.href = "https://" + window.location.hostname + "/lpgp-server/cgi-actions/my-clients.php";
+        optMy.innerText = "My clients";
+        optMy.id = "my-clients";
+
+        optCh.href = "https://" + window.location.hostname + "/lpgp-server/cgi-actions/check-client.php";
+        optCh.innerText = "Check client authentication";
+        optCh.id = "check-client";
+
+        localTo.appendChild(optAdd);
+        localTo.appendChild(optMy);
+        localTo.appendChild(optCh);
     }
 }
 

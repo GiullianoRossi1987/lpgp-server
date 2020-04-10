@@ -26,7 +26,7 @@
 	font-size: 20px;
 }
 
-.signature-card h4{
+.signature-card h4{padding: 15px 22px;
 	margin-left: 10px;
 }
 
@@ -48,5 +48,5 @@
 	background-color: #ddd;
 }
 
-
+.client-card h6{ color: #aaa;}
 

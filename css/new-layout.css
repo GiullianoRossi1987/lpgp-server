@@ -438,26 +438,30 @@
     border: 3px solid gold;
 }
 
-.user-data-con .main-col{
-
+/* .user-data-con .main-col{
     border: 1px solid black;
-}
+} */
 
 .user-data-con .main-col{
     border-radius: 7%;
 }
 
 .account-separator h2 {
-    border-radius: 3%;
     padding: 10px 12px;
     color: black;
     font-family: Verdana;
-    border-bottom: 1px solid black;
+    border: 1px solid black;
+}
+
+.account-separator{
+    background-color: #cccc !important;
+}
+
+.account-separator span{
+    margin-left: 10%;
 }
 
 .section{
-    border-radius: 5%;
-    padding: 15px 22px;
-    border-top: none !important;
-    background-color: #ccc;
+    padding: 10px 12px;
+    background-color: #aaa;
 }

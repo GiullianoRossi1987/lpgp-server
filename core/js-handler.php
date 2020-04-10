@@ -233,14 +233,19 @@ function createClientCard(array $clientData): string{
                     'Client configurations <span><i class="fas fa-cog"></i></span></a><br>';
     $link_access = '<a href="client-accesses.php?client=' . base64_encode($clientData[0]) . '" class="dft-link">' .
                     'Client Accesses <span><i class="fas fa-chart-bar"></i></span></a><br>';
-    $content_card = '<div class="card">
+    $link_data = '<a href="client-data.php?client=' . base64_encode($clientData[0]) . '" class="dft-link">'.
+                    'Download Client Data <span><i class="fas fa-box"></i></span></a>';
+    $content_card = '<div class="card client-card">
         <div class="card-body">
             <h4 class="card-title">Client <b>' . $clientData[1] .'</b> </h4>
             <h6 class="card-subtitle mb-2 client-subtitle">#' . $clientData[0] . '</h6>
+            <hr>
             <p class="card-text">
                 '. $link_change .'
                 <br>
                 '. $link_access .'
+                <br>
+                '. $link_data . '
             </p>
         </div>
         <div class="card-footer">

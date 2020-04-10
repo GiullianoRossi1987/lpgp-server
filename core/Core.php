@@ -1752,7 +1752,7 @@ class ClientsData extends DatabaseConnection{
 
         $link_a = str_replace("/var/www/html/", "/", $zip_nm);
 
-        return $HTML_mode ? "<a href=\"$link_a\" download=\"$link_a\" class=\"dft-clients-lk\">$zip_nm</a>" : $zip_nm;
+        return $HTML_mode ? "<a href=\"$link_a\" download=\"$link_a\" class=\"dft-clients-lk btn btn-lg btn-primary\" role=\"button\">Download ZIP file <span><i class=\"fas fa-file-archive\"></i></span></a><br>" : $zip_nm;
     }
 
     /**
