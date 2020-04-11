@@ -1676,9 +1676,9 @@ class ClientsData extends DatabaseConnection{
      * @param integer $token_cl The token reference to search.
      * @return boolean
      */
-    private function ckTokenClientEx(int $token_cl){
+    private function ckTokenClientEx(string $token_cl){
         $this->checkNotConnected();
-        $qr = $this->connection->query("SELECT COUNT(cd_client) FROM tb_clients WHERE tk_client = $token_cl;")->fetch_array();
+        $qr = $this->connection->query("SELECT COUNT(cd_client) FROM tb_clients WHERE tk_client = \"$token_cl\";")->fetch_array();
         return $qr[0] > 0;
     }
 
@@ -1837,14 +1837,15 @@ class ClientsData extends DatabaseConnection{
      * That method generates a client new token. Used when the class creates a new client or when changes the client token.
      * It check if the random token already exists, if it exists will 
      * 
-     * @return integer The new token generated.
+     * @return string The new token generated.
      */
-    private function genTk() : int{
+    private function genTk() : string{
         $this->checkNotConnected();
+        $tk = "";
         do{
-            for($i = 0; $i < 4; $i++) $tk = random_int(0, 9);
-        }while($this->ckTokenClientEx($tk));
-        return $tk;
+            for($i = 0; $i < 4; $i++) $tk .= (string)random_int(0, 9);
+        }while($this->ckTokenClientEx(base64_encode($tk)));
+        return base64_encode($tk);
     }
 
     /**
@@ -1871,7 +1872,7 @@ class ClientsData extends DatabaseConnection{
      * @throws TokenReferenceError If the client token selected already exists in the database.
      * @return void
      */
-    public function addClient(string $client_name, string $proprietary, bool $root_mode = false, ?int $tk = null) : void{
+    public function addClient(string $client_name, string $proprietary, bool $root_mode = false, ?string $tk = null) : void{
         $this->checkNotConnected();
         try{
             if($this->ckClientEx($this->getClientID($client_name))) 
@@ -1887,7 +1888,7 @@ class ClientsData extends DatabaseConnection{
                 $tk_client = $tk;
             }
             else $tk_client = $this->genTk();
-            $qr_add = $this->connection->query("INSERT INTO tb_clients (nm_client, id_proprietary, vl_root, tk_client) VALUES (\"$client_name\", $prp, $vl_root, $tk_client);");
+            $qr_add = $this->connection->query("INSERT INTO tb_clients (nm_client, id_proprietary, vl_root, tk_client) VALUES (\"$client_name\", $prp, $vl_root, \"$tk_client\");");
             return ;
         }
     }
