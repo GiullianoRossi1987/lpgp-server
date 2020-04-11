@@ -1981,6 +1981,20 @@ class ClientsData extends DatabaseConnection{
         }
         return $rt_arr;
     }
+
+    /**
+     * That method loads all the data from a client selected.
+     *
+     * @param integer $client The client primary key reference
+     * @throws ClientNotFound If the reference isn't valid
+     * @return array
+     */
+    public function getClientData(int $client): array{
+        $this->checkNotConnected();
+        if(!$this->ckClientEx($client)) throw new ClientNotFound("There's no client #$client", 1);
+        $qr = $this->connection->query("SELECT * FROM tb_clients WHERE cd_client = $client;");
+        return $qr->fetch_array();
+    }
 }
 
 /**
