@@ -142,9 +142,67 @@ if(isset($_GET['client'])){
 					<span>
 						<i class="fas fa-info"></i>
 					</span>
-				</a>
+                </a>
+                <br>
 				<div class="collapse" id="howto">
-					<p>Teste</p>
+                    <br>
+                    <h1>How to implement the client configurations</h1>
+                    <ul>
+                       <li>
+                           <h3>First thing: What's that file?</h3>
+                           <hr>
+                           <p>
+                               That ZIP file contains the configurations files to 
+                               your client.
+                               <br>
+                               The file will have two files:
+                                <ul>
+                                    <li>
+                                        <h4>Client Configurations file (.json)</h4>
+                                        <p>
+                                            That file contains the main information
+                                            about your client, what he have permission
+                                            to do, your reference and other data.
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <h4>Client Authenticatble file (.lpgp)</h4>
+                                        <p>
+                                            That file is a LPGP signature file, but
+                                            with the client token and access data.
+                                            That file is used for tell our servers
+                                            that's your client and not a copy.
+                                        </p>
+                                    </li>
+                                </ul>
+                           </p>
+                       </li> 
+                       <li>
+                           <h3>And how I use it?</h3>
+                           <p>
+                               To use the files is very simple, you must extract
+                               the ZIP file downloaded and then move, or copy,
+                               the files to your SDK client downloaded source folder.
+                               <br>
+                               <hr>
+                               <h4>If you don't have a LPGP SDK yet download one!</h4>
+                               <a class="btn btn-primary btn-lg" type="button" role="button" href="download-sdks.php">Choose my SDK</a>
+                               <hr>
+                               <br>
+                               To work, the files have specific folders on your source folder to stay.
+                               <ul>
+                                   <li>
+                                       <h4>The configurations file (.json)</h4>
+                                       <p>Must be at the folder <b>lib/</b></p>
+                                   </li>
+                                   <li>
+                                       <h4>The authentication file (.lpgp)</h4>
+                                       <p>Must be at the folder <b>lib/auth</b></p>
+                                   </li>
+                               </ul>
+                           </p>
+                       </li>
+                    </ul>
 				</div>
             </div>
         </div>

@@ -97,7 +97,7 @@ $usr = new UsersData("giulliano_php", "");
                         <div class="main-col col-5 card" style="margin-left: 0 !important; border: none;">
                             <div class="container data-container">
                                 <div class="main-row row card-header">
-                                    <div class="img-cont card-img-top" style="margin-left: 23%;">
+                                    <div class="img-cont card-img-top" style="margin-left: 23.5%;">
                                         <div id="img-user"></div>
                                     </div>
                                     <br>
