@@ -6,8 +6,8 @@ use Core\ClientsData;
 if(isset($_GET['client'])){
 	$cl_id = base64_decode($_GET['client']);
 	$obj = new ClientsData("giulliano_php", "");
-	$obj->rmClient($cl_id);
+	$obj->rmClient((int)$cl_id);
 
-	header("Location: ch-client.php?client=" . $_GET['client']);
+	header("Location: my_account.php");
 	
 }
