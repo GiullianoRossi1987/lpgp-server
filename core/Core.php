@@ -1701,14 +1701,6 @@ class ClientsData extends DatabaseConnection{
      * @return array
      */
     private static function pathZipGen(){
-        // Client config
-        $ind1 = 0;
-        $config_nm = "";
-        do{
-            $config_nm = "client_config_" . $ind1 . ".json";
-            $ind1++;
-        }while(file_exists(TMP_GCLIENTS . "/" . $config_nm) || strlen($config_nm) == 0);
-
         // Client auth.
         $ind2 = 0;
         $auth_nm = "";
@@ -1717,42 +1709,19 @@ class ClientsData extends DatabaseConnection{
             $ind2++;
         }while(file_exists(TMP_GCLIENTS . "/" . $auth_nm) || strlen($auth_nm) == 0);
 
-        return [TMP_GCLIENTS . "$config_nm", TMP_GCLIENTS . "$auth_nm"];
+        return TMP_GCLIENTS . "$auth_nm";
     }
 
     /**
-     * That method generate a zip file with the client configurations file and client authentication
-     * file and return a link to the zip file. 
-     * ** Warning that method uses the ZipArchive class, if you don't have it just intall using 'sudo apt-get install php-zip'
-     * 
-     * @param string $config The client configurations file path
-     * @param string $auth The client authentication file path
-     * @param boolean $HTML_mode If the method will return the link in a anchor link tag
+     * That method transforms any file path to a HTML download link
+     *
+     * @param string $path The file path to load.
      * @return string
      */
-    private static function genZipFile(string $config, string $auth, bool $HTML_mode = true) : string{
-        $zp = new ZipArchive();
-        // zip file name generation
-        $ind = 0;
-        $zip_nm = "";
-        do{
-            $zip_nm = G_CLIENTS_CONF . "zip_client_" . $ind . ".zip";
-            $ind++;
-        }while(file_exists($zip_nm) || strlen($zip_nm) == 0);
-
-        // Zip creation
-        if($zp->open($zip_nm, ZipArchive::CREATE)){
-            $zp->addFile($config, "client_config.json");
-            $zp->addFile($auth, "client_auth.lpgp");
-            $zp->close();
-        }
-
-        unlink($config);
-        unlink($auth);
-
-        $link_a = str_replace("/var/www/html/", "/", $zip_nm);
-
-        return $HTML_mode ? "<a href=\"$link_a\" download=\"$link_a\" class=\"dft-clients-lk btn btn-lg btn-primary\" role=\"button\">Download ZIP file <span><i class=\"fas fa-file-archive\"></i></span></a><br>" : $zip_nm;
+    private static function passHTML(string $path): string{
+        $nm_get1 = explode("/", $path);
+        $nm = $nm_get1[count($nm_get1 - 1)];
+        return '<a href="' . $path .'" download="' . $nm . '" role="button" class="btn btn-lg btn-primary">Download authentication<i class="far fa-file-archive"></i></a>';
     }
 
     /**
@@ -1769,18 +1738,6 @@ class ClientsData extends DatabaseConnection{
         if(!$this->ckClientEx($client_pk_ref)) throw new ClientNotFound("There's no client #$client_pk_ref", 1);
         $cldt = $this->connection->query("SELECT tk_client, vl_root, id_proprietary, nm_client, nm_client FROM tb_clients WHERE cd_client = $client_pk_ref;")->fetch_array();
         $files = $this->pathZipGen();
-        // Create and insert the content at the client config file.
-        $json_conf = array(
-            "RootMode" => (int)$cldt['vl_root'] == 1,
-            "Mode" => 0,
-            "Client" => (int) $cldt['nm_client'],
-            "LocalAccountId" => (int)$cldt['id_proprietary'],
-            "Dt-Generation" => date("Y-m-d H:i:s")
-        );
-        $dumped = json_encode($json_conf);
-        // writes the content, but before it make sure the folders are in 777 chmod;
-        file_put_contents($files[0], $dumped);
-
         // Creates and write the content at the client authentication file
         $json_aut = array(
             "Client" => $client_pk_ref,
@@ -1793,8 +1750,9 @@ class ClientsData extends DatabaseConnection{
         $exp = str_split($dumped_a);
         foreach($exp as $char) $encoded_ar[] = (string)ord($char);
         $encoded = implode(self::DELIMITER, $encoded_ar);
-        file_put_contents($files[1], $encoded);
-        return $this->genZipFile($files[0], $files[1]);
+        file_put_contents($files, $encoded);
+        $file_n = str_replace("/var/www/html", "", $files);
+        return $this->passHTML($file_n);
     }
 
     /**
