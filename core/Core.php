@@ -1933,12 +1933,27 @@ class ClientsData extends DatabaseConnection{
     public function getClientsByOwner(string $proprietary): array{
         $this->checkNotConnected();
         $prp = $this->rtPropID($proprietary);
-        $qr_all = $this->connection->query("SELECT cd_client, nm_client FROM tb_clients WHERE id_proprietary = $prp;");
+        $qr_all = $this->connection->query("SELECT * FROM tb_clients WHERE id_proprietary = $prp;");
         $rt_arr = [];
         while($row = $qr_all->fetch_array()){
             $rt_arr[] = $row;
         }
         return $rt_arr;
+    }
+
+    /**
+     * That method returns the necessary data of a client to create her card, it's normally used in the my-clients.php page.
+     * The required data is the client ID (primary key reference), the client name and the number of access of the client.
+     *
+     * @param integer $client The client primary key reference to get the required data.
+     * @throws ClientNotFound If the client referred don't exist.
+     * @return array
+     */
+    public function getClientCardData(int $client): array{
+        $this->checkNotConnected();
+        if(!$this->ckClientEx($client)) throw new ClientNotFound("There's no client #$client.", 1);
+        $qr = $this->connection->query("SELECT cl.nm_client, COUNT(ac.cd_access) FROM tb_clients AS cl INNER JOIN tb_access AS ac ON ac.id_client = cl.cd_client WHERE cl.cd_client = $client;")->fetch_array();
+        return [$client, $qr[0], $qr[1]];
     }
 
     /**
