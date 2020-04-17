@@ -254,4 +254,5 @@ function createClientCard(array $clientData): string{
     </div>';
     return $content_card;
 }
+
 ?>

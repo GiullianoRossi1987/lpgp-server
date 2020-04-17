@@ -183,6 +183,16 @@ function setClientsDrop(){
         localTo.appendChild(optMy);
         localTo.appendChild(optCh);
     }
+    else{
+        var localTo = document.querySelector(".login-dropdown .dropdown-menu");
+        var optCh = document.createElement("a");
+
+        optCh.href = "https://" + window.location.hostname + "/lpgp-server/cgi-actions/check-client.php";
+        optCh.innerText = "Check client authentication";
+        optCh.id = "check-client";
+
+        localTo.appendChild(optCh);
+    }
 }
 
 /**

@@ -2,33 +2,31 @@
 if(session_status() == PHP_SESSION_NONE) session_start();
 require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
 require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Exceptions.php";
 
-use function JSHandler\sendUserLogged;
-use function JSHandler\createClientCard;
 use Core\ClientsData;
+use ClientsExceptions\AuthenticationError;
+use function JSHandler\sendUserLogged;
 
 sendUserLogged();  // preventing bugs
 
+move_uploaded_file($_FILES['to-check']['tmp_name'][0], U_CLIENTS_CONF . $_FILES['to-check']['name'][0]);
+
 $obj = new ClientsData("giulliano_php", "");
-$clients = $obj->getClientsByOwner($_SESSION['user']);
-
-$content = "";
-
-foreach($clients as $client){
-    $dt = $obj->getClientCardData($client['cd_client']);
-	$content .= createClientCard($dt) . '<br>';
-}
-
+$mainData = $obj->getClientAuthData(U_CLIENTS_CONF . $_FILES['to-check']['name'][0]);
+$brute = $mainData['brute'];
+$bruteDataCon = '<div class="brutedata">' . "\n<ul>\n";
+$bruteDataCon .= '<li><b>Client</b> ' . $brute['Client'] . '</li>' . "\n";
+$bruteDataCon .= '<li><b>Date Creation</b>: ' . $brute['Dt'] . '</li>' . "\n";
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>LPGP Oficial Server</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>LPGP - Client</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/new-layout.css">
     <script src="../js/main-script.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
@@ -43,23 +41,35 @@ foreach($clients as $client){
     <link rel="stylesheet" href="../css/account.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
 </head>
-<style>
-</style>
 <body>
-    <script>
+	<script>
+        var show = false;
         $(document).ready(function(){   
             setAccountOpts(true);
             setSignatureOpts();
             applyToA();
             applyToForms();
             $("#img-user").css("background-image", "url(" + getLinkedUserIcon() + ")");
+			if(show){
+				$("#modal-done").modal('show');
+				show = false;
+			}
         });
 
         $(document).ready(function(){
             applyToA();
-        })
+		});
+		
+		$(document).on("change", ".al", function(){
+			$("#go").removeClass("disabled");
+		});
 
     </script>
+	<?php 
+	if(isset($_GET['alert'])){
+		echo "<script>show=true</script>";
+	}
+	?>
     <div class="container-fluid header-container" role="banner" style="position: fixed;">
         <div class="col-12 header" style="height: 71px; transition: background-color 200ms linear;">
             <div class="opt-dropdown dropdown login-dropdown">
@@ -86,18 +96,31 @@ foreach($clients as $client){
                 </div>
             </div>
         </div>
-    </div>
-    <br>
-    <hr>
-    <div class="container-fluid container-content" style="position: relative; margin-top: 5%;">
-        <div class="row-main row">
-            <div class="col-6 clear-content" style="position: relative; margin-left: 23%; max-width: 100% !important">
-                <?php echo $content; ?>
-            </div>
-        </div>
-    </div>
-    <br>
-    <div class="footer-container container" style="max-width: 100% !important; position: relative; margin-left: 0;">
+	</div>
+	<br>
+	<div class="container-fluid container content-container" style="margin-top: 10%;">
+		<div class="row main-row">
+			<div class="col-12 content" style="position: relative">
+				<center>
+					<?php 
+						if($mainData['valid']) echo '<i class="fas fa-checked" style="color: green; font-size: 150px"></i>';
+						else {
+							echo '<i class="fas fa-times" style="color: red; font-size: 150px"></i><br>';
+							echo '<small style="color: red">' . $mainData['error'] . '</small>';
+						}
+					?>
+				</center>
+				<br>
+				<a role="button" class="btn btn-lg btn-secondary" data-toggle="collapse" href="#bruteCollapse" aria-expanded="false" aria-controls="bruteCollapse">
+					Show brute data
+				</a>
+				<div class="collapse" id="bruteCollapse">
+					<?php echo $bruteDataCon; ?>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="footer-container container" style="max-width: 100% !important; position: relative; margin-left: 0;">
         <div class="footer-row row">
             <div class="footer col-12" style="height: 150px; background-color: black; margin-top: 100%; position: relative; max-width: 100% !important; margin-left: 0;">
                 <div class="social-options-grp">

@@ -1698,9 +1698,9 @@ class ClientsData extends DatabaseConnection{
      * That method generate the clients configurations file and the clients authentication file name and return the link for 
      * those files in array form.
      * 
-     * @return array
+     * @return string
      */
-    private static function pathZipGen(){
+    private static function pathZipGen(): string{
         // Client auth.
         $ind2 = 0;
         $auth_nm = "";
@@ -1720,7 +1720,7 @@ class ClientsData extends DatabaseConnection{
      */
     private static function passHTML(string $path): string{
         $nm_get1 = explode("/", $path);
-        $nm = $nm_get1[count($nm_get1 - 1)];
+        $nm = $nm_get1[count($nm_get1) - 1];
         return '<a href="' . $path .'" download="' . $nm . '" role="button" class="btn btn-lg btn-primary">Download authentication<i class="far fa-file-archive"></i></a>';
     }
 
@@ -1784,11 +1784,45 @@ class ClientsData extends DatabaseConnection{
         $json_con = "";
         foreach($exp as $chr) $json_con .= chr((int) $chr);
         $data = json_decode($json_con, true);
-        if(!$this->ckClientEx($data['Client'])) throw new ClientAuthenticationError("The client authentication file isn't valid. The client doesn't exists.", 1);
+        if(!$this->ckClientEx($this->getClientID($data['Client']))) throw new ClientAuthenticationError("The client authentication file isn't valid. The client doesn't exists.", 1);
         if(!$this->ckPropRef($data['Proprietary'])) throw new ClientAuthenticationError("The client authentication file isn't valid. The proprietary don't exist.", 1);
-        $qr_tk = $this->connection->query("SELECT tk_client FROM tb_clients WHERE cd_client = " . $data['Client'] . ";")->fetch_array();
+        $qr_tk = $this->connection->query("SELECT tk_client FROM tb_clients WHERE cd_client = " . $this->getClientID($data['Client']) . ";")->fetch_array();
         if(!$qr_tk['tk_client'] != $data['Token']) throw new ClientAuthenticationError("The client isn't valid. Token error.", 1);
         return true;
+    }
+
+    /**
+     * That method decodes the authentication file. The data decoded is passed to identify the client.
+     * If the client doesn't exist, or the file isn't valid, it will return the brute data.
+     *
+     * @param string $auth_file The authentication file to get the data
+     * @return array The array with the following data structure:
+     *  'brute' => The brute data extracted from the authentication file.
+     *  'soft'  => The client data, if it's valid.
+     *  'valid' => If the authentication file is valid.
+     */
+    public function getClientAuthData(string $auth_file): array{
+        $this->checkNotConnected();
+        $arr_rt = array();
+        $content = file_get_contents($auth_file);
+        $exp_brt = explode(self::DELIMITER, $content);
+        $bruteJSON = "";
+        foreach($exp_brt as $brtChar) $bruteJSON .= chr((int) $brtChar);
+        $bruteData = json_decode($bruteJSON, true);
+        $arr_rt['brute'] = $bruteData;
+        try{
+            $res = $this->authClient($auth_file);
+            if($res){
+                $arr_rt['soft'] = $this->getClientData($bruteData['Client']);
+                $arr_rt['valid'] = true;
+            }
+        }
+        catch(ClientAuthenticationError $e){
+            $arr_rt['soft'] = null;
+            $arr_rt['valid'] = false;
+            $arr_rt['error'] = $e->getMessage();
+        }
+        return $arr_rt;
     }
 
     /**
@@ -1952,8 +1986,9 @@ class ClientsData extends DatabaseConnection{
     public function getClientCardData(int $client): array{
         $this->checkNotConnected();
         if(!$this->ckClientEx($client)) throw new ClientNotFound("There's no client #$client.", 1);
-        $qr = $this->connection->query("SELECT cl.nm_client, COUNT(ac.cd_access) FROM tb_clients AS cl INNER JOIN tb_access AS ac ON ac.id_client = cl.cd_client WHERE cl.cd_client = $client;")->fetch_array();
-        return [$client, $qr[0], $qr[1]];
+        $qr_nm = $this->connection->query("SELECT nm_client FROM tb_clients WHERE cd_client = $client;")->fetch_array();
+        $qr = $this->connection->query("SELECT COUNT(cd_access) accesses FROM tb_access WHERE id_client = $client;")->fetch_array();
+        return [$client, $qr_nm['nm_client'], $qr['accesses']];
     }
 
     /**

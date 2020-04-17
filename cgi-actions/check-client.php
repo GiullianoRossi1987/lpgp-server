@@ -4,21 +4,8 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
 require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
 
 use function JSHandler\sendUserLogged;
-use function JSHandler\createClientCard;
-use Core\ClientsData;
 
-sendUserLogged();  // preventing bugs
-
-$obj = new ClientsData("giulliano_php", "");
-$clients = $obj->getClientsByOwner($_SESSION['user']);
-
-$content = "";
-
-foreach($clients as $client){
-    $dt = $obj->getClientCardData($client['cd_client']);
-	$content .= createClientCard($dt) . '<br>';
-}
-
+sendUserLogged();
 ?>
 
 <!DOCTYPE html>
@@ -92,7 +79,13 @@ foreach($clients as $client){
     <div class="container-fluid container-content" style="position: relative; margin-top: 5%;">
         <div class="row-main row">
             <div class="col-6 clear-content" style="position: relative; margin-left: 23%; max-width: 100% !important">
-                <?php echo $content; ?>
+                <form action="checking-client.php" method="post" enctype="multipart/form-data">
+					<h1>Drop here your client authentication file (.lpgp)</h1>
+					<br>
+					<input type="file" name="to-check[]" required class="form-control">
+                    <br>
+                    <button class="btn btn-block btn-success" type="submit">Check</button>
+				</form>
             </div>
         </div>
     </div>

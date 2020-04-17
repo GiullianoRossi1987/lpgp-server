@@ -32,7 +32,7 @@ namespace Server{
 		private $started;
 		private $connection_logs;
 
-		const HANDSHAKE   = "Welcome to the LPGP official client authentication server.\nPlease send us your client information in the LPGP documents content format.\nExample: '192/168/0/11/98'";
+		const HANDSHAKE   = "Welcome to the LPGP official client authentication server.Please send us your client information in the LPGP documents content format.Example: '192/168/0/11/98'";
 		const SIGHANDSK   = "Now you can send us the signature content for authentication. Please send the content";
 		const LOGS_FILE   = "devcenter/logs/access.log";
 		const TALKBACK_EN = TRUE;
@@ -187,7 +187,6 @@ namespace Server{
 			if(!$this->started) throw new ServerCreatedError("The socket haven't started yet!", 1);
 			$history_obj = new ClientsHistory("giulliano_php", "");
 			while($accepted = socket_accept($this->sock)){
-				// starts if the server accepted any connection
 				$snd = @socket_send($accepted, self::HANDSHAKE, 1024, 0);
 				if($snd === false) throw new SendError(socket_strerror(socket_last_error()));
 				$this->addLog(self::HANDSHAKE);
