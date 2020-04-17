@@ -10,7 +10,7 @@ use function JSHandler\sendUserLogged;
 
 sendUserLogged();  // Just for fixing a error that i don't know why is going on. 
 $usr = new UsersData("giulliano_php", "");
-if(isset($_GET['id'])) $data = $usr->getUserDataByID($_GET['id']);
+if(isset($_GET['id'])) $data = $usr->getUserDataByID(base64_decode($_GET['id']));
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -160,7 +160,7 @@ function createSignatureCardAuth(int $sign_ref, bool $valid){
         // start of the body (card)
         $card_str .= "<div class=\"card-body\">\n";
         $card_str .= "<h3>Proprietary: ";
-        $id = $data['id_proprietary'];
+        $id = base64_encode($data['id_proprietary']);
         $prp_a = "<a href=\"proprietary.php?id=$id\" target=\"_blanck\">$prop_nm</a>";
         $card_str .= $prp_a . "</h3>\n";
         unset($prp_a);
@@ -181,7 +181,7 @@ function createSignatureCardAuth(int $sign_ref, bool $valid){
         // start of the body (card)
         $card_str .= "<div class=\"card-body\">\n";
         $card_str .= "<h3>Proprietary: ";
-        $id = $data['id_proprietary'];
+        $id = base64_encode($data['id_proprietary']);
         $prp_a = "<a href=\"proprietary.php?id=$id\" target=\"_blanck\">$prop_nm</a>";
         $card_str .= $prp_a . "</h3>\n";
         unset($prp_a);
@@ -255,4 +255,27 @@ function createClientCard(array $clientData): string{
     return $content_card;
 }
 
+/**
+ * That function creates a bootstrap card using the client received soft data.
+ *
+ * @param array $clientSoftData The soft data of the client, received after the client authentication.
+ * @return string
+ */
+function createClientAuthCard(array $clientSoftData): string{
+    $tmpProprietariesObj = new ProprietariesData("giulliano_php", "");
+    $nameProprietary = $tmpProprietariesObj->getPropDataByID($clientSoftData['id_proprietary'])['nm_proprietary'];
+    $linkProprietary = '<a href="proprietary.php?id=' . base64_encode($clientSoftData['id_proprietary']) . '" target="_blank">' . $nameProprietary . '</a>';
+    $cardRet = '<div class="card client-card">
+        <div class="card-body">
+            <h4 class="card-title">Client <b>' . $clientSoftData['nm_client'] . '</b></h4>
+            <h6 class="card-subtitle mb-2 client-subtitle">#' . $clientSoftData['cd_client'] . '</h6>
+            <hr>
+            <p class="card-text">
+                Proprietary: ' . $linkProprietary . '
+                <br>
+            </p>
+        </div>
+    </div>';
+    return $cardRet;
+}
 ?>

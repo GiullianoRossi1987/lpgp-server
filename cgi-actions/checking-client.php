@@ -7,6 +7,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Exceptions.php";
 use Core\ClientsData;
 use ClientsExceptions\AuthenticationError;
 use function JSHandler\sendUserLogged;
+use function JSHandler\createClientAuthCard;
 
 sendUserLogged();  // preventing bugs
 
@@ -103,7 +104,13 @@ $bruteDataCon .= '<li><b>Date Creation</b>: ' . $brute['Dt'] . '</li>' . "\n";
 			<div class="col-12 content" style="position: relative">
 				<center>
 					<?php 
-						if($mainData['valid']) echo '<i class="fas fa-checked" style="color: green; font-size: 150px"></i>';
+						if($mainData['valid']){
+                            echo '<i class="fas fa-check" style="color: green; font-size: 150px"></i>';
+                            echo '<br>';
+                            echo '<h1 style="color: green">Hurray! The client is valid!</h1>';
+                            // client card
+                            echo createClientAuthCard($mainData['soft']);
+                        }
 						else {
 							echo '<i class="fas fa-times" style="color: red; font-size: 150px"></i><br>';
 							echo '<small style="color: red">' . $mainData['error'] . '</small>';

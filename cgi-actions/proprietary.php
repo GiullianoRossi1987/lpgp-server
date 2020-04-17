@@ -11,7 +11,7 @@ use function JSHandler\sendUserLogged;
 
 sendUserLogged();  // Just for fixing a error that i don't know why is going on. 
 $prp = new ProprietariesData("giulliano_php", "");
-if(isset($_GET['id'])) $data = $prp->getPropDataByID($_GET['id']);
+if(isset($_GET['id'])) $data = $prp->getPropDataByID(base64_decode($_GET['id']));
 ?>
 <!DOCTYPE html>
 <html lang="en">

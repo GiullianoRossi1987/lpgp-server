@@ -159,11 +159,11 @@ $usr = new UsersData("giulliano_php", "");
                                                 <br>
                                                 <?php
                                                 if($_SESSION['mode'] == "prop"){
-                                                    $id = $dt['cd_proprietary'];
+                                                    $id = base64_encode($dt['cd_proprietary']);
                                                     echo "<a href=\"proprietary.php?id=$id\" role=\"button\" target=\"_blanck\" class=\"btn btn-primary\">See as another one</a>";
                                                 }
                                                 else{
-                                                    $id = $dt['cd_user'];
+                                                    $id = base64_encode($dt['cd_user']);
                                                     echo "<a href=\"user.php?id=$id\" role=\"button\" target=\"_blanck\" class=\"btn  btn-primary\">See as another one</a>";
                                                 }
                                                 ?>

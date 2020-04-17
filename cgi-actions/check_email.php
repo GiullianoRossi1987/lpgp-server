@@ -1,3 +1,15 @@
+<?php
+require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
+if(session_status() == PHP_SESSION_NONE) session_start();
+
+use Core\UsersData;
+use Core\ProprietariesData;
+use function JSHandler\sendUserLogged;
+
+sendUserLogged();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -72,15 +84,6 @@
         <div class="row-main row">
             <div class="col-12 clear-content center-content" style="position: relative;">
             <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
-session_start();
-
-use Core\UsersData;
-use Core\ProprietariesData;
-use function JSHandler\sendUserLogged;
-
-sendUserLogged();
 
 if(array_key_exists('btn-resend', $_POST)){
     if($_SESSION['mode'] == "normie"){

@@ -27,7 +27,7 @@ $usr_obj = new UsersData("giulliano_php", "");
 $domAdd = "";
 
 // uploads the file
-move_uploaded_file($_FILES['signature-ext']['tmp_name'][0], $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/usignatures.d/" . $_FILES['signature-ext']['name'][0]);
+move_uploaded_file($_FILES['signature-ext']['tmp_name'][0], "../usignatures.d/" . $_FILES['signature-ext']['name'][0]);
 
 
 if($_SESSION['mode'] == 'prop'){
@@ -36,8 +36,8 @@ if($_SESSION['mode'] == 'prop'){
     $prop_id = $prp_obj->getPropID($_SESSION['user']);
 	$vl = false;
 	try{
-		if($sig->checkSignatureFile($_FILES['signature-ext']['name'][0])){
-			$data = $sig->getSignatureFData($_FILES['signature-ext']['name'][0]);
+		if($sig->checkSignatureFile("../usignatures.d/".$_FILES['signature-ext']['name'][0])){
+			$data = $sig->getSignatureFData("../usignatures.d/".$_FILES['signature-ext']['name'][0]);
 			$rp = str_replace("%path%", "src1", $signature_img);
 			$rp1 = str_replace("%alt%", "valid signature", $rp);
 			$signature_msg = "The signature is valid!";
@@ -82,8 +82,8 @@ else{
 	$usr_id = $usr_obj->getUserData($_SESSION['user'])['cd_user'];
 	$vl = false;
 	try{
-		if($sig->checkSignatureFile($_FILES['signature-ext']['name'][0])){
-			$data = $sig->getSignatureFData($_FILES['signature-ext']['name'][0]);
+		if($sig->checkSignatureFile("../usignatures.d/".$_FILES['signature-ext']['name'][0])){
+			$data = $sig->getSignatureFData("../usignatures.d/".$_FILES['signature-ext']['name'][0]);
 			$rp = str_replace("%path%", "src1", $signature_img);
 			$rp1 = str_replace("%alt%", "valid signature", $rp);
 			$signature_msg = "Valid signature";
@@ -92,6 +92,7 @@ else{
 		}
 	}
 	catch(InvalidSignatureFile $e){
+		$data = $sig->getSignatureFData("../usignatures.d/".$_FILES['signature-ext']['name'][0]);
 		$rel_id = $usr_c->addReg($usr_id, $data['ID'], 0, 1);
 		$rp = str_replace("%path%", "src2", $signature_img);
 		$rp1 = str_replace("%alt%", "invalid signature", $rp);
@@ -110,13 +111,17 @@ else{
 		$signature_msg = "The signature is invalid!";
 	}
 	catch(SignatureAuthError $e){
+		$data = $sig->getSignatureFData("../usignatures.d/".$_FILES['signature-ext']['name'][0]);
+		$rp = str_replace("%path%", "src2", $signature_img);
+		$rp1 = str_replace("%alt%", "invalid signature", $rp);
 		$rel_id = $usr_c->addReg($usr_id, $data['ID'], 0, 3);
 	}
 	finally{
         $signature_img = $rp1;
 		unset($rp);
 		unset($rp1);
-		$domAdd .= createSignatureCardAuth($data['ID'], $vl) ."\n<a href=\"relatory.php?prp_rel=$rel_id\" role=\"button\" class=\"btn btn-sm btn-primary\">See relatory</a><br>";
+		$rr = base64_encode($rel_id);
+		$domAdd .= createSignatureCardAuth($data['ID'], $vl) ."\n<a href=\"relatory.php?prp_rel=$rr\" role=\"button\" class=\"btn btn-sm btn-primary\">See relatory</a><br>";
 	}
 }
 ?>

@@ -1018,9 +1018,9 @@ class SignaturesData extends DatabaseConnection{
         if(!file_exists($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/usignatures.d/$file_name")) throw new SignatureFileNotFound("There's no file '$file_name' on the uploaded signatures folder.", 1);
         $content_file = utf8_encode(file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/signatures.d/" . $file_name));
         $sp_content = explode(self::DELIMITER, $content_file);
-        $ascii_none = array();
-        for($i = 0; $i <= count($sp_content); $i++) {
-            array_push($ascii_none, chr((int)$sp_content[$i]));
+        $ascii_none = [];
+        for($i = 0; $i < count($sp_content); $i++){
+            $ascii_none[] = chr((int) $sp_content[$i]);
         }
         $ascii_none_str = implode("", $ascii_none);
         $json_arr = json_decode(preg_replace("/[[[:cntrl:]]/", "", $ascii_none_str), true);
@@ -1202,16 +1202,14 @@ class SignaturesData extends DatabaseConnection{
      */
     public function getSignatureFData(string $file_name){
         $this->checkNotConnected();
-        if($this->checkSignatureFile($file_name)){
-            $content_file = file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/usignatures.d/" . $file_name);
-            $exp_content = explode(self::DELIMITER, $content_file);
-            $ascii_pr = array();
-            for($i = 0; $i < count($exp_content); $i++) $ascii_pr[] = chr((int) $exp_content[$i]);
-            $fn_json = implode("", $ascii_pr);
-            $parsed_json = json_decode($fn_json, true);
-            return $parsed_json;
-        }
-        else return null;
+    
+        $content_file = file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/usignatures.d/" . $file_name);
+        $exp_content = explode(self::DELIMITER, $content_file);
+        $ascii_pr = array();
+        for($i = 0; $i < count($exp_content); $i++) $ascii_pr[] = chr((int) $exp_content[$i]);
+        $fn_json = implode("", $ascii_pr);
+        $parsed_json = json_decode($fn_json, true);
+        return $parsed_json;
     }
 
     /**
@@ -1640,7 +1638,8 @@ class PropCheckHistory extends DatabaseConnection{
             $card_main .= "<div class=\"card-body\">";
             $prop_dt = $this->connection->query("SELECT * FROM tb_proprietaries WHERE cd_proprietary = " . $sign_data['id_proprietary'] . ";")->fetch_array();
             $id = $prop_dt['cd_proprietary'];
-            $prop_data_html = is_null($prop_dt) ? "<div class=\"prop-nf-err\">(We can't find the proprietary, probabily he deleted him account)</div>\n" : "<a href=\"https://localhost/lpgp-server/cgi-actions/proprietary.php?id=$id\" target=\"_blanck\" class=\"prop-link\">" . $prop_dt['nm_proprietary'] . "</a>\n";
+            $cdId = base64_encode($id);
+            $prop_data_html = is_null($prop_dt) ? "<div class=\"prop-nf-err\">(We can't find the proprietary, probabily he deleted him account)</div>\n" : "<a href=\"https://localhost/lpgp-server/cgi-actions/proprietary.php?id=$cdId\" target=\"_blanck\" class=\"prop-link\">" . $prop_dt['nm_proprietary'] . "</a>\n";
             $card_main .= "Proprietary: " . $prop_data_html;
             $card_main .= "<a href=\"https://localhost/lpgp-server/cgi-actions/relatory.php?rel=" . $dt['cd_reg'] . "\" target=\"__blanck\" role=\"button\" class=\"btn btn-secondary\">Check the relatory</a>\n";
             $card_main .= "<div class=\"card-footer text-muted\">Checked signature at: " . $dt['dt_reg'] . "</div>\n</div>\n</div>\n<div>\n</div>";
@@ -1721,7 +1720,7 @@ class ClientsData extends DatabaseConnection{
     private static function passHTML(string $path): string{
         $nm_get1 = explode("/", $path);
         $nm = $nm_get1[count($nm_get1) - 1];
-        return '<a href="' . $path .'" download="' . $nm . '" role="button" class="btn btn-lg btn-primary">Download authentication<i class="far fa-file-archive"></i></a>';
+        return '<a href="' . $path .'" download="' . $nm . '" role="button" class="btn btn-lg btn-primary">Download authentication <i class="far fa-file-archive"></i></a>';
     }
 
     /**
@@ -1784,9 +1783,9 @@ class ClientsData extends DatabaseConnection{
         $json_con = "";
         foreach($exp as $chr) $json_con .= chr((int) $chr);
         $data = json_decode($json_con, true);
-        if(!$this->ckClientEx($this->getClientID($data['Client']))) throw new ClientAuthenticationError("The client authentication file isn't valid. The client doesn't exists.", 1);
+        if(!$this->ckClientEx((int)$data['Client'])) throw new ClientAuthenticationError("The client authentication file isn't valid. The client doesn't exists.", 1);
         if(!$this->ckPropRef($data['Proprietary'])) throw new ClientAuthenticationError("The client authentication file isn't valid. The proprietary don't exist.", 1);
-        $qr_tk = $this->connection->query("SELECT tk_client FROM tb_clients WHERE cd_client = " . $this->getClientID($data['Client']) . ";")->fetch_array();
+        $qr_tk = $this->connection->query("SELECT tk_client FROM tb_clients WHERE cd_client = " . $data['Client'] . ";")->fetch_array();
         if(!$qr_tk['tk_client'] != $data['Token']) throw new ClientAuthenticationError("The client isn't valid. Token error.", 1);
         return true;
     }

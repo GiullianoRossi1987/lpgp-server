@@ -25,7 +25,7 @@ else if($_POST['account-type'] == "proprietary"){
 }
 if($_SESSION['checked'] == "false"){
      
-    header("Location: check_email_stp1.php");
+    header("Location: check-email-stp1.php");
 
 }
 else{

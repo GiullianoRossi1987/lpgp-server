@@ -188,6 +188,7 @@ function setClientsDrop(){
         var optCh = document.createElement("a");
 
         optCh.href = "https://" + window.location.hostname + "/lpgp-server/cgi-actions/check-client.php";
+        optCh.classList.add("dropdown-item");
         optCh.innerText = "Check client authentication";
         optCh.id = "check-client";
 

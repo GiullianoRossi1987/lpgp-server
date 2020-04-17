@@ -10,11 +10,11 @@ $relatory_bd = "";
 if(isset($_GET['rel'])){
 	if($_SESSION['mode'] == "prop"){
 		$prp_c = new PropCheckHistory("giulliano_php", "");
-		$relatory_bd = $prp_c->generateRelatory((int) $_GET['rel']);
+		$relatory_bd = $prp_c->generateRelatory((int) base64_decode($_GET['rel']));
 	}
 	else{
 		$usr_c = new UsersCheckHistory("giulliano_php", "");
-		$relatory_bd = $usr_c->generateRelatory((int) $_GET['rel']);
+		$relatory_bd = $usr_c->generateRelatory((int) base64_decode($_GET['rel']));
 	}
 }
 
