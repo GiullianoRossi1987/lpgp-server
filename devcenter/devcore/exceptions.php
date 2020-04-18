@@ -174,3 +174,15 @@ namespace ClientHistory{
 	 */
 	class HistoryRegNotFound extends Exception{}
 }
+
+namespace ThrearedServer{
+	use Exception;
+
+	/**
+	 * That exception is thrown when the thread try to load it self, but there's no client connected as a thread.
+	 * 
+	 */
+	class NoClientConnected extends Exception{}
+
+	class ClientLimitAchieved extends Exception{}
+}
