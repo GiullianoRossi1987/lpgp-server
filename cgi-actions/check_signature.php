@@ -112,6 +112,7 @@ else{
 	}
 	catch(SignatureAuthError $e){
 		$data = $sig->getSignatureFData("../usignatures.d/".$_FILES['signature-ext']['name'][0]);
+		die(var_dump($data));
 		$rp = str_replace("%path%", "src2", $signature_img);
 		$rp1 = str_replace("%alt%", "invalid signature", $rp);
 		$rel_id = $usr_c->addReg($usr_id, $data['ID'], 0, 3);
@@ -121,7 +122,7 @@ else{
 		unset($rp);
 		unset($rp1);
 		$rr = base64_encode($rel_id);
-		$domAdd .= createSignatureCardAuth($data['ID'], $vl) ."\n<a href=\"relatory.php?prp_rel=$rr\" role=\"button\" class=\"btn btn-sm btn-primary\">See relatory</a><br>";
+		$domAdd .= createSignatureCardAuth($data['ID'], $vl) ."\n<a href=\"relatory.php?rel=$rr\" role=\"button\" class=\"btn btn-sm btn-primary\">See relatory</a><br>";
 	}
 }
 ?>
