@@ -448,17 +448,16 @@
 
 .account-separator h2 {
     padding: 10px 12px;
-    color: black;
-    font-family: Verdana;
-    border: 1px solid black;
-}
-
-.account-separator{
-    background-color: #cccc !important;
+    color: white;
+    font-family: sans-serif;
+    border: 1px solid rgba(99, 99, 99, 0.8);
+    background: linear-gradient(#ffdd00, #948000) !important;
+    text-align: center;
+    
 }
 
 
 .section{
     padding: 10px 12px;
-    background-color: #aaa;
+    background: linear-gradient(#ffdd00, #948000);
 }

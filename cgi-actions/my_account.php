@@ -97,7 +97,7 @@ $usr = new UsersData("giulliano_php", "");
                         <div class="main-col col-5 card" style="margin-left: 0 !important; border: none;">
                             <div class="container data-container">
                                 <div class="main-row row card-header">
-                                    <div class="img-cont card-img-top" style="margin-left: 23.5%;">
+                                    <div class="img-cont card-img-top" style="margin-left: 29%;">
                                         <div id="img-user"></div>
                                     </div>
                                     <br>
@@ -125,8 +125,8 @@ $usr = new UsersData("giulliano_php", "");
                                         </a>
                                         <div class="collapse section" id="moreoptions-section">
                                             <br>
-                                            <div class="btn-group">
-                                                <a class="img-settings btn btn-dark" href="ch_my_data.php" role="button">
+                                            <div class="btn-group" style="margin-left: 7%;">
+                                                <a class="img-settings btn btn-lg btn-dark" href="ch_my_data.php" role="button">
                                                     Edit Account
                                                     <span>
                                                         <i class="fas fa-cog"></i>
@@ -160,11 +160,11 @@ $usr = new UsersData("giulliano_php", "");
                                                 <?php
                                                 if($_SESSION['mode'] == "prop"){
                                                     $id = base64_encode($dt['cd_proprietary']);
-                                                    echo "<a href=\"proprietary.php?id=$id\" role=\"button\" target=\"_blanck\" class=\"btn btn-primary\">See as another one</a>";
+                                                    echo "<a href=\"proprietary.php?id=$id\" role=\"button\" target=\"_blanck\" class=\"btn btn-primary btn-lg\">See as another one</a>";
                                                 }
                                                 else{
                                                     $id = base64_encode($dt['cd_user']);
-                                                    echo "<a href=\"user.php?id=$id\" role=\"button\" target=\"_blanck\" class=\"btn  btn-primary\">See as another one</a>";
+                                                    echo "<a href=\"user.php?id=$id\" role=\"button\" target=\"_blanck\" class=\"btn  btn-lg btn-primary\">See as another one</a>";
                                                 }
                                                 ?>
                                             </div>
@@ -184,7 +184,6 @@ $usr = new UsersData("giulliano_php", "");
                                     </a>';
                                 ?>
                                 <div id="signatures-section" class="collapse section">
-                                    <br>
                                     <?php
                                     // Signatures
                                     /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -208,7 +207,6 @@ $usr = new UsersData("giulliano_php", "");
                                     </h2>
                                 </a>
                                 <div class="collapse section" id="history-section">
-                                    <br>
                                     <?php
                                     // History
                                     ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -289,13 +287,18 @@ $usr = new UsersData("giulliano_php", "");
                 <div class="social-options-grp">
                     <div class="social-option">
                         <a href="https://github.com/GiullianoRossi1987/lpgp-server" target="_blanck" id="github" class="social-option-footer">
-                        <span><i class="fab fa-github"></i></span></a>
-                    </div>
-                    <div class="social-option-footer">
-                        <a href="https://" target='_blanck' id="facebook">
-
+                            <span><i class="fab fa-github"></i></span> 
+                            Visit our github!
                         </a>
                     </div>
+                    <br>
+                    <div class="social-option-footer">
+                        <a href="https://" target='_blanck' id="facebook">
+                            <span><i class="fab fa-facebook"></i></span>
+                            Visit our facebook!
+                        </a>
+                    </div>
+                    <br>
                     <div class="social-option-footer">
                         <a href="https://" target='_blanck' id="twitter"></a>
                     </div>
