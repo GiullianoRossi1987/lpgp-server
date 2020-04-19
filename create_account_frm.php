@@ -1,3 +1,10 @@
+<?php
+if(session_status() == PHP_SESSION_NONE) session_start(); 
+require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
+use function JSHandler\sendUserLogged;
+
+sendUserLogged(); // preventing bugs
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
