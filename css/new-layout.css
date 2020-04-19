@@ -465,10 +465,21 @@
 
 #home-link{
     position: relative;
-    padding: 16px 16px;
-    margin-left: 46%;
+    padding: 16px 26px;
+    margin-left: 48.7%;
     border: 2px #ffdd00 solid;
     border-radius: 10%;
     background-color: black;
-    margin-top: 10% !important;
+    margin-top: 50% !important;
+    background-image: url("../media/new-logo.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 170px !important;
+    max-width: 100% !important;
+    top: 23px;
+    opacity: .76;
+}
+
+#home-link:hover{
+    opacity: 1;
 }

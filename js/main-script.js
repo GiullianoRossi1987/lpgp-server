@@ -41,17 +41,10 @@ function setAccountOpts(ext_fls = false){
     var local_opts = document.querySelector(".login-dropdown .dropdown-menu");
     var gbl_opts = document.querySelector(".header");
     var linkHome = document.createElement("a");
-    var imgHome = document.createElement("img");
 
     linkHome.classList.add("home-link");
     linkHome.id = "home-link";
     linkHome.href = "https://" + window.location.hostname + "/lpgp-server/";
-
-    imgHome.src = "https://" + window.location.hostname + "/lpgp-server/media/new-logo.png";
-    imgHome.width  = 60;  // px
-    imgHome.height = 60; // px
-
-    linkHome.appendChild(imgHome);
 
     gbl_opts.appendChild(linkHome);
 

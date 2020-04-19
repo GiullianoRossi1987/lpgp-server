@@ -21,10 +21,9 @@ if(isset($_GET['client'])){
 	$sel .= $opts .  "</select>";	
 	$id = '<input type="hidden" name="client" value="' . $_GET['client'] . '">';
 	$del = '<a class="btn btn-lg btn-danger" role="button" type="button" href="rm-client.php?client=' . $_GET['client'] . '">Delete this client</a>';
-
-
+	$modalLink = '<a href="client-data.php?client=' . $_GET['client'] .'" role="button" class="btn btn-lg btn-success" type="button">
+						Click here to download the new authentication file.</a>';
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -127,14 +126,47 @@ if(isset($_GET['client'])){
 					</button>
                     <br>
 					<div class="collapse" id="tk-dv">
-                        <br>
-					    <?php echo $tk_ip; ?>
+						<br>
+						<div class="input-group">
+							<?php echo $tk_ip; ?>
+							<br>
+							<!-- Button trigger modal -->
+							<a type="button" class="btn btn-primary" data-toggle="modal" data-target="#modelToken" style="color: white;">
+								<span>
+									<i class="fas fa-plus"></i>
+								</span>
+								Require a new token
+							</a>
+							
+							<!-- Modal TOKEN -->
+							<div class="modal fade" id="modelToken" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title">Warning</h5>
+												<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+													<span aria-hidden="true">&times;</span>
+												</button>
+										</div>
+										<div class="modal-body">
+											Changing the client token must have consequences, after doing that, you must download
+											the new client authentication file.
+											<h1>Are you sure to do that</h1>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+											<button type="submit" class="btn btn-primary" name="chmodal">Yes</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 					<br>
 					<?php echo $del; ?>
 					<button type="submit" class="btn btn-lg btn-success disabled" id="go" name="submit">Save changes</button>
 					<a href="my_account.php" role="button" type="button" class="btn btn-lg btn-secondary">Cancel</a>
-					<!-- Modal -->
+					<!-- Modal Saved Changes -->
 					<div class="modal fade" id="modal-done" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
 						<div class="modal-dialog" role="document">
 							<div class="modal-content">
@@ -146,6 +178,7 @@ if(isset($_GET['client'])){
 								</div>
 								<div class="modal-body">
 									Your client changes were saved successfully!
+									<?php echo $modalLink; ?>
 								</div>
 								<div class="modal-footer">
 									<button type="button" class="btn btn-success" data-dismiss="modal">Ok</button>

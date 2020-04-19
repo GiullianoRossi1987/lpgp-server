@@ -1936,7 +1936,7 @@ class ClientsData extends DatabaseConnection{
         $ref = is_string($client) ? $this->getClientID($client) : $client;
         if(!$this->ckClientEx($ref)) throw new ClientNotFound("There's no client ($client)", 1);
         $new_tk = $this->genTk();
-        $qr_ch = $this->connection->query("UPDATE tb_clients SET tk_client = $new_tk WHERE cd_client = $client;");
+        $qr_ch = $this->connection->query("UPDATE tb_clients SET tk_client = \"$new_tk\" WHERE cd_client = $client;");
         unset($new_tk);
     }
 

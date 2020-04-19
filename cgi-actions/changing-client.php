@@ -11,3 +11,11 @@ if(isset($_POST['submit']) && isset($_POST['client'])){
 
 	header("Location: ch-client.php?client=" . $_POST['client'] . "&alert=1");
 }
+
+else if(isset($_POST['chmodal']) && isset($_POST['client'])){
+	$cl = (int)base64_decode($_POST['client']);
+	$obj = new ClientsData("giulliano_php", "");
+	$obj->genNewTK($cl);
+
+	header("Location: ch-client.php?client=" . $_POST['client'] . "&alert=1");
+}
