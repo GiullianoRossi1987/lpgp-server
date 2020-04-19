@@ -131,7 +131,6 @@ sendUserLogged();
                     <a href="./contact-us.html" class="dropdown-item">Contact Us</a>
                 </div>
             </div>
-            <br>
         </div>
     </div>
     <div class="content1 container content">
