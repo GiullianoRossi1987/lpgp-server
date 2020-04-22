@@ -6,6 +6,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
 use Core\ProprietariesData;
 use Core\SignaturesData;
 use ProprietariesExceptions\ProprietaryNotFound;
+use Core\ClientsAccessData;
 
 
 if(!defined("MAX_SIGC")) define("MAX_SIGC", 5);   // the max number of the signatures checked card displayed at the my_account.php page
@@ -277,5 +278,38 @@ function createClientAuthCard(array $clientSoftData): string{
         </div>
     </div>';
     return $cardRet;
+}
+
+/**
+ * That function generates a new client access plot. Using a specific data type, normally generated after
+ *
+ * @param integer $clientID The client used to check
+ * @param string $chartID The canvas element id, to generate the chart.
+ * @return string The HTML plot content
+ */
+function createAccessChart(int $clientID, string $chartID = "client-plots"): string{
+    $accessObj = new ClientsAccessData("giulliano_php", "");
+    $plotData = $accessObj->getPlotAccessData($clientID);
+    $mainChart = '<script>';
+    $jsonArr = [
+        "type" => "bar",
+        "data" => [
+            "labels" => array_keys($plotData),
+            "datasets" => [
+                
+            ]
+        ],
+        "options" => [
+            "maintainAspectRadio" => false
+        ]
+    ];
+
+    // adding the data types
+    foreach($plotData as $year => $tot) $jsonArr['data']['datasets'][] = ["label" => "Total", "data" => $tot];
+
+    $plotContent = json_encode($jsonArr);
+    $mainChart .= "\n" . 'var chart = document.getElementById("' . $chartID . '");
+                          var clientChart = new Chart(chart, ' . $plotContent . ');</script>';
+    return $mainChart;
 }
 ?>

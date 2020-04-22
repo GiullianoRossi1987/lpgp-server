@@ -32,6 +32,13 @@ function clsSignOpts(){
     catch(ex){}  // do nothing;
 }
 
+function getChartHead(){
+    var mainObj = document.querySelector("head");
+    var scriptObj = document.createElement("script");
+    scriptObj.src = '<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>';
+    mainObj.appendChild(scriptObj);
+}
+
 function setAccountOpts(ext_fls = false){
     /**
      * 

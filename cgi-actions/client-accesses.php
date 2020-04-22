@@ -7,5 +7,8 @@ use function JSHandler\sendUserLogged;
 use Core\ClientsData;
 use Core\ClientsAccessData;
 
+sendUserLogged();  // preventing bugs
+
 $clientObj = new ClientsData("giulliano_php", "");
 $clientAccess = new ClientsAccessData("giulliano_php", "");
+
