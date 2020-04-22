@@ -1741,7 +1741,7 @@ class ClientsData extends DatabaseConnection{
         $json_aut = array(
             "Client" => $client_pk_ref,
             "Proprietary" => (int)$cldt['id_proprietary'],
-            "Token" => (int)$cldt['tk_client'],
+            "Token" => $cldt['tk_client'],
             "Dt" => date("Y-m-d H:M:i")
         );
         $dumped_a = json_encode($json_aut);

@@ -34,7 +34,7 @@ namespace Server{
 
 		const HANDSHAKE   = "Welcome to the LPGP official client authentication server.Please send us your client information in the LPGP documents content format.Example: '192/168/0/11/98'";
 		const SIGHANDSK   = "Now you can send us the signature content for authentication. Please send the content";
-		const LOGS_FILE   = "devcenter/logs/access.log";
+		const LOGS_FILE   = "./logs/access.log";
 		const TALKBACK_EN = TRUE;
 		const DELIMITER   = SignaturesData::DELIMITER;
 
@@ -82,9 +82,9 @@ namespace Server{
 			$dt = date("Y-M-d H:i:s");
 			$this->connection_logs[] = "[$dt] Closing socket.";
 			$doc = implode("\n", $this->connection_logs);
-			$all_dt = file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/devcenter/logs/access.log");
+			$all_dt = file_get_contents(self::LOGS_FILE);
 			$document = $all_dt . "\n" . $doc;
-			file_put_contents($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/devcenter/logs/access.log", $document);
+			file_put_contents(self::LOGS_FILE, $document);
 		}
 
 		/**
@@ -92,7 +92,7 @@ namespace Server{
 		 * @param string $content The content to decode.
 		 * @return array
 		 */
-		private static function decodeData(string $content){
+		private static function decodeData(string $content): array{
 			$exp = explode(ServerSocket::DELIMITER, $content);
 			$json_con = "";
 			foreach($exp as $ascii) $json_con .= chr((int) $ascii);
@@ -118,14 +118,17 @@ namespace Server{
 				}
 			}
 			catch(Exception $error){ 
+				die($error);
 				$history_obj->addReg($dt['Client'], null, 0);
 				return false;
 			}
 			catch(InvalidSignatureFile $error){
+				die($error);
 				$history_obj->addReg($dt['Client'], null, 0);
 				return false;
 			}
 			catch(Exception $sas){
+				die($sas);
 				$history_obj->addReg($dt['Client'], null, 0);
 				return false;
 			}
@@ -171,7 +174,7 @@ namespace Server{
 			$dt_tm = date("Y-m-d H:i:s");
 			$sender = $ext ? "Client" : "Server";
 			$fl = fopen(self::LOGS_FILE, "a");
-			fwrite($fl, "[$dt_tm] $sender -> $data");
+			fwrite($fl, "\n[$dt_tm] $sender -> $data\n");
 			fclose($fl);
 		}
 

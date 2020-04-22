@@ -31,6 +31,13 @@ if(isset($_GET['client'])){
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.2/popper.min.js"></script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
 </head>
+
+<style>
+    #home-link{
+        top: 0px;
+    }
+</style>
+
 <body>
 	<script>
         $(document).ready(function(){   

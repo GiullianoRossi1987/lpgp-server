@@ -35,11 +35,11 @@ namespace ClientsDatabase{
 		 * @param string $client_nm The client name reference to search
 		 * @return bool
 		 */
-		private function ckClientEx(string $client_nm){
+		private function ckClientEx(int $client_id){
 			$this->checkNotConnected();
-			$qr = $this->connection->query("SELECT nm_client FROM tb_clients WHERE nm_client = \"$client_nm\";");
+			$qr = $this->connection->query("SELECT cd_client FROM tb_clients WHERE cd_client = $client_id;");
 			while($row = $qr->fetch_array()){
-				if($row['nm_client'] == $client_nm) return true;
+				if($row['cd_client'] == $client_id) return true;
 			}
 			return false;
 		}
@@ -187,10 +187,10 @@ namespace ClientsDatabase{
 		 * @param string $token The client token
 		 * @return bool
 		 */
-		public function authClient(string $client_nm, string $token){
+		public function authClient(int $client_id, string $token){
 			$this->checkNotConnected();
-			if(!$this->ckClientEx($client_nm)) return false;  // the client doesn't exist
-			$or_tk = $this->connection->query("SELECT tk_client FROM tb_clients WHERE nm_client = \"$client_nm\";")->fetch_array();
+			if(!$this->ckClientEx($client_id)) return false;  // the client doesn't exist
+			$or_tk = $this->connection->query("SELECT tk_client FROM tb_clients WHERE cd_client = $client_id;")->fetch_array();
 			return $or_tk['tk_client'] == $token;
 		}
 
