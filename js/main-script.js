@@ -1,5 +1,18 @@
 // there's some uses of the http://localhost/ if you don't want it then just change't
 
+function include(src){
+    var head = document.querySelector("head");
+    var script = document.createElement("script");
+    script.src = src;
+    head.appendChild(script);
+}
+
+function generateChart(chartData, canvas){
+    include("https://cdn.jsdelivr.net/npm/chart.js@2.8.0");
+    var idCanvas = document.getElementById(canvas);
+    var chart = new Chart(idCanvas, chartData);
+}
+
 /**
  * Resets the values at the localStorage.
  * The values are:
@@ -20,7 +33,7 @@ function clsLoginOpts(){
     try{
         document.querySelectorAll("#item1 .options-login .opt-login").remove();
     }
-    catch(ex){ } // do nothing
+    catch(e){ } // do nothing
 }
 
 function clsSignOpts(){

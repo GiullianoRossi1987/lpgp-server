@@ -2070,8 +2070,40 @@ class ClientsAccessData extends DatabaseConnection{
         if(!$this->ckClientRef($client)) throw new ReferenceError("There's no client #$client", 1);
         $raw_query = $this->connection->query("SELECT Year(dt_access) AS Years, COUNT(cd_access) AS total_access FROM tb_access WHERE id_client = $client GROUP BY Years;");
         $rt = array();
-        while($row = $raw_query->fetch_array()) $rt[$row['Years']] = $row['total_access'];
+        while($row = $raw_query->fetch_array()) $rt[$row['Years']] = $row;
         return $rt;
+    }
+
+    /**
+     * That method return the main data needed to generate a chart of all the clients
+     *
+     * @param string $proprietary The proprietary logged name to get the data
+     * @throws ProprietaryReferenceError If the referred proprietary don't exist.
+     * @return array
+     */
+    public function getAllClientsChart(string $proprietary): array{
+        $this->checkNotConnected();
+        $objCl = new ClientsData("giulliano_php", "");
+        $clients = $objCl->getClientsByOwner($proprietary);
+        $arrData = [
+            "Clients" => $clients
+        ];
+
+        $years = $this->connection->query("SELECT DISTINCT year(dt_access) AS Year FROM tb_access");
+        while($yearRow = $years->fetch_array()) $arrData[$yearRow['Year']] = [];
+
+        foreach($arrData as $year => $value){
+            if($year != "Clients"){
+                $clCount = [];
+                for($i = 0; $i < count($arrData['Clients']); $i++){
+                    $client = $arrData['Clients'][$i]['cd_client'];
+                    $qrYear = $this->connection->query("SELECT Count(cd_access) AS access FROM tb_access WHERE year(dt_access) = $year AND id_client = $client GROUP BY id_client;")->fetch_array();
+                    $clCount[] = (int)$qrYear['access'];
+                }
+                $arrData[$year] = $clCount;
+            }
+        }
+        return $arrData;
     }
 }
 
