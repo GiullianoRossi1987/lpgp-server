@@ -2105,6 +2105,155 @@ class ClientsAccessData extends DatabaseConnection{
         }
         return $arrData;
     }
+
+    /**
+     * That method returns the chart data of all the client unsuccessful access record
+     * 
+     * @param string $proprietary The proprietary name reference to search
+     * @return array The chart needed data
+     */
+    public function getAllUnsuccesfulChart(string $proprietary): array{
+        $this->checkNotConnected();
+        $objCl = new ClientsData("giulliano_php", "");
+        $clients = $objCl->getClientsByOwner($proprietary);
+        $arrData = [
+            "Clients" => $clients
+        ];
+
+        $years = $this->connection->query("SELECT DISTINCT year(dt_access) AS Year FROM tb_access");
+        while($yearRow = $years->fetch_array()) $arrData[$yearRow['Year']] = [];
+
+        foreach($arrData as $year => $value){
+            if($year != "Clients"){
+                $clCount = [];
+                for($i = 0; $i < count($arrData['Clients']); $i++){
+                    $client = $arrData['Clients'][$i]['cd_client'];
+                    $qrYear = $this->connection->query("SELECT Count(cd_access) AS access FROM tb_access WHERE year(dt_access) = $year AND id_client = $client AND vl_success = 0 GROUP BY id_client;")->fetch_array();
+                    $clCount[] = (int)$qrYear['access'];
+                }
+                $arrData[$year] = $clCount;
+            }
+        }
+        return $arrData;
+    }
+
+    /**
+     * That method returns the chart data of all the client successful access records
+     *
+     * @param string $proprietary The proprietary name reference to search
+     * @return array The chart data.
+     */
+    public function getAllSuccessfulChart(string $proprietary): array{
+        $this->checkNotConnected();
+        $objCl = new ClientsData("giulliano_php", "");
+        $clients = $objCl->getClientsByOwner($proprietary);
+        $arrData = [
+            "Clients" => $clients
+        ];
+
+        $years = $this->connection->query("SELECT DISTINCT year(dt_access) AS Year FROM tb_access");
+        while($yearRow = $years->fetch_array()) $arrData[$yearRow['Year']] = [];
+
+        foreach($arrData as $year => $value){
+            if($year != "Clients"){
+                $clCount = [];
+                for($i = 0; $i < count($arrData['Clients']); $i++){
+                    $client = $arrData['Clients'][$i]['cd_client'];
+                    $qrYear = $this->connection->query("SELECT Count(cd_access) AS access FROM tb_access WHERE year(dt_access) = $year AND id_client = $client AND vl_success = 1 GROUP BY id_client;")->fetch_array();
+                    $clCount[] = (int)$qrYear['access'];
+                }
+                $arrData[$year] = $clCount;
+            }
+        }
+        return $arrData;
+    }
+
+    /**
+     * That method get all the access of a client among the years.
+     *
+     * @param integer $client_cd The client primary key to search
+     * @throws ClientNotFound If the client reference don't exist.
+     * @return array The chart needed data
+     */
+    public function getClientAllAccess(int $client_cd): array{
+        $this->checkNotConnected();
+        if(!$this->ckClientRef($client_cd)) throw new ClientNotFound("There's no client #$client_cd", 1);
+        $qrDt = new ClientsData("giulliano_php", "");
+        $arrData = [
+            "Clients" => [$qrDt->getClientData($client_cd)]
+        ];
+
+        $years = $this->connection->query("SELECT DISTINCT year(dt_access) AS Year FROM tb_access");
+        while($yearRow = $years->fetch_array()) $arrData[$yearRow['Year']] = [];
+
+        foreach($arrData as $year => $value){
+            if($year != "Clients"){
+                $clCount = [];
+                $qrYear = $this->connection->query("SELECT Count(cd_access) AS access FROM tb_access WHERE year(dt_access) = $year AND id_client = $client_cd GROUP BY id_client;")->fetch_array();
+                $clCount[] = (int)$qrYear['access'];
+                $arrData[$year] = $clCount;
+            }
+        }
+        return $arrData;
+    }
+
+    /**
+     * That method returns the chart data of only the successful access of a specified client
+     *
+     * @param integer $client_cd The client primary key
+     * @throws ClientNotFound If the referred client don't exist.
+     * @return array
+     */
+    public function getClientSuccessfulAc(int $client_cd): array{
+        $this->checkNotConnected();
+        if(!$this->ckClientRef($client_cd)) throw new ClientNotFound("There's no client #$client_cd", 1);
+        $qrDt = new ClientsData("giulliano_php", "");
+        $arrData = [
+            "Clients" => [$qrDt->getClientData($client_cd)]
+        ];
+
+        $years = $this->connection->query("SELECT DISTINCT year(dt_access) AS Year FROM tb_access");
+        while($yearRow = $years->fetch_array()) $arrData[$yearRow['Year']] = [];
+
+        foreach($arrData as $year => $value){
+            if($year != "Clients"){
+                $clCount = [];
+                $qrYear = $this->connection->query("SELECT Count(cd_access) AS access FROM tb_access WHERE year(dt_access) = $year AND id_client = $client_cd AND vl_success = 1 GROUP BY id_client;")->fetch_array();
+                $clCount[] = (int)$qrYear['access'];
+                $arrData[$year] = $clCount;
+            }
+        }
+        return $arrData;
+    }
+
+    /**
+     * That method returns the chart data of all the unsuccessful accesses records of a client.
+     *
+     * @param integer $client_cd The client primary key reference
+     * @throws ClientNotFound If the client reference isn't valid
+     * @return array
+     */
+    public function getClientUnsuccessfulAc(int $client_cd): array{
+        $this->checkNotConnected();
+        if(!$this->ckClientRef($client_cd)) throw new ClientNotFound("There's no client #$client_cd", 1);
+        $qrDt = new ClientsData("giulliano_php", "");
+        $arrData = [
+            "Clients" => [$qrDt->getClientData($client_cd)]
+        ];
+
+        $years = $this->connection->query("SELECT DISTINCT year(dt_access) AS Year FROM tb_access");
+        while($yearRow = $years->fetch_array()) $arrData[$yearRow['Year']] = [];
+
+        foreach($arrData as $year => $value){
+            if($year != "Clients"){
+                $clCount = [];
+                $qrYear = $this->connection->query("SELECT Count(cd_access) AS access FROM tb_access WHERE year(dt_access) = $year AND id_client = $client_cd AND vl_success = 0 GROUP BY id_client;")->fetch_array();
+                $clCount[] = (int)$qrYear['access'];
+                $arrData[$year] = $clCount;
+            }
+        }
+        return $arrData;
+    }
 }
 
 

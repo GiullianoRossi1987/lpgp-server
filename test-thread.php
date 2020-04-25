@@ -21,11 +21,10 @@ $acc = new AccessPlot("teste");
 	<script src="js/charts.js"></script>
 </head> 
 <body>
-	<canvas id="client-chart" width="100" height="100"></canvas>
+	<canvas id="client-chart" width="500" height="500"></canvas>
 	<?php
-		$acc->allClientsChart("giulliano_teste", true);
+		$acc->getClientSuccessful(10, true);
 		echo $acc->generateChart("client-chart");
-		$acc->dieBase();
 	?>
 </body>
 </html>

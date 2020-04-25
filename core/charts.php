@@ -22,7 +22,7 @@ if(!defined("CHART_STRT")) define("CHART_STRT", [
 		"maintainAspectRatio" => false,
 		"scales" => [
 			"yAxes" => [
-				"beginAtZero" => true
+				"ticks" =>["beginAtZero" => true]
 			]
 		]
 	]
@@ -277,8 +277,126 @@ class AccessPlot{
 		}
 	}
 
-	public function dieBase(){
-		die(var_dump($this->base));
+	/**
+	 * Sets the chart with the client unsuccessful access.
+	 *
+	 * @param string $proprietary The proprietary to get
+	 * @param boolean $override If the method will override the actual chart.
+	 * @throws UnwritebleData If the class chart already got the a chart data.
+	 * @return void
+	 */
+	public function allClientsUnsuccessulChart(string $proprietary, bool $override = false){
+		if($this->gotDt){
+			if($override) $this->flush();
+			else throw new UnwritebleData("Can't override the actual chart data", 1);
+		}
+		$this->base['options']['title']['text'] = "Clients of $proprietary";
+		$this->base['options']['type'] = "bar";
+		$this->gotDt = true;
+		$all_dt = $this->dbHnd->getAllUnsuccesfulChart($proprietary);
+		for($i = 0; $i < count($all_dt['Clients']); $i++) $this->addLabel($all_dt['Clients'][$i]['nm_client']);
+		foreach($all_dt as $year => $accesses){
+			if($year != "Clients"){
+				$this->addData($year, $accesses);
+			}
+		}
+	}
+
+	/**
+	 * Sets the chart with the client successful access records
+	 * 
+	 * @param string $proprietary The proprietary to get the clients
+	 * @param boolean $override If the method will override the actual chart
+	 * @throws UnwritebleData If the class chart is already setted.
+	 * @return void
+	 */
+	public function allClientsSuccessfulChart(string $proprietary, bool $override = false){
+		if($this->gotDt){
+			if($override) $this->flush();
+			else throw new UnwritebleData("Can't override the actual chart data", 1);
+		}
+		$this->base['options']['title']['text'] = "Clients of $proprietary";
+		$this->base['options']['type'] = "bar";
+		$this->gotDt = true;
+		$all_dt = $this->dbHnd->getAllSuccessfulChart($proprietary);
+		$this->addLabel($all_dt['Clients'][0]['nm_client']);
+		foreach($all_dt as $year => $accesses){
+			if($year != "Clients"){
+				$this->addData($year, $accesses);
+			}
+		}
+	}
+
+	/**
+	 * That method set the chart base with all the client accesses, of a specific client.
+	 *
+	 * @param integer $client_cd The client primary key reference
+	 * @param boolean $override If the method will override the 
+	 * @return void
+	 */
+	public function getClientAccesses(int $client_cd, bool $override = false){
+		if($this->gotDt){
+			if($override) $this->flush();
+			else throw new UnwritebleData("Can't override the actual chart data", 1);
+		}
+		$this->base['options']['type'] = "bar";
+		$this->gotDt = true;
+		$all_dt = $this->dbHnd->getClientAllAccess($client_cd);
+		$this->base['options']['title']['text'] = "Clients ";
+		for($i = 0; $i < count($all_dt['Clients']); $i++) $this->addLabel($all_dt['Clients'][$i]['nm_client']);
+		foreach($all_dt as $year => $accesses){
+			if($year != "Clients"){
+				$this->addData($year, $accesses);
+			}
+		}
+	}
+
+	/**
+	 * That method set the chart base with the sucessful accesses of a client
+	 *
+	 * @param integer $client_cd The client primary key reference
+	 * @param boolean $override If the method will override the local base
+	 * @return void
+	 */
+	public function getClientSuccessful(int $client_cd, bool $override = false){
+		if($this->gotDt){
+			if($override) $this->flush();
+			else throw new UnwritebleData("Can't override the actual chart data", 1);
+		}
+		$this->base['options']['type'] = "bar";
+		$this->gotDt = true;
+		$all_dt = $this->dbHnd->getClientSuccessfulAc($client_cd);
+		$this->base['options']['title']['text'] = "Clients ";
+		for($i = 0; $i < count($all_dt['Clients']); $i++) $this->addLabel($all_dt['Clients'][$i]['nm_client']);
+		foreach($all_dt as $year => $accesses){
+			if($year != "Clients"){
+				$this->addData($year, $accesses);
+			}
+		}
+	}
+
+	/**
+	 * That method set the chart base with the unsucessful accesses of a client
+	 *
+	 * @param integer $client_cd The client primary key reference
+	 * @param boolean $override If the method will override the local base
+	 * @return void
+	 */
+	public function getClientUnsuccessful(int $client_cd, bool $override = false){
+		if($this->gotDt){
+			if($override) $this->flush();
+			else throw new UnwritebleData("Can't override the actual chart data", 1);
+		}
+		$this->base['options']['type'] = "bar";
+		$this->gotDt = true;
+		$all_dt = $this->dbHnd->getClientUnsuccessfulAc($client_cd);
+		$this->base['options']['title']['text'] = "Clients ";
+		for($i = 0; $i < count($all_dt['Clients']); $i++) $this->addLabel($all_dt['Clients'][$i]['nm_client']);
+		foreach($all_dt as $year => $accesses){
+			if($year != "Clients"){
+				$this->addData($year, $accesses);
+			}
+		}
 	}
 }
 ?>
