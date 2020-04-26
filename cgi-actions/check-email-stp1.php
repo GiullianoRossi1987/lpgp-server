@@ -39,7 +39,7 @@
             else $("#err-lb-code").hide();
         });
     </script>
-    <div class="container-fluid header-container" role="banner" style="background-color: rgb(51, 51, 71); position: relative;">
+    <div class="container-fluid header-container" role="banner" style="position: relative;">
         <div class="col-12 header" style="height: 71px">
             <div class="opt-dropdown dropdown login-dropdown">
                 <button type="button" class="btn btn-lg default-btn-header dropdown-toggle" data-toggle="dropdown" id="account-opts" aria-haspopup="true" aria-expanded="false">
@@ -53,7 +53,7 @@
                 </button>
                 <div class="dropdown-menu opts" aria-labelledby="signature-opts"></div>
             </div>
-            <div class="opt-dropdown dropdown after-opt help-dropdown" style="left: 12%; position: relative !important;">
+            <div class="opt-dropdown dropdown after-opt help-dropdown" style="relative !important;">
                 <button class="dropdown-toggle btn btn-lg default-btn-header" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true" id="help-opt">
                     Help
                 </button>
@@ -69,7 +69,7 @@
     </div>
     <br>
 
-    <div class="container-fluid container-content" style="position: relative;margin-left: 23%;">
+    <div class="container-fluid container-content" style="margin-left: 23%; margin-top: 10%;">
         <div class="row-main row">
             <div class="col-7 clear-content">
                 <h1>Check your email <?php echo $_SESSION['user'];?></h1>
