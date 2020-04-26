@@ -229,8 +229,6 @@ class AccessPlot{
 		$_bgs = is_null($bgs) ? $this->fillArray(count($data), self::_BGS) : $bgs;
 		$_bds = is_null($bds) ? $this->fillArray(count($data), self::_BDS) : $bds;
 		$_bdw = is_null($bdw) ? $this->fillArray(count($data), self::_BDW) : $bdw;
-		if(!$this->ckIncompatibilities($data, $_bgs, $_bds, $_bdw))
-			throw new IncompatibilityError("There's data incompaitibility", 1);
 		$dataset = [
 			"label" => $label,
 			"data" => $data,
@@ -315,7 +313,7 @@ class AccessPlot{
 			if($override) $this->flush();
 			else throw new UnwritebleData("Can't override the actual chart data", 1);
 		}
-		$this->base['options']['title']['text'] = "Clients of $proprietary";
+		$this->base['options']['title']['text'] = "Succesful Clients of $proprietary";
 		$this->base['options']['type'] = "bar";
 		$this->gotDt = true;
 		$all_dt = $this->dbHnd->getAllSuccessfulChart($proprietary);
@@ -342,7 +340,7 @@ class AccessPlot{
 		$this->base['options']['type'] = "bar";
 		$this->gotDt = true;
 		$all_dt = $this->dbHnd->getClientAllAccess($client_cd);
-		$this->base['options']['title']['text'] = "Clients ";
+		$this->base['options']['title']['text'] = "Access of Client " . $all_dt['Clients'][0]["nm_client"];
 		for($i = 0; $i < count($all_dt['Clients']); $i++) $this->addLabel($all_dt['Clients'][$i]['nm_client']);
 		foreach($all_dt as $year => $accesses){
 			if($year != "Clients"){
@@ -366,7 +364,7 @@ class AccessPlot{
 		$this->base['options']['type'] = "bar";
 		$this->gotDt = true;
 		$all_dt = $this->dbHnd->getClientSuccessfulAc($client_cd);
-		$this->base['options']['title']['text'] = "Clients ";
+		$this->base['options']['title']['text'] = "Successful access of " . $all_dt['Clients'][0]['nm_client'];
 		for($i = 0; $i < count($all_dt['Clients']); $i++) $this->addLabel($all_dt['Clients'][$i]['nm_client']);
 		foreach($all_dt as $year => $accesses){
 			if($year != "Clients"){
@@ -390,7 +388,7 @@ class AccessPlot{
 		$this->base['options']['type'] = "bar";
 		$this->gotDt = true;
 		$all_dt = $this->dbHnd->getClientUnsuccessfulAc($client_cd);
-		$this->base['options']['title']['text'] = "Clients ";
+		$this->base['options']['title']['text'] = "Unsuccessful accesses of " . $all_dt['Clients'][0]['nm_client'];
 		for($i = 0; $i < count($all_dt['Clients']); $i++) $this->addLabel($all_dt['Clients'][$i]['nm_client']);
 		foreach($all_dt as $year => $accesses){
 			if($year != "Clients"){
