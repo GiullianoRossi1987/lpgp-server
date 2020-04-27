@@ -155,8 +155,8 @@ if(isset($_GET['confirm'])){
             <div class="col-7 clear-content" style="position: relative; margin-left: 21%; margin-top: 10%;">
 				<h1>Your account was deleted successfully!</h1>
 				<h4>Please make login or create a new account if you want to stay in LPGP site!</h4>
-				<a href="https://localhost/lpgp-server/login.html" role="button" class="btn btn-lg btn-primary">Make Login</a>
-				<a href="https://localhost/lpgp-server/create_account_frm.php" role="button" class="btn btn-lg btn-success">Create a new account</a>
+				<a href="../login_frm.php" role="button" class="btn btn-lg btn-primary">Make Login</a>
+				<a href="../create_account_frm.php" role="button" class="btn btn-lg btn-success">Create a new account</a>
                 <br>
             </div>
         </div>
