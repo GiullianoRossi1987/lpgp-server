@@ -12,11 +12,14 @@ use LogsErrors\InvalidFile;
 use LogsErrors\LogsFileNotLoaded;
 use LogsErrors\LogsFileAlreadyLoaded;
 
-define("DEFAULT_DB_LOGS", $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/logs/database.log");
-define("DEFAULT_ERROR_LOGS", $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/logs/error.log");
-define("DEFAULT_FILES_LOG", $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/logs/files.log");
+if(!defined("DEFAULT_DB_LOGS"))    define("DEFAULT_DB_LOGS", $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/logs/database.log");
+if(!defined("DEFAULT_ERROR_LOGS")) define("DEFAULT_ERROR_LOGS", $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/logs/error.log");
+if(!defined("DEFAULT_FILES_LOG"))  define("DEFAULT_FILES_LOG", $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/logs/files.log");
+if(!defined("DTTM_FORMAT"))        define("DTTM_FORMAT", "YYYY-MM-dd HH:mm:ii");
+
 
 /**
+ *   **Warning: That class was deprecated**
  * That class is a handler for the logs management at the system. 
  * That can be used for develop other subclasses.
  * 
@@ -161,5 +164,85 @@ class Logger{
         if($auto_commit) $this->commitChanges();
     }
 
+}
+
+/**
+ * That's a new class that we use instead the deprecated Logger class. That class have a very different formmating mode.
+ * That means the same files used by the Logger class can't be used by that class and vice versa.
+ * 
+ * @var string|null $logsFile The logs file loaded by the class.
+ * @var boolean $gotFile If the class got a logs file configured
+ * @var string DELIMITER The default logs delimiter
+ */
+class SysLogger{
+    protected $logsFile = null;
+    protected $gotFile = false;
+    const DELIMITER  = "   ";
+
+    // simple getters.
+    public function _getFile(): string{ return is_null($this->logsFile) || !$this->gotFile ? "" : $this->logsFile;}
+
+    public function _getHave(): bool{ return $this->gotFile;}
+
+    /**
+     * That method adds a logs file to the class attributes;
+     *
+     * @param string $logsFile Thse logs file path to load.
+     * @throws LogsFileAlreadyoaded If the class already have a logs file loaded.
+     * @return void
+     */
+    public function loadLogs(string $logsFile){
+        if($this->gotFile) throw new LogsFileNotLoaded("There's a logs file loaded already", 1);
+        $this->logsFile = $logsFile;
+        $this->gotFile = true;
+        return ;
+    }
+
+    /**
+     * That method unsets the local logs file setted making the class able to receive other file.
+     *
+     * @throws LogsFileNotLoaded If there's no logs file loaded yet
+     * @return void
+     */
+    public function unsetLogs(){
+        if(!$this->gotFile) throw new LogsFileNotLoaded("There's no logs file loaded!", 1);
+        $this->logsFile = null;
+        $this->gotFile = False;
+    }
+
+    /**
+     * That method starts the class with the file logs to the class attributes.
+     *
+     * @param string $logsFile
+     */
+    public function __construct(string $logsFile){
+        $this->loadLogs($logsFile);
+    }
+
+    /**
+     * That method destrois the class instance/object, but before doing it, it'll unset the logs file.
+     */
+    public function __destruct(){
+        if($this->gotFile) $this->unsetLogs();
+    }
+
+    /**
+     * That method writes a record in the logs file.
+     *
+     * @param string $action The action made
+     * @param boolean $success If the action was successfully executed
+     * @param integer|null $errCode If the action had errors, then wich's the error code
+     * @param string|null $message The error message, if the action had errors.
+     * @throws LogsFileNotLoaded If there's no logs file loaded yet
+     * @return void
+     */
+    public function addLog(string $action, bool $success = true, ?int $errCode = null, ?string $message = null){
+        if(!$this->gotFile) throw new LogsFileNotLoaded("There's no logs file loaded yet", 1);
+        $fileR = fopen($this->logsFile, "a+");
+        $dtErr = !$success ? "{$errCode} $message" : "";
+        $record = date(DTTM_FORMAT) . " [" . getmypid() . "] $action  $success \n";
+        fwrite($fileR, $record);
+        fclose($fileR);
+    }
 }
 ?>
