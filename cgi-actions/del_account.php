@@ -2,21 +2,27 @@
 if(session_status() == PHP_SESSION_NONE) session_start();
 require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
 require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/logs-system.php";
 
 use Core\ProprietariesData;
 use Core\UsersData;
 use function JSHandler\sendUserLogged;
+use LogsSystem\SysLogger;
+
+$log = new SysLogger($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/logs/accounts.log");
 
 if(isset($_GET['confirm'])){
 	if($_GET['confirm'] == "y"){
 		if($_SESSION['mode'] == 'prop'){
-			$prp = new ProprietariesData("giulliano_php", "");
+            $prp = new ProprietariesData("giulliano_php", "");
+            $tt  = $_SESSION['user'];
 			$prp->delProprietary($_SESSION['user']);
+            $log->addLog("Removed Proprietary $tt");
 		}
 		else{
 			$usr = new UsersData("giulliano_php", "");
 			$usr->deleteUser($_SESSION['user']);
-		}
+        }
 		session_unset();
 		session_destroy();
         sendUserLogged();
