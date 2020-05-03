@@ -121,7 +121,7 @@ $usr = new UsersData("giulliano_php", "");
                                         }
                                         ?>
                                         <a class="account-separator" id="accountopt-sep" href="#moreoptions-section" data-toggle="collapse" aria-expanded="false" aria-controls="moreoptions-section">
-                                            <h2>More account options<span><i class="fas fa-caret-down"></i></span></h2>
+                                            <h2>More account options<span><i class="fas fa-caret-down" style="margin-left: 37%;"></i></span></h2>
                                         </a>
                                         <div class="collapse section" id="moreoptions-section">
                                             <br>
@@ -150,7 +150,7 @@ $usr = new UsersData("giulliano_php", "");
                                                             <hr>
                                                             <div class="modal-body">
                                                                 <h3>That action can't be undone!</h3>
-                                                                <a href="https://localhost/lpgp-server/cgi-actions/del_account.php?confirm=y" role="button" class="btn btn-lg btn-danger">Yes, delete my account</a>
+                                                                <a href="del_account.php?confirm=y" role="button" class="btn btn-lg btn-danger">Yes, delete my account</a>
                                                                 <a href="#" role="button" class="btn btn-lg btn-secondary" data-dismiss="modal">Cancel</a>
                                                             </div>
                                                         </div>
@@ -177,7 +177,7 @@ $usr = new UsersData("giulliano_php", "");
                         <div class="others-col col-md-7" style="margin-top: 3%;">
                             <div class="signatures-col col-12">
                                 <?php if($_SESSION['mode'] == "prop") echo '<a href="#signatures-section" class="account-separator" id="signature-sep" aria-controls="signatures-section" aria-expanded="false" data-toggle="collapse">
-                                        <h2 class="mainheader-heading mb-0">My Signatures<span>
+                                        <h2 class="mainheader-heading mb-0">My Signatures<span style="margin-left: 70%;">
                                         <i class="fas fa-caret-down"></i>
                                     </span></h2>
                                         
@@ -202,7 +202,7 @@ $usr = new UsersData("giulliano_php", "");
                                     <h2> 
                                         My History
                                         <span>
-                                            <i class="fas fa-caret-down"></i>
+                                            <i class="fas fa-caret-down" style="margin-left: 75%;"></i>
                                         </span>
                                     </h2>
                                 </a>
@@ -243,7 +243,7 @@ $usr = new UsersData("giulliano_php", "");
                                     <h2>
                                         My Clients
                                         <span>
-                                            <i class="fas fa-caret-down"></i>
+                                            <i class="fas fa-caret-down" style="margin-left: 75%;"></i>
                                         </span>
                                     </h2>
                                 </a>'

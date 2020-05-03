@@ -312,4 +312,34 @@ function createAccessChart(int $clientID, string $chartID = "client-plots"): str
                           var clientChart = new Chart(chart, ' . $plotContent . ');</script>';
     return $mainChart;
 }
+
+/**
+ * That method creates a HTML content to be showed when one of the pages had internal errors.
+ *
+ * @param string $error_message
+ * @return string
+ */
+function errorTemplate(string $error_message): string{
+    return '<div class="error-message" >
+                <div class="img-fake">
+                    <span id="err-span">
+                        <i class="fas fa-bug" id="err-i"></i>
+                    </span>
+                </div>
+                <center>
+                    <h1>Oops! An error occoured</h1>
+                </center>
+                <br>
+                <h2>For more information about this error please contact us: lpgpofficial@gmail.com</h2>
+                <br>
+                <div class="message-err collapse" id="error">
+                    <b>' . $error_message . '</b>
+                </div>
+                <br>
+                <a href="#error" data-toggle="collapse" role="button" class="btn btn-lg btn-primary" aria-expanded="false" aria-controls="error">
+                    Show error (Advanced)
+                </a>
+            </div>';
+    // done
+}
 ?>

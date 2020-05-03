@@ -448,18 +448,20 @@
 
 .account-separator h2 {
     padding: 10px 12px;
-    color: white;
     font-family: sans-serif;
     border: 1px solid rgba(99, 99, 99, 0.8);
-    background: linear-gradient(#ffdd00, #948000) !important;
-    text-align: center;
-    
+    text-align: left;
+    color: black;
+}
+
+.account-separator h2:hover{
+    padding: 12px 14px;
 }
 
 
 .section{
     padding: 10px 12px;
-    background: linear-gradient(#ffdd00, #948000);
+    background-color: #cccc;
 }
 
 
@@ -482,4 +484,22 @@
 
 #home-link:hover{
     opacity: 1;
+}
+
+.error-message{ 
+    text-align: center; 
+    margin-left: -1%;
+}
+
+.error-message span i{
+    font-size: 150px;
+    padding: 10px 10px;
+    color: black;
+}
+
+.error-message h1{
+    color: red;
+    font-family: Impact;
+    font-synthesis: weight;
+    font-language-override: normal;
 }
