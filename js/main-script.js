@@ -128,6 +128,7 @@ function setAccountOpts(ext_fls = false){
             document.querySelector("#account-opts").appendChild(sp);
         }
     }
+    setBtnSolutions(".header");
 }
 
 function rmClientDrop(){
@@ -241,4 +242,17 @@ function hideError(){
 function getLinkedUserIcon(){
     var ls  = localStorage.getItem("user-icon").split("/");
     return "https://" + window.location.hostname + "/lpgp-server/" + ls[ls.length - 2] + "/" + ls[ls.length - 1];
+}
+
+function setBtnSolutions(locale){
+    var localeNode = document.querySelector(locale);
+    var link = document.createElement("a");
+    link.href = "https://" + window.location.hostname + "/lpgp-server/solutions.html";
+    link.id = "solutions";
+    link.setAttribute("role", "button");
+    link.classList.add("btn");
+    link.classList.add("default-btn-header");
+    link.classList.add("btn-lg");
+    link.innerText = "Solutions";
+    localeNode.appendChild(link);
 }

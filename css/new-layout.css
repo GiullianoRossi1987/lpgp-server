@@ -503,3 +503,11 @@
     font-synthesis: weight;
     font-language-override: normal;
 }
+
+#solutions{
+    position: absolute;
+    margin-left: -20%;
+    border: 1px gold solid;
+    border-radius: 5%;
+    color: gold; 
+}
