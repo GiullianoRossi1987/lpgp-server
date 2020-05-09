@@ -51,7 +51,7 @@ else{
         $(document).ready(function(){   
             setAccountOpts(true);
             setSignatureOpts();
-            $("#avatar-ep").css("background-image", "url(." + getLinkedUserIcon() + ")");
+            $("#avatar-ep").css("background-image", "url(" + getLinkedUserIcon() + ")");
         });
 
         var pas1 = "text";
@@ -156,24 +156,26 @@ else{
                     <br>
 					<input type="text" name="username" id="username" class="form-control">
 					<br>
-                    <label for="email" class="form-control">Change your email</label>
+                    <label for="email" class="form-label">Change your email</label>
                     <br>
 					<input type="email" name="email" id="email" class="form-control">
 					<br>
-                    <label for="passwd1" class="form-control">Change your password</label>
+                    <label for="passwd1" class="form-label">Change your password</label>
                     <br>
 					<input type="password" id="passwd1" name="passwd" class="form-control">
-					<label for="passwd1" class="form-control">
+					<label for="passwd1" class="form-label">
+                        <br>
 						<button type="button" class="btn btn-md btn-secondary" id="spass1">
 							Show password
 						</button>
-					</label>
+                    </label>
 					<br>
                     <label for="passwd2" class="form-label">Confirm the new password</label>
                     <br>
 					<input type="password" name="passwd-confirm" id="passwd2" class="form-control">
 					<label for="passwd2" class="form-label">
-						<button type="button" class="btn btn-md btn-secondary" id="spass2">Show password</button>
+                        <button type="button" class="btn btn-md btn-secondary" id="spass2">Show password</button>
+                        <br>
 					</label>
 					<br>
 					<button class="btn btn-lg btn-success" type="submit">Save configurations</button>
