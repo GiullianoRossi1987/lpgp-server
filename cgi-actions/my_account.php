@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 if(session_status() == PHP_SESSION_NONE) session_start();
 require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
 require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
@@ -42,12 +43,13 @@ $usr = new UsersData("giulliano_php", "");
     <script src="../js/actions.js"></script>
     <link rel="stylesheet" href="../css/account.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
+
 </head>
 <style>
 </style>
 <body>
     <script>
-        $(document).ready(function(){   
+        $(document).ready(function(){
             setAccountOpts(true);
             setSignatureOpts();
             applyToA();
@@ -94,10 +96,10 @@ $usr = new UsersData("giulliano_php", "");
             <div class="col-12 clear-content" style="position: relative; margin-left: 0; max-width: 100% !important">
                 <div class="container user-data-con" style="margin-left: 0; max-width: 100%;">
 					<div class="main-row row">
-                        <div class="main-col col-5 card" style="margin-left: 0 !important; border: none;">
+                        <div class="main-col col-12 card" style="margin-left: 0% !important; border: none;">
                             <div class="container data-container">
                                 <div class="main-row row card-header">
-                                    <div class="img-cont card-img-top" style="margin-left: 29%;">
+                                    <div class="img-cont card-img-top" style="margin-left: 37%; background-color: linear-gradient(#000000, #fdff00);">
                                         <div id="img-user"></div>
                                     </div>
                                     <br>
@@ -105,19 +107,18 @@ $usr = new UsersData("giulliano_php", "");
                                         <br>
                                         <?php
                                         if($_SESSION['mode'] == "prop"){
+
                                             $dt = $prp->getPropData($_SESSION['user']);
-                                            echo "<h1 class=\"user-name\">Name: " . $dt['nm_proprietary'] . "</h1>\n";
-                                            echo "<h3 class=\"mode\">Type: Proprietary</h4>\n";
+                                            echo "<h1 class=\"user-name\">" . $dt['nm_proprietary'] . " <span class=\"badge badge-primary badge-sm\">Proprietary</span></h1>\n";
                                             echo "<h3 class=\"email\">Email: " . $dt['vl_email'] . "</h3>\n";
-                                            echo "<h3 class=\"date-creation\">Date of creation: " . $dt['dt_creation'] . "</h3>\n";
+                                            echo "<h3 class=\"date-creation\">Joined us in : " . $dt['dt_creation'] . "</h3>\n";
 
                                         }
                                         else{
                                             $dt = $usr->getUserData($_SESSION['user']);
-                                            echo "<h1 class=\"user-name\"> " . $dt['nm_user'] . "</h1>\n";
-                                            echo "<h3 class=\"mode\">Normal User</h4>\n";
+                                            echo "<h1 class=\"user-name\"> " . $dt['nm_user'] . "<span class=\"badge badge-secondary\">Normal</span></h1>\n";
                                             echo "<h3 class=\"email\">Email: " . $dt['vl_email'] . "</h3>\n";
-                                            echo "<h6 class=\"date-creation\">Date creation: " . $dt['dt_creation'] . "</h3>\n";
+                                            echo "<h6 class=\"date-creation\">Joined us in: " . $dt['dt_creation'] . "</h3>\n";
                                         }
                                         ?>
                                         <a class="account-separator" id="accountopt-sep" href="#moreoptions-section" data-toggle="collapse" aria-expanded="false" aria-controls="moreoptions-section">
@@ -127,8 +128,8 @@ $usr = new UsersData("giulliano_php", "");
                                             <br>
                                             <div class="btn-group" style="margin-left: 7%;">
                                                 <a class="img-settings btn btn-lg btn-dark" href="ch_my_data.php" role="button">
-                                                    Edit Account
                                                     <span>
+                                                    Edit Account
                                                         <i class="fas fa-cog"></i>
                                                     </span>
                                                 </a>
@@ -170,17 +171,17 @@ $usr = new UsersData("giulliano_php", "");
                                             </div>
                                         </div>
                                     </div>
-                                                
+
                                 </div>
                             </div>
                         </div>
-                        <div class="others-col col-md-7" style="margin-top: 3%;">
-                            <div class="signatures-col col-12">
+                        <div class="others-col col-md-12" style="margin-top: 3%;">
+                            <div class="signatures-col col-8 leaftable">
                                 <?php if($_SESSION['mode'] == "prop") echo '<a href="#signatures-section" class="account-separator" id="signature-sep" aria-controls="signatures-section" aria-expanded="false" data-toggle="collapse">
                                         <h2 class="mainheader-heading mb-0">My Signatures<span style="margin-left: 70%;">
                                         <i class="fas fa-caret-down"></i>
                                     </span></h2>
-                                        
+
                                     </a>';
                                 ?>
                                 <div id="signatures-section" class="collapse section">
@@ -190,16 +191,16 @@ $usr = new UsersData("giulliano_php", "");
                                     if($_SESSION['mode'] == "prop"){
                                         $prp = new ProprietariesData("giulliano_php", "");
                                         echo lsSignaturesMA($prp->getPropID($_SESSION['user']));
-                                        echo "<br>\n<a href=\"create_signature.php\" role=\"button\" class=\"btn btn-block btn-success\">". 
-                                                    "Create a new signature <span><i class=\"fas fa-id-card\"></i></span>". 
+                                        echo "<br>\n<a href=\"create_signature.php\" role=\"button\" class=\"btn btn-block btn-success\">".
+                                                    "Create a new signature <span><i class=\"fas fa-id-card\"></i></span>".
                                                     "</a><br>";
                                     }
                                     ?>
                                 </div>
                             </div>
-                            <div class="history-col col-12" style="position: relative; margin-top: 10%;">
+                            <div class="history-col col-8 leaftable" style="position: relative; margin-top: 10%;">
                                 <a class="account-separator" href="#history-section" data-toggle="collapse" aria-expanded="false" aria-controls="history-section" id="history-sep">
-                                    <h2> 
+                                    <h2>
                                         My History
                                         <span>
                                             <i class="fas fa-caret-down" style="margin-left: 75%;"></i>
@@ -237,7 +238,7 @@ $usr = new UsersData("giulliano_php", "");
                                     </a>
                                 </div>
                             </div>
-                            <div class="col-12 clients-col" style="margin-top: 10%;">
+                            <div class="col-8 clients-col leaftable" style="margin-top: 10%;">
                                 <?php
                                 if($_SESSION['mode'] == "prop") echo '<a href="#clients-section" class="account-separator" data-toggle="collapse" aria-controls="clients-section" aria-expanded="false" id="client-sep">
                                     <h2>
@@ -287,7 +288,7 @@ $usr = new UsersData("giulliano_php", "");
                 <div class="social-options-grp">
                     <div class="social-option">
                         <a href="https://github.com/GiullianoRossi1987/lpgp-server" target="_blanck" id="github" class="social-option-footer">
-                            <span><i class="fab fa-github"></i></span> 
+                            <span><i class="fab fa-github"></i></span>
                             Visit our github!
                         </a>
                     </div>

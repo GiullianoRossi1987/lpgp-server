@@ -1,5 +1,5 @@
 <?php
-if(session_status() == PHP_SESSION_NONE) session_start(); 
+if(session_status() == PHP_SESSION_NONE) session_start();
 require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
 use function JSHandler\sendUserLogged;
 
@@ -13,24 +13,25 @@ sendUserLogged(); // preventing bugs
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>LPGP Oficial Server</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="./css/new-layout.css">
-    <script src="./js/main-script.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="css/new-layout.css">
+    <script src="js/main-script.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <link rel="shortcut icon" href="./media/new-logo.png" type="image/x-icon">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.2/popper.min.js"></script>
-    <link rel="stylesheet" href="css/account-creation.css">
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
-</head>
+    <link rel="shortcut icon" href="media/new-logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+    <script src="js/actions.js"></script>
+    <link rel="stylesheet" href="css/account.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
+    <link rel="stylesheet" href="css/account-creation.css">
 <style>
 </style>
 <body>
     <script>
-        $(document).ready(function(){   
+        $(document).ready(function(){
             setAccountOpts();
             setSignatureOpts();
         });
@@ -123,11 +124,17 @@ sendUserLogged(); // preventing bugs
 
         $(document).on("click", "#default-img", function(){
             $("#upload-img-input").hide();
+            $("#upload-img-btn").css("background-color", "#0069d9");
+            $("#upload-img-btn").css("border-color", "#0069d9");
         });
 
         $(document).on("click", "#upload-img-btn", function(){
             $("#upload-img-input").show();
-            $("#default-img").attr("checked", false);
+            $("#default-img")
+            var doc = document.querySelector(".img-radio-default input");
+            doc.checked = false;
+            $(this).css("background-color", "green");
+            $(this).css("border-color", "green");
         });
     </script>
     <div class="container-fluid header-container" role="banner" style="position: relative !important">
@@ -155,10 +162,8 @@ sendUserLogged(); // preventing bugs
                 </div>
             </div>
         </div>
-
     </div>
     <br>
-    <hr>
     <div class="container-fluid container-content" style="position: relative;">
         <div class="row-main row">
             <div class="col-6 clear-content" style="position: relative; margin-left: 24%; margin-top: 5%;">
@@ -195,7 +200,7 @@ sendUserLogged(); // preventing bugs
                     </label>
                     <br>
                     <label for="password1" class="form-label">
-                        <h4>Pick a Password</h4>    
+                        <h4>Pick a Password</h4>
                     </label>
                     <br>
                     <label for="password1" class="form-label">
@@ -249,23 +254,49 @@ sendUserLogged(); // preventing bugs
                     </div>
                     <br>
                     <div class="hidden-help collapse" id="acc-help">
-                        <h1>Test help</h1>
+                        <br>
+                        <h1>What're those account types?</h1>
+                        <p>Those account types are used to differ the normal proprietary users</p>
+                        <p>There're the differences between they</p>
+                        <ul>
+                            <li>
+                                Normal User:
+                                    <p>
+                                        The normal user account is for people who use
+                                        LPGP powered products.
+                                    </p>
+                            </li>
+                            <li>
+                                Proprietary
+                                    <p>
+                                        The proprietary account is for developers and
+                                        corporations, is used for manage the clients and
+                                        the signatures.
+                                    </p>
+                            </li>
+                        </ul>
                     </div>
                     <br>
                     <h4>Choose your profile image</h4>
                     <br>
+                    <label for="default-img" class="form-label">
+                        <h6>
+                            Select default image
+                        </h6>
+                    </label>
+                    <br>
                     <div class="img-select-container">
-                        <div class="img-radio-default">
-                            <input type="radio" class="form-check" id="default-img" name="img-user" value="default-img" checked>
-                            <label for="default-img" id="default-img-lb">
+                        <div class="img-radio-default form-check form-check-inline">
+                            <input type="radio" class="form-check-input" id="default-img" name="img-user" value="default-img" checked>
+                            <label for="default-img" class="form-check-label" id="default-img-lb">
                             </label>
                         </div>
                         <br>
-                        <a href="#upload-img-input" class="btn btn-lg btn-primary" data-toggle="collapse" aria-expanded="false" aria-controls="uploaded-img-input" role="button">
+                        <a id="upload-img-btn" href="#upload-img-input" class="btn btn-lg btn-primary" data-toggle="collapse" aria-expanded="false" aria-controls="uploaded-img-input" role="button">
                             Upload a image
                         </a>
                         <br>
-                        <div class="collapse" id="upload-img-input"> 
+                        <div class="collapse" id="upload-img-input">
                             <br>
                             <label for="img-uploaded" class="form-label">
                                 <h4>Send us a image from your device</h4>
@@ -291,7 +322,7 @@ sendUserLogged(); // preventing bugs
                 <div class="social-options-grp">
                     <div class="social-option">
                         <a href="https://github.com/GiullianoRossi1987/lpgp-server" target="_blanck" id="github" class="social-option-footer">
-                        <span><i class="fab fa-github"></i></span>" alt="<github image>" width="50px" height="30px" data-toggle="tooltip" title="Visit our github" data-placement="bottom">Visit our github</a>
+                        <span><i class="fab fa-github"></i></span>Visit our Github
                     </div>
                     <div class="social-option-footer">
                         <a href="https://" target='_blanck' id="facebook">

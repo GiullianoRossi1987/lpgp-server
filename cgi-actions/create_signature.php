@@ -17,20 +17,20 @@ $inpt = "<input type=\"hidden\" name=\"prop-id\" value=\"$id\">";
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>LPGP Oficial Server</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link rel="stylesheet" href="../css/new-layout.css">
     <script src="../js/main-script.js"></script>
-    <link rel="stylesheet" href="../bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" href="../bootstrap/font-awesome.min.css">
-    <script src="../bootstrap/jquery-3.3.1.slim.min.js"></script>
-    <script src="../bootstrap/bootstrap.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
     <link rel="shortcut icon" href="../media/new-logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.2/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+    <script src="../js/actions.js"></script>
+    <link rel="stylesheet" href="../css/account.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
+
 </head>
 <style>
     a #solutions{
@@ -40,7 +40,7 @@ $inpt = "<input type=\"hidden\" name=\"prop-id\" value=\"$id\">";
 </style>
 <body>
     <script>
-        $(document).ready(function(){   
+        $(document).ready(function(){
             setAccountOpts(true);
             setSignatureOpts();
         });
@@ -93,11 +93,19 @@ $inpt = "<input type=\"hidden\" name=\"prop-id\" value=\"$id\">";
         <div class="row-main row">
             <div class="col-7 clear-content" style="position: relative; margin-left: 21%;">
                 <form action="./creating-signature.php" method="POST">
-                    <label for="passcode" class="form-label">Type the code</label>
-                    <input type="password" id="passcode" name="password" class="form-control">
                     <label for="passcode" class="form-label">
-                        <button class="btn btn-secondary" id="show-passcode" type="button">Show code</button>
+                        <h1> Type the code</h1>
                     </label>
+                    <div class="input-group input-group-inline">
+                        <input type="password" id="passcode" name="password" class="form-control">
+                        <label for="passcode" class="form-label">
+                            <button class="btn" id="show-passcode" type="button" data-toggle="tooltip" title="Show the code you're typing ">
+                                <span>
+                                    <i class="fas fa-eye"></i>
+                                </span>
+                            </button>
+                        </label>
+                    </div>
                     <br>
                     <select name="encoding" id="encoding-opts" class="form-control">
                         <option value="main">Select a type of encoding</option>
@@ -106,7 +114,17 @@ $inpt = "<input type=\"hidden\" name=\"prop-id\" value=\"$id\">";
                         <option value="2">SHA256</option>
                     </select>
                     <br>
-                    <?php echo $inpt; ?>
+                    <a href="#help" class="btn btn-primary btn-lg" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="help">
+                        Need help with this ?
+                    </a>
+                    <br>
+                    <div class="collapse" id="help">
+                        <h1>How do I create my signatures?</h1>
+                        <h3>Well create your signature is pretty simple</h3>
+                        
+                    </div>
+                    <br>
+                    <?php echo $inpt;?>
                     <button type="submit" class="btn btn-block btn-success" name="log">Create signature</button>
                 </form>
             </div>

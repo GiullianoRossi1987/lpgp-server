@@ -35,9 +35,27 @@ sendUserLogged();
     <link rel="stylesheet" href="./css/login-fmr.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
 </head>
+<style media="screen">
+    #goBack{
+        position: fixed;
+        background: black;
+        top: 10px;
+        left: 20px;
+        width: 50px;
+        height: 50px;
+        text-align: center;
+        font-size: 30px;
+        border-radius: 10px;
+        text-indent: inherit;
+    }
+    #goBack span i{
+        color: #fdff00;
+        margin-top: 10px;
+    }
+</style>
 <body>
     <script>
-        $(document).ready(function(){   
+        $(document).ready(function(){
             setAccountOpts();
             setSignatureOpts();
             applyToA();
@@ -72,6 +90,13 @@ sendUserLogged();
     </script>
     <br>
     <div class="container-fluid container-content" style="position: relative;">
+        <div class="row-back row">
+            <a href="index.php" role="div" id="goBack" data-toggle="tooltip" title="Leave to home">
+                <span>
+                    <i class="fas fa-hand-point-left"></i>
+                </span>
+            </a>
+        </div>
         <div class="row-main row">
             <div class="col-4 clear-content center-content" style="position: relative; margin-left: 32% !important; margin-top: 5% !important; border-radius: 6%;">
                 <div id="logo-ex" style="margin-left: 42% !important;"></div>
@@ -122,7 +147,27 @@ sendUserLogged();
                     </div>
                     <br>
                     <div class="collapse" id="acc-help">
-                        <h1>Teste</h1>
+                        <br>
+                        <h1>What're those account types?</h1>
+                        <p>Those account types are used to differ the normal proprietary users</p>
+                        <p>There're the differences between they</p>
+                        <ul>
+                            <li>
+                                Normal User:
+                                    <p>
+                                        The normal user account is for people who use
+                                        LPGP powered products.
+                                    </p>
+                            </li>
+                            <li>
+                                Proprietary
+                                    <p>
+                                        The proprietary account is for developers and
+                                        corporations, is used for manage the clients and
+                                        the signatures.
+                                    </p>
+                            </li>
+                        </ul>
                     </div>
                     <br>
                     <hr>

@@ -41,7 +41,6 @@
 	padding: 4px 6px;
 	margin-bottom: 5px !important;
 	margin-top: 5px !important;
-	
 }
 
 .sig-card .card-body a:hover{
@@ -50,3 +49,6 @@
 
 .client-card h6{ color: #aaa;}
 
+.badge{
+	font-size: 13px;
+}

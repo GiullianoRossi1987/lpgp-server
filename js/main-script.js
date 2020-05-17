@@ -38,7 +38,7 @@ function clsLoginOpts(){
 
 function clsSignOpts(){
     try{
-        for(var i in document.querySelectorAll("#item2 .si-opts .opt-signature")){
+        for(var i in document.querySelectorAll(".signatures-dropdown .dropdown-menu")){
             document.querySelector("#item2 .si-opts").removeChild(i);
         }
     }
@@ -54,7 +54,7 @@ function getChartHead(){
 
 function setAccountOpts(ext_fls = false){
     /**
-     * 
+     *
      */
     clsLoginOpts();
     rmClientDrop();
@@ -85,7 +85,7 @@ function setAccountOpts(ext_fls = false){
         config_opt.innerText = "Configurations";
         logoff_opt.innerText = "Logoff";
         account_opt.innerText = "My account";
-        
+
         local_opts.appendChild(config_opt);
         local_opts.appendChild(logoff_opt);
         local_opts.appendChild(account_opt);
@@ -141,7 +141,7 @@ function rmClientDrop(){
 }
 
 /**
- * 
+ *
  */
 function setSignatureOpts(){
     clsSignOpts();
@@ -157,7 +157,7 @@ function setSignatureOpts(){
         create_signature.innerText = "Create a new Signature";
         my_sign.href = "https://" + window.location.hostname +"/lpgp-server/cgi-actions/my_signatures.php";
         che_sig.href = "https://" + window.location.hostname +"/lpgp-server/check_signature.php";
-        create_signature.href = "https://" + window.location.hostname + "/lpgp-server/create_signature.php";
+        create_signature.href = "https://" + window.location.hostname + "/lpgp-server/cgi-actions/create_signature.php";
         my_sign.classList.add("dropdown-item");
         che_sig.classList.add("dropdown-item");
         create_signature.classList.add("dropdown-item");
@@ -227,12 +227,12 @@ function setClientsDrop(){
 }
 
 /**
- * 
- * @param {*} message 
+ *
+ * @param {*} message
  */
 function showError(message){
     /**
-     * 
+     *
      */
     var error_lbs = document.querySelector(".error-lb");
     error_lbs.innerHTML = message;

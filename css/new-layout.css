@@ -3,7 +3,6 @@
     background-color: black;
     position: fixed !important;
     z-index: 99;
-    border-bottom-right-radius: 5%;
     opacity: 1;
 }
 
@@ -21,7 +20,7 @@
 .default-btn-header{
     background-color: black;
     color: white !important;
-    font-family: Arial; 
+    font-family: Arial;
     margin-top: 10px !important;
     margin-left: 10px;
     margin-right: 20px;
@@ -98,11 +97,11 @@
     color: black;
     transition: background-color 200ms linear;
     transition: color 200ms linear;
-}   
+}
 
 .container-content{
     position: relative;
-    
+
 }
 
 .clear-content{
@@ -114,7 +113,7 @@
     background-repeat: no-repeat;
     background-size: cover;
     width: 50px;
-    
+
 }
 
 #facebook-btn:hover{
@@ -237,7 +236,7 @@
 #img-upload-hidden{ visibility: hidden;}
 
 .img-select-container{
-    display: inline !important;    
+    display: inline !important;
 }
 
 #default-img-lb{
@@ -275,9 +274,6 @@
     max-width: 500px !important;
     max-height: 500px !important;
 }
-
-
-
 
 .prop-data{
     border: 1px solid black;
@@ -403,7 +399,7 @@
     margin-left: -8px;
     margin-bottom: 20px !important;
     cursor: pointer;
-    padding: 10px 14px; 
+    padding: 10px 14px;
 }
 
 
@@ -447,21 +443,25 @@
 }
 
 .account-separator h2 {
-    padding: 10px 12px;
+    padding: 20px 22px;
     font-family: sans-serif;
-    border: 1px solid rgba(99, 99, 99, 0.8);
+    background-color: #ccc;
     text-align: left;
     color: black;
+    border-top-left-radius: 50px;
+    border-top-right-radius: 50px;
+    border: 1px solid black;
 }
-
-.account-separator h2:hover{
-    padding: 12px 14px;
-}
-
 
 .section{
     padding: 10px 12px;
-    background-color: #cccc;
+    background-color: #ccc;
+    border-bottom-right-radius: 40px;
+    border-bottom-left-radius: 40px;
+}
+
+.leaftable{
+    margin-left: 17%;
 }
 
 
@@ -486,8 +486,8 @@
     opacity: 1;
 }
 
-.error-message{ 
-    text-align: center; 
+.error-message{
+    text-align: center;
     margin-left: -1%;
 }
 
@@ -509,6 +509,6 @@
     margin-left: -20%;
     border: 1px gold solid;
     border-radius: 5%;
-    color: gold; 
+    color: gold;
     top: 0;
 }
