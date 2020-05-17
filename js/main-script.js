@@ -150,17 +150,22 @@ function setSignatureOpts(){
         // is a proprietary account
         var che_sig = document.createElement("a");
         var my_sign = document.createElement("a");
+        var create_signature = document.createElement("a");
 
         my_sign.innerText = "My Signatures";
         che_sig.innerText = "Check a Signature";
+        create_signature.innerText = "Create a new Signature";
         my_sign.href = "https://" + window.location.hostname +"/lpgp-server/cgi-actions/my_signatures.php";
         che_sig.href = "https://" + window.location.hostname +"/lpgp-server/check_signature.php";
+        create_signature.href = "https://" + window.location.hostname + "/lpgp-server/create_signature.php";
         my_sign.classList.add("dropdown-item");
         che_sig.classList.add("dropdown-item");
+        create_signature.classList.add("dropdown-item");
 
 
         local_opts.appendChild(my_sign);
         local_opts.appendChild(che_sig);
+        local_opts.appendChild(create_signature);
     }
     else if(localStorage.getItem("user_mode") == "normie"){
         var chk_signature = document.createElement("a");

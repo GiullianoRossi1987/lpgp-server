@@ -33,6 +33,10 @@ $inpt = "<input type=\"hidden\" name=\"prop-id\" value=\"$id\">";
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.2/popper.min.js"></script>
 </head>
 <style>
+    a #solutions{
+        top: -20px !important;
+        background-color: white !important;
+    }
 </style>
 <body>
     <script>
@@ -85,7 +89,7 @@ $inpt = "<input type=\"hidden\" name=\"prop-id\" value=\"$id\">";
     </div>
     <br>
     <hr>
-    <div class="container-fluid container-content" style="position: relative;">
+    <div class="container-fluid container-content" style="position: relative; margin-top: 10%;">
         <div class="row-main row">
             <div class="col-7 clear-content" style="position: relative; margin-left: 21%;">
                 <form action="./creating-signature.php" method="POST">

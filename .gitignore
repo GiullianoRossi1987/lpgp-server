@@ -1,5 +1,5 @@
 ./tests.php
-./.vscode/*
+./.vscode/
 ./bootstrap-4.4.1
 ./devcenter/u.clientf/*
 ./devcenter/l.clientf/*
