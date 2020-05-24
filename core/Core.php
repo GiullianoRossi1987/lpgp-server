@@ -2,7 +2,7 @@
 namespace Core;
 use Exception;
 try{
-    require_once  $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Exceptions.php";
+    require_once  $_SERVER['DOCUMENT_ROOT'] ."/core/Exceptions.php";
 }
 catch(Exception $e){
     require_once "core/Exceptions.php";
@@ -93,7 +93,7 @@ class DatabaseConnection{
      * @param bool $auto_throw If there's no connection, if the method will throw the error by default.
      * @throws NotConnectedError If there's no connection, and the method is allowed to throw that exception.
      * @return bool|void
-     */ 
+     */
     public function checkNotConnected(bool $auto_throw = true){
         if(!$this->got_connection){
             if($auto_throw) throw new NotConnectedError("There's no connection with a MySQL database!", 1);
@@ -165,7 +165,7 @@ class UsersData extends DatabaseConnection{
     }
 
     /**
-     * Checks if a user exists in the database. 
+     * Checks if a user exists in the database.
      * @param string $username The user to search in the database.
      * @param bool $auto_throw If the method will throw a exception if the user don't exists.
      * @throws UserNotFound If there's no such user in the database, and the method's allowed to throw the exception.
@@ -268,7 +268,7 @@ class UsersData extends DatabaseConnection{
             else continue;
         }
     }
-    
+
     /**
      * Adds a user for the database. Normally made for be used in HTML forms
      * @param string $user The name for the user.
@@ -299,7 +299,7 @@ class UsersData extends DatabaseConnection{
         $qr_dl = $this->connection->query("DELETE FROM tb_users WHERE nm_user = \"$user\";");
         unset($qr_dl);
     }
-    
+
     /**
      * Changes a user name in the database.
      * @param string $user THe user to change the name
@@ -315,7 +315,7 @@ class UsersData extends DatabaseConnection{
         $qr = $this->connection->query("UPDATE tb_users SET nm_user = \"$newname\" WHERE nm_user = \"$user\";");
         unset($qr);
     }
-    
+
     /**
      * Changes a user email in the database.
      * @param string $user The user to change the email.
@@ -330,7 +330,7 @@ class UsersData extends DatabaseConnection{
         $this->setUserChecked($user, false);
         unset($qr);
     }
-    
+
     /**
      * Changes the user password, but it need to be authenticated by the user password.
      * @param string $user The user to change the password
@@ -361,9 +361,9 @@ class UsersData extends DatabaseConnection{
         $qr = $this->connection->query("UPDATE tb_users SET vl_img  = \"$new_img\" WHERE nm_user = \"$user\";");
         unset($qr);
     }
-    
+
     /**
-     * Sets if a user haves the email checked in the database.   
+     * Sets if a user haves the email checked in the database.
      */
     public function setUserChecked(string $user, bool $checked = true){
 	    $this->checkNotConnected();
@@ -453,7 +453,7 @@ class UsersData extends DatabaseConnection{
         while($row = $qr->fetch_array()) array_push($arr, $row['nm_user']);
         return $arr;
     }
-    
+
     /**
      * Searches the user name by a string on him key, it'll be used at the web, but at the admin on the server.
      * @param string $key_needle The string to search on the key field;
@@ -483,7 +483,7 @@ class UsersData extends DatabaseConnection{
 
     /**
      * Returns all the data of a specific user in the database using him primary key (ID);
-     * 
+     *
      * @param integer $usr_pk The primary key reference of the user
      * @throws UserNotFound If there's no user with such primary key
      * @return array
@@ -512,7 +512,7 @@ class UsersData extends DatabaseConnection{
  * That class contains the main actions with the propriearies on the system.
  * The main methods to manage the proprietaries accounts in the database are here.
  * The constants are the same then the in UsersData class.
- * 
+ *
  * @var string DATETIME_FORMAT The format of the date and time using in the method.
  * @var string EMAIL_USING The email address used to send the emails.
  */
@@ -696,20 +696,20 @@ class ProprietariesData extends DatabaseConnection{
       * Changes the avatar image of the proprietary.
       * @param string $proprietary The name of the proprietary
       * @param string $img_new The path of the new avatar.
-      * @throws ProprietaryNotFound If the proprietary don't exists 
+      * @throws ProprietaryNotFound If the proprietary don't exists
       * @return void
       */
     public function chProprietaryImg(string $proprietary, string $img_new){
         $this->checkNotConnected();
         if(!$this->checkProprietaryExists($proprietary)) throw new ProprietaryNotFound("The proprietary '$proprietary' don't exists!", 1);
         $qr_ch = $this->connection->query("UPDATE tb_proprietaries SET vl_img = \"$img_new\" WHERE nm_proprietary = \"$proprietary\";");
-        
+
         return ;
     }
 
      /**
       * Changes a proprietary email account.
-      * 
+      *
       * @param string $proprietary The proprietary to change the email.
       * @param string $new_email The new value for the email
       * @throws ProprietaryNotFound If the proprietary selected don't exists in the database
@@ -756,7 +756,7 @@ class ProprietariesData extends DatabaseConnection{
 
      /**
       * Changes the field checked, used when the key was sended and used at the email. Or when he changes him email.
-      * 
+      *
       * @param string $proprietary The proprietary to change the info.
       * @param bool   $checked     If the email was checked already.
       * @throws ProprietaryNotFound If the choosed account don't exists in the database.
@@ -786,8 +786,8 @@ class ProprietariesData extends DatabaseConnection{
 
      /**
       * That function sends  a email with the code to the proprietary email. That uses the method mail, and requires the SMTP of the GMAIL.
-      * Also that function calls a method to convert the HTML file to the content. 
-      * 
+      * Also that function calls a method to convert the HTML file to the content.
+      *
       * @param string $proprietary The proprietary to get the data and send the email.
       * @throws ProprietaryNotFound If the selected proprietary don't exists in the database.
       * @return bool If the email was sended, or if the account already checked the email.
@@ -806,7 +806,7 @@ class ProprietariesData extends DatabaseConnection{
 
      /**
       * Searches in the database for a proprietary with a name like a string or a name exactly equal a string.
-      * 
+      *
       * @param string $name_needle The string to search in the names.
       * @param bool $exactly If will be for the exactly equal names.
       * @return array
@@ -848,7 +848,7 @@ class ProprietariesData extends DatabaseConnection{
         if(!$this->checkProprietaryExists($proprietary_nm)) throw new ProprietaryNotFound("There's no proprietary #$proprietary_nm!", 1);
         return $this->connection->query("SELECT * FROM tb_proprietaries WHERE nm_proprietary = \"$proprietary_nm\";")->fetch_array();
      }
-     
+
      /**
       * Return all the data of the proprietary by him primary key reference (PK);
       * @param integer $prop_id The primary key reference of the proprietary
@@ -877,7 +877,7 @@ class ProprietariesData extends DatabaseConnection{
  * That class contains all the uses of the signatures and signatures files.
  * The uploaded files stay at the directory ./usignatures.d and the downloadeble files stay at
  * the directory ./signatures.d
- * 
+ *
  * @var string|int VERSION_ACT The version the signature will be storaged.
  * @var string|int VERSION_MIN The minimal version accepted.
  * @var array      VERSION_ALL The allowed versions of reading.
@@ -892,7 +892,7 @@ class SignaturesData extends DatabaseConnection{
 
     /**
      * Checks if a signature exists in the database. It uses the PK at the database.
-     * 
+     *
      * @param int $signature_id The PK for search.
      * @return bool
      */
@@ -947,7 +947,7 @@ class SignaturesData extends DatabaseConnection{
     }
 
     /**
-     * Creates a filename for the signature file. 
+     * Creates a filename for the signature file.
      *
      * @param int $initial_counter The first contage of the filename (signature-file-$initial_counter)
      * @return string
@@ -955,7 +955,7 @@ class SignaturesData extends DatabaseConnection{
     public static function generateFileNm(int $initial_counter = 0){
         $local_counter = $initial_counter;
         while(true){
-            if(!file_exists($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/signatures.d/signature-file-". $local_counter . ".lpgp")) 
+            if(!file_exists($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/signatures.d/signature-file-". $local_counter . ".lpgp"))
                 break;
             else $local_counter++;
         }
@@ -964,7 +964,7 @@ class SignaturesData extends DatabaseConnection{
 
     /**
      * Creates a signature file and return it link to the file.
-     * 
+     *
      * @param string $signature_id The PK on the database.
      * @param bool $HTML_mode If the method will return a HTML <a>
      * @throws SignatureNotFound If there's no such PK in the database.
@@ -1004,11 +1004,11 @@ class SignaturesData extends DatabaseConnection{
     /**
      * Checks a uploaded signature file. It needs to have the extension .lpgp.
      * All the uploaded signatures files stay at the usignatures.d.
-     * 
+     *
      * @param string $file_path The signature file uploaded path.
      * @throws InvalidSignatureFile if the file is not a .lpgp
      * @throws VersionError if the signature file version is not allowed.
-     * @throws SignatureNotFound if the ID of the signature on the file don't exists 
+     * @throws SignatureNotFound if the ID of the signature on the file don't exists
      * @throws SignatureAuthError If the file is not valid
      * @return true
      */
@@ -1031,7 +1031,7 @@ class SignaturesData extends DatabaseConnection{
     }
 
     /**
-     * Does the same thing then the checkProprietaryExists on the class ProprietariesData, 
+     * Does the same thing then the checkProprietaryExists on the class ProprietariesData,
      * But this time it uses the PK not the name.
      *
      * @param int $id The PK of the proprietary
@@ -1067,7 +1067,7 @@ class SignaturesData extends DatabaseConnection{
 
     /**
      * Removes a signature from the database. It uses the PK of the signature tuple at the MySQL database.
-     * 
+     *
      * @param int $signature_id The signature PK on the database.
      * @throws SignatureNotFound If the PK don't exists in the database.
      * @return void
@@ -1081,7 +1081,7 @@ class SignaturesData extends DatabaseConnection{
 
     /**
      * Changes the FK of the database, that contains the proprietary that owns the signature.
-     * 
+     *
      * @param int $signature The PK of the signature.
      * @param int $new_proprietary The new Proprietary ID
      * @throws ProprietaryNotFound If the new ID don't exists has a proprietary
@@ -1098,11 +1098,11 @@ class SignaturesData extends DatabaseConnection{
 
     /**
      * Changes the algo code used at the signature.
-     * 
+     *
      * @param int $signature The PK for the signature.
      * @param int $code The index of the constant array self::CODES.
      * @param string $word_same The same word in the database. To reupdate the word too. It don't have to be encoded before.
-     * @throws SignatureNotFound If the PK don't exists 
+     * @throws SignatureNotFound If the PK don't exists
      * @return void
      */
     public function chSignatureCode(int $signature, int $code, string $word_same){
@@ -1118,7 +1118,7 @@ class SignaturesData extends DatabaseConnection{
     /**
      * It changes the main word of the signature. If the new word is not encoded at the same algo, the method
      * will encode it.
-     * 
+     *
      * @param int $signature The PK of the signature at the database;
      * @param string $word The new word to set.
      * @param bool $encode_here If the method will encode the word, if don't (false) the word must be encoded already.
@@ -1141,7 +1141,7 @@ class SignaturesData extends DatabaseConnection{
 
     /**
      * Searches in the database for a singature wich the proprietary FK is the same as the parameter
-     * 
+     *
      * @param int $proprietary_needle The FK to search
      * @return array|null
      */
@@ -1155,7 +1155,7 @@ class SignaturesData extends DatabaseConnection{
 
     /**
      * Searches in the database for a signature wich the vl_code is the same as the parameter
-     * 
+     *
      * @param int $code The vl_code to search
      * @return array|null
      */
@@ -1169,7 +1169,7 @@ class SignaturesData extends DatabaseConnection{
 
     /**
      * That method sends a e-mail for all the users and proprietaries alerting then that had a change on a signature, with a link to dowload then.
-     * 
+     *
      * @param int $proprietary The proprietary wich changed the signature.
      * @param int $signature_id The signature that the proprietary changed
      * @param array|null $exceptions The users to not send the email
@@ -1202,7 +1202,7 @@ class SignaturesData extends DatabaseConnection{
      */
     public function getSignatureFData(string $file_name){
         $this->checkNotConnected();
-    
+
         $content_file = file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/usignatures.d/" . $file_name);
         $exp_content = explode(self::DELIMITER, $content_file);
         $ascii_pr = array();
@@ -1240,7 +1240,7 @@ class SignaturesData extends DatabaseConnection{
  *      * 1 => The selected file is not a valid .lpgp file, it's checked verifing the extension and the structure
  *      * 2 => Invalid proprietary, if the proprietary don't exists in the database no more.
  *      * 3 => Invalid key (the most common), all is right, but the key is different then the original key
- * 
+ *
  * @var string ERR_CD_MSG1 The error message used in the HTML relatories when the authentication returns error code 1.
  * @var string ERR_CD_MSG2 The error message used in the HTML relatories when the authentication returns error code 2.
  * @var string ERR_CD_MSG3 The error message used in the HTML relatories when the authentication returns error code 3.
@@ -1269,12 +1269,12 @@ class UsersCheckHistory extends DatabaseConnection{
 
     /**
      * That method adds a register in the database. If that have any MySQLI errors, then you should think about the integrity of the primary key references.
-     * 
+     *
      * @param integer $usr_code The primary key reference of the user.
      * @param integer $sig_code The primary key reference of the signature.
      * @param integer $success If the signature is authentic. If it is, the the $error_cd will be null or 0.
      * @param integer|null $error_cd The error code of the authentication result, it can only be between 0 and 3 (integers obiviously). If don't will throw error.
-     * 
+     *
      * @throws InvalidErrorCode If the $err_code is not null, and there don't have errors. Or reverse.
      * @return integer The primary key reference of the added register.
      */
@@ -1308,7 +1308,7 @@ class UsersCheckHistory extends DatabaseConnection{
     }
 
     /**
-     * That method gets all the registers of the signatures checkeds by one user. Returns array type if the user checked any signature, and null if he doesn't 
+     * That method gets all the registers of the signatures checkeds by one user. Returns array type if the user checked any signature, and null if he doesn't
      * checked a single signature yet.
      * @param integer $usr_ref The primary key reference of the user.
      * @return array|null
@@ -1338,7 +1338,7 @@ class UsersCheckHistory extends DatabaseConnection{
 
     /**
      * That method gets all the registers of a specific date in the database table. Return array with the results, if there's no results then will return null.
-     * 
+     *
      * @param string $tm_needle The datetime to search in the table.
      * @return array|null
      */
@@ -1352,7 +1352,7 @@ class UsersCheckHistory extends DatabaseConnection{
     }
 
     /**
-     * That method sends the HTML relatory about the signature authentication. 
+     * That method sends the HTML relatory about the signature authentication.
      * @param integer $reg_ref The primary key reference of the register.
      * @throws RegisterNotFound If the reference don't exists.
      * @return string
@@ -1369,16 +1369,16 @@ class UsersCheckHistory extends DatabaseConnection{
         $msg = "";
         $ext_cls = "";
         switch ((int) $dt['vl_code']){
-            case 0: 
+            case 0:
                 $msg = "The signature is valid!";
             break;
-            case 1: 
+            case 1:
                 $msg = self::ERR_CD_MSG1;
             break;
-            case 2: 
+            case 2:
                 $msg = self::ERR_CD_MSG2;
             break;
-            case 3: 
+            case 3:
                 $msg = self::ERR_CD_MSG3;
             break;
             default: throw new InvalidErrorCode($dt['vl_code']);
@@ -1401,9 +1401,9 @@ class UsersCheckHistory extends DatabaseConnection{
     }
 
     /**
-     * Returns all the HTML of the history from a user, using the cards to represents the relatories. That method was created for make faster the 
+     * Returns all the HTML of the history from a user, using the cards to represents the relatories. That method was created for make faster the
      * development of the profile account page, wich have that history of the checked signatures in both types of accounts.
-     * 
+     *
      * @param string $nm_user The name of the user, normally used with the $_SESSION['user'].
      * @return string
      */
@@ -1451,9 +1451,9 @@ class UsersCheckHistory extends DatabaseConnection{
 }
 
 /**
- * Manages the signatures checking by proprietaries table in the MySQL database. That table storages all the signatures authentications, valid or not, 
+ * Manages the signatures checking by proprietaries table in the MySQL database. That table storages all the signatures authentications, valid or not,
  * made by proprietaries users. There's also other to manage the authentications made by the normal users.
- * 
+ *
  * Those classes also creates relatories
  * of the signatures checked in HTML.
  * The authentications can have errors, all they are:
@@ -1467,7 +1467,7 @@ class UsersCheckHistory extends DatabaseConnection{
  * @var string ERR_CD_MSG3 The error message used in the HTML relatories when the authentication returns error code 3.
  */
 class PropCheckHistory extends DatabaseConnection{
-    
+
 
     const ERR_CD_MSG1 = "The file selected is not valid. It requires a .lpgp file and got {file_ext} in it. Or the structure of the file is not valid.\nPlease contact the software provider to check this error.\n";
     const ERR_CD_MSG2 = "The proprietary referenced in the signature file doesn't exists!\n";
@@ -1505,7 +1505,7 @@ class PropCheckHistory extends DatabaseConnection{
         // errors checking
         if($success == 1 && !is_null($error_code)) throw new  PropInvalidCode($error_code, 1);
         if($success == 0 && is_null($error_code)) throw new PropInvalidCode(0, 1);
-        // end checking 
+        // end checking
         $vl = is_null($error_code) ? 0 : (int) $error_code;
         $qr_add = $this->connection->query("INSERT INTO tb_signatures_prop_h (id_prop, id_signature, vl_valid, vl_code) VALUES ($id_prop, $id_sign, $success, $vl);");
         $qr_id = $this->connection->query("SELECT MAX(cd_reg) FROM tb_signatures_prop_h;");
@@ -1518,7 +1518,7 @@ class PropCheckHistory extends DatabaseConnection{
     /**
      * Searches all the times when a specific signature was checked by any proprietary user. It returns a array with the tuples, or return null if there're
      * no results.
-     * 
+     *
      * @param integer $sig_ref The primary key reference of the signature to search.
      * @return array|null
      */
@@ -1533,7 +1533,7 @@ class PropCheckHistory extends DatabaseConnection{
 
     /**
      * Searches all the times when a specific proprietary user checked any signature. It returns a array with the tuples, or return null if there're no results.
-     * 
+     *
      * @param integer $prop_ref The primary key reference of the proprietary user account.
      * @return array|null
      */
@@ -1596,9 +1596,9 @@ class PropCheckHistory extends DatabaseConnection{
 
 
     /**
-     * Returns all the HTML of the history from a proprietary user, using the cards to represents the relatories. That method was created for make faster the 
+     * Returns all the HTML of the history from a proprietary user, using the cards to represents the relatories. That method was created for make faster the
      * development of the profile account page, wich have that history of the checked signatures in both types of accounts.
-     * 
+     *
      * @param string $nm_proprietary The name of the user, normally used with the $_SESSION['user'].
      * @return string
      */
@@ -1609,7 +1609,7 @@ class PropCheckHistory extends DatabaseConnection{
         $this->checkNotConnected();
         $usr_id = $this->connection->query("SELECT cd_proprietary FROM tb_proprietaries WHERE nm_proprietary = \"$nm_proprietary\";")->fetch_array();
         $all_hs = $this->getRegByProp((int) $usr_id['cd_proprietary']);
-        if(is_null($all_hs)) return "<h1>You don't have checked any signature yet!</h1>\n"; 
+        if(is_null($all_hs)) return "<h1>You don't have checked any signature yet!</h1>\n";
         $main_pg = "";  // all the page content
         for($i = 0; $i < count($all_hs); $i++){
             $card_main = "<div class=\"card signature-card\">\n<div class=\"card-header\">\n";
@@ -1620,7 +1620,7 @@ class PropCheckHistory extends DatabaseConnection{
             $card_main .= "<h2>Signature #" . $sign_data['cd_signature'] . "</h2><span class=\"badge badge-light\">$i_font\n</span></div>\n";
             $sub_msg = "";
             switch ((int) $dt['vl_code']){
-                case 0: 
+                case 0:
                     $sub_msg = " <h4 class=\"card-subtitle no-err\">Valid signature!</h4>\n";
                 break;
                 case 1:
@@ -1651,7 +1651,7 @@ class PropCheckHistory extends DatabaseConnection{
 
 /**
  * That class manages the clients data, creating and authenticating clients files.
- * @var string DELIMITER The standard constant used for the 
+ * @var string DELIMITER The standard constant used for the
  */
 class ClientsData extends DatabaseConnection{
     const DELIMITER = "/";
@@ -1660,7 +1660,7 @@ class ClientsData extends DatabaseConnection{
      * That method checks if a client reference exist or not. That reference received as a parameter is the client
      * primary key.
      *
-     * @param integer $client_ref The primary key client reference 
+     * @param integer $client_ref The primary key client reference
      * @return boolean
      */
     private function ckClientEx(int $client_ref){
@@ -1683,7 +1683,7 @@ class ClientsData extends DatabaseConnection{
 
     /**
      * That method check if a proprietary primary key reference exists in the tb_proprietaries
-     * 
+     *
      * @param integer $reference The primary key reference to check.
      * @return boolean
      */
@@ -1694,9 +1694,9 @@ class ClientsData extends DatabaseConnection{
     }
 
     /**
-     * That method generate the clients configurations file and the clients authentication file name and return the link for 
+     * That method generate the clients configurations file and the clients authentication file name and return the link for
      * those files in array form.
-     * 
+     *
      * @return string
      */
     private static function pathZipGen(): string{
@@ -1724,7 +1724,7 @@ class ClientsData extends DatabaseConnection{
     }
 
     /**
-     * That method generates two clients files, the client configurations file and the .lpgp authentication file. 
+     * That method generates two clients files, the client configurations file and the .lpgp authentication file.
      * The difference between those files is the use for the system, the configurations file is used by the client
      * (SDK) to him know what kind of client account it isit is.
      *
@@ -1756,7 +1756,7 @@ class ClientsData extends DatabaseConnection{
 
     /**
      * That method return the client integer primary key reference quering by his name.
-     * 
+     *
      * @param string $name The client name to query
      * @throws ClientNotFound If the client name doesn't exist.
      * @return integer The client primary key reference.
@@ -1769,7 +1769,7 @@ class ClientsData extends DatabaseConnection{
     }
 
     /**
-     * That method authenticate a client authentication file. To be valid the data encoded on the file content 
+     * That method authenticate a client authentication file. To be valid the data encoded on the file content
      * must be valid.
      *
      * @param string $auth_path The client authentication file path, normally located at the u.clients folder
@@ -1826,8 +1826,8 @@ class ClientsData extends DatabaseConnection{
 
     /**
      * That method generates a client new token. Used when the class creates a new client or when changes the client token.
-     * It check if the random token already exists, if it exists will 
-     * 
+     * It check if the random token already exists, if it exists will
+     *
      * @return string The new token generated.
      */
     private function genTk() : string{
@@ -1841,7 +1841,7 @@ class ClientsData extends DatabaseConnection{
 
     /**
      * Method created to get the proprietary reference by the name.
-     * 
+     *
      * @param string $proprietary The proprietary name reference
      * @return integer|null Null if the proprietary doesn't exist.
      */
@@ -1852,7 +1852,7 @@ class ClientsData extends DatabaseConnection{
     }
 
     /**
-     * That method adds a new client to the clients database. To add the new client to the 
+     * That method adds a new client to the clients database. To add the new client to the
      *
      * @param string $client_name The client name
      * @param string $proprietary The client owner proprietary name reference.
@@ -1866,7 +1866,7 @@ class ClientsData extends DatabaseConnection{
     public function addClient(string $client_name, string $proprietary, bool $root_mode = false, ?string $tk = null) : void{
         $this->checkNotConnected();
         try{
-            if($this->ckClientEx($this->getClientID($client_name))) 
+            if($this->ckClientEx($this->getClientID($client_name)))
                 throw new ClientAlreadyExists("The name '$client_name' is already in use", 1);
             }
         catch(ClientNotFound $e){
@@ -1883,10 +1883,10 @@ class ClientsData extends DatabaseConnection{
             return ;
         }
     }
-    
+
     /**
      * Removes a client from the database.
-     * 
+     *
      * @param string|integer $client The client reference, it can be the client name (string) or the client primary key (integer)
      * @throws ClientNotFound If the reference isn't valid.
      * @return void
@@ -1901,7 +1901,7 @@ class ClientsData extends DatabaseConnection{
 
     /**
      * That method changes the client name.
-     * 
+     *
      * @param string|integer $client The client reference, can be the actual name (string) or the client primary key (integer)
      * @param string $new_name The new client name.
      * @throws ClientAlreadyExists If the client name is already in use.
@@ -1925,7 +1925,7 @@ class ClientsData extends DatabaseConnection{
 
     /**
      * That method generates a new token for a client
-     * 
+     *
      * @param string|integer $client The client reference, it can be the name (string) or the primary key (integer)
      * @var integer $ref The client reference
      * @throws ClientNotFound If the client reference doesn't exists.
@@ -1942,7 +1942,7 @@ class ClientsData extends DatabaseConnection{
 
     /**
      * That method changes the root permissions value of the client selected.
-     * 
+     *
      * @param string|integer $client The client reference, it can be the client name (string value) or the client primary key (integer value)
      * @param boolean|integer $grant_root If the method will grant root permissions or revoke root permissions from the client.
      * @throws ClientNotFound If the client reference isn't valid.
@@ -1959,7 +1959,7 @@ class ClientsData extends DatabaseConnection{
 
     /**
      * That method returns all the clients of a proprietary, in a normal array. The array will have the clients name and ID
-     * 
+     *
      * @param string $proprietary The proprietary primary key reference to search in the clients table
      * @return array
      */
@@ -2009,7 +2009,7 @@ class ClientsData extends DatabaseConnection{
  * That class represents the access of the clients, all the clients which accessed the main server are here. Only the success full
  * access are storaged at the access table.
  * In that class we have the main methods for querys and a special method which returns the main data to the access plot.
- * 
+ *
  */
 class ClientsAccessData extends DatabaseConnection{
 
@@ -2027,7 +2027,7 @@ class ClientsAccessData extends DatabaseConnection{
 
     /**
      * That method adds a access record in the clients access table.
-     * 
+     *
      * @param integer $client The client primary key reference.
      * @param integer|boolean $success If the access was successfull
      * @throws ReferenceError If the client referred isn't valid
@@ -2045,7 +2045,7 @@ class ClientsAccessData extends DatabaseConnection{
 
     /**
      * That method returns all the access of a client. If you want to get the total of access, just count the array returned
-     * 
+     *
      * @param integer $client The client reference to search
      * @throws ReferenceError If the client referece isn't valid.
      * @return array
@@ -2108,7 +2108,7 @@ class ClientsAccessData extends DatabaseConnection{
 
     /**
      * That method returns the chart data of all the client unsuccessful access record
-     * 
+     *
      * @param string $proprietary The proprietary name reference to search
      * @return array The chart needed data
      */
@@ -2259,7 +2259,7 @@ class ClientsAccessData extends DatabaseConnection{
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace templateSystem;
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Exceptions.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Exceptions.php";
 
 use ExctemplateSystem\AlreadyLoadedFile;
 use ExctemplateSystem\InvalidFileType;
@@ -2267,11 +2267,11 @@ use ExctemplateSystem\NotLoadedFile;
 
 /**
  * That class is used to fetch HTML templates at the system, that class works with the errors pages.
- * 
+ *
  * There's no one especific error, but every big error will be handled by that.
- * 
+ *
  * That just works replacing strings for other values.
- * 
+ *
  * There's reserved names at the template, wich can be spoted by the %% at the first and the last character.
  * ---------------------------------------------------------------------------------------------------------
  * Those reserved names/words are:\n
@@ -2281,7 +2281,7 @@ use ExctemplateSystem\NotLoadedFile;
  *      * %image% => The image that will be showing at the error page
  *      * %title% => The error title, it can be a 500 error or even a login error.
  *      * %btn_rt% => A HTML button to return to some previous page. By default it returns to the index
- * 
+ *
  * @var string $page_templated The HTML file path, that's the template. By default is the core/templates/500-error-internal.html
  * @var string $error_message The error message to be showed on the template.
  * @var string|null $file_throwed The file that fetched the template.
@@ -2314,7 +2314,7 @@ class ErrorTemplate{
     }
 
     /**
-     * That function return the parsed values of the HTML file content. 
+     * That function return the parsed values of the HTML file content.
      *
      * @throws NotLoadedFile If the class don't haves a file loaded.
      * @return string|null
@@ -2344,7 +2344,7 @@ class ErrorTemplate{
      * @param string $documnetHTML The HTML file to connect and parse.
      * @param string $error_message The error string message.
      * @param string|null $file_throwed The file that throwed the exception
-     * @param string|null $btn_rt_lc The button to return to the previous page. 
+     * @param string|null $btn_rt_lc The button to return to the previous page.
      * @param int|null $line_error The line that showed the error
      */
     final public function __construct(string $documentHTML, string $error_message, string $file_throwed = null, int $line_error = null, string $btn_rt_lc){

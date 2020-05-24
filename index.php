@@ -1,5 +1,5 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
+require_once "core/js-handler.php";
 
 use function JSHandler\sendUserLogged;
 use function JSHandler\setCon1Links;
@@ -30,13 +30,12 @@ sendUserLogged();
     <link rel="shortcut icon" href="./media/new-logo.png" type="image/x-icon">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.2/popper.min.js"></script>
-    
 </head>
 <style>
 </style>
 <body>
     <script>
-        $(document).ready(function(){   
+        $(document).ready(function(){
             setAccountOpts();
             setSignatureOpts();
             applyToA();
@@ -146,7 +145,7 @@ sendUserLogged();
                 <h1>What's LPGP?</h1>
                 <p>
                     LPGP is a online authenticated certificate. There're so many
-                    other 
+                    other
                 </p>
             </div>
         </div>

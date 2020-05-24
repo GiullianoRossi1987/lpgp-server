@@ -1,7 +1,7 @@
 <?php
 namespace JSHandler;
 if(session_status() == PHP_SESSION_NONE)session_start();
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
 
 use Core\ProprietariesData;
 use Core\SignaturesData;
@@ -19,7 +19,7 @@ if(!defined("MAX_SIGC")) define("MAX_SIGC", 5);   // the max number of the signa
  */
 function sendUserLogged(){
     if(session_status() == PHP_SESSION_NONE) session_start();
-    if(session_status() == PHP_SESSION_NONE || session_status() == PHP_SESSION_DISABLED || empty($_SESSION) || !isset($_SESSION['user-logged']) || !$_SESSION['user-logged']){  
+    if(session_status() == PHP_SESSION_NONE || session_status() == PHP_SESSION_DISABLED || empty($_SESSION) || !isset($_SESSION['user-logged']) || !$_SESSION['user-logged']){
         // if there's no one logged.
         echo "<script>\nlocalStorage.setItem(\"logged-user\", \"false\");\nlocalStorage.setItem(\"user_mode\", \"null\");\nlocalStorage.setItem(\"checked\", \"null\");\nlocalStorage.setItem(\"user-icon\", \"null\");</script>";
         $_SESSION['user-logged']  = true;
@@ -78,8 +78,8 @@ function lsSignaturesMA(int $proprietary){
         $card .= "<h5 class=\"card-subtitle\">" . $sig_data['dt_creation'] . "</h5>\n";
         $card .= "</div> <div class=\"card-body\">";
         $card .= "<div class=\"card-text\">\n";
-        $card .= "<a href=\"https://localhost/lpgp-server/cgi-actions/get_my_signature.php?id=$cd\">Download <i class=\"fas fa-file-download\"></i></a>" . "<br><br>". 
-                 "<a href=\"https://localhost/lpgp-server/cgi-actions/ch_signature_data.php?sig_id=$cd\">Configurations<i class=\"fas fa-cog\"></i></a>\n" 
+        $card .= "<a href=\"https://localhost/lpgp-server/cgi-actions/get_my_signature.php?id=$cd\">Download <i class=\"fas fa-file-download\"></i></a>" . "<br><br>".
+                 "<a href=\"https://localhost/lpgp-server/cgi-actions/ch_signature_data.php?sig_id=$cd\">Configurations<i class=\"fas fa-cog\"></i></a>\n"
                 . "</div>\n</div>\n</div><br>";
         $all .= "\n$card\n";
     }
@@ -87,7 +87,7 @@ function lsSignaturesMA(int $proprietary){
 }
 
 /**
- * Do the same thing then the lsSignaturesMA, but from a different proprietary and without the Download & Configurations options in the 
+ * Do the same thing then the lsSignaturesMA, but from a different proprietary and without the Download & Configurations options in the
  * Signature card.
  *
  * @param integer $proprietary The primary key reference of the other proprietary
@@ -139,7 +139,7 @@ function inputsGets(int $signature){
  * **WARNING**: all the anchor HTML links gonna work only at the check_signature.php page.
  * @param integer $sign_ref The primary key reference of the signature to create the card.
  * @param bool $valid If the signature is valid, used after the authentication.
- * @return string The HTML code. 
+ * @return string The HTML code.
  */
 function createSignatureCardAuth(int $sign_ref, bool $valid){
     $sign_obj = new SignaturesData("giulliano_php", "");
@@ -200,19 +200,19 @@ function createSignatureCardAuth(int $sign_ref, bool $valid){
 /**
  * That method adds the links of the option content of the SDK's.
  * The links can be right to the SDK download page or to the login page.
- * 
+ *
  * @return string
  */
 function setCon1Links(){
     if($_SESSION['user-logged'] && $_SESSION['mode'] == "prop"){
-        return "<ul>\n" .  
-                "   <li>\n<a href=\"./devcenter/sdks/sdks.php\">See our SDK'S</a>\n</li>\n" . 
+        return "<ul>\n" .
+                "   <li>\n<a href=\"./devcenter/sdks/sdks.php\">See our SDK'S</a>\n</li>\n" .
                 "   <li>\n<a href=\"./devcenter/add-client.php\">First add a client for the System</a></li>\n" .
                 "   <li>\n>a href=\"./devcenter/help.php\">If you have any doubt about the clients</a></li>\n</ul>";
     }
     else{
-        return "<ul>\n" .  
-                "   <li>\n<a href=\"./login_frm.php\">See our SDK'S</a>\n</li>\n" . 
+        return "<ul>\n" .
+                "   <li>\n<a href=\"./login_frm.php\">See our SDK'S</a>\n</li>\n" .
                 "   <li>\n<a href=\"./login_frm.php\">First add a client for the System</a></li>\n" .
                 "   <li>\n><a href=\"./login_frm.php\">If you have any doubt about the clients</a></li>\n</ul>\n<h1> But before accessing it you'll need to make login with a proprietary account</h1>\n";
     }
@@ -223,7 +223,7 @@ function setCon1Links(){
  * That function creates a bootstrap card for the clients that the proprietary have.
  * That's a function like the CreateSignatureCard;
  *
- * @param array $clientData A array with the clients data. The array must be: 
+ * @param array $clientData A array with the clients data. The array must be:
  *      [0] => The client ID
  *      [1] => The client Name
  *      [2] => The total of access
@@ -296,7 +296,7 @@ function createAccessChart(int $clientID, string $chartID = "client-plots"): str
         "data" => [
             "labels" => array_keys($plotData),
             "datasets" => [
-                
+
             ]
         ],
         "options" => [
