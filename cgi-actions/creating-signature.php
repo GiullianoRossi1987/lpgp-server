@@ -1,5 +1,5 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
 
 use Core\SignaturesData;
 use templateSystem\ErrorTemplate;
@@ -39,7 +39,7 @@ catch(Exception $e){
 </style>
 <body>
     <script>
-        $(document).ready(function(){   
+        $(document).ready(function(){
             setAccountOpts(true);
             setSignatureOpts();
         });
@@ -132,8 +132,8 @@ catch(Exception $e){
         <div class="row-main row">
             <div class="col-7 clear-content" style="position: relative; margin-left: 21%; margin-top: 10% !important;">
 				<h1>Your signature was created successfully!</h1>
-                <a href="https://localhost/lpgp-server/cgi-actions/my_signatures.php" role="button" class="btn btn-lg bt-primary">See my signatures</a>
-				<a href="https://localhost/lpgp-server/index.php" role="button" class="btn btn-block btn-success">Get back to the home</a>
+                <a href="https://localhost/cgi-actions/my_signatures.php" role="button" class="btn btn-lg bt-primary">See my signatures</a>
+				<a href="https://localhost/index.php" role="button" class="btn btn-block btn-success">Get back to the home</a>
             </div>
         </div>
     </div>

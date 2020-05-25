@@ -1,8 +1,8 @@
 <?php
 if(session_status() == PHP_SESSION_NONE) session_start();
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/charts.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/js-handler.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/charts.php";
 
 use function JSHandler\sendUserLogged;
 use Core\ClientsData;
@@ -65,7 +65,7 @@ foreach($all as $clientData) $clls .= '<option value="' . $clientData['cd_client
 </style>
 <body>
     <script>
-        $(document).ready(function(){   
+        $(document).ready(function(){
             setAccountOpts(true);
             setSignatureOpts();
             applyToA();
@@ -98,9 +98,9 @@ foreach($all as $clientData) $clls .= '<option value="' . $clientData['cd_client
                         Help
                     </button>
                     <div class="dropdown-menu opts" aria-labelledby="help-opt">
-                        <a href="http://localhost/lpgp-server/docs/" class="dropdown-item">Documentation</a>
-                        <a href="http://localhost/lpgp-server/about.html" class="dropdown-item">About Us</a>
-                        <a href="http://localhost/lpgp-server/contact-us.html" class="dropdown-item">Contact Us</a>
+                        <a href="http://localhost/docs/" class="dropdown-item">Documentation</a>
+                        <a href="http://localhost/about.html" class="dropdown-item">About Us</a>
+                        <a href="http://localhost/contact-us.html" class="dropdown-item">Contact Us</a>
                     </div>
                 </div>
             </div>
@@ -149,7 +149,7 @@ foreach($all as $clientData) $clls .= '<option value="' . $clientData['cd_client
 				<div class="chart-row row">
 					<div class="col-md-12 col-sm-12 chart-col">
 						<canvas id="clients-plot" width="500" height="500"></canvas>
-						<?php 
+						<?php
 							echo $objClients->generateChart("clients-plot");
 						?>
 					</div>
@@ -164,7 +164,7 @@ foreach($all as $clientData) $clls .= '<option value="' . $clientData['cd_client
                 <div class="social-options-grp">
                     <div class="social-option">
                         <a href="https://github.com/GiullianoRossi1987/lpgp-server" target="_blanck" id="github" class="social-option-footer">
-                            <span><i class="fab fa-github"></i></span> 
+                            <span><i class="fab fa-github"></i></span>
                             Visit our github!
                         </a>
                     </div>

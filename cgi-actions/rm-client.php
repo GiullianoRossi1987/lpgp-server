@@ -1,5 +1,5 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
 
 use Core\ClientsData;
 
@@ -9,5 +9,5 @@ if(isset($_GET['client'])){
 	$obj->rmClient((int)$cl_id);
 
 	header("Location: my_account.php");
-	
+
 }

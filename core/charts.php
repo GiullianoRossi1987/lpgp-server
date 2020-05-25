@@ -1,7 +1,7 @@
 <?php
 namespace Charts_Plots;
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/js-handler.php";
 
 // starts with the defined constants
 if(!defined("BAR_CHART"))  define("BAR_CHART", "bar");
@@ -38,7 +38,7 @@ use Core\ClientsAccessData;
 use Core\ClientsData;
 
 /**
- * Exception thrown when the number of labels is differtent then the datasets number, it's important to 
+ * Exception thrown when the number of labels is differtent then the datasets number, it's important to
  */
 class IncompatibilityError extends Exception{}
 
@@ -70,7 +70,7 @@ class UniqueLabelError extends Exception{}
 /**
  * That class represents the access charts, it's technically a globalization of the charts used.
  * That tool will be present in all the processes.
- * 
+ *
  * @var array $base The chart array base, it'll be converted to JS language (JSON technically)
  * @var string _BGS The default background color used to the data labels.
  * @var string _BDS The default border color used to the data labels.
@@ -110,7 +110,7 @@ class AccessPlot{
 
 	/**
 	 * That method starts the class and set the chart type.
-	 * 
+	 *
 	 * @param string $type The chart type to set.
 	 * @throws InvalidChartData If the chart type received (param) isn't at the TYPES array constant.
 	 * @throws UnwritebleData If the chart type was already setted
@@ -135,7 +135,7 @@ class AccessPlot{
 
 	/**
 	 * Default class method used for the instance garbage collection when it's no more necessary
-	 * 
+	 *
 	 */
 	public function __destruct(){
 		if(!$this->gotDt) $this->flush();  // flush the data before collecting the garbage.
@@ -157,7 +157,7 @@ class AccessPlot{
 
 	/**
 	 * Default class to add labels at the base. It add a simple label reference
-	 * 
+	 *
 	 * @param string $label The label to add
 	 * @throws UndefinedChartData If the chart type wasn't defined yet.
 	 * @throws UniqueLabelError If the chart can't accept repeated label (and the label is repeated)
@@ -206,7 +206,7 @@ class AccessPlot{
 	}
 
 	/**
-	 * That function generates a array with a specific length and only one value repeated along 
+	 * That function generates a array with a specific length and only one value repeated along
 	 *
 	 * @param integer $times The array length
 	 * @param mixed $value The item to repeat
@@ -220,10 +220,10 @@ class AccessPlot{
 
 	/**
 	 * That method adds a new dataset using the parameter received data for each field.
-	 * 
+	 *
 	 * @param string $label The dataset label
 	 * @param array $data The data of each labels (data-labels)
-	 * @param string[]|null $bgs The background color of each label (data-labels). If null will get the 
+	 * @param string[]|null $bgs The background color of each label (data-labels). If null will get the
 	 */
 	public function addData(string $label, array $data, array $bgs = null, array $bds = null, array $bdw = null){
 		$_bgs = is_null($bgs) ? $this->fillArray(count($data), self::_BGS) : $bgs;
@@ -302,7 +302,7 @@ class AccessPlot{
 
 	/**
 	 * Sets the chart with the client successful access records
-	 * 
+	 *
 	 * @param string $proprietary The proprietary to get the clients
 	 * @param boolean $override If the method will override the actual chart
 	 * @throws UnwritebleData If the class chart is already setted.
@@ -329,7 +329,7 @@ class AccessPlot{
 	 * That method set the chart base with all the client accesses, of a specific client.
 	 *
 	 * @param integer $client_cd The client primary key reference
-	 * @param boolean $override If the method will override the 
+	 * @param boolean $override If the method will override the
 	 * @return void
 	 */
 	public function getClientAccesses(int $client_cd, bool $override = false){

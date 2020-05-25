@@ -1,7 +1,7 @@
 <?php
 if(session_status() == PHP_SESSION_NONE) session_start();
 
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
 
 use Core\ProprietariesData;
 $prp = new ProprietariesData("giulliano_php", "");
@@ -36,7 +36,7 @@ $inpt = "<input type=\"hidden\" name=\"prop-id\" value=\"$id\">";
 </style>
 <body>
     <script>
-        $(document).ready(function(){   
+        $(document).ready(function(){
             setAccountOpts(true);
             setSignatureOpts();
         });

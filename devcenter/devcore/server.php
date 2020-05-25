@@ -1,8 +1,8 @@
 <?php
 namespace Server{
 	use Exception;
-	require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/devcenter/devcore/dbapi.php";
-	require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
+	require_once $_SERVER['DOCUMENT_ROOT'] . "/devcenter/devcore/dbapi.php";
+	require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
 
 	use ClientsDatabase\ClientsManager;
 	use Core\SignaturesData;
@@ -101,7 +101,7 @@ namespace Server{
 
 		/**
 		 * That method decode the client data received and authenticate the data.
-		 * @param string $data The client data received, that data have the same cipher then the .lpgp files, it's a json with the client data 
+		 * @param string $data The client data received, that data have the same cipher then the .lpgp files, it's a json with the client data
 		 * @throws DataRecvError If the data received have errors.
 		 * @return bool
 		 */
@@ -117,7 +117,7 @@ namespace Server{
 					return true;
 				}
 			}
-			catch(Exception $error){ 
+			catch(Exception $error){
 				die($error);
 				$history_obj->addReg($dt['Client'], null, 0);
 				return false;

@@ -1,15 +1,15 @@
 <?php
 if(session_status() == PHP_SESSION_NONE) session_start();
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/logs-system.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/js-handler.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/logs-system.php";
 
 use Core\ProprietariesData;
 use Core\UsersData;
 use function JSHandler\sendUserLogged;
 use LogsSystem\SysLogger;
 
-$log = new SysLogger($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/logs/accounts.log");
+$log = new SysLogger($_SERVER['DOCUMENT_ROOT'] . "/logs/accounts.log");
 
 if(isset($_GET['confirm'])){
 	if($_GET['confirm'] == "y"){
@@ -29,7 +29,7 @@ if(isset($_GET['confirm'])){
         echo "<script>resetVals();</script>";
 	}
 	else{
-		echo "<script>window.location.replace(\"https://localhost/lpgp-server/cgi-actions/my_account.php\");</script>";
+		echo "<script>window.location.replace(\"https://localhost/cgi-actions/my_account.php\");</script>";
 	}
 }
 ?>
@@ -61,7 +61,7 @@ if(isset($_GET['confirm'])){
 </style>
 <body>
     <script>
-        $(document).ready(function(){   
+        $(document).ready(function(){
             setAccountOpts(true);
             setSignatureOpts();
         });
@@ -146,9 +146,9 @@ if(isset($_GET['confirm'])){
                     Help
                 </button>
                 <div class="dropdown-menu opts" aria-labelledby="help-opt">
-                    <a href="http://localhost/lpgp-server/docs/" class="dropdown-item">Documentation</a>
-                    <a href="http://localhost/lpgp-server/about.html" class="dropdown-item">About Us</a>
-                    <a href="http://localhost/lpgp-server/contact-us.html" class="dropdown-item">Contact Us</a>
+                    <a href="http://localhost/docs/" class="dropdown-item">Documentation</a>
+                    <a href="http://localhost/about.html" class="dropdown-item">About Us</a>
+                    <a href="http://localhost/contact-us.html" class="dropdown-item">Contact Us</a>
                 </div>
             </div>
         </div>

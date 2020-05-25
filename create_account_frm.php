@@ -1,6 +1,6 @@
 <?php
-if(session_status() == PHP_SESSION_NONE) session_start(); 
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
+if(session_status() == PHP_SESSION_NONE) session_start();
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/js-handler.php";
 use function JSHandler\sendUserLogged;
 
 sendUserLogged(); // preventing bugs
@@ -30,7 +30,7 @@ sendUserLogged(); // preventing bugs
 </style>
 <body>
     <script>
-        $(document).ready(function(){   
+        $(document).ready(function(){
             setAccountOpts();
             setSignatureOpts();
         });
@@ -149,9 +149,9 @@ sendUserLogged(); // preventing bugs
                     Help
                 </button>
                 <div class="dropdown-menu opts" aria-labelledby="help-opt">
-                    <a href="http://localhost/lpgp-server/docs/" class="dropdown-item">Documentation</a>
-                    <a href="http://localhost/lpgp-server/about.html" class="dropdown-item">About Us</a>
-                    <a href="http://localhost/lpgp-server/contact-us.html" class="dropdown-item">Contact Us</a>
+                    <a href="http://localhost/docs/" class="dropdown-item">Documentation</a>
+                    <a href="http://localhost/about.html" class="dropdown-item">About Us</a>
+                    <a href="http://localhost/contact-us.html" class="dropdown-item">Contact Us</a>
                 </div>
             </div>
         </div>
@@ -195,7 +195,7 @@ sendUserLogged(); // preventing bugs
                     </label>
                     <br>
                     <label for="password1" class="form-label">
-                        <h4>Pick a Password</h4>    
+                        <h4>Pick a Password</h4>
                     </label>
                     <br>
                     <label for="password1" class="form-label">
@@ -265,7 +265,7 @@ sendUserLogged(); // preventing bugs
                             Upload a image
                         </a>
                         <br>
-                        <div class="collapse" id="upload-img-input"> 
+                        <div class="collapse" id="upload-img-input">
                             <br>
                             <label for="img-uploaded" class="form-label">
                                 <h4>Send us a image from your device</h4>

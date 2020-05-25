@@ -1,7 +1,7 @@
 <?php 
 if(session_status() == PHP_SESSION_NONE) session_start();
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/js-handler.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
 
 use function JSHandler\lsSignaturesMA;
 use function JSHandler\sendUserLogged;
@@ -47,7 +47,7 @@ $usr = new UsersData("giulliano_php", "");
 </style>
 <body>
     <script>
-        $(document).ready(function(){   
+        $(document).ready(function(){
             setAccountOpts(true);
             setSignatureOpts();
             applyToA();
@@ -79,9 +79,9 @@ $usr = new UsersData("giulliano_php", "");
                         Help
                     </button>
                     <div class="dropdown-menu opts" aria-labelledby="help-opt">
-                        <a href="http://localhost/lpgp-server/docs/" class="dropdown-item">Documentation</a>
-                        <a href="http://localhost/lpgp-server/about.html" class="dropdown-item">About Us</a>
-                        <a href="http://localhost/lpgp-server/contact-us.html" class="dropdown-item">Contact Us</a>
+                        <a href="http://localhost/docs/" class="dropdown-item">Documentation</a>
+                        <a href="http://localhost/about.html" class="dropdown-item">About Us</a>
+                        <a href="http://localhost/contact-us.html" class="dropdown-item">Contact Us</a>
                     </div>
                 </div>
             </div>
@@ -170,7 +170,7 @@ $usr = new UsersData("giulliano_php", "");
                                             </div>
                                         </div>
                                     </div>
-                                                
+
                                 </div>
                             </div>
                         </div>
@@ -180,7 +180,7 @@ $usr = new UsersData("giulliano_php", "");
                                         <h2 class="mainheader-heading mb-0">My Signatures<span style="margin-left: 70%;">
                                         <i class="fas fa-caret-down"></i>
                                     </span></h2>
-                                        
+
                                     </a>';
                                 ?>
                                 <div id="signatures-section" class="collapse section">
@@ -190,8 +190,8 @@ $usr = new UsersData("giulliano_php", "");
                                     if($_SESSION['mode'] == "prop"){
                                         $prp = new ProprietariesData("giulliano_php", "");
                                         echo lsSignaturesMA($prp->getPropID($_SESSION['user']));
-                                        echo "<br>\n<a href=\"create_signature.php\" role=\"button\" class=\"btn btn-block btn-success\">". 
-                                                    "Create a new signature <span><i class=\"fas fa-id-card\"></i></span>". 
+                                        echo "<br>\n<a href=\"create_signature.php\" role=\"button\" class=\"btn btn-block btn-success\">".
+                                                    "Create a new signature <span><i class=\"fas fa-id-card\"></i></span>".
                                                     "</a><br>";
                                     }
                                     ?>
@@ -199,7 +199,7 @@ $usr = new UsersData("giulliano_php", "");
                             </div>
                             <div class="history-col col-12" style="position: relative; margin-top: 10%;">
                                 <a class="account-separator" href="#history-section" data-toggle="collapse" aria-expanded="false" aria-controls="history-section" id="history-sep">
-                                    <h2> 
+                                    <h2>
                                         My History
                                         <span>
                                             <i class="fas fa-caret-down" style="margin-left: 75%;"></i>
@@ -287,7 +287,7 @@ $usr = new UsersData("giulliano_php", "");
                 <div class="social-options-grp">
                     <div class="social-option">
                         <a href="https://github.com/GiullianoRossi1987/lpgp-server" target="_blanck" id="github" class="social-option-footer">
-                            <span><i class="fab fa-github"></i></span> 
+                            <span><i class="fab fa-github"></i></span>
                             Visit our github!
                         </a>
                     </div>

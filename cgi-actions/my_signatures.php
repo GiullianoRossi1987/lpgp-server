@@ -1,7 +1,7 @@
 <?php
 if(session_status() == PHP_SESSION_NONE) session_start();
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/js-handler.php";
 
 
 use Core\ProprietariesData;
@@ -38,7 +38,7 @@ $id = $prp->getPropID($_SESSION['user']);
 </style>
 <body>
     <script>
-        $(document).ready(function(){   
+        $(document).ready(function(){
             setAccountOpts(true);
             setSignatureOpts();
         });

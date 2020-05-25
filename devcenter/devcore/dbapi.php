@@ -2,11 +2,11 @@
 namespace ClientsDatabase{
 
 	use Exception;
-	
+
 	try{
-		require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/logs-system.php";
-		require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
-		require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/devcenter/devcore/exceptions.php";
+		require_once $_SERVER['DOCUMENT_ROOT'] . "/core/logs-system.php";
+		require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
+		require_once $_SERVER['DOCUMENT_ROOT'] . "/devcenter/devcore/exceptions.php";
 	}
 	catch(Exception $e){
 		require_once "core/logs-system.php";
@@ -25,7 +25,7 @@ namespace ClientsDatabase{
 	if(!defined("NRML_PAS_ACCESS")) define("NRML_PAS_ACCESS", "");
 
 	/**
-	 * That class manages all the MySQL database clients connections 
+	 * That class manages all the MySQL database clients connections
 	 */
 	class ClientsManager extends DatabaseConnection{
 
@@ -46,7 +46,7 @@ namespace ClientsDatabase{
 
 		/**
 		 * Checks if a token exists for a client profile.
-		 * 
+		 *
 		 * @param string $token The token value to search in the database.
 		 * @return bool
 		 */
@@ -76,11 +76,11 @@ namespace ClientsDatabase{
 
 		/**
 		 * Checks the client proprietary reference. It can be a name, or the proprietary Primary key reference.
-		 * If the value received is a proprietary name, it will check if the proprietary name exists and will return 
-		 * the proprietary primary key searching by the name reference. If the value received is a Primary key, 
-		 * the method will check if the primary key exists, and then will return it self. If the reference doesn't 
+		 * If the value received is a proprietary name, it will check if the proprietary name exists and will return
+		 * the proprietary primary key searching by the name reference. If the value received is a Primary key,
+		 * the method will check if the primary key exists, and then will return it self. If the reference doesn't
 		 * exist, then will return false.
-		 * 
+		 *
 		 * @param string|int $ref The proprietary reference
 		 * @return int|false
 		 */
@@ -120,7 +120,7 @@ namespace ClientsDatabase{
 
 		/**
 		 * Removes a client from the database, using the nm_client reference value
-		 * 
+		 *
 		 * @param string $nm_client The client name reference
 		 * @throws ClientNotFound If the client name reference don't exist.
 		 * @return void
@@ -134,7 +134,7 @@ namespace ClientsDatabase{
 
 		/**
 		 * Changes the client name reference of a client.
-		 * 
+		 *
 		 * @param string $client The actual client name reference.
 		 * @param string $new_name The new client name reference value.
 		 * @throws ClientNotFound If the actual client reference don't exist.
@@ -151,7 +151,7 @@ namespace ClientsDatabase{
 
 		/**
 		 * Generate a new token for the client profile.
-		 * 
+		 *
 		 * @param string $client The client name reference to change the token
 		 * @throws ClientNotFound If there's no client name such the referred
 		 * @return void
@@ -166,7 +166,7 @@ namespace ClientsDatabase{
 
 		/**
 		 * Changes the privileges on the client	profile privileges (root database field)
-		 * 
+		 *
 		 * @param string $client The client name reference
 		 * @param bool $toRoot If the client will have root privileges now.
 		 * @throws ClientNotFound If the client name reference don't exist.
@@ -196,7 +196,7 @@ namespace ClientsDatabase{
 
 
 		/**
-		 * Creates a filename for the signature file. 
+		 * Creates a filename for the signature file.
 		 *
 		 * @param int $initial_counter The first contage of the filename (signature-file-$initial_counter)
 		 * @return string
@@ -214,7 +214,7 @@ namespace ClientsDatabase{
 		/**
 		 * Generate a client signature file, with the same script then the signatures generation script. But with a different structure of
 		 * the encoded JSON content.
-		 * 
+		 *
 		 * @param string $client The client name reference for generate the auth.lpgp file for it
 		 * @param string $path The file path to generate the .lpgp file.
 		 * @param bool $HTML_mode If the file will be available for download. If it's true, then will return a <a> tag with the path to the download.
@@ -239,8 +239,8 @@ namespace ClientsDatabase{
 			$json_con = json_encode($json_arr);
 			for($chr = 0; $chr < strlen($json_con); $chr++) array_push($tmp_arr, (string) ord($json_con[$chr]));
 			$con = implode(SignaturesData::DELIMITER, $tmp_arr);
-			$path = $_SERVER['REMOTE_HOST'] . "/lpgp-server/devcenter/l.clientf/$nm";
-			file_put_contents($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/devcenter/l.clientf/$nm", $con);
+			$path = $_SERVER['REMOTE_HOST'] . "/devcenter/l.clientf/$nm";
+			file_put_contents($_SERVER['DOCUMENT_ROOT'] . "/devcenter/l.clientf/$nm", $con);
 			return $HTML_mode ? "<a href=\"$path\" download=\"$path\" class=\"btn btn-primary\" role=\"button\">Download</a>" : "$path";
 		}
 
@@ -252,7 +252,7 @@ namespace ClientsDatabase{
 		 */
 		public function authenticateClientF(string $file){
 			$this->checkNotConnected();
-			$raw_con = file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/devcenter/u.clientf/$file");
+			$raw_con = file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/devcenter/u.clientf/$file");
 			$exp_con = explode(SignaturesData::DELIMITER, $raw_con);
 			$json_con = "";
 			foreach($exp_con as $ascii) $json_con .= chr((int) $ascii);
@@ -266,7 +266,7 @@ namespace ClientsDatabase{
 
 		/**
 		 * Authenticate a client .lpgp file content. That authentication is used **ONLY AT THE SERVER.PHP**.
-		 * 
+		 *
 		 * @param string $content The .lpgp file content.
 		 * @throws InvalidSignatureFile If the .lpgp file isn't valid.
 		 * @return true
@@ -287,11 +287,11 @@ namespace ClientsDatabase{
 
 	/**
 	 * That class manages the history of the clients authentications. That history is a table at the
-	 * MySQL database, everytime a client's authenticated it creates a register to the 
+	 * MySQL database, everytime a client's authenticated it creates a register to the
 	 */
 	class ClientsHistory extends DatabaseConnection{
 
-		/** 
+		/**
 		 * Checks if a client primary key reference exists in the history. It's too much necessary for the hole system, so don't broke it.
 		 * @param integer $ref The client primary key reference to search in the database.
 		 * @return bool
@@ -318,7 +318,7 @@ namespace ClientsDatabase{
 
 		/**
 		 * Add a register in the history, using a client reference (name or primary key), date reference (normally using the default) and if it was a success.
-		 * 
+		 *
 		 * @param string|integer $client The client reference.
 		 * @param string|null $datetime The datetime value to use;
 		 * @param integer|bool $success If the authentication was successfull.
@@ -339,7 +339,7 @@ namespace ClientsDatabase{
 			if(is_null($datetime)) $qr = $this->connection->query("INSERT INTO tb_access (id_client, vl_success) VALUES ($client, $success);");
 			else $qr = $this->connection->query("INSERT INTO tb_access (id_client, vl_success, dt_access) VALUES ($client, $success, '$datetime');");
 			unset($qr);
-			return ; 
+			return ;
 		}
 
 		/**
@@ -357,7 +357,7 @@ namespace ClientsDatabase{
 
 		/**
 		 * Return true or fals if all the array items are string type
-		 * 
+		 *
 		 * @param array $items The array to check the items
 		 * @return boolean
 		 */
@@ -404,7 +404,7 @@ namespace ClientsDatabase{
 
 		/**
 		 * Return the total access  of a client at all the access.
-		 * 
+		 *
 		 * @param string|int $client The client reference
 		 * @throws ReferenceError If there's no such client reference as the received
 		 * @return integer
@@ -418,7 +418,7 @@ namespace ClientsDatabase{
 
 		/**
 		 * Return the access percentage of the selected clients at all the access;
-		 * 
+		 *
 		 * @param array $clients The clients to search
 		 * @throws ReferenceError If the client referred doesn't exist
 		 * @return array
@@ -433,7 +433,7 @@ namespace ClientsDatabase{
 
 		/**
 		 * Return the total access of a client, filtring by the year.
-		 * 
+		 *
 		 * @param string|integer $client The client reference to search, it can be the client name or the client PK
 		 * @param string|integer|null $year The year to search, it can be the year value (string or integer) or the current year (null)
 		 * @throws ReferenceError If there're errors with the client reference

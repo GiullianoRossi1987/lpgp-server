@@ -1,15 +1,15 @@
 <?php
 if(session_status() == PHP_SESSION_NONE) session_start();
 
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/js-handler.php";
 
 use Core\ProprietariesData;
 use function JSHandler\lsExtSignatures;
 use function JSHandler\getImgPath;
 use function JSHandler\sendUserLogged;
 
-sendUserLogged();  // Just for fixing a error that i don't know why is going on. 
+sendUserLogged();  // Just for fixing a error that i don't know why is going on.
 $prp = new ProprietariesData("giulliano_php", "");
 if(isset($_GET['id'])) $data = $prp->getPropDataByID(base64_decode($_GET['id']));
 ?>
@@ -40,7 +40,7 @@ if(isset($_GET['id'])) $data = $prp->getPropDataByID(base64_decode($_GET['id']))
 </style>
 <body>
     <script>
-        $(document).ready(function(){   
+        $(document).ready(function(){
             setAccountOpts(true);
             setSignatureOpts();
         });
@@ -89,14 +89,14 @@ if(isset($_GET['id'])) $data = $prp->getPropDataByID(base64_decode($_GET['id']))
                         <div class="container data-container">
                                 <div class="main-row row">
                                     <div class="img-cont">
-                                        <?php 
+                                        <?php
                                         $img_src = getImgPath($data['vl_img'], true);
-                                        echo "<img src=\"$img_src\" alt=\"\" width=\"200px\" height=\"200px\">"; 
+                                        echo "<img src=\"$img_src\" alt=\"\" width=\"200px\" height=\"200px\">";
                                         ?>
                                     </div>
                                     <div class="col-6 data">
                                         <?php
-                                        
+
                                         echo "<h1 class=\"user-name\"> " . $data['nm_proprietary'] . "</h1>\n";
                                         echo "<h4 class=\"mode\">Proprietary</h4>\n";
                                         echo "<h4 class=\"email\">Email: " . $data['vl_email'] . "</h3>\n";

@@ -1,5 +1,5 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
 use Core\ClientsData;
 
 if(isset($_POST['submit']) && isset($_POST['client'])){

@@ -1,8 +1,8 @@
 <?php
 if(session_status() == PHP_SESSION_NONE) session_start();
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Exceptions.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/js-handler.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Exceptions.php";
 
 use Core\ClientsData;
 use ClientsExceptions\AuthenticationError;
@@ -45,7 +45,7 @@ $bruteDataCon .= '<li><b>Date Creation</b>: ' . $brute['Dt'] . '</li>' . "\n";
 <body>
 	<script>
         var show = false;
-        $(document).ready(function(){   
+        $(document).ready(function(){
             setAccountOpts(true);
             setSignatureOpts();
             applyToA();
@@ -60,13 +60,13 @@ $bruteDataCon .= '<li><b>Date Creation</b>: ' . $brute['Dt'] . '</li>' . "\n";
         $(document).ready(function(){
             applyToA();
 		});
-		
+
 		$(document).on("change", ".al", function(){
 			$("#go").removeClass("disabled");
 		});
 
     </script>
-	<?php 
+	<?php
 	if(isset($_GET['alert'])){
 		echo "<script>show=true</script>";
 	}
@@ -90,9 +90,9 @@ $bruteDataCon .= '<li><b>Date Creation</b>: ' . $brute['Dt'] . '</li>' . "\n";
                         Help
                     </button>
                     <div class="dropdown-menu opts" aria-labelledby="help-opt">
-                        <a href="http://localhost/lpgp-server/docs/" class="dropdown-item">Documentation</a>
-                        <a href="http://localhost/lpgp-server/about.html" class="dropdown-item">About Us</a>
-                        <a href="http://localhost/lpgp-server/contact-us.html" class="dropdown-item">Contact Us</a>
+                        <a href="http://localhost/docs/" class="dropdown-item">Documentation</a>
+                        <a href="http://localhost/about.html" class="dropdown-item">About Us</a>
+                        <a href="http://localhost/contact-us.html" class="dropdown-item">Contact Us</a>
                     </div>
                 </div>
             </div>
@@ -103,7 +103,7 @@ $bruteDataCon .= '<li><b>Date Creation</b>: ' . $brute['Dt'] . '</li>' . "\n";
 		<div class="row main-row">
 			<div class="col-12 content" style="position: relative">
 				<center>
-					<?php 
+					<?php
 						if($mainData['valid']){
                             echo '<i class="fas fa-check" style="color: green; font-size: 150px"></i>';
                             echo '<br>';

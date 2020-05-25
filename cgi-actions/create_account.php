@@ -1,6 +1,6 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
-// require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
+// require_once $_SERVER['DOCUMENT_ROOT'] . "/core/js-handler.php";
 
 use Core\ProprietariesData;
 use Core\UsersData;
@@ -8,26 +8,26 @@ use Core\UsersData;
 if($_POST['account-mode'] == "normal"){
     // setting up the image to the server
     if(isset($_FILES)){
-        move_uploaded_file($_FILES['img-user']['tmp_name'][0], $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/u.images/" . $_FILES['img-user']['name'][0]);
-    
+        move_uploaded_file($_FILES['img-user']['tmp_name'][0], $_SERVER['DOCUMENT_ROOT'] . "/u.images/" . $_FILES['img-user']['name'][0]);
+
         $usr_obj = new UsersData("giulliano_php", "");
-        $usr_obj->addUser($_POST['username'], $_POST['password1'], $_POST['email'], true,$_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/u.images/" . $_FILES['img-user']['name'][0]);
+        $usr_obj->addUser($_POST['username'], $_POST['password1'], $_POST['email'], true,$_SERVER['DOCUMENT_ROOT'] . "/u.images/" . $_FILES['img-user']['name'][0]);
     }
     else{
         $usr_obj = new UsersData("giulliano_php", "");
-        $usr_obj->addUser($_POST['username'], $_POST['password1'], $_POST['email'], true,$_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/media/usr-icon.png");
+        $usr_obj->addUser($_POST['username'], $_POST['password1'], $_POST['email'], true,$_SERVER['DOCUMENT_ROOT'] . "/media/usr-icon.png");
     }
     $usr_obj->sendCheckEmail($_POST['username']);
 }
 else if($_POST['account-mode'] == "proprietary"){
     if(isset($_FILES)){
-        move_uploaded_file($_FILES['img-user']['tmp_name'][0], $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/u.images/" . $_FILES['img-user']['name'][0]);
+        move_uploaded_file($_FILES['img-user']['tmp_name'][0], $_SERVER['DOCUMENT_ROOT'] . "/u.images/" . $_FILES['img-user']['name'][0]);
         $prop_obj = new ProprietariesData("giulliano_php", "");
-        $prop_obj->addProprietary($_POST['username'], $_POST['password1'], $_POST['email'], true, $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/u.images/" . $_FILES['img-user']['name'][0]);
+        $prop_obj->addProprietary($_POST['username'], $_POST['password1'], $_POST['email'], true, $_SERVER['DOCUMENT_ROOT'] . "/u.images/" . $_FILES['img-user']['name'][0]);
     }
     else{
         $prop_obj = new ProprietariesData("giulliano_php", "");
-        $prop_obj->addProprietary($_POST['username'], $_POST['password1'], $_POST['email'], true, $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/media/usr-icon.png");
+        $prop_obj->addProprietary($_POST['username'], $_POST['password1'], $_POST['email'], true, $_SERVER['DOCUMENT_ROOT'] . "/media/usr-icon.png");
     }
     $prop_obj->sendCheckEmail($_POST['username']);
 }
@@ -59,7 +59,7 @@ else if($_POST['account-mode'] == "proprietary"){
 </style>
 <body>
     <script>
-        $(document).ready(function(){   
+        $(document).ready(function(){
             setAccountOpts();
             setSignatureOpts();
         });
@@ -149,9 +149,9 @@ else if($_POST['account-mode'] == "proprietary"){
                     Help
                 </button>
                 <div class="dropdown-menu opts" aria-labelledby="help-opt">
-                    <a href="http://localhost/lpgp-server/docs/" class="dropdown-item">Documentation</a>
-                    <a href="http://localhost/lpgp-server/about.html" class="dropdown-item">About Us</a>
-                    <a href="http://localhost/lpgp-server/contact-us.html" class="dropdown-item">Contact Us</a>
+                    <a href="http://localhost/docs/" class="dropdown-item">Documentation</a>
+                    <a href="http://localhost/about.html" class="dropdown-item">About Us</a>
+                    <a href="http://localhost/contact-us.html" class="dropdown-item">Contact Us</a>
                 </div>
             </div>
         </div>

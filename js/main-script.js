@@ -54,7 +54,7 @@ function getChartHead(){
 
 function setAccountOpts(ext_fls = false){
     /**
-     * 
+     *
      */
     clsLoginOpts();
     rmClientDrop();
@@ -64,7 +64,7 @@ function setAccountOpts(ext_fls = false){
 
     linkHome.classList.add("home-link");
     linkHome.id = "home-link";
-    linkHome.href = "https://" + window.location.hostname + "/lpgp-server/";
+    linkHome.href = "https://" + window.location.hostname + "/";
 
     gbl_opts.appendChild(linkHome);
 
@@ -73,9 +73,9 @@ function setAccountOpts(ext_fls = false){
         var logoff_opt = document.createElement("a");
         var config_opt = document.createElement("a");
 
-        config_opt.href = "https://" + window.location.hostname + "/lpgp-server/cgi-actions/ch_my_data.php";
-        logoff_opt.href = "https://" + window.location.hostname + "/lpgp-server/cgi-actions/logoff.php";
-        account_opt.href = "https://"+ window.location.hostname + "/lpgp-server/cgi-actions/my_account.php";
+        config_opt.href = "https://" + window.location.hostname + "/cgi-actions/ch_my_data.php";
+        logoff_opt.href = "https://" + window.location.hostname + "/cgi-actions/logoff.php";
+        account_opt.href = "https://"+ window.location.hostname + "/cgi-actions/my_account.php";
 
         // classes
         config_opt.classList.add("dropdown-item");
@@ -85,7 +85,7 @@ function setAccountOpts(ext_fls = false){
         config_opt.innerText = "Configurations";
         logoff_opt.innerText = "Logoff";
         account_opt.innerText = "My account";
-        
+
         local_opts.appendChild(config_opt);
         local_opts.appendChild(logoff_opt);
         local_opts.appendChild(account_opt);
@@ -103,8 +103,8 @@ function setAccountOpts(ext_fls = false){
         var login_opt = document.createElement("a");
         var ct_accopt = document.createElement("a");
 
-        login_opt.href = "https://"+  window.location.hostname + "/lpgp-server/login_frm.php";
-        ct_accopt.href = "https://"+  window.location.hostname + "/lpgp-server/create_account_frm.php";
+        login_opt.href = "https://"+  window.location.hostname + "/login_frm.php";
+        ct_accopt.href = "https://"+  window.location.hostname + "/create_account_frm.php";
         login_opt.classList.add("dropdown-item");
         ct_accopt.classList.add("dropdown-item");
         login_opt.innerText = "Make login";
@@ -141,7 +141,7 @@ function rmClientDrop(){
 }
 
 /**
- * 
+ *
  */
 function setSignatureOpts(){
     clsSignOpts();
@@ -153,8 +153,8 @@ function setSignatureOpts(){
 
         my_sign.innerText = "My Signatures";
         che_sig.innerText = "Check a Signature";
-        my_sign.href = "https://" + window.location.hostname +"/lpgp-server/cgi-actions/my_signatures.php";
-        che_sig.href = "https://" + window.location.hostname +"/lpgp-server/check_signature.php";
+        my_sign.href = "https://" + window.location.hostname +"/cgi-actions/my_signatures.php";
+        che_sig.href = "https://" + window.location.hostname +"/check_signature.php";
         my_sign.classList.add("dropdown-item");
         che_sig.classList.add("dropdown-item");
 
@@ -166,7 +166,7 @@ function setSignatureOpts(){
         var chk_signature = document.createElement("a");
 
         chk_signature.innerText = "Check a Signature";
-        chk_signature.href = "https://" + window.location.hostname + "/lpgp-server/check_signature.php";
+        chk_signature.href = "https://" + window.location.hostname + "/check_signature.php";
         chk_signature.classList.add("dropdown-item");
 
         local_opts.appendChild(chk_signature);
@@ -174,7 +174,7 @@ function setSignatureOpts(){
     else{
         var login_need = document.createElement("a");
         login_need.innerText = "Make login for check a signature";
-        login_need.href = "https://" + window.location.hostname +"/lpgp-server/login_frm.php";
+        login_need.href = "https://" + window.location.hostname +"/login_frm.php";
         login_need.classList.add("dropdown-item");
         local_opts.appendChild(login_need);
         delete(login_need);
@@ -192,15 +192,15 @@ function setClientsDrop(){
         optMy.classList.add("dropdown-item");
         optCh.classList.add("dropdown-item");
 
-        optAdd.href = "https://" + window.location.hostname + "/lpgp-server/cgi-actions/create-client.php";
+        optAdd.href = "https://" + window.location.hostname + "/cgi-actions/create-client.php";
         optAdd.innerText = "Create a Client";
         optAdd.id = "add-client";
 
-        optMy.href = "https://" + window.location.hostname + "/lpgp-server/cgi-actions/my-clients.php";
+        optMy.href = "https://" + window.location.hostname + "/cgi-actions/my-clients.php";
         optMy.innerText = "My clients";
         optMy.id = "my-clients";
 
-        optCh.href = "https://" + window.location.hostname + "/lpgp-server/cgi-actions/check-client.php";
+        optCh.href = "https://" + window.location.hostname + "/cgi-actions/check-client.php";
         optCh.innerText = "Check client authentication";
         optCh.id = "check-client";
 
@@ -212,7 +212,7 @@ function setClientsDrop(){
         var localTo = document.querySelector(".login-dropdown .dropdown-menu");
         var optCh = document.createElement("a");
 
-        optCh.href = "https://" + window.location.hostname + "/lpgp-server/cgi-actions/check-client.php";
+        optCh.href = "https://" + window.location.hostname + "/cgi-actions/check-client.php";
         optCh.classList.add("dropdown-item");
         optCh.innerText = "Check client authentication";
         optCh.id = "check-client";
@@ -222,12 +222,12 @@ function setClientsDrop(){
 }
 
 /**
- * 
- * @param {*} message 
+ *
+ * @param {*} message
  */
 function showError(message){
     /**
-     * 
+     *
      */
     var error_lbs = document.querySelector(".error-lb");
     error_lbs.innerHTML = message;
@@ -241,13 +241,13 @@ function hideError(){
 
 function getLinkedUserIcon(){
     var ls  = localStorage.getItem("user-icon").split("/");
-    return "https://" + window.location.hostname + "/lpgp-server/" + ls[ls.length - 2] + "/" + ls[ls.length - 1];
+    return "https://" + window.location.hostname + "/" + ls[ls.length - 2] + "/" + ls[ls.length - 1];
 }
 
 function setBtnSolutions(locale){
     var localeNode = document.querySelector(locale);
     var link = document.createElement("a");
-    link.href = "https://" + window.location.hostname + "/lpgp-server/solutions.html";
+    link.href = "https://" + window.location.hostname + "/solutions.html";
     link.id = "solutions";
     link.setAttribute("role", "button");
     link.classList.add("btn");

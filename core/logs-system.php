@@ -2,7 +2,7 @@
 namespace LogsSystem;
 use Exception;
 try{
-    require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Exceptions.php";
+    require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Exceptions.php";
 }
 catch(Exception $e){
     require_once "core/Exceptions.php";
@@ -12,17 +12,17 @@ use LogsErrors\InvalidFile;
 use LogsErrors\LogsFileNotLoaded;
 use LogsErrors\LogsFileAlreadyLoaded;
 
-if(!defined("DEFAULT_DB_LOGS"))    define("DEFAULT_DB_LOGS", $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/logs/database.log");
-if(!defined("DEFAULT_ERROR_LOGS")) define("DEFAULT_ERROR_LOGS", $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/logs/error.log");
-if(!defined("DEFAULT_FILES_LOG"))  define("DEFAULT_FILES_LOG", $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/logs/files.log");
+if(!defined("DEFAULT_DB_LOGS"))    define("DEFAULT_DB_LOGS", $_SERVER['DOCUMENT_ROOT'] . "/logs/database.log");
+if(!defined("DEFAULT_ERROR_LOGS")) define("DEFAULT_ERROR_LOGS", $_SERVER['DOCUMENT_ROOT'] . "/logs/error.log");
+if(!defined("DEFAULT_FILES_LOG"))  define("DEFAULT_FILES_LOG", $_SERVER['DOCUMENT_ROOT'] . "/logs/files.log");
 if(!defined("DTTM_FORMAT"))        define("DTTM_FORMAT", "YYYY-MM-dd HH:mm:ii");
 
 
 /**
  *   **Warning: That class was deprecated**
- * That class is a handler for the logs management at the system. 
+ * That class is a handler for the logs management at the system.
  * That can be used for develop other subclasses.
- * 
+ *
  * @var string|null $logs_file The logs file connected
  * @var bool $got_lfile If the class haves a logs file connected.
  * @var array|null $added_actions The actions added and not commited at the class
@@ -80,7 +80,7 @@ class Logger{
 
     /**
      * Starts the class with a new connection.
-     * 
+     *
      * @param string|null $lfile The logs file to open, if it's null then there's no connection, and it'll be a empty constructor.
      * @return void;
      */
@@ -94,7 +94,7 @@ class Logger{
 
     /**
      * Destrois the class and close any open logs file.
-     * 
+     *
      * @return void
      */
     final public function __destruct(){
@@ -169,7 +169,7 @@ class Logger{
 /**
  * That's a new class that we use instead the deprecated Logger class. That class have a very different formmating mode.
  * That means the same files used by the Logger class can't be used by that class and vice versa.
- * 
+ *
  * @var string|null $logsFile The logs file loaded by the class.
  * @var boolean $gotFile If the class got a logs file configured
  * @var string DELIMITER The default logs delimiter

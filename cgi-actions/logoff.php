@@ -1,10 +1,10 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
 use templateSystem\ErrorTemplate;
 if(session_status() == PHP_SESSION_NONE) session_start();
 
 if($_SESSION['user-logged'] == "false"){
-    $err = new ErrorTemplate($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/templates/500-error-internal.html", "There's no user logged!", __FILE__, 7, "<button class=\"default-btn btn darkble-btn\" onclick=\"window.location.replace('http://localhost/lpgp-server/')\">Back to the index</button>");
+    $err = new ErrorTemplate($_SERVER['DOCUMENT_ROOT'] . "/core/templates/500-error-internal.html", "There's no user logged!", __FILE__, 7, "<button class=\"default-btn btn darkble-btn\" onclick=\"window.location.replace('http://localhost/')\">Back to the index</button>");
     die($err->parseFile());
 }
 else{

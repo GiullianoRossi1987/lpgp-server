@@ -1,12 +1,12 @@
 <?php
 session_start();
 
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/js-handler.php";
 
 use Core\ProprietariesData;
 use Core\UsersData;
-use function JSHandler\sendUserLogged; 
+use function JSHandler\sendUserLogged;
 
 
 
@@ -24,7 +24,7 @@ else if($_POST['account-type'] == "proprietary"){
     sendUserLogged();
 }
 if($_SESSION['checked'] == "false"){
-     
+
     header("Location: check-email-stp1.php");
 
 }

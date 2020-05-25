@@ -1,7 +1,7 @@
 <?php
 if(session_status() == PHP_SESSION_NONE) session_start();
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/js-handler.php";
 
 use Core\ClientsData;
 
@@ -37,11 +37,11 @@ $obj_main = new ClientsData("giulliano_php", "");
 <body>
     <script>
         var show = false;
-        $(document).ready(function(){   
+        $(document).ready(function(){
             setAccountOpts();
             setSignatureOpts();
             applyToA();
-            if(show){ 
+            if(show){
                 $("#modelId").modal("show");
                 show = false;
             }
@@ -50,7 +50,7 @@ $obj_main = new ClientsData("giulliano_php", "");
         $(document).ready(function(){
             $(".contitle").css("opacity", "1");
             $(".headtitle").css("opacity", "1");
-        });	
+        });
     </script>
 <?php    if(isset($_POST['submit'])){
 	$isroot = $_POST['root_permissions'] == "root";
@@ -127,7 +127,7 @@ $obj_main = new ClientsData("giulliano_php", "");
                     </select>
                     <br>
                     <button class="btn btn-success btn-block" type="submit" name="submit">Create Client</button>
-                    
+
                     <!-- Modal -->
                     <div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
                         <div class="modal-dialog" role="document">
