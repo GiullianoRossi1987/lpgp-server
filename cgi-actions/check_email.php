@@ -69,9 +69,9 @@ sendUserLogged();
                     Help
                 </button>
                 <div class="dropdown-menu opts" aria-labelledby="help-opt">
-                    <a href="http://localhost/lpgp-server/docs/" class="dropdown-item">Documentation</a>
-                    <a href="http://localhost/lpgp-server/about.html" class="dropdown-item">About Us</a>
-                    <a href="http://localhost/lpgp-server/contact-us.html" class="dropdown-item">Contact Us</a>
+                    <a href="http://localhostdocs/" class="dropdown-item">Documentation</a>
+                    <a href="http://localhostabout.html" class="dropdown-item">About Us</a>
+                    <a href="http://localhostcontact-us.html" class="dropdown-item">Contact Us</a>
                 </div>
             </div>
 
@@ -95,7 +95,7 @@ if(array_key_exists('btn-resend', $_POST)){
         $prop_obj->sendCheckEmail($_SESSION['user']);
         
     }
-    echo "<h1>Email sended successfully!</h1>\n<button class=\"default-btn btn darkble-btn\" onclick=\"window.location.replace('https://localhost/lpgp-server/cgi-actions/check-email-stp1.php');\">Go back</button>";
+    echo "<h1>Email sended successfully!</h1>\n<button class=\"default-btn btn darkble-btn\" onclick=\"window.location.replace('https://localhostcgi-actions/check-email-stp1.php');\">Go back</button>";
 }
 else if(array_key_exists("bt-code", $_POST)){
     if($_SESSION['mode'] == "normie"){
@@ -106,7 +106,7 @@ else if(array_key_exists("bt-code", $_POST)){
         }
         else{
             echo "<script>showError(\"Invalid Code!\");</script>";
-            echo "<button class=\"darkble-btn btn default-btn\" onclick=\"window.location.replace('https://localhost/lpgp-server/cgi-actions/check-email-stp1.php');\">Try again!</button>";
+            echo "<button class=\"darkble-btn btn default-btn\" onclick=\"window.location.replace('https://localhostcgi-actions/check-email-stp1.php');\">Try again!</button>";
         }
     }
     else{
@@ -118,7 +118,7 @@ else if(array_key_exists("bt-code", $_POST)){
         else{
             echo "<script>showError(\"Invalid Code\");</script>";
             echo "<h1>Error</h1>";
-            echo "<button class=\"darkble-btn btn default-btn\" onclick=\"window.location.replace('https://localhost/lpgp-server/cgi-actions/check-email-stp1.php');\">Return</button>";
+            echo "<button class=\"darkble-btn btn default-btn\" onclick=\"window.location.replace('https://localhostcgi-actions/check-email-stp1.php');\">Return</button>";
         }
     }
 }

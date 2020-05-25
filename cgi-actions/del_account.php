@@ -29,7 +29,7 @@ if(isset($_GET['confirm'])){
         echo "<script>resetVals();</script>";
 	}
 	else{
-		echo "<script>window.location.replace(\"https://localhost/lpgp-server/cgi-actions/my_account.php\");</script>";
+		echo "<script>window.location.replace(\"https://localhostcgi-actions/my_account.php\");</script>";
 	}
 }
 ?>
@@ -146,9 +146,9 @@ if(isset($_GET['confirm'])){
                     Help
                 </button>
                 <div class="dropdown-menu opts" aria-labelledby="help-opt">
-                    <a href="http://localhost/lpgp-server/docs/" class="dropdown-item">Documentation</a>
-                    <a href="http://localhost/lpgp-server/about.html" class="dropdown-item">About Us</a>
-                    <a href="http://localhost/lpgp-server/contact-us.html" class="dropdown-item">Contact Us</a>
+                    <a href="http://localhostdocs/" class="dropdown-item">Documentation</a>
+                    <a href="http://localhostabout.html" class="dropdown-item">About Us</a>
+                    <a href="http://localhostcontact-us.html" class="dropdown-item">Contact Us</a>
                 </div>
             </div>
         </div>

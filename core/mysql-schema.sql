@@ -4,7 +4,7 @@
 create database if not exists LPGP_WEB;
 use LPGP_WEB;
 
-create table if no exists tb_users(
+create table if not exists tb_users(
     cd_user integer primary key auto_increment not null unique,
     nm_user varchar(100) not null unique,
     vl_email varchar(100) not null,
@@ -52,7 +52,7 @@ create table tb_signatures_prop_check_h(
     dt_reg timestamp default current_timestamp() not null,
     vl_code integer default 0 not null check(vl_code in (0, 1, 2, 3)),
     foreign key (id_prop) references tb_proprietareies(cd_proprietary),
-    foreign key (id_signature) references tb_signatures(cd_signature);
+    foreign key (id_signature) references tb_signatures(cd_signature)
 );
 
 create table tb_clients(

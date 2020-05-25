@@ -98,9 +98,9 @@ foreach($all as $clientData) $clls .= '<option value="' . $clientData['cd_client
                         Help
                     </button>
                     <div class="dropdown-menu opts" aria-labelledby="help-opt">
-                        <a href="http://localhost/lpgp-server/docs/" class="dropdown-item">Documentation</a>
-                        <a href="http://localhost/lpgp-server/about.html" class="dropdown-item">About Us</a>
-                        <a href="http://localhost/lpgp-server/contact-us.html" class="dropdown-item">Contact Us</a>
+                        <a href="http://localhostdocs/" class="dropdown-item">Documentation</a>
+                        <a href="http://localhostabout.html" class="dropdown-item">About Us</a>
+                        <a href="http://localhostcontact-us.html" class="dropdown-item">Contact Us</a>
                     </div>
                 </div>
             </div>

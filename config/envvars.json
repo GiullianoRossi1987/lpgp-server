@@ -1,0 +1,41 @@
+{
+    "apache": {
+        "virtual_host": "www.lpgpofficial.com",
+        "protocol": "https",
+        "port": 443
+    },
+    "mysqldb": {
+        "usr": "lpgpofficial",
+        "passwd": "lpgp_access",
+        "constant_users": {
+            "default_root": "client_root",
+            "default_rootp": "rootC",
+            "default_normal": "client_normal",
+            "default_normalp": "normalC"
+        },
+        "db": "LPGP_WEB",
+        "port": 3306,
+        "host": "127.0.0.1"
+    },
+    "logs": {
+        "default_error": "logs/error.log",
+        "default_talkback": "logs/access.log",
+        "connection": "logs/connection.log"
+    },
+    "file_control": {
+        "commnetary": "Those data will be used just in future",
+        "signatures": {
+            "downloads": "logs/control/sdown.dat",
+            "uploads": "logs/control/sup.dat"
+        },
+        "clients": {
+            "downloads": "logs/control/cdown.dat",
+            "uploads": "logs/control/cup.dat"
+        },
+        "delimiter": ";"
+    },
+    "socket_config": {
+        "max_listen": 5000,
+        "port": 1987
+    }
+}
