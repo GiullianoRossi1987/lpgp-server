@@ -1,15 +1,17 @@
 {
     "apache": {
-        "errorLog": "logs/error.log"
-        "virtualhost": "www.lpgpofficial.com",
-        "port": 443
+        "errorLog": "logs/error.log",
+        "virtualhost": "www.lpgpofficial.co",
+        "port": "443"
     },
     "mysql": {
         "sysuser": "lpgp_internal",
         "passwd": "lpgpofficial",
         "db": "LPGP_WEB",
         "ext_root": ["client_root", "croot"],
-        "ext_normal": ["client_normal", "cnormal"]
+        "ext_normal": ["client_normal", "cnormal"],
+        "sock_user": "lpgp_auth",
+        "sock_passwd": "lpgpofficial"
     },
     "sdk": [
             {
@@ -18,10 +20,5 @@
                 "Version": "alpha",
                 "Language": "python"
             }
-    ],
-    "logs": {
-        "clientLogs": "logs/access.log",
-        "databaseLogs": "logs/database.log",
-        "serverLogs": "logs/server.logs"
-    }
+    ]
 }
