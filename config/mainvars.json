@@ -1,0 +1,27 @@
+{
+    "apache": {
+        "errorLog": "logs/error.log"
+        "virtualhost": "www.lpgpofficial.com",
+        "port": 443
+    },
+    "mysql": {
+        "sysuser": "lpgp_internal",
+        "passwd": "lpgpofficial",
+        "db": "LPGP_WEB",
+        "ext_root": ["client_root", "croot"],
+        "ext_normal": ["client_normal", "cnormal"]
+    },
+    "sdk": [
+            {
+                "Name": "LPGP Python SDK",
+                "Link": "https://github.com/GiullianoRossi1987/lpgpython",
+                "Version": "alpha",
+                "Language": "python"
+            }
+    ],
+    "logs": {
+        "clientLogs": "logs/access.log",
+        "databaseLogs": "logs/database.log",
+        "serverLogs": "logs/server.logs"
+    }
+}
