@@ -61,12 +61,13 @@ use Configurations\ConfigManager;
 
 $gblConfig = new ConfigManager($_SERVER['DOCUMENT_ROOT'] . "/config/mainvars.json");
 
-define("DEFAULT_HOST", $gblConfig->confgi);
+define("DEFAULT_HOST", $gblConfig->getConfig()['apache']['virtualhost']);
 define("DEFAULT_DB", "LPGP_WEB");
 define("ROOT_VAR", $_SERVER['DOCUMENT_ROOT']);
 define("EMAIL_USING", "lpgp@gmail.com");
 define("DEFAULT_USER_ICON", $_SERVER['DOCUMENT_ROOT'] . "/media/user-icon.png");
 define("DEFAULT_DATETIME_F", "Y-m-d H:m:i");
+define("LPGP_CONF", $gblConfig->getConfig());
 
 
 // Clients constants
