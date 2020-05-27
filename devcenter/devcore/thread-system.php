@@ -1,8 +1,8 @@
 <?php
 namespace ThrearedServer{
-	require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/devcenter/devcore/exceptions.php";
-	require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/devcenter/devcore/dbapi.php";
-	require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/devcenter/devcore/server.php";
+	require_once $_SERVER['DOCUMENT_ROOT'] . "/devcenter/devcore/exceptions.php";
+	require_once $_SERVER['DOCUMENT_ROOT'] . "/devcenter/devcore/dbapi.php";
+	require_once $_SERVER['DOCUMENT_ROOT'] . "/devcenter/devcore/server.php";
 
 	if(!defined("MAX_LISTEN"))       define("MAX_LISTEN", 5000);
 	if(!defined("ROOT_CL_ACCESS"))   define("ROOT_CL_ACCESS", "client_root");

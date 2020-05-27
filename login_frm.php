@@ -6,8 +6,8 @@ use function JSHandler\sendUserLogged;
 use templateSystem\ErrorTemplate;
 
 if(isset($_SESSION['logged-user']) && $_SESSION['logged-user']){
-    $err = $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/templates/500-error-internal.html";
-    $tpl = new ErrorTemplate($err, "UNKNOWN ERROR: that page souldn't appear to a logged user!", "login_frm.php", null, "<a role=\"button\" class=\"default-btn-err btn\" href=\"https://localhost/lpgp-server\"></a>");
+    $err = $_SERVER['DOCUMENT_ROOT'] . "/core/templates/500-error-internal.html";
+    $tpl = new ErrorTemplate($err, "UNKNOWN ERROR: that page souldn't appear to a logged user!", "login_frm.php", null, "<a role=\"button\" class=\"default-btn-err btn\" href=\"https://localhost\"></a>");
     die($tpl->parseFile());
 }
 sendUserLogged();

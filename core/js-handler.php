@@ -78,8 +78,8 @@ function lsSignaturesMA(int $proprietary){
         $card .= "<h5 class=\"card-subtitle\">" . $sig_data['dt_creation'] . "</h5>\n";
         $card .= "</div> <div class=\"card-body\">";
         $card .= "<div class=\"card-text\">\n";
-        $card .= "<a href=\"https://localhost/lpgp-server/cgi-actions/get_my_signature.php?id=$cd\">Download <i class=\"fas fa-file-download\"></i></a>" . "<br><br>".
-                 "<a href=\"https://localhost/lpgp-server/cgi-actions/ch_signature_data.php?sig_id=$cd\">Configurations<i class=\"fas fa-cog\"></i></a>\n"
+        $card .= "<a href=\"https://localhost/cgi-actions/get_my_signature.php?id=$cd\">Download <i class=\"fas fa-file-download\"></i></a>" . "<br><br>".
+                 "<a href=\"https://localhost/cgi-actions/ch_signature_data.php?sig_id=$cd\">Configurations<i class=\"fas fa-cog\"></i></a>\n"
                 . "</div>\n</div>\n</div><br>";
         $all .= "\n$card\n";
     }

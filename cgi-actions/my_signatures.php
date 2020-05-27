@@ -146,7 +146,7 @@ $id = $prp->getPropID($_SESSION['user']);
             <div class="footer col-12" style="height: 150px; background-color: black; margin-top: 120%; position: relative; max-width: 100%; left: 0;">
                 <div class="social-options-grp">
                     <div class="social-option">
-                        <a href="https://github.com/GiullianoRossi1987/lpgp-server" target="_blanck" id="github" class="social-option-footer">
+                        <a href="https://github.com/GiullianoRossi1987" target="_blanck" id="github" class="social-option-footer">
                         <span><i class="fab fa-github"></i></span></a>
                     </div>
                     <div class="social-option-footer">

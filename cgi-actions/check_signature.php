@@ -191,7 +191,7 @@ else{
     <hr>
     <div class="container-fluid container-content" style="position: relative; margin-top: 10%;">
         <div class="row-main row">
-            <div class="col-7 clear-content" style="position: relative; margin-left: 21%;">
+            <div class="col-7 clear-content" style="position: relative; margin-left: 21%; margin-top: 10%;">
 				<?php
 					echo $domAdd;
 				?>
@@ -205,7 +205,7 @@ else{
             <div class="footer col-12" style="height: 150px; background-color: black; margin-top: 100%; position: relative; max-width: 100%; left: 0;">
                 <div class="social-options-grp">
                     <div class="social-option">
-                        <a href="https://github.com/GiullianoRossi1987/lpgp-server" target="_blanck" id="github" class="social-option-footer">
+                        <a href="https://github.com/GiullianoRossi1987" target="_blanck" id="github" class="social-option-footer">
                         <span><i class="fab fa-github"></i></span></a>
                     </div>
                     <div class="social-option-footer">

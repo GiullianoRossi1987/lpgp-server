@@ -113,7 +113,7 @@ else if(array_key_exists("bt-code", $_POST)){
         $prop = new ProprietariesData("giulliano_php", "");
         if($prop->authPropKey($_SESSION['user'], $_POST['code'])){
             $prop->setProprietaryChecked($_SESSION['user'], true);
-            echo "<script>window.location.replace(\"https://localhost/lpgp-server\");</script>";
+            echo "<script>window.location.replace(\"https://localhost\");</script>";
         }
         else{
             echo "<script>showError(\"Invalid Code\");</script>";
