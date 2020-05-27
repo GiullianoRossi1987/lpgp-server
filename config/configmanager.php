@@ -4,6 +4,10 @@ namespace Configurations{
     use Exception;
     if(!defined("CONFIG_FILE")) define("CONFIG_FILE", $_SERVER['DOCUMENT_ROOT'] . "/config/mainvars.json");
 
+    /**
+     * <Exception> Thrown when the configurations manager class try to load a configurations file
+     * but there's other configurations file loaded already
+     */
     class ConfigurationsLoaded extends Exception{
 
         public function __construct(int $code = 1){
@@ -11,6 +15,10 @@ namespace Configurations{
         }
     }
 
+    /**
+     * <Exception> Thrown when the configurations manager class don't have a confgurations
+     * file loaded, and a method requires it
+     */
     class ConfigurationsNotLoaded extends Exception{
 
         public function __construct(int $code = 1){
@@ -18,6 +26,11 @@ namespace Configurations{
         }
     }
 
+
+    /**
+     * <Exception> Thrown when the configurations manager class try to load a configurations
+     * file, but it ins't valid.
+     */
     class InvalidConfigurations extends Exception{
 
         public function __construct(string $error, int $code = 1){
@@ -203,7 +216,7 @@ namespace Configurations{
          * @param string $file The configurations file to load.
          */
         public function __construct(string $file){
-            if(is_null($this->configurationsFile)) throw new ConfigurationsLoaded();
+            if(!is_null($this->configurationsFile)) throw new ConfigurationsLoaded();
             if(!$this->checkConfig($file)) throw new InvalidConfigurations("Invalid configurations file", 1);
             $this->configurationsFile = $file;
             $this->config = json_decode(file_get_contents($file), true);
@@ -234,6 +247,42 @@ namespace Configurations{
                 $this->config = null;
             }
         }
-        
+
+        /**
+         * **Warning** To avoid a overflow on the localStorage, the quantity of
+         * options loaded was limited. Now the database variables aren't visible
+         * to the JavaScript localStorage.
+         *
+         * Dumps the configurations to the localStorage on the JavaScript system.
+         * Those configurations values'll be added to JavaScript using the folloing structure:
+         *
+         * 'apache_virtualhost': apache::virtualhost
+         * 'apache_port': apache::port
+         * 'apache_error_log': apache::errorLog
+         *
+         * 'sdks': sdks::(eachOne) # array
+         *
+         * @throws ConfigurationsNotLoaded If there's no configurations file loaded.
+         * @return void;
+         */
+        public function pushJS(){
+            if(is_null($this->configurationsFile)) throw new ConfigurationsNotLoaded();
+            $JS = "<script>\n";
+            foreach($this->config['apache'] as $apacheConfig => $apacheVl)
+                $JS .= "    localStorage.setItem(\"apache_$apacheConfig\", \"$apacheVl\");\n";
+            $jsonSdk = json_encode($this->config['sdk']);
+            $JS .= "    localStorage.setItem(\"sdks\", \"$jsonSdk\");\n</script>";
+            echo $JS;
+        }
+
+        /**
+         * Method to get the configurations content loaded.
+         * Just return the configuratins values.
+         * @throws ConfigurationsNotLoaded If there's no configurations file loaded
+         * @return array
+         */
+        public function getConfig(){
+            // return $this->config
+        }
     }
 }

@@ -136,6 +136,7 @@ $id = $prp->getPropID($_SESSION['user']);
         <div class="row-main row">
             <div class="col-7 clear-content" style="position: relative; margin-left: 21%; margin-top: 10%">
 				<?php echo lsSignaturesMA($id); ?>
+                <a href="create_signature.php" role="button" class="btn btn-block btn-success">Create a new signature</a>
             </div>
         </div>
     </div>

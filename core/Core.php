@@ -2,7 +2,8 @@
 namespace Core;
 use Exception;
 try{
-    require_once  $_SERVER['DOCUMENT_ROOT'] ."/core/Exceptions.php";
+    require_once  $_SERVER['DOCUMENT_ROOT'] . "/core/Exceptions.php";
+    require_once  $_SERVER['DOCUMENT_ROOT'] . "/config/configmanager.php";
 }
 catch(Exception $e){
     require_once "core/Exceptions.php";
@@ -56,7 +57,11 @@ use ClientsAccessExceptions\SuccessValueError;
 
 use ZipArchive;
 
-define("DEFAULT_HOST", "localhost");
+use Configurations\ConfigManager;
+
+$gblConfig = new ConfigManager(CONFIG_FILE);
+
+define("DEFAULT_HOST", $gblConfig->confgi);
 define("DEFAULT_DB", "LPGP_WEB");
 define("ROOT_VAR", $_SERVER['DOCUMENT_ROOT']);
 define("EMAIL_USING", "lpgp@gmail.com");
@@ -1539,7 +1544,8 @@ class PropCheckHistory extends DatabaseConnection{
      */
     public function getRegByProp(int $prop_ref){
         $this->checkNotConnected();
-        $qr = $this->connection->query("SELECT * FROM tb_signatures_prop_h WHERE id_prop = $prop_ref;");
+        $qr = $this->connection->query("SELECT * FROM tb_signatures_prop_check_h WHERE id_prop = $prop_ref;");
+        if($qr === false) print($this->connection->error);
         $results = array();
         while($row = $qr->fetch_array()) $results[] = $row;
         $qr->close();
@@ -1967,6 +1973,7 @@ class ClientsData extends DatabaseConnection{
         $this->checkNotConnected();
         $prp = $this->rtPropID($proprietary);
         $qr_all = $this->connection->query("SELECT * FROM tb_clients WHERE id_proprietary = $prp;");
+        if($qr_all === false) die($this->connection->error);
         $rt_arr = [];
         while($row = $qr_all->fetch_array()){
             $rt_arr[] = $row;
@@ -1987,6 +1994,7 @@ class ClientsData extends DatabaseConnection{
         if(!$this->ckClientEx($client)) throw new ClientNotFound("There's no client #$client.", 1);
         $qr_nm = $this->connection->query("SELECT nm_client FROM tb_clients WHERE cd_client = $client;")->fetch_array();
         $qr = $this->connection->query("SELECT COUNT(cd_access) accesses FROM tb_access WHERE id_client = $client;")->fetch_array();
+        if($qr_nm === false || $qr === false) die($this->connection->error);
         return [$client, $qr_nm['nm_client'], $qr['accesses']];
     }
 
@@ -2001,6 +2009,7 @@ class ClientsData extends DatabaseConnection{
         $this->checkNotConnected();
         if(!$this->ckClientEx($client)) throw new ClientNotFound("There's no client #$client", 1);
         $qr = $this->connection->query("SELECT * FROM tb_clients WHERE cd_client = $client;");
+        if($qr === false) die($this->connection->error);
         return $qr->fetch_array();
     }
 }

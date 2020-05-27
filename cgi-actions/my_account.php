@@ -1,7 +1,8 @@
-<?php 
+<?php
 if(session_status() == PHP_SESSION_NONE) session_start();
 require_once $_SERVER['DOCUMENT_ROOT'] . "/core/js-handler.php";
 require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
+
 
 use function JSHandler\lsSignaturesMA;
 use function JSHandler\sendUserLogged;
