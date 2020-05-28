@@ -1,8 +1,14 @@
 <?php
 require_once "core/js-handler.php";
+require_once "core/Core.php";
+require_once "config/configmanager.php";
 
 use function JSHandler\sendUserLogged;
 use function JSHandler\setCon1Links;
+use Configurations\ConfigManager;
+
+$gblConfig = new ConfigManager($_SERVER['DOCUMENT_ROOT'] . "/config/mainvars.json");
+if(!defined("LPGP_CONF")) define("LPGP_CONF", $gblConfig->getConfig());
 
 sendUserLogged();
 ?>

@@ -61,7 +61,7 @@ use Configurations\ConfigManager;
 
 $gblConfig = new ConfigManager($_SERVER['DOCUMENT_ROOT'] . "/config/mainvars.json");
 
-define("DEFAULT_HOST", $gblConfig->getConfig()['apache']['virtualhost']);
+define("DEFAULT_HOST", "127.0.0.1");
 define("DEFAULT_DB", "LPGP_WEB");
 define("ROOT_VAR", $_SERVER['DOCUMENT_ROOT']);
 define("EMAIL_USING", "lpgp@gmail.com");
@@ -609,6 +609,7 @@ class ProprietariesData extends DatabaseConnection{
         $this->checkNotConnected();
         if(!$this->checkProprietaryExists($proprietary)) throw new ProprietaryNotFound("There's no proprietary user '$proprietary'!", 1);
         $prop_data = $this->connection->query("SELECT vl_password FROM tb_proprietaries WHERE nm_proprietary = \"$proprietary\";")->fetch_array();
+        if($prop_data === false) throw new Exception($this->connection->error);
         $from_db = $encoded_password ? base64_decode($prop_data['vl_password']) : $prop_data['vl_password'];
         return $password == $from_db;
      }

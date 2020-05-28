@@ -282,7 +282,7 @@ namespace Configurations{
          * @return array
          */
         public function getConfig(){
-            // return $this->config
+            return $this->config;
         }
     }
 }
