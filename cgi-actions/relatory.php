@@ -4,16 +4,17 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
 
 use Core\UsersCheckHistory;
 use Core\PropCheckHistory;
+use const LPGP_CONF;
 
 $relatory_bd = "";
 
 if(isset($_GET['rel'])){
 	if($_SESSION['mode'] == "prop"){
-		$prp_c = new PropCheckHistory("giulliano_php", "");
+		$prp_c = new PropCheckHistory(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 		$relatory_bd = $prp_c->generateRelatory((int) base64_decode($_GET['rel']));
 	}
 	else{
-		$usr_c = new UsersCheckHistory("giulliano_php", "");
+		$usr_c = new UsersCheckHistory(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 		$relatory_bd = $usr_c->generateRelatory((int) base64_decode($_GET['rel']));
 	}
 }
@@ -88,11 +89,11 @@ if(isset($_GET['rel'])){
 				<?php
 					if(isset($_GET['rel'])){
                         if($_SESSION['mode'] == "prop"){
-                            $prp_c = new PropCheckHistory("giulliano_php", "");
+                            $prp_c = new PropCheckHistory(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
                             echo $prp_c->generateRelatory((int) $_GET['rel']);
                         }
                         else{
-                            $usr_c = new UsersCheckHistory("giulliano_php", "");
+                            $usr_c = new UsersCheckHistory(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
                             echo $usr_c->generateRelatory((int) $_GET['rel']);
                         }
                     }

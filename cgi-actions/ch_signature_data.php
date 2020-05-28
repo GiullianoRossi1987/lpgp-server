@@ -6,10 +6,11 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/core/js-handler.php";
 
 use Core\SignaturesData;
 use function JSHandler\sendUserLogged;
+use const LPGP_CONF;
 sendUserLogged();
 
 if(isset($_GET['sig_id'])){
-	$sig = new SignaturesData("giulliano_php", "");
+	$sig = new SignaturesData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 	$data = $sig->getSignatureData($_GET['sig_id']);
 	$select_vl = "<select name=\"code\" id=\"code-sel\">";
 	$opt = "<option value=\"" . $data['vl_code'] . "\" selected>" . $sig::CODES[$data['vl_code']] . "</option>";

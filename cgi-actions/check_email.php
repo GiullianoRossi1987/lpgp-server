@@ -6,6 +6,7 @@ if(session_status() == PHP_SESSION_NONE) session_start();
 use Core\UsersData;
 use Core\ProprietariesData;
 use function JSHandler\sendUserLogged;
+use const LPGP_CONF;
 
 sendUserLogged();
 ?>
@@ -87,11 +88,11 @@ sendUserLogged();
 
 if(array_key_exists('btn-resend', $_POST)){
     if($_SESSION['mode'] == "normie"){
-        $usr_obj = new UsersData("giulliano_php", "");
+        $usr_obj = new UsersData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
         $usr_obj->sendCheckEmail($_SESSION['user']);
     }
     if($_SESSION['mode'] == "prop"){
-        $prop_obj = new ProprietariesData("giulliano_php", "");
+        $prop_obj = new ProprietariesData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
         $prop_obj->sendCheckEmail($_SESSION['user']);
 
     }
@@ -99,7 +100,7 @@ if(array_key_exists('btn-resend', $_POST)){
 }
 else if(array_key_exists("bt-code", $_POST)){
     if($_SESSION['mode'] == "normie"){
-        $usr = new UsersData("giulliano_php", "");
+        $usr = new UsersData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
         if($usr->authUserKey($_SESSION['user'], $_POST['code'])){
             $usr->setUserChecked($_SESSION['user'], true);
             echo "<script>window.location.replace(\"https://localhost/\");</script>";
@@ -110,7 +111,7 @@ else if(array_key_exists("bt-code", $_POST)){
         }
     }
     else{
-        $prop = new ProprietariesData("giulliano_php", "");
+        $prop = new ProprietariesData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
         if($prop->authPropKey($_SESSION['user'], $_POST['code'])){
             $prop->setProprietaryChecked($_SESSION['user'], true);
             echo "<script>window.location.replace(\"https://localhost\");</script>";

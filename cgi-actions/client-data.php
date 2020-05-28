@@ -3,10 +3,11 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
 require_once $_SERVER['DOCUMENT_ROOT'] . "/core/js-handler.php";
 
 use Core\ClientsData;
+use const LPGP_CONF;
 
 if(isset($_GET['client'])){
 	$client = (int)base64_decode($_GET['client']);
-	$obj = new ClientsData("giulliano_php", "");
+	$obj = new ClientsData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 	$link = $obj->genConfigClient($client);
 }
 ?>

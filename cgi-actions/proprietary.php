@@ -8,9 +8,10 @@ use Core\ProprietariesData;
 use function JSHandler\lsExtSignatures;
 use function JSHandler\getImgPath;
 use function JSHandler\sendUserLogged;
+use const LPGP_CONF;
 
 sendUserLogged();  // Just for fixing a error that i don't know why is going on.
-$prp = new ProprietariesData("giulliano_php", "");
+$prp = new ProprietariesData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 if(isset($_GET['id'])) $data = $prp->getPropDataByID(base64_decode($_GET['id']));
 ?>
 <!DOCTYPE html>
@@ -114,7 +115,7 @@ if(isset($_GET['id'])) $data = $prp->getPropDataByID(base64_decode($_GET['id']))
                             ////////////////////////////////////////////////////////////////////////////////////////////////
                             $nm = $data['nm_proprietary'];
                             echo "<h1 class=\"section-title\">Signatures of $nm</h1><br>";
-                            $prp = new ProprietariesData("giulliano_php", "");
+                            $prp = new ProprietariesData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
                             echo lsExtSignatures($_GET['id']);
                         ?>
                         </div>

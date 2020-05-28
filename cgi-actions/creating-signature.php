@@ -3,8 +3,9 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
 
 use Core\SignaturesData;
 use templateSystem\ErrorTemplate;
+use const LPGP_CONF;
 
-$sig = new SignaturesData("giulliano_php", "");
+$sig = new SignaturesData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 try{
 	$sig->addSignature((int) $_POST['prop-id'], $_POST['password'], (int) $_POST['encoding']);
 }

@@ -1,11 +1,13 @@
-<?php 
+<?php
 require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
 require_once $_SERVER['DOCUMENT_ROOT'] . "/core/js-handler.php";
+
 use Core\SignaturesData;
 use function JSHandler\sendUserLogged;
+use const LPGP_CONF;
 
 sendUserLogged();
-$sign = new SignaturesData("giulliano_php", "");
+$sign = new SignaturesData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 ?>
 
 

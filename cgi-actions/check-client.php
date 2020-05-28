@@ -4,7 +4,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
 require_once $_SERVER['DOCUMENT_ROOT'] . "/core/js-handler.php";
 
 use function JSHandler\sendUserLogged;
-
+use const LPGP_CONF;
 sendUserLogged();
 ?>
 

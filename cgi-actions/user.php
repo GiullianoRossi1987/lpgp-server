@@ -7,9 +7,10 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/core/js-handler.php";
 use Core\UsersData;
 use function JSHandler\getImgPath;
 use function JSHandler\sendUserLogged;
+use const LPGP_CONF;
 
 sendUserLogged();  // Just for fixing a error that i don't know why is going on.
-$usr = new UsersData("giulliano_php", "");
+$usr = new UsersData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 if(isset($_GET['id'])) $data = $usr->getUserDataByID(base64_decode($_GET['id']));
 ?>
 <!DOCTYPE html>

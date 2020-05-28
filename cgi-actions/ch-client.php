@@ -3,10 +3,11 @@
 require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
 
 use Core\ClientsData;
+use const LPGP_CONF;
 
 if(isset($_GET['client'])){
 	$cl_id = base64_decode($_GET['client']);
-	$obj = new ClientsData("giulliano_php", "");
+	$obj = new ClientsData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 	$cl_dt = $obj->getClientData((int)$cl_id);
 
 	$name_ip = '<input type="text" name="client-name" id="cl-nm" class="form-control al" value="' . $cl_dt['nm_client'] .'">';

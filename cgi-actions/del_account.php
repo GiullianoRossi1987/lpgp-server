@@ -8,19 +8,20 @@ use Core\ProprietariesData;
 use Core\UsersData;
 use function JSHandler\sendUserLogged;
 use LogsSystem\SysLogger;
+use const LPGP_CONF;
 
 $log = new SysLogger($_SERVER['DOCUMENT_ROOT'] . "/logs/accounts.log");
 
 if(isset($_GET['confirm'])){
 	if($_GET['confirm'] == "y"){
 		if($_SESSION['mode'] == 'prop'){
-            $prp = new ProprietariesData("giulliano_php", "");
+            $prp = new ProprietariesData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
             $tt  = $_SESSION['user'];
 			$prp->delProprietary($_SESSION['user']);
             $log->addLog("Removed Proprietary $tt");
 		}
 		else{
-			$usr = new UsersData("giulliano_php", "");
+			$usr = new UsersData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 			$usr->deleteUser($_SESSION['user']);
         }
 		session_unset();

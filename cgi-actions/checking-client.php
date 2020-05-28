@@ -8,12 +8,13 @@ use Core\ClientsData;
 use ClientsExceptions\AuthenticationError;
 use function JSHandler\sendUserLogged;
 use function JSHandler\createClientAuthCard;
+use const LPGP_CONF;
 
 sendUserLogged();  // preventing bugs
 
 move_uploaded_file($_FILES['to-check']['tmp_name'][0], U_CLIENTS_CONF . $_FILES['to-check']['name'][0]);
 
-$obj = new ClientsData("giulliano_php", "");
+$obj = new ClientsData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 $mainData = $obj->getClientAuthData(U_CLIENTS_CONF . $_FILES['to-check']['name'][0]);
 $brute = $mainData['brute'];
 $bruteDataCon = '<div class="brutedata">' . "\n<ul>\n";

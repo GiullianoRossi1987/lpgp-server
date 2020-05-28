@@ -6,12 +6,13 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/core/js-handler.php";
 use Core\UsersData;
 use Core\ProprietariesData;
 use function JSHandler\sendUserLogged;
+use const LPGP_CONF;
 
 sendUserLogged(); // preventing the old bug with the localStorage.
 
 
 if($_SESSION['mode'] == "prop"){
-	$prp = new ProprietariesData("giulliano_php", "");
+	$prp = new ProprietariesData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 	if(isset($_POST['passwd']) && strlen($_POST['passwd']) > 0){
 		$prp->chProprietaryPasswd($_SESSION['user'], $_POST['passwd']);
 	}
@@ -30,7 +31,7 @@ if($_SESSION['mode'] == "prop"){
 	}
 }
 else{
-	$usr = new UsersData("giulliano_php", "");
+	$usr = new UsersData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 	if(isset($_POST['passwd']) && strlen($_POST['passwd']) > 0){
 		$usr->chUserPasswd($_SESSION['user'], $_POST['passwd']);
 	}

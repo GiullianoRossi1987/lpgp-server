@@ -4,8 +4,9 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
 require_once $_SERVER['DOCUMENT_ROOT'] . "/core/js-handler.php";
 
 use Core\ClientsData;
+use const LPGP_CONF;
 
-$obj_main = new ClientsData("giulliano_php", "");
+$obj_main = new ClientsData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 
 
 ?>

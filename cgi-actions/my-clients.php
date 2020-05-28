@@ -6,10 +6,11 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/core/js-handler.php";
 use function JSHandler\sendUserLogged;
 use function JSHandler\createClientCard;
 use Core\ClientsData;
+use const LPGP_CONF;
 
 sendUserLogged();  // preventing bugs
 
-$obj = new ClientsData("giulliano_php", "");
+$obj = new ClientsData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 $clients = $obj->getClientsByOwner($_SESSION['user']);
 
 $content = "";

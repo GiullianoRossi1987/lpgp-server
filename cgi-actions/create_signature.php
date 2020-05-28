@@ -4,7 +4,9 @@ if(session_status() == PHP_SESSION_NONE) session_start();
 require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
 
 use Core\ProprietariesData;
-$prp = new ProprietariesData("giulliano_php", "");
+use const LPGP_CONF;
+
+$prp = new ProprietariesData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 $id = $prp->getPropID($_SESSION['user']);
 $inpt = "<input type=\"hidden\" name=\"prop-id\" value=\"$id\">";
 ?>

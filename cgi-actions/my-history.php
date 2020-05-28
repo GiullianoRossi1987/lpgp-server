@@ -6,16 +6,17 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/core/js-handler.php";
 use Core\UsersCheckHistory;
 use Core\PropCheckHistory;
 use function JSHandler\sendUserLogged;
+use const LPGP_CONF;
 
 sendUserLogged();
 $body = "";
 
 if($_SESSION['mode'] == "prop"){
-	$prp_c = new PropCheckHistory("giulliano_php", "");
+	$prp_c = new PropCheckHistory(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 	$body = $prp_c->getPropHistory($_SESSION['user']);
 }
 else{
-	$usr_c = new UsersCheckHistory("giulliano_php", "");
+	$usr_c = new UsersCheckHistory(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 	$body = $usr_c->getUsrHistory($_SESSION['user']);
 }
 

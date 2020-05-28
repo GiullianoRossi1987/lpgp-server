@@ -8,6 +8,7 @@ use function JSHandler\sendUserLogged;
 use Core\ClientsData;
 use Core\ClientsAccessData;
 use Charts_Plots\AccessPlot;
+use const LPGP_CONF;
 
 sendUserLogged();  // preventing bugs
 $objClients = new AccessPlot("Client ");
@@ -31,7 +32,7 @@ else if(isset($_POST['changer'])){
     }
 }
 
-$clients = new ClientsData("giulliano_php", "");
+$clients = new ClientsData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 $all = $clients->getClientsByOwner($_SESSION['user']);
 $clls = "";
 

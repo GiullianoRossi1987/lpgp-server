@@ -6,17 +6,18 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/core/js-handler.php";
 use Core\UsersData;
 use Core\ProprietariesData;
 use function JSHandler\sendUserLogged;
+use const LPGP_CONF;
 
 sendUserLogged();
 $error_msg = "";
 $err = false;
 
 if($_SESSION['mode'] == "prop"){
-	$prp = new ProprietariesData("giulliano_php", "");
+	$prp = new ProprietariesData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 	$data = $prp->getPropData($_SESSION['user']);
 }
 else{
-	$usr = new UsersData("giulliano_php", "");
+	$usr = new UsersData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 	$data = $usr->getUserData($_SESSION['user']);
 }
 ?>

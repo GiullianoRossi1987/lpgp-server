@@ -5,13 +5,14 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/core/js-handler.php";
 
 use Core\SignaturesData;
 use function JSHandler\sendUserLogged;
+use const LPGP_CONF;
 sendUserLogged();
 
 if(isset($_POST['cancel-btn'])) echo "<script>window.location.replace(\"https://localhost/cgi-actions/my_account.php\");</script>";
 
 if(isset($_POST['rm-btn'])){
 	if(isset($_POST['sig_id'])){
-		$si = new SignaturesData("giulliano_php", "");
+		$si = new SignaturesData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 		$si->delSignature((int) $_POST['sig_id']);
 		echo "<script>window.location.replace(\"https://localhost/cgi-actions/my_account.php\");</script>";
 	}
@@ -19,7 +20,7 @@ if(isset($_POST['rm-btn'])){
 
 if(isset($_POST['save-btn'])){
 	if(isset($_POST['sig_id'])){
-		$sig = new SignaturesData("giulliano_php", "");
+		$sig = new SignaturesData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 		// checks the password field;
 		if(isset($_POST['passcode']) && strlen($_POST['passcode']) > 0){
 			$sig->chSignaturePassword((int) $_POST['sig_id'], (string) $_POST['passcode']);

@@ -1,20 +1,21 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
-// require_once $_SERVER['DOCUMENT_ROOT'] . "/core/js-handler.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/js-handler.php";
 
 use Core\ProprietariesData;
 use Core\UsersData;
+use const LPGP_CONF;
 
 if($_POST['account-mode'] == "normal"){
     // setting up the image to the server
     if(isset($_FILES)){
         move_uploaded_file($_FILES['img-user']['tmp_name'][0], $_SERVER['DOCUMENT_ROOT'] . "/u.images/" . $_FILES['img-user']['name'][0]);
 
-        $usr_obj = new UsersData("giulliano_php", "");
+        $usr_obj = new UsersData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
         $usr_obj->addUser($_POST['username'], $_POST['password1'], $_POST['email'], true,$_SERVER['DOCUMENT_ROOT'] . "/u.images/" . $_FILES['img-user']['name'][0]);
     }
     else{
-        $usr_obj = new UsersData("giulliano_php", "");
+        $usr_obj = new UsersData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
         $usr_obj->addUser($_POST['username'], $_POST['password1'], $_POST['email'], true,$_SERVER['DOCUMENT_ROOT'] . "/media/usr-icon.png");
     }
     $usr_obj->sendCheckEmail($_POST['username']);
@@ -22,11 +23,11 @@ if($_POST['account-mode'] == "normal"){
 else if($_POST['account-mode'] == "proprietary"){
     if(isset($_FILES)){
         move_uploaded_file($_FILES['img-user']['tmp_name'][0], $_SERVER['DOCUMENT_ROOT'] . "/u.images/" . $_FILES['img-user']['name'][0]);
-        $prop_obj = new ProprietariesData("giulliano_php", "");
+        $prop_obj = new ProprietariesData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
         $prop_obj->addProprietary($_POST['username'], $_POST['password1'], $_POST['email'], true, $_SERVER['DOCUMENT_ROOT'] . "/u.images/" . $_FILES['img-user']['name'][0]);
     }
     else{
-        $prop_obj = new ProprietariesData("giulliano_php", "");
+        $prop_obj = new ProprietariesData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
         $prop_obj->addProprietary($_POST['username'], $_POST['password1'], $_POST['email'], true, $_SERVER['DOCUMENT_ROOT'] . "/media/usr-icon.png");
     }
     $prop_obj->sendCheckEmail($_POST['username']);

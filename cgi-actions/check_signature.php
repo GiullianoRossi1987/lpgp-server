@@ -13,6 +13,8 @@ use Core\UsersCheckHistory;
 use Core\ProprietariesData;
 use Core\UsersData;
 
+use const LPGP_CONF;
+
 use SignaturesExceptions\InvalidSignatureFile;
 use SignaturesExceptions\SignatureAuthError;
 use SignaturesExceptions\SignatureFileNotFound;
@@ -22,8 +24,8 @@ use SignaturesExceptions\VersionError;
 sendUserLogged();   // Just preventing any error in the localStorage.
 $signature_img = "<img src=\"%path%\" alt=\"%alt%\">";
 $signature_msg = "";
-$prp_obj = new ProprietariesData("giulliano_php", "");
-$usr_obj = new UsersData("giulliano_php", "");
+$prp_obj = new ProprietariesData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
+$usr_obj = new UsersData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 $domAdd = "";
 
 // uploads the file
@@ -31,8 +33,8 @@ move_uploaded_file($_FILES['signature-ext']['tmp_name'][0], "../usignatures.d/" 
 
 
 if($_SESSION['mode'] == 'prop'){
-	$prp_c = new PropCheckHistory("giulliano_php", "");
-	$sig = new SignaturesData("giulliano_php", "");
+	$prp_c = new PropCheckHistory(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
+	$sig = new SignaturesData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
     $prop_id = $prp_obj->getPropID($_SESSION['user']);
 	$vl = false;
 	try{
@@ -77,8 +79,8 @@ if($_SESSION['mode'] == 'prop'){
 	}
 }
 else{
-	$usr_c = new UsersCheckHistory("giulliano_php", "");
-	$sig = new SignaturesData("giulliano_php", "");
+	$usr_c = new UsersCheckHistory(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
+	$sig = new SignaturesData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 	$usr_id = $usr_obj->getUserData($_SESSION['user'])['cd_user'];
 	$vl = false;
 	try{

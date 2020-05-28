@@ -3,11 +3,11 @@ if(session_status() == PHP_SESSION_NONE) session_start();
 require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
 require_once $_SERVER['DOCUMENT_ROOT'] . "/core/js-handler.php";
 
-
+use const LPGP_CONF;
 use Core\ProprietariesData;
 use function JSHandler\lsSignaturesMA;
 
-$prp = new ProprietariesData("giulliano_php", "");
+$prp = new ProprietariesData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 $id = $prp->getPropID($_SESSION['user']);
 ?>
 <!DOCTYPE html>
