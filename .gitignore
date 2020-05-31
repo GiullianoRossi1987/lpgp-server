@@ -13,3 +13,4 @@
 ./u.clients/tmp/*
 ./u.clients/*.zip
 ./config/apache.conf
+logs/error.log
