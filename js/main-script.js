@@ -155,10 +155,15 @@ function setSignatureOpts(){
         my_sign.innerText = "My Signatures";
         che_sig.innerText = "Check a Signature";
 <<<<<<< HEAD
+<<<<<<< HEAD
         create_signature.innerText = "Create a new Signature";
         my_sign.href = "https://" + window.location.hostname +"/lpgp-server/cgi-actions/my_signatures.php";
         che_sig.href = "https://" + window.location.hostname +"/lpgp-server/check_signature.php";
         create_signature.href = "https://" + window.location.hostname + "/lpgp-server/cgi-actions/create_signature.php";
+=======
+        my_sign.href = "https://" + window.location.hostname +"/cgi-actions/my_signatures.php";
+        che_sig.href = "https://" + window.location.hostname +"/check_signature.php";
+>>>>>>> datacore
 =======
         my_sign.href = "https://" + window.location.hostname +"/cgi-actions/my_signatures.php";
         che_sig.href = "https://" + window.location.hostname +"/check_signature.php";

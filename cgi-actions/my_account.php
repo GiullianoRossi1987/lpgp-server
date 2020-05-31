@@ -1,6 +1,9 @@
 <?php
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+>>>>>>> datacore
 =======
 >>>>>>> datacore
 if(session_status() == PHP_SESSION_NONE) session_start();
@@ -293,7 +296,11 @@ $usr = new UsersData(LPGP_CONFG['mysql']['sysuser'], LPGP_CONF['mysql']['passwd'
                 <div class="social-options-grp">
                     <div class="social-option">
 <<<<<<< HEAD
+<<<<<<< HEAD
                         <a href="https://github.com/GiullianoRossi1987/lpgp-server" target="_blanck" id="github" class="social-option-footer">
+=======
+                        <a href="https://github.com/GiullianoRossi1987" target="_blanck" id="github" class="social-option-footer">
+>>>>>>> datacore
 =======
                         <a href="https://github.com/GiullianoRossi1987" target="_blanck" id="github" class="social-option-footer">
 >>>>>>> datacore

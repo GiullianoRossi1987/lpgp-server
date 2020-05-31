@@ -1,7 +1,11 @@
 <?php
 if(session_status() == PHP_SESSION_NONE) session_start();
 <<<<<<< HEAD
+<<<<<<< HEAD
 require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
+=======
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/js-handler.php";
+>>>>>>> datacore
 =======
 require_once $_SERVER['DOCUMENT_ROOT'] . "/core/js-handler.php";
 >>>>>>> datacore
@@ -326,9 +330,12 @@ sendUserLogged(); // preventing bugs
                 <div class="social-options-grp">
                     <div class="social-option">
 <<<<<<< HEAD
+<<<<<<< HEAD
                         <a href="https://github.com/GiullianoRossi1987/lpgp-server" target="_blanck" id="github" class="social-option-footer">
                         <span><i class="fab fa-github"></i></span>Visit our Github
 =======
+=======
+>>>>>>> datacore
                         <a href="https://github.com/GiullianoRossi1987" target="_blanck" id="github" class="social-option-footer">
                         <span><i class="fab fa-github"></i></span>" alt="<github image>" width="50px" height="30px" data-toggle="tooltip" title="Visit our github" data-placement="bottom">Visit our github</a>
 >>>>>>> datacore
