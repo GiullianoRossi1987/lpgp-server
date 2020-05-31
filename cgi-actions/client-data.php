@@ -1,12 +1,13 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/js-handler.php";
 
 use Core\ClientsData;
+use const LPGP_CONF;
 
 if(isset($_GET['client'])){
 	$client = (int)base64_decode($_GET['client']);
-	$obj = new ClientsData("giulliano_php", "");
+	$obj = new ClientsData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 	$link = $obj->genConfigClient($client);
 }
 ?>
@@ -40,7 +41,7 @@ if(isset($_GET['client'])){
 
 <body>
 	<script>
-        $(document).ready(function(){   
+        $(document).ready(function(){
             setAccountOpts();
             setSignatureOpts();
             applyToA();
@@ -159,7 +160,7 @@ if(isset($_GET['client'])){
                            <h3>First thing: What's that file?</h3>
                            <hr>
                            <p>
-                               That ZIP file contains the configurations files to 
+                               That ZIP file contains the configurations files to
                                your client.
                                <br>
                                The file will have two files:
@@ -183,7 +184,7 @@ if(isset($_GET['client'])){
                                     </li>
                                 </ul>
                            </p>
-                       </li> 
+                       </li>
                        <li>
                            <h3>And how I use it?</h3>
                            <p>
@@ -223,7 +224,7 @@ if(isset($_GET['client'])){
             <div class="footer col-12">
                 <div class="social-options-grp">
                     <div class="social-option">
-                        <a href="https://github.com/GiullianoRossi1987/lpgp-server" target="_blanck" id="github" class="social-option-footer">
+                        <a href="https://github.com/GiullianoRossi1987" target="_blanck" id="github" class="social-option-footer">
                         <span><i class="fab fa-github"></i></span>Visit our github</a>
                     </div>
                     <div class="social-option-footer">

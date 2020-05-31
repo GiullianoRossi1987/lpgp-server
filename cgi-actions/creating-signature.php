@@ -1,10 +1,11 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
 
 use Core\SignaturesData;
 use templateSystem\ErrorTemplate;
+use const LPGP_CONF;
 
-$sig = new SignaturesData("giulliano_php", "");
+$sig = new SignaturesData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 try{
 	$sig->addSignature((int) $_POST['prop-id'], $_POST['password'], (int) $_POST['encoding']);
 }
@@ -39,7 +40,7 @@ catch(Exception $e){
 </style>
 <body>
     <script>
-        $(document).ready(function(){   
+        $(document).ready(function(){
             setAccountOpts(true);
             setSignatureOpts();
         });
@@ -132,8 +133,8 @@ catch(Exception $e){
         <div class="row-main row">
             <div class="col-7 clear-content" style="position: relative; margin-left: 21%; margin-top: 10% !important;">
 				<h1>Your signature was created successfully!</h1>
-                <a href="https://localhost/lpgp-server/cgi-actions/my_signatures.php" role="button" class="btn btn-lg bt-primary">See my signatures</a>
-				<a href="https://localhost/lpgp-server/index.php" role="button" class="btn btn-block btn-success">Get back to the home</a>
+                <a href="https://localhost/cgi-actions/my_signatures.php" role="button" class="btn btn-lg bt-primary">See my signatures</a>
+				<a href="https://localhost/index.php" role="button" class="btn btn-block btn-success">Get back to the home</a>
             </div>
         </div>
     </div>
@@ -143,7 +144,7 @@ catch(Exception $e){
             <div class="footer col-12" style="height: 150px; background-color: black; top: 190%; position: relative; max-width: 100%; left: 0;">
                 <div class="social-options-grp">
                     <div class="social-option">
-                        <a href="https://github.com/GiullianoRossi1987/lpgp-server" target="_blanck" id="github" class="social-option-footer">
+                        <a href="https://github.com/GiullianoRossi1987" target="_blanck" id="github" class="social-option-footer">
                         <span><i class="fab fa-github"></i></span></a>
                     </div>
                     <div class="social-option-footer">

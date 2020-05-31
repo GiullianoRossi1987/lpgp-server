@@ -12,3 +12,4 @@
 ./g.clients/tmp/*
 ./u.clients/tmp/*
 ./u.clients/*.zip
+./config/apache.conf

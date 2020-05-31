@@ -1,19 +1,20 @@
 <?php
 if(session_status() == PHP_SESSION_NONE) session_start();
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
 
 use Core\UsersCheckHistory;
 use Core\PropCheckHistory;
+use const LPGP_CONF;
 
 $relatory_bd = "";
 
 if(isset($_GET['rel'])){
 	if($_SESSION['mode'] == "prop"){
-		$prp_c = new PropCheckHistory("giulliano_php", "");
+		$prp_c = new PropCheckHistory(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 		$relatory_bd = $prp_c->generateRelatory((int) base64_decode($_GET['rel']));
 	}
 	else{
-		$usr_c = new UsersCheckHistory("giulliano_php", "");
+		$usr_c = new UsersCheckHistory(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 		$relatory_bd = $usr_c->generateRelatory((int) base64_decode($_GET['rel']));
 	}
 }
@@ -48,7 +49,7 @@ if(isset($_GET['rel'])){
 </style>
 <body>
     <script>
-        $(document).ready(function(){   
+        $(document).ready(function(){
             setAccountOpts(true);
             setSignatureOpts();
         });
@@ -72,9 +73,9 @@ if(isset($_GET['rel'])){
                     Help
                 </button>
                 <div class="dropdown-menu opts" aria-labelledby="help-opt">
-                    <a href="http://localhost/lpgp-server/docs/" class="dropdown-item">Documentation</a>
-                    <a href="http://localhost/lpgp-server/about.html" class="dropdown-item">About Us</a>
-                    <a href="http://localhost/lpgp-server/contact-us.html" class="dropdown-item">Contact Us</a>
+                    <a href="http://localhost/docs/" class="dropdown-item">Documentation</a>
+                    <a href="http://localhost/about.html" class="dropdown-item">About Us</a>
+                    <a href="http://localhost/contact-us.html" class="dropdown-item">Contact Us</a>
                 </div>
             </div>
         </div>
@@ -84,15 +85,15 @@ if(isset($_GET['rel'])){
     <hr>
     <div class="container-fluid container-content" style="position: relative; margin-top: 10%">
         <div class="row-main row">
-            <div class="col-7 clear-content" style="position: relative; margin-left: 21%;">
+            <div class="col-7 clear-content" style="position: relative; margin-left: 21%; margin-top: 10%;">
 				<?php
 					if(isset($_GET['rel'])){
                         if($_SESSION['mode'] == "prop"){
-                            $prp_c = new PropCheckHistory("giulliano_php", "");
+                            $prp_c = new PropCheckHistory(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
                             echo $prp_c->generateRelatory((int) $_GET['rel']);
                         }
                         else{
-                            $usr_c = new UsersCheckHistory("giulliano_php", "");
+                            $usr_c = new UsersCheckHistory(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
                             echo $usr_c->generateRelatory((int) $_GET['rel']);
                         }
                     }
@@ -108,7 +109,7 @@ if(isset($_GET['rel'])){
             <div class="footer col-12" style="height: 150px; background-color: black; margin-top: 190%; position: relative; max-width: 100%; left: 0;">
                 <div class="social-options-grp">
                     <div class="social-option">
-                        <a href="https://github.com/GiullianoRossi1987/lpgp-server" target="_blanck" id="github" class="social-option-footer">
+                        <a href="https://github.com/GiullianoRossi1987" target="_blanck" id="github" class="social-option-footer">
                         <span><i class="fab fa-github"></i></span></a>
                     </div>
                     <div class="social-option-footer">

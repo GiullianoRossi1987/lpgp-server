@@ -1,25 +1,26 @@
 <?php
 if(session_status() == PHP_SESSION_NONE) session_start();
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/js-handler.php";
 
 use Core\SignaturesData;
 use function JSHandler\sendUserLogged;
+use const LPGP_CONF;
 sendUserLogged();
 
-if(isset($_POST['cancel-btn'])) echo "<script>window.location.replace(\"https://localhost/lpgp-server/cgi-actions/my_account.php\");</script>";
+if(isset($_POST['cancel-btn'])) echo "<script>window.location.replace(\"https://localhost/cgi-actions/my_account.php\");</script>";
 
 if(isset($_POST['rm-btn'])){
 	if(isset($_POST['sig_id'])){
-		$si = new SignaturesData("giulliano_php", "");
+		$si = new SignaturesData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 		$si->delSignature((int) $_POST['sig_id']);
-		echo "<script>window.location.replace(\"https://localhost/lpgp-server/cgi-actions/my_account.php\");</script>";
+		echo "<script>window.location.replace(\"https://localhost/cgi-actions/my_account.php\");</script>";
 	}
 }
 
 if(isset($_POST['save-btn'])){
 	if(isset($_POST['sig_id'])){
-		$sig = new SignaturesData("giulliano_php", "");
+		$sig = new SignaturesData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 		// checks the password field;
 		if(isset($_POST['passcode']) && strlen($_POST['passcode']) > 0){
 			$sig->chSignaturePassword((int) $_POST['sig_id'], (string) $_POST['passcode']);
@@ -59,7 +60,7 @@ if(isset($_POST['save-btn'])){
 </style>
 <body>
     <script>
-        $(document).ready(function(){   
+        $(document).ready(function(){
             setAccountOpts(true);
             setSignatureOpts();
         });
@@ -125,9 +126,9 @@ if(isset($_POST['save-btn'])){
                             Help
                         </button>
                         <div class="dropdown-menu opts" aria-labelledby="help-opt">
-                            <a href="http://localhost/lpgp-server/docs/" class="dropdown-item">Documentation</a>
-                            <a href="http://localhost/lpgp-server/about.html" class="dropdown-item">About Us</a>
-                            <a href="http://localhost/lpgp-server/contact-us.html" class="dropdown-item">Contact Us</a>
+                            <a href="http://localhost/docs/" class="dropdown-item">Documentation</a>
+                            <a href="http://localhost/about.html" class="dropdown-item">About Us</a>
+                            <a href="http://localhost/contact-us.html" class="dropdown-item">Contact Us</a>
                         </div>
                     </div>
                 </div>
@@ -138,7 +139,7 @@ if(isset($_POST['save-btn'])){
     <hr>
     <div class="container-fluid container-content" style="position: relative;">
         <div class="row-main row">
-            <div class="col-7 clear-content" style="position: relative; margin-left: 21%;">
+            <div class="col-7 clear-content" style="position: relative; margin-left: 21%; margin-top: 10%;">
             </div>
 		</div>
 	</div>
@@ -148,7 +149,7 @@ if(isset($_POST['save-btn'])){
             <div class="footer col-12" style="height: 150px; background-color: black; margin-top: 190%; position: relative !important; max-width: 100%; left: 0;">
                 <div class="social-options-grp">
                     <div class="social-option">
-                        <a href="https://github.com/GiullianoRossi1987/lpgp-server" target="_blanck" id="github" class="social-option-footer">
+                        <a href="https://github.com/GiullianoRossi1987" target="_blanck" id="github" class="social-option-footer">
                         <span><i class="fab fa-github"></i></span></a>
                     </div>
                     <div class="social-option-footer">

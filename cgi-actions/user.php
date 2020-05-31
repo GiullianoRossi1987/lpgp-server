@@ -1,15 +1,16 @@
 <?php
 if(session_status() == PHP_SESSION_NONE) session_start();
 
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/js-handler.php";
 
 use Core\UsersData;
 use function JSHandler\getImgPath;
 use function JSHandler\sendUserLogged;
+use const LPGP_CONF;
 
-sendUserLogged();  // Just for fixing a error that i don't know why is going on. 
-$usr = new UsersData("giulliano_php", "");
+sendUserLogged();  // Just for fixing a error that i don't know why is going on.
+$usr = new UsersData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 if(isset($_GET['id'])) $data = $usr->getUserDataByID(base64_decode($_GET['id']));
 ?>
 <!DOCTYPE html>
@@ -39,7 +40,7 @@ if(isset($_GET['id'])) $data = $usr->getUserDataByID(base64_decode($_GET['id']))
 </style>
 <body>
     <script>
-        $(document).ready(function(){   
+        $(document).ready(function(){
             setAccountOpts(true);
             setSignatureOpts();
         });
@@ -81,21 +82,21 @@ if(isset($_GET['id'])) $data = $usr->getUserDataByID(base64_decode($_GET['id']))
     <hr>
     <div class="container-fluid container-content" style="position: relative;">
         <div class="row-main row">
-            <div class="col-7 clear-content" style="position: relative; margin-left: 21%;">
+            <div class="col-7 clear-content" style="position: relative; margin-left: 21%; margin-top: 10%;">
                 <div class="prop-main-data-container container">
 					<div class="data-row row">
 						<div class="col-12 prop-data">
                         <div class="container data-container">
                                 <div class="main-row row">
                                     <div class="img-cont">
-                                        <?php 
+                                        <?php
 											$img = getImgPath($data['vl_img'], true);
 											echo "<img src=\"$img\" alt=\"\" width=\"200px\" height=\"200px\">";
                                         ?>
                                     </div>
                                     <div class="col-6 data">
                                         <?php
-                                        
+
                                         echo "<h1 class=\"user-name\"> " . $data['nm_user'] . "</h1>\n";
                                         echo "<h4 class=\"mode\">Normal user</h4>\n";
                                         echo "<h4 class=\"email\">Email: " . $data['vl_email'] . "</h3>\n";
@@ -121,7 +122,7 @@ if(isset($_GET['id'])) $data = $usr->getUserDataByID(base64_decode($_GET['id']))
             <div class="footer col-12"  style="height: 150px; background-color: black; margin-top: 100%; position: relative; max-width: 100%; left: 0;">
                 <div class="social-options-grp">
                     <div class="social-option">
-                        <a href="https://github.com/GiullianoRossi1987/lpgp-server" target="_blanck" id="github" class="social-option-footer">
+                        <a href="https://github.com/GiullianoRossi1987" target="_blanck" id="github" class="social-option-footer">
                         <span><i class="fab fa-github"></i></span></a>
                     </div>
                     <div class="social-option-footer">

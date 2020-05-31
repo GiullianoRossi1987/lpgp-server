@@ -1,12 +1,17 @@
 <?php
+<<<<<<< HEAD
 
+=======
+>>>>>>> datacore
 if(session_status() == PHP_SESSION_NONE) session_start();
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/js-handler.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
+
 
 use function JSHandler\lsSignaturesMA;
 use function JSHandler\sendUserLogged;
 use const MAX_SIGC;
+use const LPGP_CONF;
 use function JSHandler\createClientCard;
 
 use Core\ProprietariesData;
@@ -18,8 +23,8 @@ use Core\ClientsAccessData;
 
 sendUserLogged(); // preventing bugs
 
-$prp = new ProprietariesData("giulliano_php", "");
-$usr = new UsersData("giulliano_php", "");
+$prp = new ProprietariesData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
+$usr = new UsersData(LPGP_CONFG['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 
 ?>
 <!DOCTYPE html>
@@ -81,9 +86,9 @@ $usr = new UsersData("giulliano_php", "");
                         Help
                     </button>
                     <div class="dropdown-menu opts" aria-labelledby="help-opt">
-                        <a href="http://localhost/lpgp-server/docs/" class="dropdown-item">Documentation</a>
-                        <a href="http://localhost/lpgp-server/about.html" class="dropdown-item">About Us</a>
-                        <a href="http://localhost/lpgp-server/contact-us.html" class="dropdown-item">Contact Us</a>
+                        <a href="http://localhost/docs/" class="dropdown-item">Documentation</a>
+                        <a href="http://localhost/about.html" class="dropdown-item">About Us</a>
+                        <a href="http://localhost/contact-us.html" class="dropdown-item">Contact Us</a>
                     </div>
                 </div>
             </div>
@@ -189,7 +194,7 @@ $usr = new UsersData("giulliano_php", "");
                                     // Signatures
                                     /////////////////////////////////////////////////////////////////////////////////////////////////
                                     if($_SESSION['mode'] == "prop"){
-                                        $prp = new ProprietariesData("giulliano_php", "");
+                                        $prp = new ProprietariesData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
                                         echo lsSignaturesMA($prp->getPropID($_SESSION['user']));
                                         echo "<br>\n<a href=\"create_signature.php\" role=\"button\" class=\"btn btn-block btn-success\">".
                                                     "Create a new signature <span><i class=\"fas fa-id-card\"></i></span>".
@@ -212,7 +217,7 @@ $usr = new UsersData("giulliano_php", "");
                                     // History
                                     ///////////////////////////////////////////////////////////////////////////////////////////////
                                     if($_SESSION['mode'] == "prop"){
-                                        $obj = new PropCheckHistory("giulliano_php", "");
+                                        $obj = new PropCheckHistory(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
                                         $hist = $obj->getPropHistory($_SESSION['user']);
                                         $hist_e = explode("<br>", $hist);
                                         for($i = 0; $i <= MAX_SIGC; $i++){
@@ -221,7 +226,7 @@ $usr = new UsersData("giulliano_php", "");
                                         }
                                     }
                                     else{
-                                        $obj = new UsersCheckHistory("giulliano_php", "");
+                                        $obj = new UsersCheckHistory(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
                                         $hist = $obj->getUsrHistory($_SESSION['user']);
                                         $hist_e = explode("<br>", $hist);
                                         for($i = 0; $i <= MAX_SIGC; $i++){
@@ -252,9 +257,9 @@ $usr = new UsersData("giulliano_php", "");
                                 <div class="collapse section" id="clients-section">
                                     <?php
                                     if($_SESSION['mode'] == "prop"){
-                                        $obj = new ClientsData("giulliano_php", "");
+                                        $obj = new ClientsData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
                                         $clients = $obj->getClientsByOwner($_SESSION['user']);
-                                        $hs = new ClientsAccessData("giulliano_php", "");
+                                        $hs = new ClientsAccessData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
                                         $dt = "";
                                         if(count($clients) == 0){
                                             echo "<h1>You don't have any clients yet!</h1>";
@@ -287,7 +292,11 @@ $usr = new UsersData("giulliano_php", "");
             <div class="footer col-12" style="height: 150px; background-color: black; margin-top: 100%; position: relative; max-width: 100% !important; margin-left: 0;">
                 <div class="social-options-grp">
                     <div class="social-option">
+<<<<<<< HEAD
                         <a href="https://github.com/GiullianoRossi1987/lpgp-server" target="_blanck" id="github" class="social-option-footer">
+=======
+                        <a href="https://github.com/GiullianoRossi1987" target="_blanck" id="github" class="social-option-footer">
+>>>>>>> datacore
                             <span><i class="fab fa-github"></i></span>
                             Visit our github!
                         </a>

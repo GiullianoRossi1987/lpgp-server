@@ -1,10 +1,10 @@
 <?php
 if(session_status() == PHP_SESSION_NONE) session_start();
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/js-handler.php";
 
 use function JSHandler\sendUserLogged;
-
+use const LPGP_CONF;
 sendUserLogged();
 ?>
 
@@ -34,7 +34,7 @@ sendUserLogged();
 </style>
 <body>
     <script>
-        $(document).ready(function(){   
+        $(document).ready(function(){
             setAccountOpts(true);
             setSignatureOpts();
             applyToA();
@@ -66,9 +66,9 @@ sendUserLogged();
                         Help
                     </button>
                     <div class="dropdown-menu opts" aria-labelledby="help-opt">
-                        <a href="http://localhost/lpgp-server/docs/" class="dropdown-item">Documentation</a>
-                        <a href="http://localhost/lpgp-server/about.html" class="dropdown-item">About Us</a>
-                        <a href="http://localhost/lpgp-server/contact-us.html" class="dropdown-item">Contact Us</a>
+                        <a href="http://localhost/docs/" class="dropdown-item">Documentation</a>
+                        <a href="http://localhost/about.html" class="dropdown-item">About Us</a>
+                        <a href="http://localhost/contact-us.html" class="dropdown-item">Contact Us</a>
                     </div>
                 </div>
             </div>
@@ -95,7 +95,7 @@ sendUserLogged();
             <div class="footer col-12" style="height: 150px; background-color: black; margin-top: 100%; position: relative; max-width: 100% !important; margin-left: 0;">
                 <div class="social-options-grp">
                     <div class="social-option">
-                        <a href="https://github.com/GiullianoRossi1987/lpgp-server" target="_blanck" id="github" class="social-option-footer">
+                        <a href="https://github.com/GiullianoRossi1987" target="_blanck" id="github" class="social-option-footer">
                         <span><i class="fab fa-github"></i></span></a>
                     </div>
                     <div class="social-option-footer">

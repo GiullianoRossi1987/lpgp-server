@@ -1,11 +1,12 @@
 <?php
 if(session_status() == PHP_SESSION_NONE) session_start();
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/js-handler.php";
 
 use Core\ClientsData;
+use const LPGP_CONF;
 
-$obj_main = new ClientsData("giulliano_php", "");
+$obj_main = new ClientsData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 
 
 ?>
@@ -37,11 +38,11 @@ $obj_main = new ClientsData("giulliano_php", "");
 <body>
     <script>
         var show = false;
-        $(document).ready(function(){   
+        $(document).ready(function(){
             setAccountOpts();
             setSignatureOpts();
             applyToA();
-            if(show){ 
+            if(show){
                 $("#modelId").modal("show");
                 show = false;
             }
@@ -50,7 +51,7 @@ $obj_main = new ClientsData("giulliano_php", "");
         $(document).ready(function(){
             $(".contitle").css("opacity", "1");
             $(".headtitle").css("opacity", "1");
-        });	
+        });
     </script>
 <?php    if(isset($_POST['submit'])){
 	$isroot = $_POST['root_permissions'] == "root";
@@ -127,7 +128,7 @@ $obj_main = new ClientsData("giulliano_php", "");
                     </select>
                     <br>
                     <button class="btn btn-success btn-block" type="submit" name="submit">Create Client</button>
-                    
+
                     <!-- Modal -->
                     <div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
                         <div class="modal-dialog" role="document">
@@ -157,7 +158,7 @@ $obj_main = new ClientsData("giulliano_php", "");
             <div class="footer col-12">
                 <div class="social-options-grp">
                     <div class="social-option">
-                        <a href="https://github.com/GiullianoRossi1987/lpgp-server" target="_blanck" id="github" class="social-option-footer">
+                        <a href="https://github.com/GiullianoRossi1987" target="_blanck" id="github" class="social-option-footer">
                         <span><i class="fab fa-github"></i></span>Visit our github</a>
                     </div>
                     <div class="social-option-footer">

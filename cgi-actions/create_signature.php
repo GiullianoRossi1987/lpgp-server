@@ -1,10 +1,12 @@
 <?php
 if(session_status() == PHP_SESSION_NONE) session_start();
 
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
 
 use Core\ProprietariesData;
-$prp = new ProprietariesData("giulliano_php", "");
+use const LPGP_CONF;
+
+$prp = new ProprietariesData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 $id = $prp->getPropID($_SESSION['user']);
 $inpt = "<input type=\"hidden\" name=\"prop-id\" value=\"$id\">";
 ?>
@@ -91,7 +93,7 @@ $inpt = "<input type=\"hidden\" name=\"prop-id\" value=\"$id\">";
     <hr>
     <div class="container-fluid container-content" style="position: relative; margin-top: 10%;">
         <div class="row-main row">
-            <div class="col-7 clear-content" style="position: relative; margin-left: 21%;">
+            <div class="col-7 clear-content" style="position: relative; margin-left: 21%; margin-top: 10%;">
                 <form action="./creating-signature.php" method="POST">
                     <label for="passcode" class="form-label">
                         <h1> Type the code</h1>
@@ -136,7 +138,7 @@ $inpt = "<input type=\"hidden\" name=\"prop-id\" value=\"$id\">";
             <div class="footer col-12" style="height: 150px; background-color: black; top: 190%; position: relative; max-width: 100%; left: 0;">
                 <div class="social-options-grp">
                     <div class="social-option">
-                        <a href="https://github.com/GiullianoRossi1987/lpgp-server" target="_blanck" id="github" class="social-option-footer">
+                        <a href="https://github.com/GiullianoRossi1987" target="_blanck" id="github" class="social-option-footer">
                         <span><i class="fab fa-github"></i></span></a>
                     </div>
                     <div class="social-option-footer">

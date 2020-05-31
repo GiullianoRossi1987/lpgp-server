@@ -1,8 +1,8 @@
 <?php
 if(session_status() == PHP_SESSION_NONE) session_start();
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Exceptions.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/js-handler.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Exceptions.php";
 
 
 use Core\SignaturesData;
@@ -13,6 +13,8 @@ use Core\UsersCheckHistory;
 use Core\ProprietariesData;
 use Core\UsersData;
 
+use const LPGP_CONF;
+
 use SignaturesExceptions\InvalidSignatureFile;
 use SignaturesExceptions\SignatureAuthError;
 use SignaturesExceptions\SignatureFileNotFound;
@@ -22,8 +24,8 @@ use SignaturesExceptions\VersionError;
 sendUserLogged();   // Just preventing any error in the localStorage.
 $signature_img = "<img src=\"%path%\" alt=\"%alt%\">";
 $signature_msg = "";
-$prp_obj = new ProprietariesData("giulliano_php", "");
-$usr_obj = new UsersData("giulliano_php", "");
+$prp_obj = new ProprietariesData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
+$usr_obj = new UsersData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 $domAdd = "";
 
 // uploads the file
@@ -31,8 +33,8 @@ move_uploaded_file($_FILES['signature-ext']['tmp_name'][0], "../usignatures.d/" 
 
 
 if($_SESSION['mode'] == 'prop'){
-	$prp_c = new PropCheckHistory("giulliano_php", "");
-	$sig = new SignaturesData("giulliano_php", "");
+	$prp_c = new PropCheckHistory(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
+	$sig = new SignaturesData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
     $prop_id = $prp_obj->getPropID($_SESSION['user']);
 	$vl = false;
 	try{
@@ -77,8 +79,8 @@ if($_SESSION['mode'] == 'prop'){
 	}
 }
 else{
-	$usr_c = new UsersCheckHistory("giulliano_php", "");
-	$sig = new SignaturesData("giulliano_php", "");
+	$usr_c = new UsersCheckHistory(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
+	$sig = new SignaturesData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 	$usr_id = $usr_obj->getUserData($_SESSION['user'])['cd_user'];
 	$vl = false;
 	try{
@@ -155,7 +157,7 @@ else{
 </style>
 <body>
     <script>
-        $(document).ready(function(){   
+        $(document).ready(function(){
             setAccountOpts(true);
             setSignatureOpts();
         });
@@ -179,9 +181,9 @@ else{
                     Help
                 </button>
                 <div class="dropdown-menu opts" aria-labelledby="help-opt">
-                    <a href="http://localhost/lpgp-server/docs/" class="dropdown-item">Documentation</a>
-                    <a href="http://localhost/lpgp-server/about.html" class="dropdown-item">About Us</a>
-                    <a href="http://localhost/lpgp-server/contact-us.html" class="dropdown-item">Contact Us</a>
+                    <a href="http://localhost/docs/" class="dropdown-item">Documentation</a>
+                    <a href="http://localhost/about.html" class="dropdown-item">About Us</a>
+                    <a href="http://localhost/contact-us.html" class="dropdown-item">Contact Us</a>
                 </div>
             </div>
         </div>
@@ -191,7 +193,7 @@ else{
     <hr>
     <div class="container-fluid container-content" style="position: relative; margin-top: 10%;">
         <div class="row-main row">
-            <div class="col-7 clear-content" style="position: relative; margin-left: 21%;">
+            <div class="col-7 clear-content" style="position: relative; margin-left: 21%; margin-top: 10%;">
 				<?php
 					echo $domAdd;
 				?>
@@ -205,7 +207,7 @@ else{
             <div class="footer col-12" style="height: 150px; background-color: black; margin-top: 100%; position: relative; max-width: 100%; left: 0;">
                 <div class="social-options-grp">
                     <div class="social-option">
-                        <a href="https://github.com/GiullianoRossi1987/lpgp-server" target="_blanck" id="github" class="social-option-footer">
+                        <a href="https://github.com/GiullianoRossi1987" target="_blanck" id="github" class="social-option-footer">
                         <span><i class="fab fa-github"></i></span></a>
                     </div>
                     <div class="social-option-footer">

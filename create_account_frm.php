@@ -1,6 +1,10 @@
 <?php
 if(session_status() == PHP_SESSION_NONE) session_start();
+<<<<<<< HEAD
 require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
+=======
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/js-handler.php";
+>>>>>>> datacore
 use function JSHandler\sendUserLogged;
 
 sendUserLogged(); // preventing bugs
@@ -156,9 +160,9 @@ sendUserLogged(); // preventing bugs
                     Help
                 </button>
                 <div class="dropdown-menu opts" aria-labelledby="help-opt">
-                    <a href="http://localhost/lpgp-server/docs/" class="dropdown-item">Documentation</a>
-                    <a href="http://localhost/lpgp-server/about.html" class="dropdown-item">About Us</a>
-                    <a href="http://localhost/lpgp-server/contact-us.html" class="dropdown-item">Contact Us</a>
+                    <a href="http://localhost/docs/" class="dropdown-item">Documentation</a>
+                    <a href="http://localhost/about.html" class="dropdown-item">About Us</a>
+                    <a href="http://localhost/contact-us.html" class="dropdown-item">Contact Us</a>
                 </div>
             </div>
         </div>
@@ -321,8 +325,13 @@ sendUserLogged(); // preventing bugs
             <div class="footer col-12" style="height: 150px; background-color: black; margin-top: 90%; max-width: 100%; left: 0;">
                 <div class="social-options-grp">
                     <div class="social-option">
+<<<<<<< HEAD
                         <a href="https://github.com/GiullianoRossi1987/lpgp-server" target="_blanck" id="github" class="social-option-footer">
                         <span><i class="fab fa-github"></i></span>Visit our Github
+=======
+                        <a href="https://github.com/GiullianoRossi1987" target="_blanck" id="github" class="social-option-footer">
+                        <span><i class="fab fa-github"></i></span>" alt="<github image>" width="50px" height="30px" data-toggle="tooltip" title="Visit our github" data-placement="bottom">Visit our github</a>
+>>>>>>> datacore
                     </div>
                     <div class="social-option-footer">
                         <a href="https://" target='_blanck' id="facebook">

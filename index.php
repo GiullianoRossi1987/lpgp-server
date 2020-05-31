@@ -1,8 +1,14 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
+require_once "core/js-handler.php";
+require_once "core/Core.php";
+require_once "config/configmanager.php";
 
 use function JSHandler\sendUserLogged;
 use function JSHandler\setCon1Links;
+use Configurations\ConfigManager;
+
+$gblConfig = new ConfigManager($_SERVER['DOCUMENT_ROOT'] . "/config/mainvars.json");
+if(!defined("LPGP_CONF")) define("LPGP_CONF", $gblConfig->getConfig());
 
 sendUserLogged();
 ?>
@@ -30,7 +36,10 @@ sendUserLogged();
     <link rel="shortcut icon" href="./media/new-logo.png" type="image/x-icon">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.2/popper.min.js"></script>
+<<<<<<< HEAD
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
+=======
+>>>>>>> datacore
 </head>
 <style>
 </style>
@@ -160,7 +169,7 @@ sendUserLogged();
             <div class="footer col-12">
                 <div class="social-options-grp">
                     <div class="social-option">
-                        <a href="https://github.com/GiullianoRossi1987/lpgp-server" target="_blanck" id="github" class="social-option-footer">
+                        <a href="https://github.com/GiullianoRossi1987" target="_blanck" id="github" class="social-option-footer">
                         <span><i class="fab fa-github"></i></span>Visit our github</a>
                     </div>
                     <div class="social-option-footer">

@@ -1,12 +1,13 @@
 <?php
 
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
 
 use Core\ClientsData;
+use const LPGP_CONF;
 
 if(isset($_GET['client'])){
 	$cl_id = base64_decode($_GET['client']);
-	$obj = new ClientsData("giulliano_php", "");
+	$obj = new ClientsData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 	$cl_dt = $obj->getClientData((int)$cl_id);
 
 	$name_ip = '<input type="text" name="client-name" id="cl-nm" class="form-control al" value="' . $cl_dt['nm_client'] .'">';
@@ -18,7 +19,7 @@ if(isset($_GET['client'])){
     else{
         $opts = '<option value="1">Root</option>' . '<option value="0" selected>Normal</option>';
     }
-	$sel .= $opts .  "</select>";	
+	$sel .= $opts .  "</select>";
 	$id = '<input type="hidden" name="client" value="' . $_GET['client'] . '">';
 	$del = '<a class="btn btn-lg btn-danger" role="button" type="button" href="rm-client.php?client=' . $_GET['client'] . '">Delete this client</a>';
 	$modalLink = '<a href="client-data.php?client=' . $_GET['client'] .'" role="button" class="btn btn-lg btn-success" type="button">
@@ -50,7 +51,7 @@ if(isset($_GET['client'])){
 <body>
 	<script>
         var show = false;
-        $(document).ready(function(){   
+        $(document).ready(function(){
             setAccountOpts(true);
             setSignatureOpts();
             applyToA();
@@ -65,13 +66,13 @@ if(isset($_GET['client'])){
         $(document).ready(function(){
             applyToA();
 		});
-		
+
 		$(document).on("change", ".al", function(){
 			$("#go").removeClass("disabled");
 		});
 
     </script>
-	<?php 
+	<?php
 	if(isset($_GET['alert'])){
 		echo "<script>show=true</script>";
 	}
@@ -95,9 +96,9 @@ if(isset($_GET['client'])){
                         Help
                     </button>
                     <div class="dropdown-menu opts" aria-labelledby="help-opt">
-                        <a href="http://localhost/lpgp-server/docs/" class="dropdown-item">Documentation</a>
-                        <a href="http://localhost/lpgp-server/about.html" class="dropdown-item">About Us</a>
-                        <a href="http://localhost/lpgp-server/contact-us.html" class="dropdown-item">Contact Us</a>
+                        <a href="http://localhost/docs/" class="dropdown-item">Documentation</a>
+                        <a href="http://localhost/about.html" class="dropdown-item">About Us</a>
+                        <a href="http://localhost/contact-us.html" class="dropdown-item">Contact Us</a>
                     </div>
                 </div>
             </div>
@@ -137,7 +138,7 @@ if(isset($_GET['client'])){
 								</span>
 								Require a new token
 							</a>
-							
+
 							<!-- Modal TOKEN -->
 							<div class="modal fade" id="modelToken" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
 								<div class="modal-dialog" role="document">
@@ -195,7 +196,7 @@ if(isset($_GET['client'])){
             <div class="footer col-12" style="height: 150px; background-color: black; margin-top: 100%; position: relative; max-width: 100% !important; margin-left: 0;">
                 <div class="social-options-grp">
                     <div class="social-option">
-                        <a href="https://github.com/GiullianoRossi1987/lpgp-server" target="_blanck" id="github" class="social-option-footer">
+                        <a href="https://github.com/GiullianoRossi1987" target="_blanck" id="github" class="social-option-footer">
                         <span><i class="fab fa-github"></i></span></a>
                     </div>
                     <div class="social-option-footer">

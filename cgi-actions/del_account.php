@@ -1,26 +1,27 @@
 <?php
 if(session_status() == PHP_SESSION_NONE) session_start();
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/Core.php";
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/js-handler.php";
-require_once $_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/core/logs-system.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/js-handler.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/logs-system.php";
 
 use Core\ProprietariesData;
 use Core\UsersData;
 use function JSHandler\sendUserLogged;
 use LogsSystem\SysLogger;
+use const LPGP_CONF;
 
-$log = new SysLogger($_SERVER['DOCUMENT_ROOT'] . "/lpgp-server/logs/accounts.log");
+$log = new SysLogger($_SERVER['DOCUMENT_ROOT'] . "/logs/accounts.log");
 
 if(isset($_GET['confirm'])){
 	if($_GET['confirm'] == "y"){
 		if($_SESSION['mode'] == 'prop'){
-            $prp = new ProprietariesData("giulliano_php", "");
+            $prp = new ProprietariesData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
             $tt  = $_SESSION['user'];
 			$prp->delProprietary($_SESSION['user']);
             $log->addLog("Removed Proprietary $tt");
 		}
 		else{
-			$usr = new UsersData("giulliano_php", "");
+			$usr = new UsersData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 			$usr->deleteUser($_SESSION['user']);
         }
 		session_unset();
@@ -29,7 +30,7 @@ if(isset($_GET['confirm'])){
         echo "<script>resetVals();</script>";
 	}
 	else{
-		echo "<script>window.location.replace(\"https://localhost/lpgp-server/cgi-actions/my_account.php\");</script>";
+		echo "<script>window.location.replace(\"https://localhost/cgi-actions/my_account.php\");</script>";
 	}
 }
 ?>
@@ -61,7 +62,7 @@ if(isset($_GET['confirm'])){
 </style>
 <body>
     <script>
-        $(document).ready(function(){   
+        $(document).ready(function(){
             setAccountOpts(true);
             setSignatureOpts();
         });
@@ -146,9 +147,9 @@ if(isset($_GET['confirm'])){
                     Help
                 </button>
                 <div class="dropdown-menu opts" aria-labelledby="help-opt">
-                    <a href="http://localhost/lpgp-server/docs/" class="dropdown-item">Documentation</a>
-                    <a href="http://localhost/lpgp-server/about.html" class="dropdown-item">About Us</a>
-                    <a href="http://localhost/lpgp-server/contact-us.html" class="dropdown-item">Contact Us</a>
+                    <a href="http://localhost/docs/" class="dropdown-item">Documentation</a>
+                    <a href="http://localhost/about.html" class="dropdown-item">About Us</a>
+                    <a href="http://localhost/contact-us.html" class="dropdown-item">Contact Us</a>
                 </div>
             </div>
         </div>
@@ -173,7 +174,7 @@ if(isset($_GET['confirm'])){
             <div class="footer col-12" style="height: 150px; background-color: black; top: 190%; position: relative; max-width: 100%; left: 0;">
                 <div class="social-options-grp">
                     <div class="social-option">
-                        <a href="https://github.com/GiullianoRossi1987/lpgp-server" target="_blanck" id="github" class="social-option-footer">
+                        <a href="https://github.com/GiullianoRossi1987" target="_blanck" id="github" class="social-option-footer">
                         <span><i class="fab fa-github"></i></span></a>
                     </div>
                     <div class="social-option-footer">
