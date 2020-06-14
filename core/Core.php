@@ -904,7 +904,7 @@ class SignaturesData extends DatabaseConnection{
      * @param int $signature_id The PK for search.
      * @return bool
      */
-    private function checkSignatureExists(int $signature_id){
+    public function checkSignatureExists(int $signature_id){
         $this->checkNotConnected();
         $qr = $this->connection->query("SELECT cd_signature FROM tb_signatures WHERE cd_signature = $signature_id;");
         while($row = $qr->fetch_array()){
@@ -982,11 +982,13 @@ class SignaturesData extends DatabaseConnection{
         $this->checkNotConnected();
         if(!$this->checkSignatureExists($signature_id)) throw new SignatureNotFound("There's no signature #$signature_id !", 1);
         $sig_dt = $this->connection->query("SELECT prop.nm_proprietary, sig.vl_password, sig.vl_code FROM tb_signatures as sig INNER JOIN tb_proprietaries AS prop ON prop.cd_proprietary = sig.id_proprietary WHERE sig.cd_signature = $signature_id;")->fetch_array();
+        // TODO: Implement the control download system.
         $content = array(
             "Date-Creation" => date(DEFAULT_DATETIME_F),
             "Proprietary" => $sig_dt['nm_proprietary'],
             "ID" => $signature_id,
             "Signature" => $sig_dt['vl_password']
+            // control download token index is "DToken"
         );
         $to_json = json_encode($content);
         $arr_ord = array();

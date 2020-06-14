@@ -61,7 +61,7 @@ namespace Control{
      */
     class SignatureReferenceError extends Exception{
 
-        public function __construct(mixed $ref){
+        public function __construct(int $ref){
             parent::__construct("Can't access signature reference \"$ref\".", 1);
         }
     }
@@ -72,7 +72,7 @@ namespace Control{
      */
     class UserReferenceError extends Exception{
 
-        public function __construct(mixed $ref){
+        public function __construct($ref){
             parent::__construct("Can't access the user reference \"$ref\"", 1);
         }
     }
@@ -83,8 +83,25 @@ namespace Control{
      */
     class ProprietaryReferenceError extends Exception{
 
-        public function __construct(mixed $ref){
+        public function __construct($ref){
             parent::__construct("Can't access the proprietary reference \"$ref\"", 1);
+        }
+    }
+
+
+    class DownloadTokenNotFound extends Exception{
+
+        public function __construct(string $token, int $mode = 0){
+            $rf = $mode == 0 ? "signature" : "client authentication file";
+            parent::__construct("Can't find the download token '$token' at the $rf control file", 1);
+        }
+    }
+
+    class DownloadTokenDuplicate extends Exception{
+
+        public function __construct(string $token, int $mode = 0){
+            $rf = $mode == 0 ? "signature" : "client authentication file";
+            parent::__construct("Duplicated download token reference '$token' at the $rf control file", 1);
         }
     }
 }
