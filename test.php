@@ -6,9 +6,6 @@ use Control\SignaturesController;
 use Control\SignatureReferenceError;
 
 $obj = new SignaturesController("core/control/control.json");
-try{
-    $obj->addUploadRecord(1, true);
-}
-catch(SignatureReferenceError $e){ echo "Signature error";}
-echo "ok";
+echo $obj->generateDownloadToken();
+echo "\nok";
 ?>

@@ -143,8 +143,7 @@ namespace Control{
          */
         private function checkDownloadTokenExists(string $token): bool{
             if(!$this->gotControl) throw new ControlFileNotFound();
-            $bufferR = $this->$bufferedR;  // buffer representation, to avoid changing the content
-            foreach($bufferR[SignaturesController::DEFAULT_DOWNLOAD_INDEX] as $record){
+            foreach($this->bufferedR[SignaturesController::DEFAULT_DOWNLOAD_INDEX] as $record){
                 if($record['dtk'] == $token) return true;
             }
             unset($bufferR);
@@ -163,7 +162,7 @@ namespace Control{
         public function generateDownloadToken(): string{
             if(!$this->gotControl) throw new ControlFileNotFound();
             do{
-                $rand = (string)bin2hex(random_byte(8));
+                $rand = (string)bin2hex(random_bytes(8));
             }while($this->checkDownloadTokenExists($rand));
             return $rand;
         }
@@ -227,7 +226,7 @@ namespace Control{
             $sigObj = new SignaturesData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
             if(!$sigObj->checkSignatureExists($signature)) throw new SignatureReferenceError($signature);
             unset($sigObj);
-            foreach($this->bufferedR[DEFAULT_DOWNLOAD_INDEX] as $record){
+            foreach($this->bufferedR[SignaturesController::DEFAULT_DOWNLOAD_INDEX] as $record){
                 if($record['signature'] == $signature && $record['dtk'] == $token && $record['timestamp'] == $timestamp)
                     return true;
             }
@@ -274,7 +273,7 @@ namespace Control{
         public function searchUploadsByTime(string $timestamp): array{
             if(!$this->gotControl) throw new ControlFileNotFound();
             $results = array();
-            foreach($this->bufferedR[DEFAULT_UPLOAD_INDEX] as $record){
+            foreach($this->bufferedR[SignaturesController::DEFAULT_UPLOAD_INDEX] as $record){
                 if($record['timestamp'] == $timestamp) array_push($results, $record);
             }
             return $results;
@@ -297,7 +296,7 @@ namespace Control{
                 unset($sigObj);
             }
             $results = array();
-            foreach($this->bufferedR[DEFAULT_UPLOAD_INDEX] as $urecord){
+            foreach($this->bufferedR[SignaturesController::DEFAULT_UPLOAD_INDEX] as $urecord){
                 if($urecord['signature'] == $signature) array_push($results, $urecord);
             }
             return $results;
@@ -314,7 +313,7 @@ namespace Control{
         public function searchDownloadsByTime(string $timestamp): array{
             if(!$this->gotControl) throw new ControlFileNotFound();
             $results = array();
-            foreach($this->bufferedR[DEFAULT_DOWNLOAD_INDEX] as $record){
+            foreach($this->bufferedR[SignaturesController::DEFAULT_DOWNLOAD_INDEX] as $record){
                 if($record['timestamp'] == $timestamp) array_push($results, $record);
             }
             return $results;
@@ -337,7 +336,7 @@ namespace Control{
                 unset($sigObj);
             }
             $results = array();
-            foreach($this->bufferedR[DEFAULT_DOWNLOAD_INDEX] as $drecord){
+            foreach($this->bufferedR[SignaturesController::DEFAULT_DOWNLOAD_INDEX] as $drecord){
                 if($urecord['signature'] == $signature) array_push($results, $drecord);
             }
             return $results;
@@ -375,9 +374,247 @@ namespace Control{
             foreach($this->bufferedR[DEFAULT_UPLOAD_INDEX] as $drecord){
                 if(!$sigObj->checkSignatureExists((int)$drecord['signature']))
                     array_splice($this->bufferedR[DEFAULT_UPLOAD_INDEX], $counter);
-                else $counter++;
+                $counter++;
             }
             return;
+        }
+    }
+
+    /**
+     * Client authentication file controller, it manages the uploaded and downloaded
+     * client files
+     *
+     * @var string DEFAULT_UPLOAD_INDEX The default named index of the uploaded
+     *                                  client files at the control array
+     * @var string DEFAULT_DOWNLOAD_INDEX The default named index of the downloaded
+     *                                    client files at the cotnrol array
+     * @var string DEFAULT_FILE_TOKEN_INDEX The named index of the download token
+     *                                      in the client authentication files.
+     */
+    class ClientsController extends BaseController{
+        const DEFAULT_UPLOAD_INDEX     = "cuploads";
+        const DEFAULT_DONWLOAD_INDEX   = "cdownloads";
+        const DEFAULT_FILE_TOKEN_INDEX = "cdtk";
+
+        /**
+         * Checks if a download token is already in use at the clients download
+         * recorder.
+         *
+         * @param string $token The token to search in the records.
+         * @throws ControlFileNotFound If there's no control file loaded.
+         * @return bool
+         */
+        private function checkDownloadTokenExists(string $token): bool{
+            if(!$this->gotControl) throw new ControlFileNotFound();
+            foreach($this->bufferedR[ClientsController::DEFAULT_DOWNLOAD_INDEX] as $record){
+                if($record['dtk'] == $token) return true;
+            }
+            return false;
+        }
+
+        /**
+         * Generates a new download token for the clients authentication file re
+         * cords.
+         *
+         * @throws ControlFileNotFound if there's no control file loaded.
+         * @return string
+         */
+        public function generateDownloadToken(): string{
+            if(!$this->gotControl) throw new ControlFileNotFound();
+            do{
+                $tk = (string)bin2hex(random_bytes(8));
+            }while($this->checkDownloadTokenExists($tk));
+            return $tk;
+        }
+
+        /**
+         * Adds a new upload record to the buffer, and eventually commits the
+         * changes to the control file.
+         *
+         * @param integer $clientPk The client database identifier.
+         * @param boolean $autoCommit If the method will write the changes
+         *                            after adding the record.
+         * @throws ControlFileNotFound If the control file isn't loaded yet.
+         * @throws ClientReferenceError If the client identifier isn't valid
+         * @return void
+         */
+        public function addUploadRecord(int $clientPk, bool $autoCommit = false){
+            if(!$this->gotControl) throw new ControlFileNotFound();
+            $clObj = new ClientsData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
+            if(!$clObj->checkClientExists($clientPk)) throw new ClientReferenceError();
+            $mainData = array("client" => $clientPk, "timestamp" => date("Y-m-d H:i:s"));
+            array_push($this->bufferedR[ClientsController::DEFAULT_UPLOAD_INDEX], $mainData);
+            if($autoCommit) $this->commitB();
+            unset($mainData);
+            unset($clObj);
+        }
+
+        /**
+         * Adds a new download record to the buffer, and eventually commits the
+         * changes to the control file. In that case you must have a token generated
+         * by the method ClientsController::generateDownloadToken, it doesn't
+         * generate the download token.
+         *
+         * @param integer $clientPk The client primary key reference from the
+         *                          main database.
+         * @param string $token The download token to use.
+         * @param boolean $autoCommit If the method will commit the changes to the
+         *                            control file.
+         * @throws ControlFileNotFound If there's no control file loaded.
+         * @throws ClientReferenceError If the client primary key isn't valid
+         * @throws DownloadTokenDuplicate If the download token received is already
+         *                                in use.
+         * @return void
+         */
+        public function addDownloadRecord(int $clientPk, string $token, bool $autoCommit = false){
+            if(!$this->gotControl) throw new ControlFileNotFound();
+            $clObj = new ClientsData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
+            if(!$clObj->checkClientExists($clientPk)) throw new ClientReferenceError($clientPk);
+            if($this->checkDownloadTokenExists($token)) throw new DownloadTokenDuplicate($token, 1);
+            unset($clObj);
+            $downloadData = array("client" => $clientPk, "token" => $token, "timestamp" => date("Y-m-d H:i:s"));
+            array_push($this->bufferedR[ClientsController::DEFAULT_DOWNLOAD_INDEX], $downloadData);
+            unset($downloadData);
+        }
+
+        /**
+         * Removes the records with invalid or corrupted data from the download control
+         * records. If a client in any record doesn't exist any more in the database,
+         * the record will be deleted.
+         *
+         * @throws ControlFileNotFound If the control file isn't loaded
+         * @return void
+         */
+        public function cleanDownloadRecords(){
+            if(!$this->gotControl) throw new ControlFileNotFound();
+            $clObj = new ClientsData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
+            $rc = 0;
+            foreach($this->bufferedR[ClientsController::DEFAULT_DOWNLOAD_INDEX] as $record){
+                if(!$clObj->checkClientExists((int)$record['client']))
+                    array_splice($this->bufferedR[ClientsController::DEFAULT_DOWNLOAD_INDEX], $rc);
+                $rc++;
+            }
+        }
+
+        /**
+         * Removes the records with invalid or corrupted data from the uploads control
+         * records. If a client in any record doesn't exist any more in the database,
+         * the record will be deleted.
+         *
+         * @throws ControlFileNotFound If the control file isn't loaded
+         * @return void
+         */
+        public function cleanUploadRecords(){
+            if(!$this->gotControl) throw new ControlFileNotFound();
+            $clObj = new ClientsData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
+            $rc = 0;
+            foreach($this->bufferedR[ClientsController::DEFAULT_DOWNLOAD_INDEX] as $record){
+                if(!$clObj->checkClientExists((int)$record['client']))
+                    array_splice($this->bufferedR[ClientsController::DEFAULT_DOWNLOAD_INDEX], $rc);
+                $rc++;
+            }
+        }
+
+        /**
+         * Reads the upload control records, searching for a record with the
+         * specified timestamp value.
+         *
+         * @param string $timestamp The timestamp value to search
+         * @throws ControlFileNotFound If there's no control file loaded.
+         * @return array
+         */
+        public function searchUploadsByTime(string $timestamp): array{
+            if(!$this->gotControl) throw new ControlFileNotFound();
+            $results = [];
+            foreach($this->bufferedR[ClientsController::DEFAULT_UPLOAD_INDEX] as $record){
+                if($record['timestamp'] == $timestamp) $results[] = $record;
+            }
+            return $results;
+        }
+
+        /**
+         * Reads the download control records, searching for a record with the
+         * specified timestamp value.
+         *
+         * @param string $timestamp The timestamp value to search
+         * @throws ControlFileNotFound If there's no control file loaded.
+         * @return array
+         */
+        public function searchDownloadsByTime(string $timestamp): bool{
+            if(!$this->gotControl) throw new ControlFileNotFound();
+            $results = [];
+            foreach($this->bufferedR[ClientsController::DEFAULT_DOWNLOAD_INDEX] as $record){
+                if($record['timestamp'] == $timestamp) $results[] = $record;
+            }
+            return $results;
+        }
+
+        /**
+         * Searches in the upload control records for all the downloads of a
+         * specific client.
+         *
+         * @param integer $clientPk The client primary key reference to search
+         * @throws ControlFileNotFound If there's no control file loaded
+         * @throws ClientReferenceError If the client primary key isn't valid
+         * @return array
+         */
+        public function searchUploadsByClient(int $clientPk): array{
+            if(!$this->gotControl) throw new ControlFileNotFound();
+            $clObj = new ClientsData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
+            if(!$clObj->checkClientExists($clientPk)) throw new ClientReferenceError($clientPk);
+            unset($clObj);
+            $results = [];
+            foreach($this->bufferedR[ClientsController::DEFAULT_DOWNLOAD_INDEX] as $record){
+                if($record['client'] == $clientPk) $results[] = $record;
+            }
+            return $results;
+        }
+
+        /**
+         * Checks if the received data of a client download record exists and it's valid
+         * or not. To be valid all the received data might exists all in a record.
+         *
+         * @param integer $clientPk The client primary key using
+         * @param string $token The download token to search
+         * @param string $timestamp When the client authentication file were downloaded.
+         * @throws ControlFileNotFound If there's no control file loaded yet.
+         * @throws ClientReferenceError If the referred client doesn't exist.
+         * @throws DownloadTokenNotFound If the download token using isn't valid.
+         * @return boolean
+         */
+        public function authDownloadData(int $clientPk, string $token, string $timestamp): bool{
+            if(!$this->gotControl) throw new ControlFileNotFound();
+            $clObj = new ClientsData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
+            if(!$clObj->checkClientExists($clientPk)) throw new ClientReferenceError($clientPk);
+            if(!$this->checkDownloadTokenExists($token)) throw new DownloadTokenNotFound($token, 1);
+            unset($clObj);
+            foreach($this->bufferedR[ClientsController::DEFAULT_DOWNLOAD_INDEX] as $record){
+                if($record['client'] == $clientPk && $record['token'] == $token && $record['timestamp'] == $timestamp)
+                    return true;
+            }
+            return false;
+        }
+
+        /**
+         * Authenticates the client authentication file data, getting the date of the
+         * file download, the download token in the file, and the client to authenticate
+         *
+         * @param string $filename The file name of the client authentication file at the uclients
+         *                         dir.
+         * @throws ControlFileNotFound If there's no control file loaded yet.
+         * @throws ClientReferenceError If the referred client doesn't exist.
+         * @throws DownloadTokenNotFound If the download token using isn't valid.
+         * @return boolean
+         */
+        public function authDownloadFile(string $filename): bool{
+            if(!$this->gotControl) throw new ControlFileNotFound();
+            // decodes the file
+            $raw_content = file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/u.clients/$filename");
+            $exp = explode(SignaturesData::DELIMITER, $raw_content);
+            $notnum_content = "";
+            foreach($exp as $aschar) $notnum_content .= chr((int)$aschar);
+            $pureData = json_decode($notnum_content, true);
+            return $this->authDownloadData($pureData['Client'], $pureData[ClientsController::DEFAULT_FILE_TOKEN_INDEX], $pureData['Dt']);
         }
     }
 }

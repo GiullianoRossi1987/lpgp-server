@@ -384,3 +384,29 @@
 [Sun Jun 14 10:55:16.791451 2020] [php7:warn] [pid 918] [client 127.0.0.1:47220] PHP Warning:  file_put_contents(/home/giulliano/lpgp-server/config/mainvars.json): failed to open stream: Permission denied in /home/giulliano/lpgp-server/config/configmanager.php on line 234
 [Sun Jun 14 10:56:47.392476 2020] [php7:warn] [pid 921] [client 127.0.0.1:47294] PHP Warning:  file_put_contents(/home/giulliano/lpgp-server/config/mainvars.json): failed to open stream: Permission denied in /home/giulliano/lpgp-server/config/configmanager.php on line 234
 [Sun Jun 14 10:57:27.191417 2020] [php7:warn] [pid 922] [client 127.0.0.1:47302] PHP Warning:  file_put_contents(/home/giulliano/lpgp-server/config/mainvars.json): failed to open stream: Permission denied in /home/giulliano/lpgp-server/config/configmanager.php on line 234
+[Sun Jun 14 17:14:55.559127 2020] [php7:error] [pid 3189] [client 127.0.0.1:48764] PHP Fatal error:  Uncaught Error: Call to undefined function Control\\random_byte() in /home/giulliano/lpgp-server/core/control/controllers.php:166\nStack trace:\n#0 /home/giulliano/lpgp-server/test.php(9): Control\\SignaturesController->generateDownloadToken()\n#1 {main}\n  thrown in /home/giulliano/lpgp-server/core/control/controllers.php on line 166
+[Sun Jun 14 17:15:45.739466 2020] [php7:notice] [pid 918] [client 127.0.0.1:48798] PHP Notice:  Undefined variable: bufferedR in /home/giulliano/lpgp-server/core/control/controllers.php on line 146
+[Sun Jun 14 17:15:45.739632 2020] [php7:notice] [pid 918] [client 127.0.0.1:48798] PHP Notice:  Undefined property: Control\\SignaturesController::$ in /home/giulliano/lpgp-server/core/control/controllers.php on line 146
+[Sun Jun 14 17:15:45.739678 2020] [php7:warn] [pid 918] [client 127.0.0.1:48798] PHP Warning:  Invalid argument supplied for foreach() in /home/giulliano/lpgp-server/core/control/controllers.php on line 147
+[Sun Jun 14 17:15:45.740046 2020] [php7:warn] [pid 918] [client 127.0.0.1:48798] PHP Warning:  file_put_contents(/home/giulliano/lpgp-server/config/mainvars.json): failed to open stream: Permission denied in /home/giulliano/lpgp-server/config/configmanager.php on line 234
+[Sun Jun 14 17:16:03.433491 2020] [php7:notice] [pid 920] [client 127.0.0.1:48800] PHP Notice:  Undefined variable: bufferedR in /home/giulliano/lpgp-server/core/control/controllers.php on line 146
+[Sun Jun 14 17:16:03.433557 2020] [php7:notice] [pid 920] [client 127.0.0.1:48800] PHP Notice:  Undefined property: Control\\SignaturesController::$ in /home/giulliano/lpgp-server/core/control/controllers.php on line 146
+[Sun Jun 14 17:16:03.433589 2020] [php7:warn] [pid 920] [client 127.0.0.1:48800] PHP Warning:  Invalid argument supplied for foreach() in /home/giulliano/lpgp-server/core/control/controllers.php on line 147
+[Sun Jun 14 17:16:03.433659 2020] [php7:warn] [pid 920] [client 127.0.0.1:48800] PHP Warning:  file_put_contents(/home/giulliano/lpgp-server/config/mainvars.json): failed to open stream: Permission denied in /home/giulliano/lpgp-server/config/configmanager.php on line 234
+[Sun Jun 14 17:17:13.227513 2020] [php7:warn] [pid 921] [client 127.0.0.1:48808] PHP Warning:  file_put_contents(/home/giulliano/lpgp-server/config/mainvars.json): failed to open stream: Permission denied in /home/giulliano/lpgp-server/config/configmanager.php on line 234
+[Sun Jun 14 22:26:20.458578 2020] [ssl:warn] [pid 745] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Sun Jun 14 22:26:20.518712 2020] [ssl:warn] [pid 745] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Sun Jun 14 22:26:21.141510 2020] [ssl:warn] [pid 844] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Sun Jun 14 22:26:21.141564 2020] [ssl:warn] [pid 844] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Mon Jun 15 12:08:29.308749 2020] [ssl:warn] [pid 780] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Mon Jun 15 12:08:29.342508 2020] [ssl:warn] [pid 780] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Mon Jun 15 12:08:30.221259 2020] [ssl:warn] [pid 905] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Mon Jun 15 12:08:30.221277 2020] [ssl:warn] [pid 905] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Tue Jun 16 08:02:41.019979 2020] [ssl:warn] [pid 767] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Tue Jun 16 08:02:41.174746 2020] [ssl:warn] [pid 767] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Tue Jun 16 08:02:41.697187 2020] [ssl:warn] [pid 899] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Tue Jun 16 08:02:41.697212 2020] [ssl:warn] [pid 899] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Tue Jun 16 16:17:18.475478 2020] [ssl:warn] [pid 726] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Tue Jun 16 16:17:18.528459 2020] [ssl:warn] [pid 726] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Tue Jun 16 16:17:19.185634 2020] [ssl:warn] [pid 848] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Tue Jun 16 16:17:19.185697 2020] [ssl:warn] [pid 848] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name

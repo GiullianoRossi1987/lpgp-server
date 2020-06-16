@@ -1693,6 +1693,24 @@ class ClientsData extends DatabaseConnection{
     }
 
     /**
+     * Checks if a reference of a client exists or not, it's just the ckClientEx
+     * with public access and two types of references.
+     *
+     * @param string|integer $reference The client reference, it can be the client name
+     *                                  (string), or the PK (int)
+     * @return boolean
+     */
+    public function checkClientExists($reference): bool{
+        $this->checkNotConnected();
+        if(is_int($reference))
+            $qr = $this->connection->query("SELECT COUNT(cd_client) FROM tb_clients WHERE cd_client = $reference;");
+        else if(is_string($reference))
+            $qr = $this->connection->query("SELECT COUNT(cd_client) FROM tb_clients WHERE nm_client = \"$reference\";");
+        else return null;
+        return $qr->fetch_array()[0] > 0;
+    }
+
+    /**
      * That method check if a proprietary primary key reference exists in the tb_proprietaries
      *
      * @param integer $reference The primary key reference to check.
