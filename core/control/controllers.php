@@ -393,7 +393,7 @@ namespace Control{
      */
     class ClientsController extends BaseController{
         const DEFAULT_UPLOAD_INDEX     = "cuploads";
-        const DEFAULT_DONWLOAD_INDEX   = "cdownloads";
+        const DEFAULT_DOWNLOAD_INDEX   = "cdownloads";
         const DEFAULT_FILE_TOKEN_INDEX = "cdtk";
 
         /**

@@ -4,8 +4,9 @@ require_once "core/control/exceptions.php";
 use Control\BaseController;
 use Control\SignaturesController;
 use Control\SignatureReferenceError;
+use Control\ClientsController;
 
-$obj = new SignaturesController("core/control/control.json");
+$obj = new ClientsController("core/control/control.json");
 echo $obj->generateDownloadToken();
-echo "\nok";
+
 ?>
