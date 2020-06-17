@@ -69,7 +69,7 @@ define("DEFAULT_DB", "LPGP_WEB");
 define("ROOT_VAR", $_SERVER['DOCUMENT_ROOT']);
 define("EMAIL_USING", "lpgp@gmail.com");
 define("DEFAULT_USER_ICON", $_SERVER['DOCUMENT_ROOT'] . "/media/user-icon.png");
-define("DEFAULT_DATETIME_F", "Y-m-d H:m:i");
+define("DEFAULT_DATETIME_F", "Y-m-d H:i:s");
 define("LPGP_CONF", $gblConfig->getConfig());
 define("CONTROL_FILE", $_SERVER['DOCUMENT_ROOT'] . "/core/control/control.json");
 
@@ -1501,7 +1501,7 @@ class PropCheckHistory extends DatabaseConnection{
      */
     private function checkHisExists(int $reg_ref){
         $this->checkNotConnected();
-        $qr_raw = $this->connection->query("SELECT cd_reg FROM tb_signatures_prop_h WHERE cd_reg = $reg_ref;");
+        $qr_raw = $this->connection->query("SELECT cd_reg FROM tb_signatures_prop_check_h WHERE cd_reg = $reg_ref;");
         while($row = $qr_raw->fetch_array()){
             if($row['cd_reg'] == $reg_ref) return true;
         }
@@ -1527,8 +1527,10 @@ class PropCheckHistory extends DatabaseConnection{
         if($success == 0 && is_null($error_code)) throw new PropInvalidCode(0, 1);
         // end checking
         $vl = is_null($error_code) ? 0 : (int) $error_code;
-        $qr_add = $this->connection->query("INSERT INTO tb_signatures_prop_h (id_prop, id_signature, vl_valid, vl_code) VALUES ($id_prop, $id_sign, $success, $vl);");
-        $qr_id = $this->connection->query("SELECT MAX(cd_reg) FROM tb_signatures_prop_h;");
+        $qr_add = $this->connection->query("INSERT INTO tb_signatures_prop_check_h (id_prop, id_signature, vl_valid, vl_code) VALUES ($id_prop, $id_sign, $success, $vl);");
+        $qr_id = $this->connection->query("SELECT MAX(cd_reg) FROM tb_signatures_prop_check_h;");
+        echo $this->connection->error;
+        if($qr_id === false) echo $this->connection->error;
         $id = (int) $qr_id->fetch_array()[0];
         unset($qr_add);
         unset($qr_id);
@@ -1544,7 +1546,7 @@ class PropCheckHistory extends DatabaseConnection{
      */
     public function getRegBySig(int $sig_ref){
         $this->checkNotConnected();
-        $qr = $this->connection->query("SELECT * FROM tb_signatures_prop_h WHERE id_signature = $sig_ref;");
+        $qr = $this->connection->query("SELECT * FROM tb_signatures_prop_check_h WHERE id_signature = $sig_ref;");
         $results = array();
         while($row = $qr->fetch_array()) $results[] = $row;
         $qr->close();
@@ -1575,7 +1577,7 @@ class PropCheckHistory extends DatabaseConnection{
     public function generateRelatory(int $reg_ref){
         $this->checkNotConnected();
         if(!$this->checkHisExists($reg_ref = $reg_ref)) throw new PropRegisterNotFound("There's no register #$reg_ref", 1);
-        $reg_data = $this->connection->query("SELECT * FROM tb_signatures_prop_h WHERE cd_reg = $reg_ref;")->fetch_array();
+        $reg_data = $this->connection->query("SELECT * FROM tb_signatures_prop_check_h WHERE cd_reg = $reg_ref;")->fetch_array();
         $error_msg = "";
         $extra_cls = $reg_data['vl_code'] == 0 ? "" : "error-msg";
         $extra_card_cls = $reg_data['vl_code'] == 0 ? "valid-card" : "invalid-card";
@@ -1791,7 +1793,7 @@ class ClientsData extends DatabaseConnection{
         foreach($exp as $char) $encoded_ar[] = (string)ord($char);
         $encoded = implode(self::DELIMITER, $encoded_ar);
         file_put_contents($files, $encoded);
-        $controller->addDownloadRecord($client_pk_ref, $tk, $json_au['Dt']);
+        $controller->addDownloadRecord($client_pk_ref, $tk, $json_aut['Dt']);
         unset($controller);
         $file_n = str_replace("/var/www/html", "", $files);
         return $this->passHTML($file_n);

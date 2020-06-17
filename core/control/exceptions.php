@@ -50,7 +50,7 @@ namespace Control{
      */
     class ClientReferenceError extends Exception{
 
-        public function __construct(mixed $ref){
+        public function __construct($ref){
             parent::__construct("Can't access the client reference \"$ref\"", 1);
         }
     }

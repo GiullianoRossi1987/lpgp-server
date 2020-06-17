@@ -9,6 +9,7 @@ namespace Control{
     use Core\ProprietariesData;
     use Core\ClientsData;
     use const LPGP_CONF;
+    use Exception;
 
     /**
      * That class have the basic operations and structures to all the control files,
@@ -49,7 +50,7 @@ namespace Control{
                 return;
             }
             catch(Exception $e){
-                throw new ControlFileUnreachable();
+                throw new ControlFileUnreachable("Can't access file", $controlFile);
             }
         }
 
@@ -247,7 +248,7 @@ namespace Control{
         public function authDownloadFile(string $fileName): bool{
             if(!$this->gotControl) throw new ControlFileNotFound();
             // decode the main file encoding
-            $content = file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/u.signatures.d/$fileName");
+            $content = file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/usignatures.d/$fileName");
             $exp = explode(SignaturesData::DELIMITER, $content);
             $asciiNone = "";
             foreach($exp as $char) $asciiNone .= chr((int)$char);
@@ -257,7 +258,10 @@ namespace Control{
                 $token = (string)$jsonParsed['DToken'];
                 $timestamp = (string)$jsonParsed['Date-Creation'];
             }
-            catch(Exception $e) {return false;}
+            catch(Exception $e) {
+                echo $e->getMessage();
+                return false;
+            }
             // if no errors with the indexes
             return $this->authDownloadData($signature, $token, $timestamp);
         }
@@ -337,7 +341,7 @@ namespace Control{
             }
             $results = array();
             foreach($this->bufferedR[SignaturesController::DEFAULT_DOWNLOAD_INDEX] as $drecord){
-                if($urecord['signature'] == $signature) array_push($results, $drecord);
+                if($drecord['signature'] == $signature) array_push($results, $drecord);
             }
             return $results;
         }
@@ -353,9 +357,9 @@ namespace Control{
             if(!$this->gotControl) throw new ControlFileNotFound();
             $sigObj = new SignaturesData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
             $counter = 0;
-            foreach($this->bufferedR[DEFAULT_DOWNLOAD_INDEX] as $drecord){
+            foreach($this->bufferedR[SignaturesController::DEFAULT_DOWNLOAD_INDEX] as $drecord){
                 if(!$sigObj->checkSignatureExists((int)$drecord['signature']))
-                    array_splice($this->bufferedR[DEFAULT_DOWNLOAD_INDEX], $counter);
+                    array_splice($this->bufferedR[SignaturesController::DEFAULT_DOWNLOAD_INDEX], $counter);
                 else $counter++;
             }
             return;
@@ -371,9 +375,9 @@ namespace Control{
             if(!$this->gotControl) throw new ControlFileNotFound();
             $sigObj = new SignaturesData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
             $counter = 0;
-            foreach($this->bufferedR[DEFAULT_UPLOAD_INDEX] as $drecord){
+            foreach($this->bufferedR[SignaturesController::DEFAULT_UPLOAD_INDEX] as $drecord){
                 if(!$sigObj->checkSignatureExists((int)$drecord['signature']))
-                    array_splice($this->bufferedR[DEFAULT_UPLOAD_INDEX], $counter);
+                    array_splice($this->bufferedR[SignaturesController::DEFAULT_UPLOAD_INDEX], $counter);
                 $counter++;
             }
             return;
@@ -441,7 +445,7 @@ namespace Control{
         public function addUploadRecord(int $clientPk, bool $autoCommit = false){
             if(!$this->gotControl) throw new ControlFileNotFound();
             $clObj = new ClientsData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
-            if(!$clObj->checkClientExists($clientPk)) throw new ClientReferenceError();
+            if(!$clObj->checkClientExists($clientPk)) throw new ClientReferenceError($clientPk);
             $mainData = array("client" => $clientPk, "timestamp" => date("Y-m-d H:i:s"));
             array_push($this->bufferedR[ClientsController::DEFAULT_UPLOAD_INDEX], $mainData);
             if($autoCommit) $this->commitB();
@@ -540,7 +544,7 @@ namespace Control{
          * @throws ControlFileNotFound If there's no control file loaded.
          * @return array
          */
-        public function searchDownloadsByTime(string $timestamp): bool{
+        public function searchDownloadsByTime(string $timestamp): array{
             if(!$this->gotControl) throw new ControlFileNotFound();
             $results = [];
             foreach($this->bufferedR[ClientsController::DEFAULT_DOWNLOAD_INDEX] as $record){

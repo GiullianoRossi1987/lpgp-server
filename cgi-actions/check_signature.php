@@ -35,7 +35,9 @@ move_uploaded_file($_FILES['signature-ext']['tmp_name'][0], "../usignatures.d/" 
 if($_SESSION['mode'] == 'prop'){
 	$prp_c = new PropCheckHistory(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 	$sig = new SignaturesData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
-    $prop_id = $prp_obj->getPropID($_SESSION['user']);
+	$prop_id = $prp_obj->getPropID($_SESSION['user']);
+	$data = $sig->getSignatureFData("../usignatures.d/".$_FILES['signature-ext']['name'][0]);
+	$rp1 = "";
 	$vl = false;
 	try{
 		if($sig->checkSignatureFile("../usignatures.d/".$_FILES['signature-ext']['name'][0])){
@@ -45,6 +47,9 @@ if($_SESSION['mode'] == 'prop'){
 			$signature_msg = "The signature is valid!";
 			$rel_id = $prp_c->addReg($prop_id, $data['ID'], 1, null);
 			$vl = true;
+		}
+		else{
+			$rel_id = $prp_c->addReg($prop_id, $data['ID'], 0, 2);
 		}
 	}
 	catch(InvalidSignatureFile $e){
