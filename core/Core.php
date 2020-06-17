@@ -4,6 +4,7 @@ use Exception;
 try{
     require_once  $_SERVER['DOCUMENT_ROOT'] . "/core/Exceptions.php";
     require_once  $_SERVER['DOCUMENT_ROOT'] . "/config/configmanager.php";
+    require_once  $_SERVER['DOCUMENT_ROOT'] . "/core/control/controllers.php";
 }
 catch(Exception $e){
     require_once "core/Exceptions.php";
@@ -58,6 +59,8 @@ use ClientsAccessExceptions\SuccessValueError;
 use ZipArchive;
 
 use Configurations\ConfigManager;
+use Control\ClientsController;
+use Control\SignaturesController;
 
 $gblConfig = new ConfigManager($_SERVER['DOCUMENT_ROOT'] . "/config/mainvars.json");
 
@@ -68,6 +71,7 @@ define("EMAIL_USING", "lpgp@gmail.com");
 define("DEFAULT_USER_ICON", $_SERVER['DOCUMENT_ROOT'] . "/media/user-icon.png");
 define("DEFAULT_DATETIME_F", "Y-m-d H:m:i");
 define("LPGP_CONF", $gblConfig->getConfig());
+define("CONTROL_FILE", $_SERVER['DOCUMENT_ROOT'] . "/core/control/control.json");
 
 
 // Clients constants
@@ -982,13 +986,14 @@ class SignaturesData extends DatabaseConnection{
         $this->checkNotConnected();
         if(!$this->checkSignatureExists($signature_id)) throw new SignatureNotFound("There's no signature #$signature_id !", 1);
         $sig_dt = $this->connection->query("SELECT prop.nm_proprietary, sig.vl_password, sig.vl_code FROM tb_signatures as sig INNER JOIN tb_proprietaries AS prop ON prop.cd_proprietary = sig.id_proprietary WHERE sig.cd_signature = $signature_id;")->fetch_array();
-        // TODO: Implement the control download system.
+        $controller = new SignaturesController(CONTROL_FILE);
+        $dtk = $controller->generateDownloadToken();
         $content = array(
             "Date-Creation" => date(DEFAULT_DATETIME_F),
             "Proprietary" => $sig_dt['nm_proprietary'],
             "ID" => $signature_id,
-            "Signature" => $sig_dt['vl_password']
-            // control download token index is "DToken"
+            "Signature" => $sig_dt['vl_password'],
+            "DToken" => $dtk
         );
         $to_json = json_encode($content);
         $arr_ord = array();
@@ -996,6 +1001,8 @@ class SignaturesData extends DatabaseConnection{
         $content_file = implode(self::DELIMITER, $arr_ord);
         $root = $_SERVER['DOCUMENT_ROOT'];
         file_put_contents($_SERVER['DOCUMENT_ROOT'] . "/signatures.d/" . $file_name, $content_file);
+        $controller->addDownloadRecord($signature_id, $dtk, $content['Date-Creation']);
+        unset($controller);
         return $HTML_mode ? "<a href=\"https://localhost/signatures.d/$file_name\" download=\"$file_name\" role=\"button\" class=\"btn btn-lg downloads-btn btn-primary\">Get your signature #$signature_id here!</a>" : "$root/signatures.d/$file_name";
     }
 
@@ -1027,6 +1034,8 @@ class SignaturesData extends DatabaseConnection{
         if(!$this->checkFileValid($file_name)) throw new InvalidSignatureFile("", 1);
         if(!file_exists($_SERVER['DOCUMENT_ROOT'] . "/usignatures.d/$file_name")) throw new SignatureFileNotFound("There's no file '$file_name' on the uploaded signatures folder.", 1);
         $content_file = utf8_encode(file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/signatures.d/" . $file_name));
+        $controller = new SignaturesController(CONTROL_FILE);
+        if(!$controller->authDownloadFile($file_name)) return false;
         $sp_content = explode(self::DELIMITER, $content_file);
         $ascii_none = [];
         for($i = 0; $i < count($sp_content); $i++){
@@ -1037,6 +1046,7 @@ class SignaturesData extends DatabaseConnection{
         if(!$this->checkSignatureExists((int) $json_arr['ID'])) throw new SignatureNotFound("There's no signature #" . $json_arr['Signature'], 1);
         $signautre_data = $this->connection->query("SELECT vl_password FROM tb_signatures WHERE cd_signature = " . $json_arr['ID'])->fetch_array();
         if($signautre_data['vl_password'] != $json_arr['Signature']) throw new SignatureAuthError("The file signature is not valid.", 1);
+
         return true;
     }
 
@@ -1766,12 +1776,14 @@ class ClientsData extends DatabaseConnection{
         if(!$this->ckClientEx($client_pk_ref)) throw new ClientNotFound("There's no client #$client_pk_ref", 1);
         $cldt = $this->connection->query("SELECT tk_client, vl_root, id_proprietary, nm_client, nm_client FROM tb_clients WHERE cd_client = $client_pk_ref;")->fetch_array();
         $files = $this->pathZipGen();
-        // Creates and write the content at the client authentication file
+        $controller = new ClientsController(CONTROL_FILE);
+        $tk = $controller->generateDownloadToken();
         $json_aut = array(
             "Client" => $client_pk_ref,
             "Proprietary" => (int)$cldt['id_proprietary'],
             "Token" => $cldt['tk_client'],
-            "Dt" => date("Y-m-d H:M:i")
+            "Dt" => date("Y-m-d H:M:i"),
+            "cdtk" => $tk
         );
         $dumped_a = json_encode($json_aut);
         $encoded_ar = [];
@@ -1779,6 +1791,8 @@ class ClientsData extends DatabaseConnection{
         foreach($exp as $char) $encoded_ar[] = (string)ord($char);
         $encoded = implode(self::DELIMITER, $encoded_ar);
         file_put_contents($files, $encoded);
+        $controller->addDownloadRecord($client_pk_ref, $tk, $json_au['Dt']);
+        unset($controller);
         $file_n = str_replace("/var/www/html", "", $files);
         return $this->passHTML($file_n);
     }
@@ -1809,6 +1823,9 @@ class ClientsData extends DatabaseConnection{
         $this->checkNotConnected();
         $content = file_get_contents($auth_path);
         $exp = explode(self::DELIMITER, $content);
+        $controller = new ClientsController(CONTROL_FILE);
+        if(!$controller->authExtDownloadFile($auth_path)) return false;
+        unset($controller);
         $json_con = "";
         foreach($exp as $chr) $json_con .= chr((int) $chr);
         $data = json_decode($json_con, true);

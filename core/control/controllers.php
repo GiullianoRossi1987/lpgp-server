@@ -616,5 +616,29 @@ namespace Control{
             $pureData = json_decode($notnum_content, true);
             return $this->authDownloadData($pureData['Client'], $pureData[ClientsController::DEFAULT_FILE_TOKEN_INDEX], $pureData['Dt']);
         }
+
+        /**
+         * Authenticates a client authentication file download control data.
+         * The difference between the ClientsController::authDownloadFile
+         * and that method is: The file path, that method authenticates a file
+         * at any points of the server, however the authDownloadFile authenticates
+         * a client auth file uploaded at the u.clients dir at the root path of
+         * the server.
+         *
+         * @param string $absPath The path to the client authentication file
+         * @throws ControlFileNotFound If there's no control file loaded yet.
+         * @throws ClientReferenceError If the referred client doesn't exist.
+         * @throws DownloadTokenNotFound If the download token using isn't valid.
+         * @return boolean
+         */
+        public function authExtDownloadFile(string $absPath): bool{
+            if(!$this->gotControl) throw new ControlFileNotFound();
+            $raw_content = file_get_contents($absPath);
+            $exp = explode(SignaturesData::DELIMITER, $raw_content);
+            $notnum_content = "";
+            foreach($exp as $aschar) $notnum_content .= chr((int)$aschar);
+            $pureData = json_decode($notnum_content, true);
+            return $this->authDownloadData($pureData['Client'], $pureData[ClientsController::DEFAULT_FILE_TOKEN_INDEX], $pureData['Dt']);
+        }
     }
 }
