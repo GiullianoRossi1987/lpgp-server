@@ -1003,7 +1003,7 @@ class SignaturesData extends DatabaseConnection{
         file_put_contents($_SERVER['DOCUMENT_ROOT'] . "/signatures.d/" . $file_name, $content_file);
         $controller->addDownloadRecord($signature_id, $dtk, $content['Date-Creation']);
         unset($controller);
-        return $HTML_mode ? "<a href=\"https://localhost/signatures.d/$file_name\" download=\"$file_name\" role=\"button\" class=\"btn btn-lg downloads-btn btn-primary\">Get your signature #$signature_id here!</a>" : "$root/signatures.d/$file_name";
+        return $HTML_mode ? "<a href=\"https://lpgpofficial.com/signatures.d/$file_name\" download=\"$file_name\" role=\"button\" class=\"btn btn-lg downloads-btn btn-primary\">Get your signature #$signature_id here!</a>" : "$root/signatures.d/$file_name";
     }
 
 
@@ -1530,7 +1530,6 @@ class PropCheckHistory extends DatabaseConnection{
         $qr_add = $this->connection->query("INSERT INTO tb_signatures_prop_check_h (id_prop, id_signature, vl_valid, vl_code) VALUES ($id_prop, $id_sign, $success, $vl);");
         $qr_id = $this->connection->query("SELECT MAX(cd_reg) FROM tb_signatures_prop_check_h;");
         echo $this->connection->error;
-        if($qr_id === false) echo $this->connection->error;
         $id = (int) $qr_id->fetch_array()[0];
         unset($qr_add);
         unset($qr_id);

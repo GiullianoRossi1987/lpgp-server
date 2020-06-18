@@ -80,7 +80,8 @@ if($_SESSION['mode'] == 'prop'){
 		$signature_img = $rp1;
 		unset($rp);
 		unset($rp1);
-		$domAdd .= createSignatureCardAuth($data['ID'], $vl) . "<a href=\"relatory.php?rel=$rel_id\" role=\"button\" class=\"btn btn-block btn-primary\">See relatory</a><br><hr>";
+		$rr = base64_encode($rel_id);
+		$domAdd .= createSignatureCardAuth($data['ID'], $vl) . "<a href=\"relatory.php?rel=$rr\" role=\"button\" class=\"btn btn-block btn-primary\">See relatory</a><br><hr>";
 	}
 }
 else{
