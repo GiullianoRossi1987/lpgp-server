@@ -78,3 +78,19 @@ create table tb_access(
     on delete cascade
     on update cascade
 );
+
+create user 'lpgp_internal'@'localhost' identified with mysql_native_password by "lpgpofficial";
+grant all privileges on LPGP_WEB.* to lpgp_internal@localhost;
+
+create user 'lpgp_auth'@'localhost' identified with mysql_native_password by "lpgp_ext_official";
+grant select on LPGP_WEB.tb_clients to lpgp_auth@localhost;
+grant insert select on LPGP_WEB.tb_access to lpgp_auth@localhost;
+
+create user 'client_normal'@'localhost' identified with mysql_native_password;
+grant select on LPGP_WEB.* to client_normal@localhost;
+
+create user 'client_root'@'localhost' identified with mysql_native_password;
+grant insert update delete select on LPGP_WEB.tb_proprietaries to client_root@localhost;
+grant insert update delete select on LPGP_WEB.tb_signatures to client_root@localhsot;
+grant insert update delete select on LPGP_WEB.tb_clients to client_root@localhost;
+grant select insert on LPGP_WEB.tb_access to client_root@localhost;

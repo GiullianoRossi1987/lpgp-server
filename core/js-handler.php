@@ -276,7 +276,7 @@ function createClientAuthCard(array $clientSoftData): string{
     $cardRet = '<div class="card client-card">
         <div class="card-body">
             <h4 class="card-title">Client <b>' . $clientSoftData['nm_client'] . '</b></h4>
-            <h6 class="card-subtitle mb-2 client-subtitle">#' . $clientSoftData['cd_client'] . '</h6>
+            <h6 class="card-subtitle mb-2 client-subtitle">#' . base64_encode($clientSoftData['cd_client']) . '</h6>
             <hr>
             <p class="card-text">
                 Proprietary: ' . $linkProprietary . '

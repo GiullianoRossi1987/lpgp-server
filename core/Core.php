@@ -4,6 +4,7 @@ use Exception;
 try{
     require_once  $_SERVER['DOCUMENT_ROOT'] . "/core/Exceptions.php";
     require_once  $_SERVER['DOCUMENT_ROOT'] . "/config/configmanager.php";
+    require_once  $_SERVER['DOCUMENT_ROOT'] . "/core/control/controllers.php";
 }
 catch(Exception $e){
     require_once "core/Exceptions.php";
@@ -58,6 +59,8 @@ use ClientsAccessExceptions\SuccessValueError;
 use ZipArchive;
 
 use Configurations\ConfigManager;
+use Control\ClientsController;
+use Control\SignaturesController;
 
 $gblConfig = new ConfigManager($_SERVER['DOCUMENT_ROOT'] . "/config/mainvars.json");
 
@@ -66,8 +69,9 @@ define("DEFAULT_DB", "LPGP_WEB");
 define("ROOT_VAR", $_SERVER['DOCUMENT_ROOT']);
 define("EMAIL_USING", "lpgp@gmail.com");
 define("DEFAULT_USER_ICON", $_SERVER['DOCUMENT_ROOT'] . "/media/user-icon.png");
-define("DEFAULT_DATETIME_F", "Y-m-d H:m:i");
+define("DEFAULT_DATETIME_F", "Y-m-d H:i:s");
 define("LPGP_CONF", $gblConfig->getConfig());
+define("CONTROL_FILE", $_SERVER['DOCUMENT_ROOT'] . "/core/control/control.json");
 
 
 // Clients constants
@@ -904,7 +908,7 @@ class SignaturesData extends DatabaseConnection{
      * @param int $signature_id The PK for search.
      * @return bool
      */
-    private function checkSignatureExists(int $signature_id){
+    public function checkSignatureExists(int $signature_id){
         $this->checkNotConnected();
         $qr = $this->connection->query("SELECT cd_signature FROM tb_signatures WHERE cd_signature = $signature_id;");
         while($row = $qr->fetch_array()){
@@ -982,11 +986,14 @@ class SignaturesData extends DatabaseConnection{
         $this->checkNotConnected();
         if(!$this->checkSignatureExists($signature_id)) throw new SignatureNotFound("There's no signature #$signature_id !", 1);
         $sig_dt = $this->connection->query("SELECT prop.nm_proprietary, sig.vl_password, sig.vl_code FROM tb_signatures as sig INNER JOIN tb_proprietaries AS prop ON prop.cd_proprietary = sig.id_proprietary WHERE sig.cd_signature = $signature_id;")->fetch_array();
+        $controller = new SignaturesController(CONTROL_FILE);
+        $dtk = $controller->generateDownloadToken();
         $content = array(
             "Date-Creation" => date(DEFAULT_DATETIME_F),
             "Proprietary" => $sig_dt['nm_proprietary'],
             "ID" => $signature_id,
-            "Signature" => $sig_dt['vl_password']
+            "Signature" => $sig_dt['vl_password'],
+            "DToken" => $dtk
         );
         $to_json = json_encode($content);
         $arr_ord = array();
@@ -994,7 +1001,9 @@ class SignaturesData extends DatabaseConnection{
         $content_file = implode(self::DELIMITER, $arr_ord);
         $root = $_SERVER['DOCUMENT_ROOT'];
         file_put_contents($_SERVER['DOCUMENT_ROOT'] . "/signatures.d/" . $file_name, $content_file);
-        return $HTML_mode ? "<a href=\"https://localhost/signatures.d/$file_name\" download=\"$file_name\" role=\"button\" class=\"btn btn-lg downloads-btn btn-primary\">Get your signature #$signature_id here!</a>" : "$root/signatures.d/$file_name";
+        $controller->addDownloadRecord($signature_id, $dtk, $content['Date-Creation']);
+        unset($controller);
+        return $HTML_mode ? "<a href=\"https://lpgpofficial.com/signatures.d/$file_name\" download=\"$file_name\" role=\"button\" class=\"btn btn-lg downloads-btn btn-primary\">Get your signature #$signature_id here!</a>" : "$root/signatures.d/$file_name";
     }
 
 
@@ -1025,6 +1034,8 @@ class SignaturesData extends DatabaseConnection{
         if(!$this->checkFileValid($file_name)) throw new InvalidSignatureFile("", 1);
         if(!file_exists($_SERVER['DOCUMENT_ROOT'] . "/usignatures.d/$file_name")) throw new SignatureFileNotFound("There's no file '$file_name' on the uploaded signatures folder.", 1);
         $content_file = utf8_encode(file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/signatures.d/" . $file_name));
+        $controller = new SignaturesController(CONTROL_FILE);
+        if(!$controller->authDownloadFile($file_name)) return false;
         $sp_content = explode(self::DELIMITER, $content_file);
         $ascii_none = [];
         for($i = 0; $i < count($sp_content); $i++){
@@ -1035,6 +1046,7 @@ class SignaturesData extends DatabaseConnection{
         if(!$this->checkSignatureExists((int) $json_arr['ID'])) throw new SignatureNotFound("There's no signature #" . $json_arr['Signature'], 1);
         $signautre_data = $this->connection->query("SELECT vl_password FROM tb_signatures WHERE cd_signature = " . $json_arr['ID'])->fetch_array();
         if($signautre_data['vl_password'] != $json_arr['Signature']) throw new SignatureAuthError("The file signature is not valid.", 1);
+
         return true;
     }
 
@@ -1489,7 +1501,7 @@ class PropCheckHistory extends DatabaseConnection{
      */
     private function checkHisExists(int $reg_ref){
         $this->checkNotConnected();
-        $qr_raw = $this->connection->query("SELECT cd_reg FROM tb_signatures_prop_h WHERE cd_reg = $reg_ref;");
+        $qr_raw = $this->connection->query("SELECT cd_reg FROM tb_signatures_prop_check_h WHERE cd_reg = $reg_ref;");
         while($row = $qr_raw->fetch_array()){
             if($row['cd_reg'] == $reg_ref) return true;
         }
@@ -1515,8 +1527,9 @@ class PropCheckHistory extends DatabaseConnection{
         if($success == 0 && is_null($error_code)) throw new PropInvalidCode(0, 1);
         // end checking
         $vl = is_null($error_code) ? 0 : (int) $error_code;
-        $qr_add = $this->connection->query("INSERT INTO tb_signatures_prop_h (id_prop, id_signature, vl_valid, vl_code) VALUES ($id_prop, $id_sign, $success, $vl);");
-        $qr_id = $this->connection->query("SELECT MAX(cd_reg) FROM tb_signatures_prop_h;");
+        $qr_add = $this->connection->query("INSERT INTO tb_signatures_prop_check_h (id_prop, id_signature, vl_valid, vl_code) VALUES ($id_prop, $id_sign, $success, $vl);");
+        $qr_id = $this->connection->query("SELECT MAX(cd_reg) FROM tb_signatures_prop_check_h;");
+        echo $this->connection->error;
         $id = (int) $qr_id->fetch_array()[0];
         unset($qr_add);
         unset($qr_id);
@@ -1532,7 +1545,7 @@ class PropCheckHistory extends DatabaseConnection{
      */
     public function getRegBySig(int $sig_ref){
         $this->checkNotConnected();
-        $qr = $this->connection->query("SELECT * FROM tb_signatures_prop_h WHERE id_signature = $sig_ref;");
+        $qr = $this->connection->query("SELECT * FROM tb_signatures_prop_check_h WHERE id_signature = $sig_ref;");
         $results = array();
         while($row = $qr->fetch_array()) $results[] = $row;
         $qr->close();
@@ -1563,7 +1576,7 @@ class PropCheckHistory extends DatabaseConnection{
     public function generateRelatory(int $reg_ref){
         $this->checkNotConnected();
         if(!$this->checkHisExists($reg_ref = $reg_ref)) throw new PropRegisterNotFound("There's no register #$reg_ref", 1);
-        $reg_data = $this->connection->query("SELECT * FROM tb_signatures_prop_h WHERE cd_reg = $reg_ref;")->fetch_array();
+        $reg_data = $this->connection->query("SELECT * FROM tb_signatures_prop_check_h WHERE cd_reg = $reg_ref;")->fetch_array();
         $error_msg = "";
         $extra_cls = $reg_data['vl_code'] == 0 ? "" : "error-msg";
         $extra_card_cls = $reg_data['vl_code'] == 0 ? "valid-card" : "invalid-card";
@@ -1691,6 +1704,24 @@ class ClientsData extends DatabaseConnection{
     }
 
     /**
+     * Checks if a reference of a client exists or not, it's just the ckClientEx
+     * with public access and two types of references.
+     *
+     * @param string|integer $reference The client reference, it can be the client name
+     *                                  (string), or the PK (int)
+     * @return boolean
+     */
+    public function checkClientExists($reference): bool{
+        $this->checkNotConnected();
+        if(is_int($reference))
+            $qr = $this->connection->query("SELECT COUNT(cd_client) FROM tb_clients WHERE cd_client = $reference;");
+        else if(is_string($reference))
+            $qr = $this->connection->query("SELECT COUNT(cd_client) FROM tb_clients WHERE nm_client = \"$reference\";");
+        else return null;
+        return $qr->fetch_array()[0] > 0;
+    }
+
+    /**
      * That method check if a proprietary primary key reference exists in the tb_proprietaries
      *
      * @param integer $reference The primary key reference to check.
@@ -1746,12 +1777,14 @@ class ClientsData extends DatabaseConnection{
         if(!$this->ckClientEx($client_pk_ref)) throw new ClientNotFound("There's no client #$client_pk_ref", 1);
         $cldt = $this->connection->query("SELECT tk_client, vl_root, id_proprietary, nm_client, nm_client FROM tb_clients WHERE cd_client = $client_pk_ref;")->fetch_array();
         $files = $this->pathZipGen();
-        // Creates and write the content at the client authentication file
+        $controller = new ClientsController(CONTROL_FILE);
+        $tk = $controller->generateDownloadToken();
         $json_aut = array(
             "Client" => $client_pk_ref,
             "Proprietary" => (int)$cldt['id_proprietary'],
             "Token" => $cldt['tk_client'],
-            "Dt" => date("Y-m-d H:M:i")
+            "Dt" => date("Y-m-d H:i:s"),
+            "cdtk" => $tk
         );
         $dumped_a = json_encode($json_aut);
         $encoded_ar = [];
@@ -1759,7 +1792,9 @@ class ClientsData extends DatabaseConnection{
         foreach($exp as $char) $encoded_ar[] = (string)ord($char);
         $encoded = implode(self::DELIMITER, $encoded_ar);
         file_put_contents($files, $encoded);
-        $file_n = str_replace("/var/www/html", "", $files);
+        $controller->addDownloadRecord($client_pk_ref, $tk, $json_aut['Dt'], true);
+        unset($controller);
+        $file_n = str_replace($_SERVER['DOCUMENT_ROOT'], "", $files);
         return $this->passHTML($file_n);
     }
 
@@ -1789,13 +1824,16 @@ class ClientsData extends DatabaseConnection{
         $this->checkNotConnected();
         $content = file_get_contents($auth_path);
         $exp = explode(self::DELIMITER, $content);
+        $controller = new ClientsController(CONTROL_FILE);
+        if(!$controller->authExtDownloadFile($auth_path)) return false;
+        unset($controller);
         $json_con = "";
         foreach($exp as $chr) $json_con .= chr((int) $chr);
         $data = json_decode($json_con, true);
         if(!$this->ckClientEx((int)$data['Client'])) throw new ClientAuthenticationError("The client authentication file isn't valid. The client doesn't exists.", 1);
         if(!$this->ckPropRef($data['Proprietary'])) throw new ClientAuthenticationError("The client authentication file isn't valid. The proprietary don't exist.", 1);
         $qr_tk = $this->connection->query("SELECT tk_client FROM tb_clients WHERE cd_client = " . $data['Client'] . ";")->fetch_array();
-        if(!$qr_tk['tk_client'] != $data['Token']) throw new ClientAuthenticationError("The client isn't valid. Token error.", 1);
+        if($qr_tk['tk_client'] != $data['Token']) throw new ClientAuthenticationError("The client isn't valid. Token error.", 1);
         return true;
     }
 
@@ -1823,6 +1861,11 @@ class ClientsData extends DatabaseConnection{
             if($res){
                 $arr_rt['soft'] = $this->getClientData($bruteData['Client']);
                 $arr_rt['valid'] = true;
+            }
+            else{
+                $arr_rt['soft'] = $this->getClientData($bruteData['Client']);
+                $arr_rt['valid'] = false;
+                $arr_rt['error'] = "Invalid Client Authentication File";
             }
         }
         catch(ClientAuthenticationError $e){
