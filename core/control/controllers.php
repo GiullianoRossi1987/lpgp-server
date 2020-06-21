@@ -411,7 +411,7 @@ namespace Control{
         private function checkDownloadTokenExists(string $token): bool{
             if(!$this->gotControl) throw new ControlFileNotFound();
             foreach($this->bufferedR[ClientsController::DEFAULT_DOWNLOAD_INDEX] as $record){
-                if($record['dtk'] == $token) return true;
+                if($record['token'] == $token) return true;
             }
             return false;
         }
@@ -479,6 +479,8 @@ namespace Control{
             $downloadData = array("client" => $clientPk, "token" => $token, "timestamp" => date("Y-m-d H:i:s"));
             array_push($this->bufferedR[ClientsController::DEFAULT_DOWNLOAD_INDEX], $downloadData);
             unset($downloadData);
+            if($autoCommit) $this->commitB();
+            return;
         }
 
         /**

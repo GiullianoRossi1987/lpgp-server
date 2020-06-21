@@ -18,7 +18,7 @@ $obj = new ClientsData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd
 $mainData = $obj->getClientAuthData(U_CLIENTS_CONF . $_FILES['to-check']['name'][0]);
 $brute = $mainData['brute'];
 $bruteDataCon = '<div class="brutedata">' . "\n<ul>\n";
-$bruteDataCon .= '<li><b>Client</b> ' . $brute['Client'] . '</li>' . "\n";
+$bruteDataCon .= '<li><b>Client</b> ' . base64_encode($brute['Client']) . '</li>' . "\n";
 $bruteDataCon .= '<li><b>Date Creation</b>: ' . $brute['Dt'] . '</li>' . "\n";
 ?>
 

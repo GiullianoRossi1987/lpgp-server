@@ -1783,7 +1783,7 @@ class ClientsData extends DatabaseConnection{
             "Client" => $client_pk_ref,
             "Proprietary" => (int)$cldt['id_proprietary'],
             "Token" => $cldt['tk_client'],
-            "Dt" => date("Y-m-d H:M:i"),
+            "Dt" => date("Y-m-d H:i:s"),
             "cdtk" => $tk
         );
         $dumped_a = json_encode($json_aut);
@@ -1792,9 +1792,9 @@ class ClientsData extends DatabaseConnection{
         foreach($exp as $char) $encoded_ar[] = (string)ord($char);
         $encoded = implode(self::DELIMITER, $encoded_ar);
         file_put_contents($files, $encoded);
-        $controller->addDownloadRecord($client_pk_ref, $tk, $json_aut['Dt']);
+        $controller->addDownloadRecord($client_pk_ref, $tk, $json_aut['Dt'], true);
         unset($controller);
-        $file_n = str_replace("/var/www/html", "", $files);
+        $file_n = str_replace($_SERVER['DOCUMENT_ROOT'], "", $files);
         return $this->passHTML($file_n);
     }
 
@@ -1833,7 +1833,7 @@ class ClientsData extends DatabaseConnection{
         if(!$this->ckClientEx((int)$data['Client'])) throw new ClientAuthenticationError("The client authentication file isn't valid. The client doesn't exists.", 1);
         if(!$this->ckPropRef($data['Proprietary'])) throw new ClientAuthenticationError("The client authentication file isn't valid. The proprietary don't exist.", 1);
         $qr_tk = $this->connection->query("SELECT tk_client FROM tb_clients WHERE cd_client = " . $data['Client'] . ";")->fetch_array();
-        if(!$qr_tk['tk_client'] != $data['Token']) throw new ClientAuthenticationError("The client isn't valid. Token error.", 1);
+        if($qr_tk['tk_client'] != $data['Token']) throw new ClientAuthenticationError("The client isn't valid. Token error.", 1);
         return true;
     }
 
@@ -1861,6 +1861,11 @@ class ClientsData extends DatabaseConnection{
             if($res){
                 $arr_rt['soft'] = $this->getClientData($bruteData['Client']);
                 $arr_rt['valid'] = true;
+            }
+            else{
+                $arr_rt['soft'] = $this->getClientData($bruteData['Client']);
+                $arr_rt['valid'] = false;
+                $arr_rt['error'] = "Invalid Client Authentication File";
             }
         }
         catch(ClientAuthenticationError $e){
