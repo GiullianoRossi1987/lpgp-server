@@ -538,3 +538,241 @@
 [Sun Jun 21 15:58:43.217545 2020] [ssl:warn] [pid 706] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
 [Sun Jun 21 15:58:47.799813 2020] [ssl:warn] [pid 814] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
 [Sun Jun 21 15:58:47.799868 2020] [ssl:warn] [pid 814] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Mon Jun 22 00:00:21.662481 2020] [ssl:warn] [pid 814] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Mon Jun 22 00:00:21.716827 2020] [ssl:warn] [pid 814] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Mon Jun 22 12:56:14.158907 2020] [ssl:warn] [pid 740] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Mon Jun 22 12:56:14.181895 2020] [ssl:warn] [pid 740] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Mon Jun 22 12:56:15.051755 2020] [ssl:warn] [pid 855] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Mon Jun 22 12:56:15.051799 2020] [ssl:warn] [pid 855] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Tue Jun 23 00:13:41.349090 2020] [ssl:warn] [pid 855] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Tue Jun 23 00:13:41.451699 2020] [ssl:warn] [pid 855] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Wed Jun 24 09:57:04.196770 2020] [ssl:warn] [pid 756] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Wed Jun 24 09:57:04.205536 2020] [ssl:warn] [pid 756] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Wed Jun 24 09:57:05.406970 2020] [ssl:warn] [pid 882] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Wed Jun 24 09:57:05.407147 2020] [ssl:warn] [pid 882] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Thu Jun 25 07:58:51.611779 2020] [ssl:warn] [pid 768] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Thu Jun 25 07:58:51.674720 2020] [ssl:warn] [pid 768] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Thu Jun 25 07:58:52.593913 2020] [ssl:warn] [pid 904] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Thu Jun 25 07:58:52.593969 2020] [ssl:warn] [pid 904] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Thu Jun 25 18:57:41.949306 2020] [ssl:warn] [pid 726] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Thu Jun 25 18:57:41.976651 2020] [ssl:warn] [pid 726] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Thu Jun 25 18:57:42.741036 2020] [ssl:warn] [pid 847] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Thu Jun 25 18:57:42.741052 2020] [ssl:warn] [pid 847] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Fri Jun 26 14:46:25.572171 2020] [ssl:warn] [pid 744] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Fri Jun 26 14:46:25.611721 2020] [ssl:warn] [pid 744] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Fri Jun 26 14:46:26.496915 2020] [ssl:warn] [pid 884] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Fri Jun 26 14:46:26.496971 2020] [ssl:warn] [pid 884] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Sat Jun 27 10:42:14.683872 2020] [ssl:warn] [pid 777] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Sat Jun 27 10:42:14.712967 2020] [ssl:warn] [pid 777] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Sat Jun 27 10:42:15.857613 2020] [ssl:warn] [pid 898] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Sat Jun 27 10:42:15.857669 2020] [ssl:warn] [pid 898] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Sun Jun 28 00:00:34.984958 2020] [ssl:warn] [pid 898] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Sun Jun 28 00:00:35.088724 2020] [ssl:warn] [pid 898] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Sun Jun 28 10:31:12.625445 2020] [ssl:warn] [pid 727] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Sun Jun 28 10:31:12.680734 2020] [ssl:warn] [pid 727] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Sun Jun 28 10:31:13.932587 2020] [ssl:warn] [pid 849] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Sun Jun 28 10:31:13.932694 2020] [ssl:warn] [pid 849] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Tue Jun 30 18:12:11.710242 2020] [ssl:warn] [pid 764] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Tue Jun 30 18:12:11.880445 2020] [ssl:warn] [pid 764] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Tue Jun 30 18:12:12.501168 2020] [ssl:warn] [pid 899] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Tue Jun 30 18:12:12.501270 2020] [ssl:warn] [pid 899] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Wed Jul 01 08:10:03.205667 2020] [ssl:warn] [pid 740] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Wed Jul 01 08:10:03.382174 2020] [ssl:warn] [pid 740] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Wed Jul 01 08:10:04.533761 2020] [ssl:warn] [pid 904] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Wed Jul 01 08:10:04.533817 2020] [ssl:warn] [pid 904] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Wed Jul 01 11:03:47.155035 2020] [ssl:warn] [pid 709] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Wed Jul 01 11:03:47.168968 2020] [ssl:warn] [pid 709] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Wed Jul 01 11:03:47.918932 2020] [ssl:warn] [pid 845] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Wed Jul 01 11:03:47.919037 2020] [ssl:warn] [pid 845] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Thu Jul 02 08:01:56.245524 2020] [ssl:warn] [pid 736] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Thu Jul 02 08:01:56.281017 2020] [ssl:warn] [pid 736] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Thu Jul 02 08:01:57.914752 2020] [ssl:warn] [pid 881] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Thu Jul 02 08:01:57.914798 2020] [ssl:warn] [pid 881] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Thu Jul 02 16:47:01.258865 2020] [ssl:warn] [pid 736] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Thu Jul 02 16:47:01.296312 2020] [ssl:warn] [pid 736] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Thu Jul 02 16:47:01.790439 2020] [ssl:warn] [pid 851] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Thu Jul 02 16:47:01.790505 2020] [ssl:warn] [pid 851] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Fri Jul 03 15:51:20.059553 2020] [ssl:warn] [pid 757] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Fri Jul 03 15:51:20.135750 2020] [ssl:warn] [pid 757] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Fri Jul 03 15:51:21.039655 2020] [ssl:warn] [pid 883] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Fri Jul 03 15:51:21.039701 2020] [ssl:warn] [pid 883] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Sat Jul 04 19:30:28.002486 2020] [ssl:warn] [pid 748] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Sat Jul 04 19:30:28.029838 2020] [ssl:warn] [pid 748] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Sat Jul 04 19:30:28.997718 2020] [ssl:warn] [pid 888] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Sat Jul 04 19:30:28.997775 2020] [ssl:warn] [pid 888] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Sat Jul 04 20:18:25.179251 2020] [ssl:warn] [pid 703] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Sat Jul 04 20:18:25.228058 2020] [ssl:warn] [pid 703] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Sat Jul 04 20:18:29.048408 2020] [ssl:warn] [pid 830] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Sat Jul 04 20:18:29.048476 2020] [ssl:warn] [pid 830] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Sun Jul 05 10:22:50.457252 2020] [ssl:warn] [pid 784] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Sun Jul 05 10:22:50.605234 2020] [ssl:warn] [pid 784] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Sun Jul 05 10:22:51.894750 2020] [ssl:warn] [pid 919] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Sun Jul 05 10:22:51.894782 2020] [ssl:warn] [pid 919] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Sun Jul 05 20:00:18.836573 2020] [ssl:warn] [pid 711] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Sun Jul 05 20:00:18.885210 2020] [ssl:warn] [pid 711] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Sun Jul 05 20:00:19.648882 2020] [ssl:warn] [pid 848] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Sun Jul 05 20:00:19.648899 2020] [ssl:warn] [pid 848] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Mon Jul 06 08:01:52.484781 2020] [ssl:warn] [pid 789] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Mon Jul 06 08:01:52.589178 2020] [ssl:warn] [pid 789] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Mon Jul 06 08:01:53.593107 2020] [ssl:warn] [pid 908] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Mon Jul 06 08:01:53.593128 2020] [ssl:warn] [pid 908] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Tue Jul 07 00:00:41.012514 2020] [ssl:warn] [pid 908] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Tue Jul 07 00:00:41.102168 2020] [ssl:warn] [pid 908] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Tue Jul 07 08:00:37.503283 2020] [ssl:warn] [pid 763] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Tue Jul 07 08:00:37.525280 2020] [ssl:warn] [pid 763] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Tue Jul 07 08:00:38.487454 2020] [ssl:warn] [pid 895] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Tue Jul 07 08:00:38.487526 2020] [ssl:warn] [pid 895] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Tue Jul 07 14:31:56.770483 2020] [ssl:warn] [pid 722] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Tue Jul 07 14:31:57.064391 2020] [ssl:warn] [pid 722] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Tue Jul 07 14:31:58.104282 2020] [ssl:warn] [pid 870] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Tue Jul 07 14:31:58.104329 2020] [ssl:warn] [pid 870] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Wed Jul 08 00:14:31.545172 2020] [ssl:warn] [pid 870] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Wed Jul 08 00:14:31.773364 2020] [ssl:warn] [pid 870] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Wed Jul 08 00:28:33.761198 2020] [ssl:warn] [pid 701] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Wed Jul 08 00:28:33.828406 2020] [ssl:warn] [pid 701] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Wed Jul 08 00:28:41.992068 2020] [ssl:warn] [pid 807] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Wed Jul 08 00:28:41.992121 2020] [ssl:warn] [pid 807] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Thu Jul 09 08:05:10.782432 2020] [ssl:warn] [pid 764] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Thu Jul 09 08:05:10.891730 2020] [ssl:warn] [pid 764] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Thu Jul 09 08:05:11.701771 2020] [ssl:warn] [pid 915] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Thu Jul 09 08:05:11.701799 2020] [ssl:warn] [pid 915] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Fri Jul 10 15:02:00.007971 2020] [ssl:warn] [pid 729] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Fri Jul 10 15:02:00.149195 2020] [ssl:warn] [pid 729] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Fri Jul 10 15:02:01.442907 2020] [ssl:warn] [pid 855] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Fri Jul 10 15:02:01.442962 2020] [ssl:warn] [pid 855] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Sat Jul 11 10:59:46.471942 2020] [ssl:warn] [pid 761] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Sat Jul 11 10:59:46.517059 2020] [ssl:warn] [pid 761] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Sat Jul 11 10:59:48.447747 2020] [ssl:warn] [pid 887] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Sat Jul 11 10:59:48.447802 2020] [ssl:warn] [pid 887] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Sun Jul 12 10:13:07.781982 2020] [ssl:warn] [pid 741] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Sun Jul 12 10:13:07.831198 2020] [ssl:warn] [pid 741] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Sun Jul 12 10:13:09.965428 2020] [ssl:warn] [pid 923] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Sun Jul 12 10:13:09.965504 2020] [ssl:warn] [pid 923] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Mon Jul 13 09:23:07.838499 2020] [ssl:warn] [pid 756] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Mon Jul 13 09:23:07.881545 2020] [ssl:warn] [pid 756] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Mon Jul 13 09:23:09.452139 2020] [ssl:warn] [pid 884] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Mon Jul 13 09:23:09.452193 2020] [ssl:warn] [pid 884] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Tue Jul 14 00:03:22.950155 2020] [ssl:warn] [pid 884] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Tue Jul 14 00:03:22.978848 2020] [ssl:warn] [pid 884] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Tue Jul 14 16:09:52.582731 2020] [ssl:warn] [pid 721] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Tue Jul 14 16:09:52.644675 2020] [ssl:warn] [pid 721] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Tue Jul 14 16:09:53.302436 2020] [ssl:warn] [pid 852] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Tue Jul 14 16:09:53.302492 2020] [ssl:warn] [pid 852] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Wed Jul 15 00:00:49.140582 2020] [ssl:warn] [pid 852] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Wed Jul 15 00:00:49.180074 2020] [ssl:warn] [pid 852] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Wed Jul 15 08:40:06.923533 2020] [ssl:warn] [pid 741] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Wed Jul 15 08:40:06.950187 2020] [ssl:warn] [pid 741] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Wed Jul 15 08:40:07.980970 2020] [ssl:warn] [pid 862] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Wed Jul 15 08:40:07.981037 2020] [ssl:warn] [pid 862] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Wed Jul 15 13:00:17.473270 2020] [ssl:warn] [pid 737] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Wed Jul 15 13:00:17.518408 2020] [ssl:warn] [pid 737] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Wed Jul 15 13:00:18.539481 2020] [ssl:warn] [pid 859] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Wed Jul 15 13:00:18.539577 2020] [ssl:warn] [pid 859] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Thu Jul 16 08:03:42.694070 2020] [ssl:warn] [pid 757] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Thu Jul 16 08:03:42.711512 2020] [ssl:warn] [pid 757] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Thu Jul 16 08:03:43.456732 2020] [ssl:warn] [pid 923] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Thu Jul 16 08:03:43.456804 2020] [ssl:warn] [pid 923] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Thu Jul 16 18:02:59.906225 2020] [ssl:warn] [pid 736] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Thu Jul 16 18:02:59.992053 2020] [ssl:warn] [pid 736] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Thu Jul 16 18:03:00.833194 2020] [ssl:warn] [pid 859] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Thu Jul 16 18:03:00.833220 2020] [ssl:warn] [pid 859] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Fri Jul 17 12:23:28.469660 2020] [ssl:warn] [pid 748] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Fri Jul 17 12:23:28.583230 2020] [ssl:warn] [pid 748] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Fri Jul 17 12:23:29.049856 2020] [ssl:warn] [pid 927] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Fri Jul 17 12:23:29.049874 2020] [ssl:warn] [pid 927] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Sat Jul 18 10:04:49.528158 2020] [ssl:warn] [pid 753] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Sat Jul 18 10:04:49.550655 2020] [ssl:warn] [pid 753] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Sat Jul 18 10:04:50.749960 2020] [ssl:warn] [pid 931] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Sat Jul 18 10:04:50.749992 2020] [ssl:warn] [pid 931] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Sun Jul 19 10:36:18.896698 2020] [ssl:warn] [pid 791] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Sun Jul 19 10:36:18.961578 2020] [ssl:warn] [pid 791] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Sun Jul 19 10:36:21.747023 2020] [ssl:warn] [pid 974] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Sun Jul 19 10:36:21.747078 2020] [ssl:warn] [pid 974] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Mon Jul 20 15:38:46.084072 2020] [ssl:warn] [pid 743] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Mon Jul 20 15:38:46.105945 2020] [ssl:warn] [pid 743] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Mon Jul 20 15:38:47.376076 2020] [ssl:warn] [pid 895] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Mon Jul 20 15:38:47.376132 2020] [ssl:warn] [pid 895] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Mon Jul 20 18:16:52.684858 2020] [ssl:warn] [pid 732] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Mon Jul 20 18:16:52.721131 2020] [ssl:warn] [pid 732] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Mon Jul 20 18:16:54.042337 2020] [ssl:warn] [pid 862] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Mon Jul 20 18:16:54.042355 2020] [ssl:warn] [pid 862] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Mon Jul 20 23:26:44.002200 2020] [ssl:warn] [pid 722] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Mon Jul 20 23:26:44.019589 2020] [ssl:warn] [pid 722] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Mon Jul 20 23:26:44.749283 2020] [ssl:warn] [pid 881] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Mon Jul 20 23:26:44.749337 2020] [ssl:warn] [pid 881] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Tue Jul 21 00:00:16.055068 2020] [ssl:warn] [pid 881] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Tue Jul 21 00:00:16.111144 2020] [ssl:warn] [pid 881] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Tue Jul 21 09:22:20.573043 2020] [ssl:warn] [pid 740] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Tue Jul 21 09:22:20.590790 2020] [ssl:warn] [pid 740] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Tue Jul 21 09:22:21.213434 2020] [ssl:warn] [pid 861] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Tue Jul 21 09:22:21.213493 2020] [ssl:warn] [pid 861] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Tue Jul 21 14:27:28.904941 2020] [ssl:warn] [pid 728] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Tue Jul 21 14:27:28.970021 2020] [ssl:warn] [pid 728] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Tue Jul 21 14:27:29.902089 2020] [ssl:warn] [pid 875] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Tue Jul 21 14:27:29.902106 2020] [ssl:warn] [pid 875] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Wed Jul 22 00:01:04.129571 2020] [ssl:warn] [pid 875] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Wed Jul 22 00:01:04.144014 2020] [ssl:warn] [pid 875] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Wed Jul 22 08:23:49.777934 2020] [ssl:warn] [pid 763] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Wed Jul 22 08:23:49.984051 2020] [ssl:warn] [pid 763] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Wed Jul 22 08:23:50.684081 2020] [ssl:warn] [pid 893] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Wed Jul 22 08:23:50.684105 2020] [ssl:warn] [pid 893] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Thu Jul 23 14:37:32.156952 2020] [ssl:warn] [pid 761] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Thu Jul 23 14:37:32.190052 2020] [ssl:warn] [pid 761] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Thu Jul 23 14:37:33.580813 2020] [ssl:warn] [pid 898] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Thu Jul 23 14:37:33.580881 2020] [ssl:warn] [pid 898] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Fri Jul 24 00:00:51.098931 2020] [ssl:warn] [pid 898] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Fri Jul 24 00:00:51.158445 2020] [ssl:warn] [pid 898] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Fri Jul 24 14:42:47.885762 2020] [ssl:warn] [pid 723] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Fri Jul 24 14:42:48.237760 2020] [ssl:warn] [pid 723] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Fri Jul 24 14:42:48.962608 2020] [ssl:warn] [pid 859] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Fri Jul 24 14:42:48.962655 2020] [ssl:warn] [pid 859] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Sat Jul 25 00:00:33.988508 2020] [ssl:warn] [pid 859] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Sat Jul 25 00:00:34.004910 2020] [ssl:warn] [pid 859] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Sat Jul 25 09:35:44.678488 2020] [ssl:warn] [pid 724] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Sat Jul 25 09:35:44.726189 2020] [ssl:warn] [pid 724] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Sat Jul 25 09:35:46.413200 2020] [ssl:warn] [pid 854] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Sat Jul 25 09:35:46.413256 2020] [ssl:warn] [pid 854] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Sun Jul 26 00:01:23.662198 2020] [ssl:warn] [pid 854] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Sun Jul 26 00:01:23.755391 2020] [ssl:warn] [pid 854] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Sun Jul 26 10:55:37.650211 2020] [ssl:warn] [pid 762] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Sun Jul 26 10:55:37.694467 2020] [ssl:warn] [pid 762] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Sun Jul 26 10:55:38.268291 2020] [ssl:warn] [pid 855] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Sun Jul 26 10:55:38.268348 2020] [ssl:warn] [pid 855] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Mon Jul 27 00:01:30.479465 2020] [ssl:warn] [pid 855] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Mon Jul 27 00:01:30.531964 2020] [ssl:warn] [pid 855] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Mon Jul 27 19:17:05.993529 2020] [ssl:warn] [pid 760] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Mon Jul 27 19:17:06.048540 2020] [ssl:warn] [pid 760] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Mon Jul 27 19:17:06.712677 2020] [ssl:warn] [pid 893] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Mon Jul 27 19:17:06.712694 2020] [ssl:warn] [pid 893] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Mon Jul 27 21:57:10.572564 2020] [ssl:warn] [pid 761] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Mon Jul 27 21:57:10.594459 2020] [ssl:warn] [pid 761] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Mon Jul 27 21:57:12.046126 2020] [ssl:warn] [pid 845] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Mon Jul 27 21:57:12.046193 2020] [ssl:warn] [pid 845] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Tue Jul 28 00:00:20.429696 2020] [ssl:warn] [pid 845] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Tue Jul 28 00:00:20.744679 2020] [ssl:warn] [pid 845] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Tue Jul 28 11:55:14.913539 2020] [ssl:warn] [pid 762] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Tue Jul 28 11:55:14.985297 2020] [ssl:warn] [pid 762] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Tue Jul 28 11:55:16.197938 2020] [ssl:warn] [pid 860] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Tue Jul 28 11:55:16.198003 2020] [ssl:warn] [pid 860] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Thu Jul 30 15:38:24.283630 2020] [ssl:warn] [pid 791] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Thu Jul 30 15:38:24.420413 2020] [ssl:warn] [pid 791] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Thu Jul 30 15:38:25.555868 2020] [ssl:warn] [pid 920] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Thu Jul 30 15:38:25.555885 2020] [ssl:warn] [pid 920] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Thu Jul 30 15:52:25.144024 2020] [php7:warn] [pid 3278] [client 127.0.0.1:35218] PHP Warning:  The use statement with non-compound name 'LPGP_CONF' has no effect in /home/giulliano/lpgp-server/cgi-actions/login.php on line 11, referer: https://www.lpgpofficial.com/login_frm.php
+[Thu Jul 30 15:52:29.104071 2020] [php7:warn] [pid 3278] [client 127.0.0.1:35218] PHP Warning:  The use statement with non-compound name 'MAX_SIGC' has no effect in /home/giulliano/lpgp-server/cgi-actions/my_account.php on line 9, referer: https://www.lpgpofficial.com/index.php
+[Thu Jul 30 15:52:29.104262 2020] [php7:warn] [pid 3278] [client 127.0.0.1:35218] PHP Warning:  The use statement with non-compound name 'LPGP_CONF' has no effect in /home/giulliano/lpgp-server/cgi-actions/my_account.php on line 10, referer: https://www.lpgpofficial.com/index.php
+[Thu Jul 30 15:52:29.110182 2020] [php7:warn] [pid 3278] [client 127.0.0.1:35218] PHP Warning:  Use of undefined constant LPGP_CONFG - assumed 'LPGP_CONFG' (this will throw an Error in a future version of PHP) in /home/giulliano/lpgp-server/cgi-actions/my_account.php on line 23, referer: https://www.lpgpofficial.com/index.php
+[Thu Jul 30 15:52:29.110272 2020] [php7:warn] [pid 3278] [client 127.0.0.1:35218] PHP Warning:  Illegal string offset 'mysql' in /home/giulliano/lpgp-server/cgi-actions/my_account.php on line 23, referer: https://www.lpgpofficial.com/index.php
+[Thu Jul 30 15:52:29.110338 2020] [php7:warn] [pid 3278] [client 127.0.0.1:35218] PHP Warning:  Illegal string offset 'sysuser' in /home/giulliano/lpgp-server/cgi-actions/my_account.php on line 23, referer: https://www.lpgpofficial.com/index.php
+[Thu Jul 30 15:52:29.112036 2020] [php7:warn] [pid 3278] [client 127.0.0.1:35218] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'L'@'localhost' (using password: YES) in /home/giulliano/lpgp-server/core/Core.php on line 124, referer: https://www.lpgpofficial.com/index.php
+[Thu Jul 30 15:52:29.112233 2020] [php7:warn] [pid 3278] [client 127.0.0.1:35218] PHP Warning:  mysqli::autocommit(): Couldn't fetch mysqli in /home/giulliano/lpgp-server/core/Core.php on line 129, referer: https://www.lpgpofficial.com/index.php
+[Thu Jul 30 15:52:29.654716 2020] [php7:warn] [pid 3278] [client 127.0.0.1:35218] PHP Warning:  mysqli_close(): Couldn't fetch mysqli in /home/giulliano/lpgp-server/core/Core.php on line 136, referer: https://www.lpgpofficial.com/index.php
+[Thu Jul 30 15:53:06.467553 2020] [php7:warn] [pid 3241] [client 127.0.0.1:35246] PHP Warning:  The use statement with non-compound name 'LPGP_CONF' has no effect in /home/giulliano/lpgp-server/cgi-actions/ch_my_data.php on line 9, referer: https://www.lpgpofficial.com/cgi-actions/my_account.php
+[Thu Jul 30 15:57:45.296037 2020] [php7:warn] [pid 938] [client 127.0.0.1:35362] PHP Warning:  The use statement with non-compound name 'LPGP_CONF' has no effect in /home/giulliano/lpgp-server/cgi-actions/my-clients.php on line 9, referer: https://www.lpgpofficial.com/cgi-actions/ch_my_data.php
+[Thu Jul 30 15:57:49.123293 2020] [php7:warn] [pid 939] [client 127.0.0.1:35388] PHP Warning:  The use statement with non-compound name 'LPGP_CONF' has no effect in /home/giulliano/lpgp-server/cgi-actions/client-accesses.php on line 11, referer: https://www.lpgpofficial.com/cgi-actions/my-clients.php
+[Thu Jul 30 15:58:00.539146 2020] [php7:warn] [pid 3244] [client 127.0.0.1:35398] PHP Warning:  Use of undefined constant LPGP_CONFG - assumed 'LPGP_CONFG' (this will throw an Error in a future version of PHP) in /home/giulliano/lpgp-server/cgi-actions/my_account.php on line 23, referer: https://www.lpgpofficial.com/cgi-actions/client-accesses.php?client=MQ==
+[Thu Jul 30 15:58:00.539300 2020] [php7:warn] [pid 3244] [client 127.0.0.1:35398] PHP Warning:  Illegal string offset 'mysql' in /home/giulliano/lpgp-server/cgi-actions/my_account.php on line 23, referer: https://www.lpgpofficial.com/cgi-actions/client-accesses.php?client=MQ==
+[Thu Jul 30 15:58:00.539342 2020] [php7:warn] [pid 3244] [client 127.0.0.1:35398] PHP Warning:  Illegal string offset 'sysuser' in /home/giulliano/lpgp-server/cgi-actions/my_account.php on line 23, referer: https://www.lpgpofficial.com/cgi-actions/client-accesses.php?client=MQ==
+[Thu Jul 30 15:58:00.540975 2020] [php7:warn] [pid 3244] [client 127.0.0.1:35398] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'L'@'localhost' (using password: YES) in /home/giulliano/lpgp-server/core/Core.php on line 124, referer: https://www.lpgpofficial.com/cgi-actions/client-accesses.php?client=MQ==
+[Thu Jul 30 15:58:00.541187 2020] [php7:warn] [pid 3244] [client 127.0.0.1:35398] PHP Warning:  mysqli::autocommit(): Couldn't fetch mysqli in /home/giulliano/lpgp-server/core/Core.php on line 129, referer: https://www.lpgpofficial.com/cgi-actions/client-accesses.php?client=MQ==
+[Thu Jul 30 15:58:00.572875 2020] [php7:warn] [pid 3244] [client 127.0.0.1:35398] PHP Warning:  mysqli_close(): Couldn't fetch mysqli in /home/giulliano/lpgp-server/core/Core.php on line 136, referer: https://www.lpgpofficial.com/cgi-actions/client-accesses.php?client=MQ==
