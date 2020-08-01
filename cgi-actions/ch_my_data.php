@@ -30,22 +30,52 @@ else{
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>LPGP Oficial Server</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
     <link rel="stylesheet" href="../css/new-layout.css">
     <script src="../js/main-script.js"></script>
     <link rel="stylesheet" href="../bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="../bootstrap/font-awesome.min.css">
+	<link rel="stylesheet" href="../jquery/lib/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc" crossorigin="anonymous">
     <script src="../bootstrap/jquery-3.3.1.slim.min.js"></script>
     <script src="../bootstrap/bootstrap.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> -->
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <link rel="shortcut icon" href="../media/new-logo.png" type="image/x-icon">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.2/popper.min.js"></script>
+	<script src="../jquery/lib/bootstrap/js/bootstrap.js" charset="utf-8"></script>
+	<script src="../jquery/lib/jquery-3.4.1.min.js" charset="utf-8"></script>
 </head>
 <style>
+	#avatar-ep{
+		border-radius: 50%;
+		border: 5px solid black;
+		padding: 20px 21px;
+		background-color: gray;
+		background-size: cover;
+		background-repeat: no-repeat;
+		width: 300px;
+		height: 300px;
+	}
+
+	#avatar-container{
+		padding: 23px 24px;
+		background: linear-gradient(to bottom, black, grey, white, #fdff00);
+		width: 350px;
+		height: 350px;
+		align-items: center;
+		margin-left: 33.3%;
+		border-radius: 50%;
+		cursor: pointer;
+	}
+
+	#avatar-container:hover{
+		z-index: 99;
+		opacity: .67;
+	}
 </style>
 <body>
     <script>
@@ -58,15 +88,16 @@ else{
         var pas1 = "text";
         var pas2 = "text";
         var vb = "visible";
+		var dp_tmp = false;
 
-        $(document).on("click", "#show-passwd1", function(){
-            $("#password1").attr("type", pas1);
+        $(document).on("click", "#spass1", function(){
+            $("#passwd1").attr("type", pas1);
             if(pas1 == "text") pas1 = "password";
             else pas1 = "text";
         });
 
-        $(document).on("click", "#show-passwd2", function(){
-            $("#password2").attr("type", pas1);
+        $(document).on("click", "#spass2", function(){
+            $("#passwd2").attr("type", pas1);
             if(pas2 == "text") pas2 = "password";
             else pas2 = "text";
         });
@@ -109,6 +140,45 @@ else{
         $(document).on("click", "#default-img", function(){
             $("#upload-img-input").hide();
         });
+
+		$(document).on("click", "#reset", function(){
+			window.location.reload();
+		});
+
+		// ajax inputs
+		$(document).on("change", "#new-img", function(){
+			let files = new FormData();
+			files.append("img-auto-load", $("#new-img")[0].files[0]);
+			// testing
+			files.append("teste", "aaa");
+			$.post({
+				url: "ajx_img_viewer.php",
+				data: files,
+				processData: false,
+				contentType: false,
+				success: function(response){
+					$("#avatar-ep").css("background-image", "url(../" + response + ")");
+
+				},
+				error: function(xhr, status, error){ console.log(error); }
+			});
+		});
+
+		// send the data using ajx
+		$(document).on("click", "#save", function(){
+			let newData = new FormData();
+			if($("#new-img")[0].files[0] !== undefined && $("#new-img")[0].files[0] !== null)
+				newData.append("new-img", $("#new-img")[0].files[0]);
+			if(dp_tmp) newData.append("dp_tmp_media", true);
+			if($("#username").val().length > 0)
+				newData.append("new-name", $("#username").val());
+			if($("#email").val().length > 0)
+				newData.append("new-email", $("#email").val());
+			if($("#passwd1").val().length > 0 && $("#passwd2").val().length > 0)
+				newData.append("new-passwd", $("passwd1").val());
+		});
+
+		$(document).on("click", "#avatar-container", function(){ $("#opt-avatar").collapse("toggle");})
     </script>
     <div class="container-fluid header-container" role="banner" style="position: fixed;">
         <div class="col-12 header" style="height: 71px; transition: background-color 200ms linear;">
@@ -143,15 +213,18 @@ else{
     <div class="container-fluid container-content" style="position: relative;">
         <div class="row-main row">
             <div class="col-7 clear-content" style="position: relative; margin-left: 21%; margin-top: 10%;">
-				<form action="change_account_data.php" method="post" class="form-group" enctype="multipart/form-data">
+				<form method="post" class="form-group" enctype="multipart/form-data">
                     <h1>Your configurations</h1>
                     <h6>If you don't want to change a field just leave it empty</h6>
                     <br>
-                    <div id="avatar-ep" style="width: 200px; height: 200px; background-size: cover; background-repeat: no-repeat">
-                    </div>
-                    <label for="new-img" class="form-label">Change the profile image</label>
-                    <br>
-                    <input type="file" name="new-img[]" id="new-img" class="form-group" accept="image/*">
+					<div id="avatar-container" data-toggle="tooltip" title="Change Avatar">
+						<div id="avatar-ep">
+						</div>
+					</div>
+					<br>
+					<label for="new-img" class="form-label">Change the profile image</label>
+					<br>
+					<input type="file" name="new-img[]" id="new-img" class="form-group" accept="image/*">
 					<br>
                     <label for="username" class="form-label">Change your username</label>
                     <br>
@@ -163,24 +236,31 @@ else{
 					<br>
                     <label for="passwd1" class="form-label">Change your password</label>
                     <br>
-					<input type="password" id="passwd1" name="passwd" class="form-control">
-					<label for="passwd1" class="form-label">
-                        <br>
-						<button type="button" class="btn btn-md btn-secondary" id="spass1">
-							Show password
-						</button>
-                    </label>
+					<div class="input-group input-group-inline pass1-grp">
+						<input type="password" id="passwd1" name="passwd" class="form-control">
+						<div class="input-group-append">
+							<button type="button" class="btn btn-md btn-secondary" id="spass1">
+								<span><i class="fas fa-eye"></i></span>
+							</button>
+						</div>
+					</div>
 					<br>
                     <label for="passwd2" class="form-label">Confirm the new password</label>
                     <br>
-					<input type="password" name="passwd-confirm" id="passwd2" class="form-control">
-					<label for="passwd2" class="form-label">
-                        <button type="button" class="btn btn-md btn-secondary" id="spass2">Show password</button>
-                        <br>
-					</label>
+					<div class="input-group input-group-inline">
+						<input type="password" name="passwd-confirm" id="passwd2" class="form-control">
+						<div class="input-group-append">
+							<button type="button" class="btn btn-md btn-secondary" id="spass2">
+								<span>
+									<i class="fas fa-eye"></i>
+								</span>
+							</button>
+						</div>
+					</div>
 					<br>
-					<button class="btn btn-lg btn-success" type="submit">Save configurations</button>
+					<button class="btn btn-lg btn-success" type="button" id="save">Save configurations</button>
 					<button class="btn btn-lg btn-secondary" type="submit" onclick="window.location.replace('./my_account.php');">Cancel</button>
+					<button type="button" id="reset" class="btn btn-lg btn-warning">Restore default</button>
 				</form>
             </div>
 		</div>
