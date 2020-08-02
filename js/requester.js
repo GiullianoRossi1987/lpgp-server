@@ -50,14 +50,11 @@ function previewImageTmp(internalPath, imgInput){
 
 
 function requestChart(client, mode, chartDisposeId){
-    var content;
+    var data = client !== null && client != 0 ? "client="+parseInt(client)+"&mode="+parseInt(mode) : "mode="+parseInt(mode);
     $.post({
         url: "ajx_chart_view.php",
-        data: client !== null ? "client="+client+"&mode="+mode : "mode="+mode,
-        processData: false,
-        contentType: false,
-        success: function(response){ $(chartDisposeId).html(response); },
+        data: data,
+        success: function(response){ eval(response.replace("<script>", "").replace("</script>", "")); },
         error: function(xhr, status, error){ console.error(error); }
     });
-    return content;
 }

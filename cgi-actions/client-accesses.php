@@ -54,7 +54,6 @@ foreach($all as $clientData) $clls .= '<option value="' . $clientData['cd_client
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
     <link rel="shortcut icon" href="../media/new-logo.png" type="image/x-icon">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
     <script src="../js/actions.js"></script>
@@ -65,6 +64,7 @@ foreach($all as $clientData) $clls .= '<option value="' . $clientData['cd_client
 	<script src="../jquery/lib/jquery-3.4.1.min.js" charset="utf-8"></script>
 	<script src="../jquery/lib/bootstrap/js/bootstrap.js" charset="utf-8"></script>
 	<script src="../js/requester.js" charset="utf-8"></script>
+
 </head>
 <style>
 </style>
@@ -84,7 +84,7 @@ foreach($all as $clientData) $clls .= '<option value="' . $clientData['cd_client
         });
 
 		$(document).on("click", "#changer", function(){
-			requestChart($("#client-selector").val(), $("#mode-selector"), "#chart-dispose");
+			requestChart($("#client-selector").val(), $("#mode-selector").val(), "chart-dispose");
 		});
     </script>
     <div class="container-fluid header-container" role="banner" style="position: fixed;">
@@ -140,7 +140,7 @@ foreach($all as $clientData) $clls .= '<option value="' . $clientData['cd_client
                                 <option value="2">Only the unsuccessful</option>
 							</select>
                             <br>
-                            <button type="submit" class="btn btn-primary" name="changer" id="changer">Load chart</button>
+                            <button type="button" class="btn btn-primary" name="changer" id="changer">Load chart</button>
 						</form>
 					</div>
 				</div>
@@ -157,9 +157,9 @@ foreach($all as $clientData) $clls .= '<option value="' . $clientData['cd_client
 				<div class="chart-row row">
 					<div class="col-md-12 col-sm-12 chart-col" id="chart-dispose">
 						<canvas id="clients-plot" width="500" height="500"></canvas>
-						<?php
-							echo $objClients->generateChart("clients-plot");
-						?>
+						<!-- <?php
+							// echo $objClients->generateChart("clients-plot");
+						?> -->
 					</div>
 				</div>
 			</div>
