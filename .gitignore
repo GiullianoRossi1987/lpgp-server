@@ -14,5 +14,6 @@
 ./u.clients/*.zip
 ./config/apache.conf
 logs/error.log
+<<<<<<< HEAD
 jquery/*
 ./jquery
