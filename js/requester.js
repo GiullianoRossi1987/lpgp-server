@@ -1,4 +1,5 @@
-function loadJquery(internalPath = false){
+
+function loadJquery(internalPath){
     let linkB_E = document.createElement("link");
     let scriptB_E = document.createElement("script");
     let scriptJ_E = document.createElement("script");
@@ -18,7 +19,7 @@ function loadJquery(internalPath = false){
     document.querySelector("head").appendChild(scriptJ_E);
 }
 
-function loadLoggedData(internalPath = false){
+function loadLoggedData(internalPath){
     // make shure you loaded the Jquery correctly first
     // for that just call loadJquery(internalPath)
     var mainData = null;
@@ -27,8 +28,36 @@ function loadLoggedData(internalPath = false){
         data: "getJSON=t",
         contentType: false,
         processData: false,
-        success: function(response){ mainData = JSON.parse(response); }
+        success: function(response){ mainData = JSON.parse(response); },
         error: function(xhr, status, error){ console.error(error); }
     });
     return mainData;
+}
+
+function previewImageTmp(internalPath, imgInput){
+    var source = null;
+    let imgData = new FormData();
+    imgData.append("img-auto-load", $(imgInput)[0].files[0]);
+    $.post({
+        url: internalPath ? "../cgi-actions/ajx_img_viewer.php" : "cgi-actions/ajx_img_viewer.php",
+        data: imgData,
+        processData: false,
+        contentType: false,
+        success: function(response){ source = response; }
+    });
+    return source;
+}
+
+
+function requestChart(client, mode, chartDisposeId){
+    var content;
+    $.post({
+        url: "ajx_chart_view.php",
+        data: client !== null ? "client="+client+"&mode="+mode : "mode="+mode,
+        processData: false,
+        contentType: false,
+        success: function(response){ $(chartDisposeId).html(response); },
+        error: function(xhr, status, error){ console.error(error); }
+    });
+    return content;
 }
