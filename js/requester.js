@@ -19,20 +19,7 @@ function loadJquery(internalPath){
     document.querySelector("head").appendChild(scriptJ_E);
 }
 
-function loadLoggedData(internalPath){
-    // make shure you loaded the Jquery correctly first
-    // for that just call loadJquery(internalPath)
-    var mainData = null;
-    $.post({
-        url: internalPath ? "ajx_logged_request.php" : "cgi-actions/ajx_logged_request.php",
-        data: "getJSON=t",
-        contentType: false,
-        processData: false,
-        success: function(response){ mainData = JSON.parse(response); },
-        error: function(xhr, status, error){ console.error(error); }
-    });
-    return mainData;
-}
+function hnd_vlAjx_success(value, dumper){ dumper = value; }
 
 function previewImageTmp(internalPath, imgInput){
     var source = null;
@@ -55,6 +42,28 @@ function requestChart(client, mode, chartDisposeId){
         url: "ajx_chart_view.php",
         data: data,
         success: function(response){ eval(response.replace("<script>", "").replace("</script>", "")); },
+        error: function(xhr, status, error){ console.error(error); }
+    });
+}
+
+
+/**
+ * That method sends the search content of the main-query.php to the ajax
+ * interpreter ajx_query_main.php .
+ * @param string scope The scope of the search, if it's in all the whole server ('all')
+ *                     or just in the account ('me'); [the account search is available
+ *                     only to the proprietaries]
+ * @param string needle The needle name to search
+ * @param int type The type of the result => 0 : For all; 1: Only Accounts; 2: Only
+ *                 Proprietaries Accounts; 3: Only Normal Accounts; 4: Only clients
+ * @param disposeResults The ID of the location to dispose the results.
+ */
+function requestQuery(scope, needle, mode, disposeResults){
+    $.post({
+        url: "ajx_query_main.php",
+        data: "scope="+scope+"&needle="+needle+"&mode="+parseInt(mode),
+        dataType: 'text',
+        success: function(response){ $(disposeResults).html(response); },
         error: function(xhr, status, error){ console.error(error); }
     });
 }
