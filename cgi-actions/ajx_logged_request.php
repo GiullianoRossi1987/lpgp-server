@@ -17,10 +17,9 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/core/js-handler.php";
 
 use Core\UsersData;
 use Core\ProprietariesData;
-use const Core\LPGP_CONF;
 
-if(isset($_POST['getJSON']) && $_POST['getJSON'] == "t"){
-    if($_SESSION['user-logged']){
+if(isset($_POST['getJSON'])){
+    if((bool)$_SESSION['user-logged'] && $_SESSION['user'] !== null){
         $prp = new ProprietariesData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
         $usr = new UsersData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
         $mainArr = array(
@@ -41,8 +40,12 @@ if(isset($_POST['getJSON']) && $_POST['getJSON'] == "t"){
             $mainArr['Email'] = $bruteData['vl_email'];
             $mainArr['Password'] = $bruteData['vl_passwd']; // already encoded at the database
         }
-        die(json_encode($mainArr));
+        echo json_encode($mainArr);
     }
-    else die(json_encode(array("Logged" => false)));
+    else {
+        $emptyData = [];
+        $emptyData['Logged'] = false;
+        die(json_encode($emptyData));
+    }
 }
  ?>

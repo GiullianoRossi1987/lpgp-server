@@ -238,7 +238,7 @@ class UsersData extends DatabaseConnection{
         $arr_info['user'] = $user;
         $arr_info['mode'] = "normie";
         $arr_info['user-icon'] = $img_path['vl_img'];
-        $arr_info['checked'] = $checked_usr['checked'] == "1" || $checked_usr['checked'] == 1? "true": "false";
+        $arr_info['checked'] = $checked_usr['checked'] == "1" || $checked_usr['checked'] == 1 ? "true": "false";
         return $arr_info;
     }
 
