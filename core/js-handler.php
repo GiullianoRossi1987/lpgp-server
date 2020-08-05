@@ -12,9 +12,6 @@ use Configurations\ConfigManager;
 
 $gblConfig = new ConfigManager($_SERVER['DOCUMENT_ROOT'] . "/config/mainvars.json");
 if(!defined("LPGP_CONF")) define("LPGP_CONF", $gblConfig->getConfig());
-
-
-
 if(!defined("MAX_SIGC")) define("MAX_SIGC", 5);   // the max number of the signatures checked card displayed at the my_account.php page
 
 /**
@@ -347,6 +344,58 @@ function errorTemplate(string $error_message): string{
                     Show error (Advanced)
                 </a>
             </div>';
-    // done
+}
+
+
+/**
+ * Generates a result of a normal user query in cards
+ * @param array $data The user data received
+ */
+function genResultNormalUser(array $data): string{
+    return '<div class="card result-card card-rs-normal text-center">
+                <div class="card-content">
+                    <div class="card-body">
+                        <a href="user.php?id='. base64_encode($data[0]) . '">
+                            <h4 class="card-title">
+                                    '. $data[1] . '    <span class="bagde badge-primary">Normal User</span>
+                                </h4>
+                        </a>
+                    </div>
+                </div>
+            </div><br>' . PHP_EOL;
+}
+
+/**
+ * Generates a result of a proprietary user query in cards
+ * @param array $data The proprietary data received
+ */
+function genResultProprietary(array $data): string{
+    return '<div class="card result-card card-rs-prop text-center">
+                <div class="card-content">
+                    <div class="card-body">
+                        <a href="proprietary.php?id='. base64_encode($data[0]) . '">
+                            <h4 class="card-title">
+                                    '. $data[1] . '   <span class="bagde badge-success">Proprietary</span>
+                                </h4>
+                        </a>
+                    </div>
+                </div>
+            </div><br>' . PHP_EOL;
+}
+/**
+ * Generates a result of a client query in cards
+ */
+function genResultClient(array $data): string{
+    return '<div class="card result-card card-rs-prop text-center">
+                <div class="card-content">
+                    <div class="card-body">
+                        <a href="proprietary.php?id='. base64_encode($data[3]) . '" data-toggle="tooltip" title="visit the proprietary">
+                            <h4 class="card-title">
+                                    '. $data[1] . '   <span class="bagde badge-secondary">Client</span>
+                                </h4>
+                        </a>
+                    </div>
+                </div>
+            </div><br>' . PHP_EOL;
 }
 ?>

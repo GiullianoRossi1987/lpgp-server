@@ -19,7 +19,6 @@ function loadJquery(internalPath){
     document.querySelector("head").appendChild(scriptJ_E);
 }
 
-function hnd_vlAjx_success(value, dumper){ dumper = value; }
 
 function previewImageTmp(internalPath, imgInput){
     var source = null;
@@ -58,7 +57,7 @@ function requestChart(client, mode, chartDisposeId){
  *                 Proprietaries Accounts; 3: Only Normal Accounts; 4: Only clients
  * @param disposeResults The ID of the location to dispose the results.
  */
-function requestQuery(scope, needle, mode, disposeResults){
+function requestQuery(needle, scope, mode, disposeResults){
     $.post({
         url: "ajx_query_main.php",
         data: "scope="+scope+"&needle="+needle+"&mode="+parseInt(mode),

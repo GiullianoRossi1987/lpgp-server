@@ -826,9 +826,9 @@ class ProprietariesData extends DatabaseConnection{
     public function qrPropByName(string $name_needle, bool $exactly = false){
         $this->checkNotConnected();
         $results = array();
-        if($exactly) $qr = $this->connection->query("SELECT nm_proprietary FROM tb_proprietaries WHERE nm_proprietary = \"$name_needle\";");
-        else $qr = $this->connection->querY("SELECT nm_proprietary FROM tb_proprietaries WHERE nm_proprietary LIKE  \"%$name_needle%\";");
-        while($row = $qr->fetch_array()) array_push($results, $row['nm_proprietary']);
+        if($exactly) $qr = $this->connection->query("SELECT * FROM tb_proprietaries WHERE nm_proprietary = \"$name_needle\";");
+        else $qr = $this->connection->query("SELECT * FROM tb_proprietaries WHERE nm_proprietary LIKE  \"%$name_needle%\";");
+        while($row = $qr->fetch_array()) array_push($results, $row);
         return $results;
      }
 
@@ -2057,6 +2057,45 @@ class ClientsData extends DatabaseConnection{
         $qr = $this->connection->query("SELECT * FROM tb_clients WHERE cd_client = $client;");
         if($qr === false) die($this->connection->error);
         return $qr->fetch_array();
+    }
+
+    /**
+     * That method searchs all the clients using a needle at the name.
+     * It returns all of then in a array;
+     *
+     * @param string $needle The name neddle to search
+     * @return array
+     */
+    public function qrAllClients(string $needle): array{
+        $this->checkNotConnected();
+        $qr_all = $this->connection->query("SELECT * FROM tb_clients WHERE cd_client LIKE \"%$needle%\";");
+        $results = [];
+        while($row = $qr_all->fetch_array()) $results[] = $row;
+        return $results;
+    }
+
+    /**
+     * That method searchs all the clients of a proprietary using a needle of
+     * the client name.
+     *
+     * @param string $neddle The client name neddle to search
+     * @param string|integer $proprietary The proprietary name/ID of the client
+     * @return array
+     */
+    public function qrClientsOfProp(string $needle, $proprietary): array{
+        $this->checkNotConnected();
+        $results = [];
+        $qr_all = null;
+        if(!is_numeric($proprietary)){
+            $qr_all = $this->connection->query("SELECT cl.* FROM tb_clients AS cl INNER JOIN tb_proprietaries AS p ON p.cd_proprietary = cl.id_proprietary WHERE p.nm_proprietary = \"$proprietary\" AND cl.nm_client LIKE \"%$needle%\";");
+        }
+        else{
+            $qr_all = $this->connection->query("SELECT * FROM tb_clients WHERE id_proprietary = $proprietary AND nm_client LIKE \"%$needle%\";");
+        }
+        if($qr_all !== false && !is_null($qr_all)){
+            while($row = $qr_all->fetch_array()) $results[] = $row;
+        }
+        return $results;
     }
 }
 
