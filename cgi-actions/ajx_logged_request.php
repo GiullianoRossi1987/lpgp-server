@@ -19,7 +19,7 @@ use Core\UsersData;
 use Core\ProprietariesData;
 
 if(isset($_POST['getJSON'])){
-    if((bool)$_SESSION['user-logged'] && $_SESSION['user'] !== null){
+    if((bool)$_SESSION['user-logged'] && isset($_SESSION['user'])){
         $prp = new ProprietariesData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
         $usr = new UsersData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
         $mainArr = array(
@@ -38,7 +38,7 @@ if(isset($_POST['getJSON'])){
             $bruteData = $prp->getPropData($_SESSION['user']);
             $mainArr['Username'] = $_SESSION['user'];
             $mainArr['Email'] = $bruteData['vl_email'];
-            $mainArr['Password'] = $bruteData['vl_passwd']; // already encoded at the database
+            $mainArr['Password'] = $bruteData['vl_password']; // already encoded at the database
         }
         echo json_encode($mainArr);
     }

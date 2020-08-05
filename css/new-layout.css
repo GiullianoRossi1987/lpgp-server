@@ -540,3 +540,8 @@
     border-radius: 45px;
     padding: 5px 6px;
 }
+
+.qr-chk input:disabled + label{
+    opacity: .51;
+    cursor: default;
+}

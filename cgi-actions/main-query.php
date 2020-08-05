@@ -57,9 +57,22 @@ sendUserLogged();
                     let mainData = $.parseJSON(response);
                     if(parseInt(mainData['Mode']) != 1 || !mainData['Logged']){
                         $("#scope-rs").prop("disabled", true);
-                        $("#md-s-ch").prop("disabled", true);
+                        $("#main-spc-rs").prop("data-toggle", "tooltip");
+                        $("#main-spc-rs").prop("title", "This feature isn't available now");
+                        ////////////////////////////////////////////////////////////////////
                         $("#md-c-ch").prop("disabled", true);
+                        $(".cli-rb").prop("data-toggle", "tooltip");
+                        $(".cli-rb").prop("title", "This feature isn't available for you now");
+                    }
+                    else{
+                        $("#scope-rs").prop("disabled", false);
+                        $("#md-c-ch").prop("disabled", false);
 
+                        $(".cli-rb").prop("data-toggle", null);
+                        $(".cli-rb").prop("title", null);
+
+                        $("#main-spc-rs").prop("data-toggle", null);
+                        $("#main-spc-rs").prop("title", null);
                     }
                 },
                 error: function(xhr, status, error){ console.error(error); }
@@ -69,13 +82,47 @@ sendUserLogged();
         $(document).ready(function(){
             $(".contitle").css("opacity", "1");
             $(".headtitle").css("opacity", "1");
+            dpOptionsScope();
         });
 
         $(document).on("click", "#search-bt", function(){
             let mode = document.getElementsByName('mode');
             let scope = document.getElementsByName('scope');
-            requestQuery($('#needle-in').val(), $(scope).val(),$(mode).val(),  "#results-dispose");
+            requestQuery($('#needle-in').val(), $("input[name='scope']:checked").val(), $("input[name='mode']:checked").val(),  "#results-dispose");
         });
+
+        function dpOptionsScope(){
+            if($("input[name='scope']:checked").val() != "all"){
+                $("#md-u-ch").prop("disabled", true);
+                $(".usr-rb").prop("data-toggle", "tooltip");
+                $(".usr-rb").prop("title", "This feature isn't available now");
+
+                $("#md-p-ch").prop("disabled", true);
+                $(".prp-rb").prop("data-toggle", "tooltip");
+                $(".prp-rb").prop("title", "This feature isn't available now")
+
+                $("#md-n-ch").prop("disabled", true);
+                $(".nrm-rb").prop("data-toggle", "tooltip");
+                $(".nrm-rb").prop("title", "This feature isn't available now");
+            }
+            else{
+                $("#md-u-ch").prop("disabled", false);
+                $("#md-p-ch").prop("disabled", false);
+                $("#md-n-ch").prop("disabled", false);
+
+                $(".usr-rb").prop("data-toggle", null);
+                $(".usr-rb").prop("title", null);
+
+                $(".prp-rb").prop("data-toggle", null);
+                $(".prp-rb").prop("title", null);
+
+                $(".nrm-rb").prop("data-toggle", null);
+                $(".nrm-rb").prop("title", null);
+            }
+        }
+
+        $(document).on("change", $(".opt-scope"), function(){ dpOptionsScope(); });
+
     </script>
     <div class="container-fluid header-container" role="banner" style="position: relative;">
         <div class="col-md-12 header col-sm-12" style="height: 71px;">
@@ -126,11 +173,11 @@ sendUserLogged();
                     <div class="row opt-row">
                         <div class="col-md-4">
                             <div class="form-group scope-group">
-                                <div class="form-check all-rb form-check-inline qr-chk">
-                                    <input type="radio" name="scope" value="all" id="scope-all" class="form-check-control">
+                                <div class="form-check all-rb form-check-inline qr-chk opt-scope">
+                                    <input type="radio" name="scope" value="all" id="scope-all" class="form-check-control" checked>
                                     <label class="form-check-label" for="scope-all"> All the LPGP Site</label>
                                 </div>
-                                <div class="form-check rs-rb form-check-inline qr-chk" id="main-spc-rs">
+                                <div class="form-check rs-rb form-check-inline qr-chk opt-scope" id="main-spc-rs">
                                     <input type="radio" name="scope" value="logged" id="scope-rs" class="form-check-control">
                                     <label for="scope-rs" class="form-check-label">Only at my account</label>
                                 </div>
@@ -152,15 +199,11 @@ sendUserLogged();
                                     <label for="md-n-ch" class="form-check-label">Only Normal Users</label>
                                 </div>
                                 <div class="form-check form-check-inline prp-rb qr-chk">
-                                    <input type="radio" name="mode" value="4" class="form-check-control" id="md-p-ch">
+                                    <input type="radio" name="mode" value="3" class="form-check-control" id="md-p-ch">
                                     <label for="md-p-ch" class="form-check-label">Only Proprietaries</label>
                                 </div>
-                                <div class="form-check form-check-inline sig-rb qr-chk">
-                                    <input type="radio" name="mode" value="5" class="form-check-control" id="md-s-ch" >
-                                    <label for="md-s-ch" class="form-check-label">Only Signatures</label>
-                                </div>
                                 <div class="form-check form-check-inline cli-rb qr-chk">
-                                    <input type="radio" name="mode" value="6" class="form-check-control" id="md-c-ch" >
+                                    <input type="radio" name="mode" value="4" class="form-check-control" id="md-c-ch" >
                                     <label for="md-c-ch" class="form-check-label">Only Clients</label>
                                 </div>
                             </div>
@@ -173,7 +216,6 @@ sendUserLogged();
         <div class="row results-row">
             <div class="col-md-12 results-col">
                 <div id="results-dispose">
-
                 </div>
             </div>
         </div>
