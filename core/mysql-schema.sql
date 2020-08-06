@@ -79,6 +79,44 @@ create table tb_access(
     on update cascade
 );
 
+DELIMITER $
+CREATE PROCEDURE AZClientsFrom(IN prop INTEGER)
+BEGIN
+    SELECT * FROM tb_clients WHERE id_proprietary = prop ORDER BY nm_client ASC;
+END$
+
+CREATE PROCEDURE ZAClientsFrom(IN prop INTEGER)
+BEGIN
+    SELECT * FROM tb_clients WHERE id_proprietary = prop ORDER BY nm_client DESC;
+END$
+
+CREATE PROCEDURE md5_Signatures(IN prop INTEGER)
+BEGIN
+    SELECT * FROM tb_signatures WHERE id_proprietary = prop AND vl_code = 0;
+END$
+
+CREATE PROCEDURE sha1_Signatures(IN prop INTEGER)
+BEGIN
+    SELECT * FROM tb_signatures WHERE id_proprietary = prop AND vl_code = 1;
+END$
+
+CREATE PROCEDURE sha256_Signatures(IN prop INTEGER)
+BEGIN
+    SELECT * FROM tb_signatures WHERE id_proprietary = prop AND vl_code = 2;
+END$
+
+CREATE PROCEDURE newer_signatures(IN prop INTEGER)
+BEGIN
+    SELECT * FROM tb_signatures ORDER BY dt_creation DESC;
+END$
+
+CREATE PROCEDURE older_signatures(IN prop INTEGER)
+BEGIN
+    SELECT * FROM tb_signatures ORDER BY dt_creation ASC;
+END$
+
+DELIMITER ;
+
 create user 'lpgp_internal'@'localhost' identified with mysql_native_password by "lpgpofficial";
 grant all privileges on LPGP_WEB.* to lpgp_internal@localhost;
 

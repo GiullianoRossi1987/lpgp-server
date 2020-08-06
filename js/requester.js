@@ -66,3 +66,30 @@ function requestQuery(needle, scope, mode, disposeResults){
         error: function(xhr, status, error){ console.error(error); }
     });
 }
+
+
+/**
+ * That method works sending a specific request for filtering the signatures
+ * or clients.
+ * @param {int} type The type of the items to search (0 = signatures, 1 = clients)
+ * @param {int} mode The mode of the filter:
+ *              * 0 => None
+ *              * 11 => Sort the newest signatures
+ *              * 12 => Sort the oldest signatures
+ *              * 13 => Only MD5 signatures
+ *              * 14 => Only SHA1 signatures
+ *              * 15 => Only SHA256 signatures
+ *              * 21 => A-Z Clients
+ *              * 22 => Z-A Clients
+ * @param {str} dispose The id of the element to dispose the results
+ */
+function requestFilter(type, mode, dispose){
+    let dp_Scope = type == 0 ? "s" : "c";
+    $.post({
+        url: "ajx_filter.php",
+        data: "scope="+dp_Scope+"&sortType="+mode,
+        dataType: 'text',
+        success: function(response){ $(dispose).html(response); },
+        error: function(xhr, status, error){ console.error(error); }
+    });
+}

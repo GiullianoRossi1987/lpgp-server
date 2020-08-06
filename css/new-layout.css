@@ -33,7 +33,7 @@
     margin-left: 90%;
     margin-top: -40px !important;
     border: 1px solid white;
-    border-radius: 12%;
+    border-radius: 50px;
     transition: background-color 1.1s ease-in;
     transition: border-color: 1.1s ease-in;
 }
