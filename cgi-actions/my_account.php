@@ -38,14 +38,25 @@ $usr = new UsersData(LPGP_CONFG['mysql']['sysuser'], LPGP_CONF['mysql']['passwd'
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
     <link rel="shortcut icon" href="../media/new-logo.png" type="image/x-icon">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
     <script src="../js/actions.js"></script>
     <link rel="stylesheet" href="../css/account.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
+    <script src="../js/requester.js" charset="utf-8"></script>
+    <script src="../jquery/lib/jquery-3.4.1.min.js" charset="utf-8"></script>
+    <script src="../jquery/lib/bootstrap/js/bootstrap.js" charset="utf-8"></script>
+
 </head>
 <style>
+    #img-user{
+        border-radius: 50%;
+    }
+
+    .prop-img{
+        border: 5px solid green;
+        background-color: green;
+    }
 </style>
 <body>
     <script>
@@ -54,6 +65,20 @@ $usr = new UsersData(LPGP_CONFG['mysql']['sysuser'], LPGP_CONF['mysql']['passwd'
             setSignatureOpts();
             applyToA();
             applyToForms();
+            $.post({
+                url: "ajx_logged_request.php",
+                data: "getJSON=t",
+                success: function(json){
+                    let brute = $.parseJSON(json);
+                    if(brute['Mode'] == 0){
+                        $("#img-cont").addClass("usr-img");
+                    }
+                    else{
+                        $("#img-cont").addClass("prop-img");
+                    }
+                },
+                error: function(xhr, status, error){ console.log(error); }
+            });
             $("#img-user").css("background-image", "url(" + getLinkedUserIcon() + ")");
         });
 
@@ -99,7 +124,7 @@ $usr = new UsersData(LPGP_CONFG['mysql']['sysuser'], LPGP_CONF['mysql']['passwd'
                         <div class="main-col col-5 card" style="margin-left: 0 !important; border: none;">
                             <div class="container data-container">
                                 <div class="main-row row card-header">
-                                    <div class="img-cont card-img-top" style="margin-left: 29%;">
+                                    <div class="img-cont card-img-top" style="margin-left: 29%; padding: 20px 21px;">
                                         <div id="img-user"></div>
                                     </div>
                                     <br>
@@ -108,8 +133,7 @@ $usr = new UsersData(LPGP_CONFG['mysql']['sysuser'], LPGP_CONF['mysql']['passwd'
                                         <?php
                                         if($_SESSION['mode'] == "prop"){
                                             $dt = $prp->getPropData($_SESSION['user']);
-                                            echo "<h1 class=\"user-name\">Name: " . $dt['nm_proprietary'] . "</h1>\n";
-                                            echo "<h3 class=\"mode\">Type: Proprietary</h4>\n";
+                                            echo "<h1 class=\"user-name\">Name: " . $dt['nm_proprietary'] . " <span class=\"badge badge-success\">Proprietary</span></h1>";
                                             echo "<h3 class=\"email\">Email: " . $dt['vl_email'] . "</h3>\n";
                                             echo "<h3 class=\"date-creation\">Date of creation: " . $dt['dt_creation'] . "</h3>\n";
 

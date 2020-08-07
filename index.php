@@ -80,11 +80,9 @@ sendUserLogged();
                     <a href="./contact-us.html" class="dropdown-item">Contact Us</a>
                 </div>
             </div>
-            <!-- <a href="cgi-actions/main-query.php" role="button" class="btn" id="qr-btn">
-                <span>
-                    <i class="fas fa-search"></i>
-                </span>
-            </a> -->
+            <div id="notification-container">
+
+            </div>
         </div>
     </div>
     <div class="content1 container content">
