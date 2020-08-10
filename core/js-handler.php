@@ -65,6 +65,43 @@ function createSignatureCard(int $signature_id, string $algo, $opts_link, string
 }
 
 /**
+ * Shows a signature data in a card to be displayed at the My_signatures page
+ * @param array $signature The pure signature data.
+ * @return string
+ */
+function genSignatureCard(array $signature): string{
+    $badgeEncoding = "";
+    switch($signature['vl_code']){
+        case 0:
+            $badgeEncoding = '<span class="badge badge-primary">MD5</span>';
+            break;
+        case 1:
+            $badgeEncoding = '<span class="badge badge-primary">SHA1</span>';
+            break;
+        case 2:
+            $badgeEncoding = '<span class="badge badge-primary">SHA256</span>';
+            break;
+        default: $badgeEncoding = '<span class="badge badge-danger" data-toggle="tooltip" title="Something went wrong">???</span>';
+    }
+    $enc = base64_encode($signature['cd_signature']);
+    return '<div class="card sig-card">
+                <div class="card-content">
+                    <div class="card-header">
+                        <h3>Signature #' . $signature['cd_signature'] . '   <small>'. $badgeEncoding .'</small></h3>
+                    </div>
+                    <div class="card-body">
+                        <a href="https://lpgpofficial.com/cgi-actions/get_my_signature.php?id='. $enc . '">Download <span><i class="fas fa-file-download"></i></span></a>
+                        <br>
+                        <a href="https://lpgpofficial.com/cgi-actions/ch_signature_data.php?sig_id='. $enc . '">Configurations<span><i class="fas fa-cog"></i></span></a>
+                    </div>
+                    <div class="card-footer">
+                        <h6><b>Date Created:</b> '. $signature['dt_creation'] . '</h6>
+                    </div>
+                </div>
+            </div>';
+}
+
+/**
  * That method sets all the signatures from a proprietary
  * @param int $proprietary The primary key reference of the proprietary to get him signatures
  * @return void
@@ -76,19 +113,22 @@ function lsSignaturesMA(int $proprietary){
     if(is_null($signatures)){ return "<h1>You don't have any signature yet!</h1>";}
     foreach($signatures as $cd){
         $sig_data = $sig->getSignatureData($cd);
+        // TODO Change all that code for the function created before
         $card = "<div class=\"card sig-card\">\n";
         $card .= "<div class=\"card-header\">\n";
         $card .= "<h3 class=\"card-title\"> Signature #$cd</h3>\n";
         $card .= "<h5 class=\"card-subtitle\">" . $sig_data['dt_creation'] . "</h5>\n";
         $card .= "</div> <div class=\"card-body\">";
         $card .= "<div class=\"card-text\">\n";
-        $card .= "<a href=\"https://localhost/cgi-actions/get_my_signature.php?id=$cd\">Download <i class=\"fas fa-file-download\"></i></a>" . "<br><br>".
-                 "<a href=\"https://localhost/cgi-actions/ch_signature_data.php?sig_id=$cd\">Configurations<i class=\"fas fa-cog\"></i></a>\n"
+        $card .= "<a href=\"https://www.lpgpofficial.com/cgi-actions/get_my_signature.php?id=" . base64_encode($cd). "\">Download <i class=\"fas fa-file-download\"></i></a>" . "<br><br>".
+                 "<a href=\"https://www.lpgpofficial.com/cgi-actions/ch_signature_data.php?sig_id=" . base64_encode($cd). "\">Configurations<i class=\"fas fa-cog\"></i></a>\n"
                 . "</div>\n</div>\n</div><br>";
         $all .= "\n$card\n";
     }
     return $all;
 }
+
+
 
 /**
  * Do the same thing then the lsSignaturesMA, but from a different proprietary and without the Download & Configurations options in the
@@ -259,6 +299,7 @@ function createClientCard(array $clientData): string{
     </div>';
     return $content_card;
 }
+
 
 /**
  * That function creates a bootstrap card using the client received soft data.

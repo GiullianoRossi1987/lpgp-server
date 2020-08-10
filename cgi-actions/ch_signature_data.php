@@ -11,8 +11,8 @@ sendUserLogged();
 
 if(isset($_GET['sig_id'])){
 	$sig = new SignaturesData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
-	$data = $sig->getSignatureData($_GET['sig_id']);
-	$select_vl = "<select name=\"code\" id=\"code-sel\">";
+	$data = $sig->getSignatureData((int)base64_decode($_GET['sig_id']));
+	$select_vl = "<select name=\"code\" id=\"code-sel\" class=\"form-control\">";
 	$opt = "<option value=\"" . $data['vl_code'] . "\" selected>" . $sig::CODES[$data['vl_code']] . "</option>";
 	// others options
 	$opts_o = [];
@@ -21,7 +21,7 @@ if(isset($_GET['sig_id'])){
 			$opts_o[] = "<option value=\"" . $i . "\">" . $sig::CODES[$i] . "</option>";
 		}
 	}
-	$hidden = "<input type=\"hidden\" value=\"" . $_GET['sig_id'] . "\" name=\"sig_id\">";
+	$hidden = "<input type=\"hidden\" value=\"" . base64_decode($_GET['sig_id']) . "\" name=\"sig_id\">";
 	echo "<script> const code = " . $data['vl_code'] . ";</script>";
 	$raw_inpt = "<input readonly=\"true\" value=\"" . $data['vl_password'] . "\" id=\"raw_code\" style=\"visibility: hidden;\" class=\"form-control\">";
 }

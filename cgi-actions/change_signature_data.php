@@ -13,7 +13,7 @@ if(isset($_POST['cancel-btn'])) echo "<script>window.location.replace(\"https://
 if(isset($_POST['rm-btn'])){
 	if(isset($_POST['sig_id'])){
 		$si = new SignaturesData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
-		$si->delSignature((int) $_POST['sig_id']);
+		$si->delSignature((int) base64_decode($_POST['sig_id']));
 		echo "<script>window.location.replace(\"https://localhost/cgi-actions/my_account.php\");</script>";
 	}
 }
@@ -23,11 +23,11 @@ if(isset($_POST['save-btn'])){
 		$sig = new SignaturesData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 		// checks the password field;
 		if(isset($_POST['passcode']) && strlen($_POST['passcode']) > 0){
-			$sig->chSignaturePassword((int) $_POST['sig_id'], (string) $_POST['passcode']);
+			$sig->chSignaturePassword((int) base64_decode($_POST['sig_id']), (string) $_POST['passcode']);
 		}
-		$sig_code = (int) $sig->getSignatureData((int) $_POST['sig_id'])['vl_code'];
+		$sig_code = (int)$sig->getSignatureData((int) base64_decode($_POST['sig_id']))['vl_code'];
 		if(isset($_POST['code']) && $_POST['code'] != $sig_code && isset($_POST['conf-pass'])){
-			$sig->chSignatureCode((int) $_POST['sig_id'], (int) $_POST['code'], $_POST['conf-pass']);
+			$sig->chSignatureCode((int) base64_decode($_POST['sig_id']), (int) $_POST['code'], $_POST['conf-pass']);
 		}
 	}
 }

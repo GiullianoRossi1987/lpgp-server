@@ -1248,9 +1248,111 @@ class SignaturesData extends DatabaseConnection{
         $signature_data = $this->connection->query("SELECT vl_password FROM tb_signatures WHERE cd_signature = " . $json_con['ID'] . ";")->fetch_array();
         return $signature_data['vl_password'] == $json_con['Signature'];
     }
+
+    /**
+     * Handle the other methods to reach the PK of a specific proprietary
+     * @param string|integer $proprietary The proprietary value received
+     * @return integer|null If the type of the param is integer or string and
+     *                      the proprietary exists it returns the proprietary's
+     *                      PK. Otherwise it'll return null
+     */
+    private function hndProprietaryId($proprietary){
+        $this->checkNotConnected();
+        if(is_int($proprietary) || is_numeric($proprietary)){
+            // checks if the proprietary exists.
+            $dp = $this->connection->query("SELECT COUNT(cd_proprietary) FROM tb_proprietaries WHERE cd_proprietary = $proprietary;");
+            if((int)$dp->fetch_array()[0] != 1) return null;
+            else return (int)$proprietary;
+        }
+        else if(is_string($proprietary)){
+            $dp = $this->connection->query("SELECT COUNT(cd_proprietary), cd_proprietary FROM tb_proprietaries WHERE nm_proprietary = \"$proprietary\";")->fetch_array();
+            if((int)$dp[0] != 1) return null;
+            else return (int)$dp[1];
+        }
+        else return null;
+    }
+
+    /**
+     * Uses the internal database procedure older_signatures to filter the signatures
+     * of a specific proprietary and return they sorted by the older date.
+     * @param string|integer $proprietary The proprietary who own's the signatures
+     * @return array
+     */
+    public function filterOlder($proprietary): array{
+        $this->checkNotConnected();
+        $results = [];
+        $id_P = $this->hndProprietaryId($proprietary);
+        if(is_null($id_P) || $id_P === null) return null;
+        $sorted = $this->connection->query("CALL older_Signatures($id_P);");
+        while($row = $sorted->fetch_array()) $results[] = $row;
+        return $results;
+    }
+
+    /**
+     * Uses the internal database procedure newer_Signatures to filter the signatures
+     * of a specific proprietary and return they sorted by the newer date.
+     * @param string|integer $proprietary The proprietary who owns the signatures
+     * @return array;
+     */
+    public function filterNewer($proprietary): array{
+        $this->checkNotConnected();
+        $results = [];
+        $id_P = $this->hndProprietaryId($proprietary);
+        if(is_null($id_P) || $id_P === null) return null;
+        $sorted = $this->connection->query("CALL newer_Signatures($id_P);");
+        while($row = $sorted->fetch_array()) $results[] = $row;
+        return $results;
+    }
+
+    /**
+     * Uses the internal database procedure md5_Signatures to filter the signatures
+     * of a specific proprietary and return only the MD5 encoded signatures
+     * @param string|integer $proprietary The proprietary who owns the signatures
+     * @return array
+     */
+    public function filterMd5($proprietary): array{
+        $this->checkNotConnected();
+        $results = [];
+        $id_P = $this->hndProprietaryId($proprietary);
+        if(is_null($id_P) || $id_P === null) return null;
+        $sorted = $this->connection->query("CALL md5_Signatures($id_P);");
+        while($row = $sorted->fetch_array()) $results[] = $row;
+        return $results;
+    }
+
+    /**
+     * Uses the internal database procedure sha1_Signatures to filter the signatures
+     * of a specific proprietary and return only the SHA1 encoded signatures
+     * @param string|integer $proprietary The proprietary who owns the signatures
+     * @return array
+     */
+    public function filterSha1($proprietary): array{
+        $this->checkNotConnected();
+        $results = [];
+        $id_P = $this->hndProprietaryId($proprietary);
+        if(is_null($id_P) || $id_P === null) return null;
+        $sorted = $this->connection->query("CALL sha1_Signatures($id_P);");
+        while($row = $sorted->fetch_array()) $results[] = $row;
+        return $results;
+    }
+
+    /**
+     * Uses the internal database procedure sha256_Signatures to filter the signatures
+     * of a specific proprietary and return only the SHA256 encoded singatures
+     * @param string|integer $proprietary The proprietary who owns the signatures
+     * @return array
+     */
+    public function filterSha256($proprietary): array{
+        $this->checkNotConnected();
+        $results = [];
+        $id_P = $this->hndProprietaryId($proprietary);
+        if(is_null($id_P) || $id_P === null) return null;
+        $sorted = $this->connection->query("CALL sha256_Signatures($id_P);");
+        while($row = $sorted->fetch_array()) $results[] = $row;
+        return $results;
+    }
 }
 
-// ** Ready for the tests! **
 /**
  * That class manages the signature checking history table in the MySQL database. That table storages all the signatures checkeds in the website, but only
  * signatures checkeds from normal users, for signatures checked by proprietaries history check the class PropCheckHistory. Those classes also creates relatories
@@ -2095,6 +2197,61 @@ class ClientsData extends DatabaseConnection{
         if($qr_all !== false && !is_null($qr_all)){
             while($row = $qr_all->fetch_array()) $results[] = $row;
         }
+        return $results;
+    }
+
+    /**
+     * Handle the other methods to reach the PK of a specific proprietary
+     * @param string|integer $proprietary The proprietary value received
+     * @return integer|null If the type of the param is integer or string and
+     *                      the proprietary exists it returns the proprietary's
+     *                      PK. Otherwise it'll return null
+     */
+    private function hndProprietaryId($proprietary){
+        $this->checkNotConnected();
+        if(is_int($proprietary) || is_numeric($proprietary)){
+            // checks if the proprietary exists.
+            $dp = $this->connection->query("SELECT COUNT(cd_proprietary) FROM tb_proprietaries WHERE cd_proprietary = $proprietary;");
+            if((int)$dp->fetch_array()[0] != 1) return null;
+            else return (int)$proprietary;
+        }
+        else if(is_string($proprietary)){
+            $dp = $this->connection->query("SELECT COUNT(cd_proprietary), cd_proprietary FROM tb_proprietaries WHERE nm_proprietary = \"$proprietary\";")->fetch_array();
+            if((int)$dp[0] != 1) return null;
+            else return (int)$dp[1];
+        }
+        else return null;
+    }
+
+    /**
+     * Uses the internal database procedure AZClientsFrom to sort the clients alphabetically of
+     * a specific proprietary
+     * @param string|integer $proprietary The proprietary who owns the clients
+     * @return array
+     */
+    public function sortAZ($proprietary): array{
+        $this->checkNotConnected();
+        $results = [];
+        $id_P = $this->hndProprietaryId($proprietary);
+        if(is_null($id_P) || $id_P === null) return null;
+        $sorted = $this->connection->query("CALL AZClientsFrom($id_P);");
+        while($row = $sorted->fetch_array()) $results[] = $row;
+        return $results;
+    }
+
+    /**
+     * Uses the internal database procedure ZAClientsFrom to sort the clients alphabetically reversed
+     * of a specific proprietary.
+     * @param string|integer $proprietary The proprietary who owns the clients
+     * @return array
+     */
+    public function sortZA($proprietary): array{
+        $this->checkNotConnected();
+        $results = [];
+        $id_P = $this->hndProprietaryId($proprietary);
+        if(is_null($id_P) || $id_P === null) return null;
+        $sorted = $this->connection->query("CALL ZAClientsFrom($id_P);");
+        while($row = $sorted->fetch_array()) $results[] = $row;
         return $results;
     }
 }

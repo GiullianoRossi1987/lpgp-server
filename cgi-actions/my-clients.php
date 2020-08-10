@@ -37,12 +37,15 @@ foreach($clients as $client){
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
     <link rel="shortcut icon" href="../media/new-logo.png" type="image/x-icon">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
     <script src="../js/actions.js"></script>
     <link rel="stylesheet" href="../css/account.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
+    <script src="../jquery/lib/jquery-3.4.1.min.js" charset="utf-8"></script>
+    <script src="../jquery/lib/bootstrap/js/bootstrap.js" charset="utf-8"></script>
+    <script src="../js/requester.js" charset="utf-8"></script>
+    <script src="../js/autoload.js" charset="utf-8"></script>
 </head>
 <style>
 </style>
@@ -54,6 +57,8 @@ foreach($clients as $client){
             applyToA();
             applyToForms();
             $("#img-user").css("background-image", "url(" + getLinkedUserIcon() + ")");
+            loadSearchButton();
+            requestFilter(1, 0, "#dispose-items");
         });
 
         $(document).ready(function(){
@@ -93,7 +98,26 @@ foreach($clients as $client){
     <div class="container-fluid container-content" style="position: relative; margin-top: 5%;">
         <div class="row-main row">
             <div class="col-6 clear-content" style="position: relative; margin-left: 23%; max-width: 100% !important">
-                <?php echo $content; ?>
+                <div class="container container-fluid filter-container">
+                    <div class="form-row row">
+                        <div class="col-12 form-col">
+                            <div class="input-group input-group-inline">
+                                <div class="input-group-prepend">
+                                    <label for="filter-main" class="form-label">Filter by</label>
+                                </div>
+                                <select class="form-control" name="filter" id="filter-main">
+                                    <option value="0">No Filter</option>
+                                    <option value="21">A-Z</option>
+                                    <option value="22">Z-A</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div id="dispose-items"></div>
+                <br>
+                <a href="create-client.php" role="button" class="btn btn-block btn-success">Create new client</a>
             </div>
         </div>
     </div>
