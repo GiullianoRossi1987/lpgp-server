@@ -76,6 +76,17 @@ $usr = new UsersData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']
                 error: function(xhr, status, error){ console.log(error); }
             });
             $("#img-user").css("background-image", "url(" + getLinkedUserIcon() + ")");
+            loadSearchButton();
+            $.post({
+                url: "ajx_logged_request.php",
+                data: "getJSON=t",
+                success: function(response){
+                    let jsonData = $.parseJSON(response);
+                    if(jsonData['Logged'] == false){
+                        alert("your session expired");
+                    }
+                }
+            });
         });
 
         $(document).on("click", ".account-separator .content", function(){
