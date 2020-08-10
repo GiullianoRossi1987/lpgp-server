@@ -52,19 +52,31 @@
 
 
 .account-separator .content{
-    padding: 18px 20px;
+    padding: 10px 10px;
     font-family: sans-serif;
-    border: 1px solid rgb(51, 51, 71);
-    text-align: center;
-    border-top-right-radius: 50px;
-    border-top-left-radius: 50px;
-    background-color: rgb(51, 51, 71);
+    text-align: left;
+	width: auto;
+	height: 70px;
+	border-bottom: 1px solid black;
+	transition: border 1.2s ease-in-out, background-color 1.2s ease-out;
 }
 
 .account-separator .content h2{
-    color: white;
+    color: initial;
     font-family: sans-serif;
 }
+
+.account-separator .content:hover,
+.selected-separator{
+	border-top: 1px solid black;
+	border-right: 1px solid black;
+	border-left: 1px solid black;
+	border-bottom: none !important;
+}
+
+.account-separator .selected-separator h2{ color: #fdff00 !important;}
+.account-separator .selected-separator h2::after{ content: "\f0d8" !important; }
+.account-separator .selected-separator{ background-color: black; }
 
 .account-separator .content h2::after{
     content: "\f0d7";
@@ -72,6 +84,7 @@
     font-weight: 900;
     padding-right: 20px;
     float: right;
+	transition: content 1.3s ease-in-out;
 }
 
 .account-separator h2:focus{

@@ -77,6 +77,10 @@ $usr = new UsersData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']
             });
             $("#img-user").css("background-image", "url(" + getLinkedUserIcon() + ")");
         });
+
+        $(document).on("click", ".account-separator .content", function(){
+            $(this).toggleClass("selected-separator");
+        });
     </script>
     <div class="container-fluid header-container" role="banner" style="position: fixed;">
         <div class="col-12 header" style="height: 71px; transition: background-color 200ms linear;">

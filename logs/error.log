@@ -1795,3 +1795,8 @@
 [Sun Aug 09 09:05:53.753867 2020] [ssl:warn] [pid 753] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
 [Sun Aug 09 09:05:54.842851 2020] [ssl:warn] [pid 857] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
 [Sun Aug 09 09:05:54.842908 2020] [ssl:warn] [pid 857] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Mon Aug 10 07:56:18.737053 2020] [ssl:warn] [pid 794] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Mon Aug 10 07:56:18.810387 2020] [ssl:warn] [pid 794] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Mon Aug 10 07:56:20.035447 2020] [ssl:warn] [pid 920] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Mon Aug 10 07:56:20.035513 2020] [ssl:warn] [pid 920] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Mon Aug 10 15:47:26.600467 2020] [php7:warn] [pid 936] [client 127.0.0.1:45230] PHP Warning:  The use statement with non-compound name 'LPGP_CONF' has no effect in /home/giulliano/lpgp-server/cgi-actions/login.php on line 11, referer: https://www.lpgpofficial.com/login_frm.php
