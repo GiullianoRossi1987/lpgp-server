@@ -1,3 +1,5 @@
+@import "notifications.css";
+
 
 .header-container{
     background-color: black;
@@ -6,11 +8,6 @@
     opacity: 1;
 }
 
-.scrolled{
-    background-color:black;
-    border-bottom: 1px white solid;
-    transition: background-color 200ms linear;
-}
 
 .header-container .header{
     height: 71px !important;
@@ -32,6 +29,23 @@
     fill-opacity: 1;
 }
 
+#qr-btn{
+    color: white;
+    background-color: black;
+    margin-left: 90%;
+    margin-top: -40px !important;
+    border: 1px solid white;
+    border-radius: 50px;
+    transition: background-color 1.1s ease-in;
+    transition: border-color: 1.1s ease-in;
+}
+
+#qr-btn:hover{
+    background-color: #ffffff;
+    color: #000000;
+    border-color: #fdff00;
+}
+
 .user-icon{
     padding: 2px 3px;
     border: 1px white solid;
@@ -41,7 +55,6 @@
     background-color: black;
     border-color: rgb(51, 51, 71);
     color: white !important;
-    transition: background-color 200ms linear();
 }
 
 .after-opt{
@@ -243,17 +256,8 @@
     background-image: url("../media/usr-icon.png");
     background-size: cover;
     background-repeat: no-repeat;
+    opacity: .75;
 }
-
-.img-radio-default input ~ .checkmark{
-    background-color: #eee;
-}
-
-.img-radio-default:hover input ~.checkmark{
-    background-color: #ccc;
-    transition: background-color 200ms linear;
-}
-
 
 .main-col{
     border: 1px solid black;
@@ -442,6 +446,7 @@
     border-radius: 7%;
 }
 
+<<<<<<< HEAD
 .account-separator h2 {
     padding: 20px 22px;
     font-family: sans-serif;
@@ -464,6 +469,8 @@
     margin-left: 17%;
 }
 
+=======
+>>>>>>> requestsUpgrade
 
 #home-link{
     position: relative;
@@ -472,14 +479,14 @@
     border: 2px #ffdd00 solid;
     border-radius: 10%;
     background-color: black;
-    margin-top: 50% !important;
+    margin-top: -10% !important;
     background-image: url("../media/new-logo.png");
     background-size: cover;
     background-repeat: no-repeat;
     width: 170px !important;
     max-width: 100% !important;
-    top: 23px;
     opacity: .76;
+    top: 5px;
 }
 
 #home-link:hover{
@@ -505,10 +512,36 @@
 }
 
 #solutions{
-    position: absolute;
-    margin-left: -20%;
+    position: relative;
+    margin-left: -20% !important;
     border: 1px gold solid;
     border-radius: 5%;
     color: gold;
+<<<<<<< HEAD
     top: 0;
+=======
+    margin-top: 10px !important;
+}
+
+.qr-chk  input{
+    display: none;
+}
+
+.qr-chk input:checked ~ label{
+    background-color: black;
+    color: #fdff00;
+}
+
+.qr-chk label{
+    background-color: white;
+    cursor: pointer;
+    border: 1px black solid;
+    border-radius: 45px;
+    padding: 5px 6px;
+}
+
+.qr-chk input:disabled + label{
+    opacity: .51;
+    cursor: default;
+>>>>>>> requestsUpgrade
 }

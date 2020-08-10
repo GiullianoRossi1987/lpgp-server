@@ -41,6 +41,10 @@
 	padding: 4px 6px;
 	margin-bottom: 5px !important;
 	margin-top: 5px !important;
+<<<<<<< HEAD
+=======
+
+>>>>>>> requestsUpgrade
 }
 
 .sig-card .card-body a:hover{
@@ -49,6 +53,54 @@
 
 .client-card h6{ color: #aaa;}
 
+<<<<<<< HEAD
 .badge{
 	font-size: 13px;
+=======
+
+.account-separator .content{
+    padding: 10px 10px;
+    font-family: sans-serif;
+    text-align: left;
+	width: auto;
+	height: 70px;
+	border-bottom: 1px solid black;
+	transition: border 1.2s ease-in-out, background-color 1.2s ease-out;
+}
+
+.account-separator .content h2{
+    color: initial;
+    font-family: sans-serif;
+}
+
+.account-separator .content:hover,
+.selected-separator{
+	border-top: 1px solid black;
+	border-right: 1px solid black;
+	border-left: 1px solid black;
+	border-bottom: none !important;
+}
+
+.account-separator .selected-separator h2{ color: #fdff00 !important;}
+.account-separator .selected-separator h2::after{ content: "\f0d8" !important; }
+.account-separator .selected-separator{ background-color: black; }
+
+.account-separator .content h2::after{
+    content: "\f0d7";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    padding-right: 20px;
+    float: right;
+	transition: content 1.3s ease-in-out;
+}
+
+.account-separator h2:focus{
+    padding: 22px 24px;
+}
+
+
+.section{
+    padding: 10px 12px;
+    border: 1px solid black;
+>>>>>>> requestsUpgrade
 }

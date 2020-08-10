@@ -38,11 +38,16 @@ sendUserLogged();
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.2/popper.min.js"></script>
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
 =======
 >>>>>>> datacore
 =======
 >>>>>>> datacore
+=======
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc" crossorigin="anonymous">
+    <script src="js/autoload.js" charset="utf-8"></script>
+>>>>>>> requestsUpgrade
 </head>
 <style>
 </style>
@@ -52,6 +57,7 @@ sendUserLogged();
             setAccountOpts();
             setSignatureOpts();
             applyToA();
+            loadSearchButton();
         });
 
         $(document).ready(function(){
@@ -59,65 +65,6 @@ sendUserLogged();
             $(".headtitle").css("opacity", "1");
         });
 
-        var pas1 = "text";
-        var pas2 = "text";
-        var vb = "visible";
-
-        $(document).on("click", "#show-passwd1", function(){
-            $("#password1").attr("type", pas1);
-            if(pas1 == "text") pas1 = "password";
-            else pas1 = "text";
-        });
-
-        $(document).on("click", "#show-passwd2", function(){
-            $("#password2").attr("type", pas1);
-            if(pas2 == "text") pas2 = "password";
-            else pas2 = "text";
-        });
-
-        $(document).on("change", "#password1", function(){
-            var content = $(this).val();
-            if(content.length <= 7){
-                $("#err-lb-passwd1").text("Please choose a password with more then 7 characters.");
-                $("#err-lb-passwd1").show();
-            }
-            else if(content != $("#password2").val()){
-                $("#err-lb-passwd1").text("The passwords doesn't match");
-                $("#err-lb-passwd1").show();
-            }
-            else $("#err-lb-passwd1").hide();
-        });
-
-        $(document).on("change", "#username", function(){
-            var content = $(this).val();
-            if(content.length <= 0){
-                $("#err-lb-username").text("Please choose a username!");
-                $("#err-lb-username").show();
-            }
-            else $("#err-lb-username").hide();
-        });
-
-        $(document).on("change", "#email", function(){
-            var content = $(this).val();
-            if(content.length <= 0){
-                $("#err-lb-email").text("Please choose a e-amil address");
-                $("#err-lb-email").show();
-            }
-            else if(content.search("@") < 0){
-                $("#err-lb-email").text("Please choose a valid e-mail address");
-                $("#err-lb-email").show();
-            }
-            else $("#err-lb-email").hide();
-        });
-
-        $(document).on("click", "#default-img", function(){
-            $("#upload-img-input").hide();
-        });
-
-        $("#mainCarousel").carousel({
-            interval: 2000,
-            direction: left
-        });
     </script>
     <div class="container-fluid header-container" role="banner" style="position: relative;">
         <div class="col-md-12 header col-sm-12" style="height: 71px;">
@@ -142,6 +89,9 @@ sendUserLogged();
                     <a href="./about.html" class="dropdown-item">About Us</a>
                     <a href="./contact-us.html" class="dropdown-item">Contact Us</a>
                 </div>
+            </div>
+            <div id="notification-container">
+
             </div>
         </div>
     </div>

@@ -90,11 +90,11 @@ if(isset($_GET['rel'])){
 					if(isset($_GET['rel'])){
                         if($_SESSION['mode'] == "prop"){
                             $prp_c = new PropCheckHistory(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
-                            echo $prp_c->generateRelatory((int) $_GET['rel']);
+                            echo $prp_c->generateRelatory((int) base64_decode($_GET['rel']));
                         }
                         else{
                             $usr_c = new UsersCheckHistory(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
-                            echo $usr_c->generateRelatory((int) $_GET['rel']);
+                            echo $usr_c->generateRelatory((int) base64_decode($_GET['rel']));
                         }
                     }
 				?>

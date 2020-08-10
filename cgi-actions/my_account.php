@@ -13,8 +13,6 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
 
 use function JSHandler\lsSignaturesMA;
 use function JSHandler\sendUserLogged;
-use const MAX_SIGC;
-use const LPGP_CONF;
 use function JSHandler\createClientCard;
 
 use Core\ProprietariesData;
@@ -27,7 +25,7 @@ use Core\ClientsAccessData;
 sendUserLogged(); // preventing bugs
 
 $prp = new ProprietariesData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
-$usr = new UsersData(LPGP_CONFG['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
+$usr = new UsersData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
 
 ?>
 <!DOCTYPE html>
@@ -42,18 +40,31 @@ $usr = new UsersData(LPGP_CONFG['mysql']['sysuser'], LPGP_CONF['mysql']['passwd'
     <script src="../js/main-script.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/@popperjs/core@2"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
     <link rel="shortcut icon" href="../media/new-logo.png" type="image/x-icon">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
     <script src="../js/actions.js"></script>
     <link rel="stylesheet" href="../css/account.css">
+<<<<<<< HEAD
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
 
+=======
+    <script src="../js/requester.js" charset="utf-8"></script>
+    <script src="../jquery/lib/jquery-3.4.1.min.js" charset="utf-8"></script>
+    <script src="../jquery/lib/bootstrap/js/bootstrap.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc" crossorigin="anonymous">
+>>>>>>> requestsUpgrade
 </head>
 <style>
+    #img-user{
+        border-radius: 50%;
+    }
+
+    .prop-img{
+        border: 5px solid green;
+        background-color: green;
+    }
 </style>
 <body>
     <script>
@@ -62,13 +73,26 @@ $usr = new UsersData(LPGP_CONFG['mysql']['sysuser'], LPGP_CONF['mysql']['passwd'
             setSignatureOpts();
             applyToA();
             applyToForms();
+            $.post({
+                url: "ajx_logged_request.php",
+                data: "getJSON=t",
+                success: function(json){
+                    let brute = $.parseJSON(json);
+                    if(brute['Mode'] == 0){
+                        $("#img-cont").addClass("usr-img");
+                    }
+                    else{
+                        $("#img-cont").addClass("prop-img");
+                    }
+                },
+                error: function(xhr, status, error){ console.log(error); }
+            });
             $("#img-user").css("background-image", "url(" + getLinkedUserIcon() + ")");
         });
 
-        $(document).ready(function(){
-            applyToA();
-        })
-
+        $(document).on("click", ".account-separator .content", function(){
+            $(this).toggleClass("selected-separator");
+        });
     </script>
     <div class="container-fluid header-container" role="banner" style="position: fixed;">
         <div class="col-12 header" style="height: 71px; transition: background-color 200ms linear;">
@@ -92,6 +116,7 @@ $usr = new UsersData(LPGP_CONFG['mysql']['sysuser'], LPGP_CONF['mysql']['passwd'
                         <a href="http://localhost/docs/" class="dropdown-item">Documentation</a>
                         <a href="http://localhost/about.html" class="dropdown-item">About Us</a>
                         <a href="http://localhost/contact-us.html" class="dropdown-item">Contact Us</a>
+                        <a href="https://www.lpgpofficial.com/cgi-actions/report-trouble.html"></a>
                     </div>
                 </div>
             </div>
@@ -101,13 +126,20 @@ $usr = new UsersData(LPGP_CONFG['mysql']['sysuser'], LPGP_CONF['mysql']['passwd'
     <hr>
     <div class="container-fluid container-content" style="position: relative; margin-top: 5%;">
         <div class="row-main row">
-            <div class="col-12 clear-content" style="position: relative; margin-left: 0; max-width: 100% !important">
-                <div class="container user-data-con" style="margin-left: 0; max-width: 100%;">
+            <div class="col-12 clear-content">
+                <div class="container user-data-con" >
 					<div class="main-row row">
+<<<<<<< HEAD
                         <div class="main-col col-12 card" style="margin-left: 0% !important; border: none;">
                             <div class="container data-container">
                                 <div class="main-row row card-header">
                                     <div class="img-cont card-img-top" style="margin-left: 37%; background-color: linear-gradient(#000000, #fdff00);">
+=======
+                        <div class="main-col col-12 card" style="; border: none;">
+                            <div class="container data-container">
+                                <div class="main-row row card-header">
+                                    <div class="img-cont card-img-top" style="margin-left: 35%; padding: 20px 21px;">
+>>>>>>> requestsUpgrade
                                         <div id="img-user"></div>
                                     </div>
                                     <br>
@@ -117,20 +149,32 @@ $usr = new UsersData(LPGP_CONFG['mysql']['sysuser'], LPGP_CONF['mysql']['passwd'
                                         if($_SESSION['mode'] == "prop"){
 
                                             $dt = $prp->getPropData($_SESSION['user']);
+<<<<<<< HEAD
                                             echo "<h1 class=\"user-name\">" . $dt['nm_proprietary'] . " <span class=\"badge badge-primary badge-sm\">Proprietary</span></h1>\n";
                                             echo "<h3 class=\"email\">Email: " . $dt['vl_email'] . "</h3>\n";
                                             echo "<h3 class=\"date-creation\">Joined us in : " . $dt['dt_creation'] . "</h3>\n";
+=======
+                                            echo "<h1 class=\"user-name\">Name: " . $dt['nm_proprietary'] . " <span class=\"badge badge-success\">Proprietary</span></h1>";
+                                            echo "<h3 class=\"email\">Email: " . $dt['vl_email'] . "</h3>\n";
+                                            echo "<h3 class=\"date-creation\">Date of creation: " . date_format(new DateTime($dt['dt_creation']), "Y-m-d") . "</h3>\n";
+>>>>>>> requestsUpgrade
 
                                         }
                                         else{
                                             $dt = $usr->getUserData($_SESSION['user']);
+<<<<<<< HEAD
                                             echo "<h1 class=\"user-name\"> " . $dt['nm_user'] . "<span class=\"badge badge-secondary\">Normal</span></h1>\n";
                                             echo "<h3 class=\"email\">Email: " . $dt['vl_email'] . "</h3>\n";
                                             echo "<h6 class=\"date-creation\">Joined us in: " . $dt['dt_creation'] . "</h3>\n";
+=======
+                                            echo "<h1 class=\"user-name\"> " . $dt['nm_user'] . "   <span class=\"badge badge-secondary\">Normal User</span></h1>";
+                                            echo "<h3 class=\"email\">Email: " . $dt['vl_email'] . "</h3>\n";
+                                            echo "<h6 class=\"date-creation\">Date creation: " . date_format(new DateTime($dt['dt_creation']), "Y-m-d") . "</h3>\n";
+>>>>>>> requestsUpgrade
                                         }
                                         ?>
                                         <a class="account-separator" id="accountopt-sep" href="#moreoptions-section" data-toggle="collapse" aria-expanded="false" aria-controls="moreoptions-section">
-                                            <h2>More account options<span><i class="fas fa-caret-down" style="margin-left: 37%;"></i></span></h2>
+                                            <div class="content"><h2>More account options</h2></div>
                                         </a>
                                         <div class="collapse section" id="moreoptions-section">
                                             <br>
@@ -179,17 +223,22 @@ $usr = new UsersData(LPGP_CONFG['mysql']['sysuser'], LPGP_CONF['mysql']['passwd'
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
+<<<<<<< HEAD
                         <div class="others-col col-md-12" style="margin-top: 3%;">
                             <div class="signatures-col col-8 leaftable">
+=======
+                    </div>
+                    <br>
+                    </div>
+                    <div class="row itens-row">
+                        <div class="others-col col-md-7" style="margin-left: 21%;">
+                            <div class="signatures-col col-12">
+>>>>>>> requestsUpgrade
                                 <?php if($_SESSION['mode'] == "prop") echo '<a href="#signatures-section" class="account-separator" id="signature-sep" aria-controls="signatures-section" aria-expanded="false" data-toggle="collapse">
-                                        <h2 class="mainheader-heading mb-0">My Signatures<span style="margin-left: 70%;">
-                                        <i class="fas fa-caret-down"></i>
-                                    </span></h2>
-
+                                        <div class="content"><h2 class="mainheader-heading mb-0">My Signatures</h2></div>
                                     </a>';
                                 ?>
                                 <div id="signatures-section" class="collapse section">
@@ -208,12 +257,11 @@ $usr = new UsersData(LPGP_CONFG['mysql']['sysuser'], LPGP_CONF['mysql']['passwd'
                             </div>
                             <div class="history-col col-8 leaftable" style="position: relative; margin-top: 10%;">
                                 <a class="account-separator" href="#history-section" data-toggle="collapse" aria-expanded="false" aria-controls="history-section" id="history-sep">
-                                    <h2>
-                                        My History
-                                        <span>
-                                            <i class="fas fa-caret-down" style="margin-left: 75%;"></i>
-                                        </span>
-                                    </h2>
+                                    <div class="content">
+                                        <h2>
+                                            My History
+                                        </h2>
+                                    </div>
                                 </a>
                                 <div class="collapse section" id="history-section">
                                     <?php
@@ -249,12 +297,11 @@ $usr = new UsersData(LPGP_CONFG['mysql']['sysuser'], LPGP_CONF['mysql']['passwd'
                             <div class="col-8 clients-col leaftable" style="margin-top: 10%;">
                                 <?php
                                 if($_SESSION['mode'] == "prop") echo '<a href="#clients-section" class="account-separator" data-toggle="collapse" aria-controls="clients-section" aria-expanded="false" id="client-sep">
-                                    <h2>
-                                        My Clients
-                                        <span>
-                                            <i class="fas fa-caret-down" style="margin-left: 75%;"></i>
-                                        </span>
-                                    </h2>
+                                    <div class="content">
+                                        <h2>
+                                            My Clients
+                                        </h2>
+                                    </div>
                                 </a>'
                                 ?>
                                 <div class="collapse section" id="clients-section">
@@ -284,6 +331,7 @@ $usr = new UsersData(LPGP_CONFG['mysql']['sysuser'], LPGP_CONF['mysql']['passwd'
                                 </div>
                             </div>
                         </div>
+                    </div>
 					</div>
 				</div>
             </div>

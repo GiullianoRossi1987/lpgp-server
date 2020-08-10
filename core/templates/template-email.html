@@ -8,47 +8,85 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
 </head>
-<style>
-    header{
-        width: 100%;
-        border: 1px solid black;
-        background-color: #ccc;
+<style media="screen">
+
+    .main-container{
+        background-color: black;
+        margin-top: 10%;
+        border-radius: 20px;
+        padding: 20px 21px;
     }
 
-    .code{
+    .main-container > .title-row > h1{
+        color: #fdff00;
+        text-align: center !important;
+        margin-left: 35%;
+        padding: 10px 11px;
+    }
+
+    .main-container > .title-row > h1::after{
+        content: "©";
+        font-size: 25px;
+        color: inherit;
+        margin-top: -13px;
+        padding: 3px 4px;
+    }
+
+    .content-container{
+        background-color: white;
+        border: 15px black solid;
+        font-size: 20px;
+        border-radius: 20px;
+        padding: 10px 11px;
+        margin-bottom: 100px;
+    }
+
+    #code{
         display: flex;
-        text-align: center;
-        border: 2px solid blue;
-        height: 100px;
-        width: 200px;
-        align-content: center;
-        font-size: larger;
-        text-shadow: #ccc;
-        font-variant: small-caps;
-        font-family: Ubuntu, Cantarell;
-        font-kerning: normal;
+        border: 1px black solid;
+        width: 240px;
+        padding: 10px 11px;
+        cursor: pointer;
+        background-color: black;
+        color: #fdff00;
+        border-radius: 15px;
     }
 </style>
 <body>
-
-    <div class="card main-card">
-        <div class="card-header">
-            <h1 class="card-title mb-0" style="margin-left: 34%;">Welcome to the LPGP %user%</h1>
-            <br>
-            <h3 class="card-subtitle mb-0" style="margin-left: 36%;">We are so glad that you joined us!</h3>
+    <div class="container container-fluid main-container">
+        <div class="row title-row">
+            <h1 id="title">LPGP OFFICIAL</h1>
         </div>
-        <div class="card-body">
-            There's your access code:
-            <br>
-            <div class="code">
-                %key%
+        <br>
+        <div class="row content-row">
+            <div class="container content-container">
+                <div class="main-row row">
+                    <div class="col-12">
+                        <p>
+                            Welcome to the LPGP %user% !
+                            Please to continue your account, insert that code
+                            next time you log in the LPGP Official site.
+                        </p>
+                        <br>
+                        <div class="code" id="code" data-toggle="tooltip" title="Click to copy the code" onclick="clickCopy(this);">
+                            %key%
+                        </div>
+                        <br>
+                        <p>
+                            If you aren't %user% or don't created a LPGP account ,
+                            then just ignore this e-mail.
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
-    <h1>Welcome to the LPGP %user%</h1>
-    <p>
-        Remember to the blalablalblablablalballbal  %key%
-    </p>
+    <script type="text/javascript">
+        function clickCopy(sender){
+            let content = document.querySelector("#code").innerText;
+            navigator.clipboard.writeText(content);
+            sender.title = "Copied to the clipboard";
+        }
+    </script>
 </body>
 </html>

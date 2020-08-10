@@ -64,6 +64,7 @@ input[type="file"]{
 	font-size: 24px;
 }
 
+<<<<<<< HEAD
 
 .img-radio-default label{
 	opacity: 0.55;
@@ -79,4 +80,70 @@ input[type="file"]{
 	opacity: 1;
 	background-color: green;
 	padding: 20px 20px;
+=======
+.img-radio-default input:checked + #default-img{
+    outline: green solid 2px;
+    transition: outline 1s linear;
+	opacity: 1;
+}
+
+.img-radio-default{
+    margin-bottom: 40px;
+    padding: 10px 14px;
+}
+
+.img-radio-default input:checked ~ .img-radio-default{
+	background-color: green;
+}
+
+.img-radio-default input:hover + #default-img{
+    outline: green dotted 2px;
+}
+
+.img-radio-default input{
+	display: none;
+}
+
+.img-rado-default label{
+	opacity: .78;
+}
+
+.img-chooser{
+	margin-bottom: 50px;
+	display: inline-flex;
+}
+
+.img-opt{
+	width: 200px;
+	height: 350px;
+	display: inline-flex !important;
+	margin-right: 30px;
+	transition: opacity 1.3s ease-in;
+	transition: outline 1.3s ease-out;
+}
+
+.dft-img-opt .card-footer .form-check input{ display: none; }
+.dft-img-opt{
+	outline: green 2px solid;
+}
+
+.dft-ignored{
+	outline: none;
+	opacity: .67;
+}
+
+.upl-img-opt{
+	opacity: .67;
+}
+
+.upl-img-opt:hover,
+.upl-img-checked,
+.dft-ignored:hover{opacity: 1;}
+
+.upl-img-checked{ outline: 2px green solid;}
+
+.upl-img-opt:hover ~ .dft-img-opt,
+.dft-ignored:hover ~ .upl-img-opt{
+	opacity: .67;
+>>>>>>> requestsUpgrade
 }
