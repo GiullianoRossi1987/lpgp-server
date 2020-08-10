@@ -55,7 +55,6 @@
     background-color: black;
     border-color: rgb(51, 51, 71);
     color: white !important;
-    transition: background-color 200ms linear();
 }
 
 .after-opt{
@@ -257,17 +256,8 @@
     background-image: url("../media/usr-icon.png");
     background-size: cover;
     background-repeat: no-repeat;
+    opacity: .75;
 }
-
-.img-radio-default input ~ .checkmark{
-    background-color: #eee;
-}
-
-.img-radio-default:hover input ~.checkmark{
-    background-color: #ccc;
-    transition: background-color 200ms linear;
-}
-
 
 .main-col{
     border: 1px solid black;
@@ -457,24 +447,6 @@
 
 .user-data-con .main-col{
     border-radius: 7%;
-}
-
-.account-separator h2 {
-    padding: 10px 12px;
-    font-family: sans-serif;
-    border: 1px solid rgba(99, 99, 99, 0.8);
-    text-align: left;
-    color: black;
-}
-
-.account-separator h2:hover{
-    padding: 12px 14px;
-}
-
-
-.section{
-    padding: 10px 12px;
-    background-color: #cccc;
 }
 
 

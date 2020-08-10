@@ -13,18 +13,17 @@ sendUserLogged(); // preventing bugs
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>LPGP Oficial Server</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link rel="stylesheet" href="./css/new-layout.css">
     <script src="./js/main-script.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <link rel="shortcut icon" href="./media/new-logo.png" type="image/x-icon">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.2/popper.min.js"></script>
     <link rel="stylesheet" href="css/account-creation.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
+    <script src="jquery/lib/jquery-3.4.1.min.js" charset="utf-8"></script>
+    <script src="jquery/lib/bootstrap/js/bootstrap.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="jquery/lib/bootstrap/css/bootstrap.css">
 </head>
 <style>
 </style>
@@ -126,8 +125,24 @@ sendUserLogged(); // preventing bugs
         });
 
         $(document).on("click", "#upload-img-btn", function(){
+            $(".img-radio-dft input").prop("checked", false);
             $("#upload-img-input").show();
-            $("#default-img").attr("checked", false);
+        });
+
+        $(document).on("click", ".dft-img-opt .card-footer .form-check label", function(){
+            console.log("got it");
+            let toggler = $(".dft-img-opt .card-footer .form-check input").prop("checked");
+            console.log(toggler);
+            $(".dft-img-opt").toggleClass("dft-ignored", !toggler);
+            $(".upl-img-opt").toggleClass("upl-img-checked", !toggler);
+            $("#upload-img-input").collapse("hide");
+        });
+
+        $(document).on("click", ".upl-img-opt .card-footer a", function(){
+            let toggler = $("#upload-img-input").prop("aria-expanded");
+            $(".upl-img-opt").toggleClass("upl-img-checked", $(toggler));
+            $(".dft-img-opt").toggleClass("dft-ignored", $(toggler));
+            $(".dft-img-opt .card-footer .form-check input").prop("checked", !toggler);
         });
     </script>
     <div class="container-fluid header-container" role="banner" style="position: relative !important">
@@ -155,10 +170,8 @@ sendUserLogged(); // preventing bugs
                 </div>
             </div>
         </div>
-
     </div>
     <br>
-    <hr>
     <div class="container-fluid container-content" style="position: relative;">
         <div class="row-main row">
             <div class="col-6 clear-content" style="position: relative; margin-left: 24%; margin-top: 5%;">
@@ -249,21 +262,67 @@ sendUserLogged(); // preventing bugs
                     </div>
                     <br>
                     <div class="hidden-help collapse" id="acc-help">
-                        <h1>Test help</h1>
+                        <h4>Account types</h4>
+                        <p>There're two kinds of LPGP accounts, they're:</p>
+                        <br>
+                        <ul class="list-unstyled">
+                            <li>
+                                <h1>Normal Accounts</h1>
+                                <h4>It can: </h4>
+                                <ul>
+                                    <li>Check a Signature normally</li>
+                                    <li>Access other accounts and send e-mails directly using our LPGP Fast Crow service&copy</li>
+                                    <li>Manage it own account</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <h1>Proprietary Accounts</h1>
+                                <h4>It can: </h4>
+                                <ul>
+                                    <li>Do all the same things the normal account can</li>
+                                    <li>Create and manage signatures</li>
+                                    <li>Create and manage clients</li>
+                                </ul>
+                            </li>
+                        </ul>
                     </div>
                     <br>
                     <h4>Choose your profile image</h4>
                     <br>
                     <div class="img-select-container">
-                        <div class="img-radio-default">
-                            <input type="radio" class="form-check" id="default-img" name="img-user" value="default-img" checked>
-                            <label for="default-img" id="default-img-lb">
-                            </label>
+                        <div class="options-img d-inline">
+                            <div class="card dft-img-opt img-opt">
+                                <div class="card-header">
+                                    <img src="media/usr-icon.png" alt="Default avatar" class="card-img-top">
+                                </div>
+                                <div class="card-body">
+                                    <h4 class="card-title">Default avatar</h4>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="form-check">
+                                        <input type="radio" name="img-usr" value="default-img" autocomplete="off" checked id="dft-img-d" class="form-check-control">
+                                        <label for="dft-img-d" class="form-check-label btn btn-block btn-secondary" role="button">Select</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card upl-img-opt img-opt">
+                                <div class="card-header">
+                                    <img src="media/upload-img-opt.png" alt="Upload" class="card-img-top">
+                                </div>
+                                <div class="card-body">
+                                    <h4 class="card-title">Upload a image</h4>
+                                </div>
+                                <br>
+                                <div class="card-footer btn-group btn-group-toggle" data-toggle="buttons">
+                                    <a href="#upload-img-input" role="button" class="btn btn-block btn-secondary" data-toggle="collapse" aria-expanded="false">
+                                        Upload
+                                        <span>
+                                            <i class="fas fa-upload"></i>
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
-                        <br>
-                        <a href="#upload-img-input" class="btn btn-lg btn-primary" data-toggle="collapse" aria-expanded="false" aria-controls="uploaded-img-input" role="button">
-                            Upload a image
-                        </a>
                         <br>
                         <div class="collapse" id="upload-img-input">
                             <br>
@@ -291,7 +350,7 @@ sendUserLogged(); // preventing bugs
                 <div class="social-options-grp">
                     <div class="social-option">
                         <a href="https://github.com/GiullianoRossi1987" target="_blanck" id="github" class="social-option-footer">
-                        <span><i class="fab fa-github"></i></span>" alt="<github image>" width="50px" height="30px" data-toggle="tooltip" title="Visit our github" data-placement="bottom">Visit our github</a>
+                        <span><i class="fab fa-github"></i></span>Visit our GitHub</a>
                     </div>
                     <div class="social-option-footer">
                         <a href="https://" target='_blanck' id="facebook">
