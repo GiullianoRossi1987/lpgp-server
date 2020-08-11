@@ -1,4 +1,5 @@
 // coding = utf-8
+import * from "https://www.lpgpofficial.com/js/requester.js";
 
 function loadSearchButton(){
     let mainBtn = document.createElement("a");
@@ -19,3 +20,11 @@ function loadSearchButton(){
 
     document.querySelector(".header-container .header").appendChild(mainBtn);
 }
+
+function loadJSLibs(){
+
+};
+
+function startup(){
+
+};

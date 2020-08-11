@@ -93,3 +93,57 @@ function requestFilter(type, mode, dispose){
         error: function(xhr, status, error){ console.error(error); }
     });
 }
+
+function genSessionErrorModal(link_replacement){
+    var mainModal = document.createElement("div");
+    var modalDialog = document.createElement("div");
+    var modalContent = document.createElement("div");
+    var modalHeader = document.createElement("div");
+    var modalTitle = document.createElement("h1");
+    var modalBody = document.createElement("div");
+    var modalText = document.createElement("p");
+    var anchorMain = document.createElement("a");
+
+    mainModal.classList.add("modal");
+    mainModal.classList.add("fade");
+    mainModal.classList.add("session-error-m");
+    mainModal.setAttribute("data-backdrop", "static");
+    mainModal.setAttribute("data-keyboard", false);
+    mainModal.setAttribute("tabindex", -1);
+    mainModal.setAttribute("aria-hidden", false);
+    mainModal.id = "session-error-m";
+
+    modalDialog.classList.add("modal-dialog");
+
+    modalContent.classList.add("modal-content");
+
+
+    modalHeader.classList.add("modal-header");
+    modalTitle.classList.add("modal-title");
+    modalTitle.innerText = "Session error, sorry";
+    modalTitle.id = "session-error-m-title";
+
+    modalBody.classList.add("modal-body");
+    modalText.innerText = "Please make the login again";
+
+    anchorMain.classList.add("btn");
+    anchorMain.classList.add("btn-lg");
+    anchorMain.classList.add("btn-secondary");
+    anchorMain.role = "button";
+    anchorMain.onclick = function(){
+        window.location.replace(link_replacement);
+    };
+    anchorMain.innerText = "Back to the login";
+
+    modalBody.appendChild(modalText);
+    modalBody.appendChild(anchorMain);
+    modalHeader.appendChild(modalTitle);
+    modalContent.appendChild(modalHeader);
+    modalContent.appendChild(modalBody);
+    modalDialog.appendChild(modalContent);
+    mainModal.appendChild(modalDialog);
+
+    // requires the JQUERY
+    $(mainModal).modal("show");
+    $(mainModal).on("hidden.bs.modal", function(e){ window.location.replace(link_replacement); });
+}

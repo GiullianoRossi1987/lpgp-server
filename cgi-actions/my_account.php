@@ -40,6 +40,7 @@ $usr = new UsersData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']
     <script src="../js/actions.js"></script>
     <link rel="stylesheet" href="../css/account.css">
     <script src="../js/requester.js" charset="utf-8"></script>
+    <script src="../js/autoload.js" charset="utf-8"></script>
     <script src="../jquery/lib/jquery-3.4.1.min.js" charset="utf-8"></script>
     <script src="../jquery/lib/bootstrap/js/bootstrap.js" charset="utf-8"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc" crossorigin="anonymous">

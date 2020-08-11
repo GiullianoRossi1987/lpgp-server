@@ -1,3 +1,6 @@
 [submodule "PHPMailer"]
 	path = PHPMailer
 	url = https://github.com/PHPMailer/PHPMailer
+[submodule "lpgp-auth"]
+	path = lpgp-auth
+	url = https://github.com/GiullianoRossi1987/lpgp-auth
