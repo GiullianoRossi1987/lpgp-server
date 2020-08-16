@@ -5,6 +5,11 @@
  * That file have all the buttons and fields methods.
  */
 
+const normalUsersReportTypes = ["Other", "Signature checking", "Client Checking", "My Account", "WebSite Design"];
+const proprietariesReportTypes = ["Other", "Signature checking",
+                                  "Client Checking", "My Account",
+                                  "Signatures Management", "Clients Management",
+                                  "Access Plot view", "WebSite Design"];
 
 /**
  * Show a error in the page, using the .error-lb class and specifying the label ID

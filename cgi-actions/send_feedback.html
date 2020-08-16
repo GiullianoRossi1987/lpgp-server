@@ -1,17 +1,3 @@
-<?php
-require_once "core/js-handler.php";
-require_once "core/Core.php";
-require_once "config/configmanager.php";
-
-use function JSHandler\sendUserLogged;
-use function JSHandler\setCon1Links;
-use Configurations\ConfigManager;
-
-$gblConfig = new ConfigManager($_SERVER['DOCUMENT_ROOT'] . "/config/mainvars.json");
-if(!defined("LPGP_CONF")) define("LPGP_CONF", $gblConfig->getConfig());
-
-sendUserLogged();
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,25 +6,25 @@ sendUserLogged();
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>LPGP Oficial Server</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="./css/new-layout.css">
-    <script src="./js/main-script.js"></script>
-    <script src="./js/actions.js"></script>
+    <link rel="stylesheet" href="../css/new-layout.css">
+    <script src="../js/main-script.js"></script>
+    <script src="../js/actions.js"></script>
     <link rel="stylesheet" href="./bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="./bootstrap/font-awesome.min.css">
-    <link rel="stylesheet" href="css/content-style.css">
     <script src="./bootstrap/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <link rel="shortcut icon" href="./media/new-logo.png" type="image/x-icon">
+    <link rel="shortcut icon" href="../media/new-logo.png" type="image/x-icon">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.2/popper.min.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc" crossorigin="anonymous">
-    <script src="js/autoload.js" charset="utf-8"></script>
+    <script src="../js/autoload.js" charset="utf-8"></script>
+    <script src="../jquery/lib/jquery-3.4.1.min.js" charset="utf-8"></script>
 </head>
 <style>
+    #qr-btn{ margin-top: -66px !important;}
 </style>
 <body>
     <script>
@@ -47,6 +33,33 @@ sendUserLogged();
             setSignatureOpts();
             applyToA();
             loadSearchButton();
+            $.post({
+                url: "ajx_logged_request.php",
+                data: "getJSON=t",
+                success: function(json){
+                    let mainData = $.parseJSON(json);
+                    if(mainData["Logged"] === false) window.location.replace("../login_frm.php");
+                    if(mainData['Mode'] == 1){
+                        // proprietary
+                        for(var i = 0; i < 8; i++){
+                            let option = document.createElement("option");
+                            option.value = i;
+                            option.innerHTML = proprietariesReportTypes[i];
+                            $("#type-report").append(option);
+                        }
+                    }
+                    else{
+                        // normal user
+                        for(var i = 0; i < 5; i++){
+                            let option = document.createElement("option");
+                            option.value = i;
+                            option.innerHTML = normalUsersReportTypes[i];
+                            $("#type-report").append(option);
+                        }
+                    }
+                },
+                error: function(xhr, status, error){ console.error(error); }
+            });
         });
 
         $(document).ready(function(){
@@ -54,8 +67,18 @@ sendUserLogged();
             $(".headtitle").css("opacity", "1");
         });
 
+        $(document).on("click", "#sender", function(){
+            $.post({
+                url: "ajx_mail_sender.php",
+                data: "report=t&report-content="+$("#report-content").val()+"&type="+$("#type-report").val(),
+                success: function(response){
+                    $(".container-content").html(response);
+                }
+            });
+        });
+
     </script>
-    <div class="container-fluid header-container" role="banner" style="position: relative;">
+    <div class="container-fluid header-container" role="banner">
         <div class="col-md-12 header col-sm-12" style="height: 71px;">
             <div class="opt-dropdown dropdown login-dropdown">
                 <button type="button" class="btn btn-lg default-btn-header dropdown-toggle" data-toggle="dropdown" id="account-opts" aria-haspopup="true" aria-expanded="false">
@@ -84,26 +107,36 @@ sendUserLogged();
             </div>
         </div>
     </div>
-    <div class="content1 container content">
-        <div class="row rowcontent">
-            <div class="col-12 col-md-12 col-sm-12 col-ls-12 main-header" >
-                <h1 class="anim-appear masthead-heading text-uppercase mb-0" style="color: black; margin-top: 12%;"><u>LPGP</u></h1>
-                <h1 class="masthead-heading text-uppercase mb-0" style="color: black; text-align: center; margin-top: 1%;">Let the golden raven lead you</h1>
+    <div class="container container-fluid container-content" style="margin-top: 5% !important;">
+        <div class="row">
+            <div class="col-md-12 main-form-report">
+                <div class="form main-form">
+                    <h1>Report us a error</h1>
+                    <br>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <label for="type-report" class="form-label">What kind of error is it? </label>
+                        </div>
+                        <br>
+                        <select class="form-control" name="type" id="type-report"></select>
+                    </div>
+                    <br>
+                    <br>
+                    <label for="report-content" class="form-label">Describe yout issue</label>
+                    <br>
+                    <textarea name="" rows="8" cols="100" class="form-control" id="report-content"></textarea>
+                    <br>
+                    <br>
+                    <div class="options-container container">
+                        <div class="main-row row">
+                            <div class="col-4">
+                                <button type="button" name="button" id="sender" class="btn btn-lg btn-success">Report issue</button>
+                                <a href="https://www.lpgpofficial.com/" role="button" class="btn btn-lg btn-secondary">Cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="row rowcontentn">
-            <div class="col-12 col-md-12 col-sm-12 content-nrm" id="con2">
-                <div id="logo-ex"></div>
-                <h1>What's LPGP?</h1>
-                <p>
-                    LPGP is a online authenticated certificate. There're so many
-                    other
-                </p>
-            </div>
-        </div>
-        <hr>
-        <div class="row rowcontentn">
-
         </div>
     </div>
     <div class="footer-container container">

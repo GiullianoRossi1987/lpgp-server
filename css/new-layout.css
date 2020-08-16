@@ -6,6 +6,8 @@
     position: fixed !important;
     z-index: 99;
     opacity: 1;
+    margin-top: 0 !important;
+    top: 0 !important;
 }
 
 
@@ -113,8 +115,7 @@
 }
 
 .container-content{
-    position: relative;
-
+    position: relative !important;
 }
 
 .clear-content{
