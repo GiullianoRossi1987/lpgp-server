@@ -68,7 +68,7 @@ if(isset($_POST['report'])){
 }
 else if(isset($_POST['feedback'])){
     $md = DUMP_FEEDBACK_MODE[(int)$_POST['mode']];
-    $email = fetchTemplate($_POST['report-content'], $l_name, $dt['vl_email'], FEEDBACK_TEMPLATE);
+    $email = fetchTemplate($_POST['feedback-content'], $l_name, $dt['vl_email'], FEEDBACK_TEMPLATE);
     send(EMAIL_TO, $email, $dt['vl_email'], "$l_name is sending a $md feedback");
     die("SENT");
 }

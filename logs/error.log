@@ -1900,3 +1900,19 @@
 [Sun Aug 16 15:42:31.758432 2020] [php7:warn] [pid 11631] [client 127.0.0.1:42060] PHP Warning:  filesize(): stat failed for /home/giulliano/lpgp-server/core/templates/report.html in /home/giulliano/lpgp-server/cgi-actions/ajx_mail_sender.php on line 29, referer: https://www.lpgpofficial.com/cgi-actions/send_feedback.html
 [Sun Aug 16 15:42:31.758472 2020] [php7:warn] [pid 11631] [client 127.0.0.1:42060] PHP Warning:  fread() expects parameter 1 to be resource, bool given in /home/giulliano/lpgp-server/cgi-actions/ajx_mail_sender.php on line 29, referer: https://www.lpgpofficial.com/cgi-actions/send_feedback.html
 [Sun Aug 16 15:42:31.758485 2020] [php7:warn] [pid 11631] [client 127.0.0.1:42060] PHP Warning:  fclose() expects parameter 1 to be resource, bool given in /home/giulliano/lpgp-server/cgi-actions/ajx_mail_sender.php on line 30, referer: https://www.lpgpofficial.com/cgi-actions/send_feedback.html
+[Mon Aug 17 00:00:45.003292 2020] [ssl:warn] [pid 880] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Mon Aug 17 00:00:45.159960 2020] [ssl:warn] [pid 880] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Mon Aug 17 17:56:10.489492 2020] [ssl:warn] [pid 734] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Mon Aug 17 17:56:10.619469 2020] [ssl:warn] [pid 734] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Mon Aug 17 17:56:11.867408 2020] [ssl:warn] [pid 856] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Mon Aug 17 17:56:11.867425 2020] [ssl:warn] [pid 856] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Tue Aug 18 00:00:55.854172 2020] [ssl:warn] [pid 856] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Tue Aug 18 00:00:55.870803 2020] [ssl:warn] [pid 856] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Tue Aug 18 18:17:00.064846 2020] [ssl:warn] [pid 746] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Tue Aug 18 18:17:00.111644 2020] [ssl:warn] [pid 746] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Tue Aug 18 18:17:00.705967 2020] [ssl:warn] [pid 861] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Tue Aug 18 18:17:00.706019 2020] [ssl:warn] [pid 861] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Tue Aug 18 19:10:31.990906 2020] [php7:warn] [pid 880] [client 127.0.0.1:49324] PHP Warning:  The use statement with non-compound name 'LPGP_CONF' has no effect in /home/giulliano/lpgp-server/cgi-actions/login.php on line 11, referer: https://www.lpgpofficial.com/login_frm.php
+[Tue Aug 18 22:53:59.972223 2020] [php7:notice] [pid 4427] [client 127.0.0.1:50532] PHP Notice:  Undefined index: user-logged in /home/giulliano/lpgp-server/cgi-actions/logoff.php on line 6, referer: https://www.lpgpofficial.com/cgi-actions/send_feedback.html
+[Wed Aug 19 00:00:19.389078 2020] [ssl:warn] [pid 861] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Wed Aug 19 00:00:19.425202 2020] [ssl:warn] [pid 861] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name

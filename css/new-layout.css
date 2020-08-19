@@ -1,5 +1,5 @@
 @import "notifications.css";
-
+@import "keyframes.css";
 
 .header-container{
     background-color: black;
@@ -520,3 +520,30 @@
     opacity: .51;
     cursor: default;
 }
+
+.signal-an{
+    background-color: white;
+    border: 1px solid white;
+    border-radius: 500px;
+    height: 200px;
+    width: 200px;
+    animation-duration: 4s;
+}
+
+.signal-an .content{
+    color: white;
+    font-size: initial;
+    margin-left: auto;
+    margin-right: auto;
+    animation-duration: 4s;
+}
+
+.signal-an .content-sm{ animation-name: auth-content-sm; }
+
+.signal-an .content-md{ animation-name: auth-content; }
+
+.signal-an .content-lg{ animation-name: auth-content-lg; }
+
+.valid-signature-sg{ animation-name: auth-valid; }
+
+.invalid-signature-sg{ animation-name: auth-invalid; }
