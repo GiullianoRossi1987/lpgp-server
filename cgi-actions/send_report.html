@@ -26,6 +26,62 @@
 </head>
 <style>
     #qr-btn{ margin-top: -66px !important;}
+    div.response-container{
+        margin-left: 40%;
+        text-align: justify;
+    }
+
+    div.response-container > div.gen-valid{
+        animation-name: correctSignature-background;
+        animation-timing-function: linear;
+        animation-duration: 2s;
+        border: 1px solid green;
+        border-radius: 50%;
+        animation-fill-mode: forwards;
+        display: flex;
+        width: 150px;
+        height: 150px;
+        margin-bottom: 10px;
+        padding-top: -20px;
+    }
+
+    div.response-container > div > span{
+        margin-bottom: 20px;
+        padding-top: 20px;
+        padding-left: 10px;
+        padding-bottom: 20px;
+    }
+
+    div.response-container > div > span > i{
+        margin-left: auto;
+        margin-right: auto;
+        color: white;
+        animation-name: auth-content-lg;
+        animation-duration: 2s;
+        animation-fill-mode: forwards;
+        animation-timing-function: linear;
+    }
+
+    div.response-container a{
+        margin-top: 10%;
+        margin-left: -4%;
+    }
+
+    .valid-title::before{
+        content: "Your feedback was send successfully!";
+        color: green;
+    }
+
+    .invalid-title::before{
+        content: "Occoured a error sending your feedback";
+    }
+
+    div.response-container h3{
+        padding-top: 10px;
+        margin-bottom: 10px;
+        margin-left: -150px;
+        margin-top: 10px;
+    }
 </style>
 <body>
     <script>
@@ -73,7 +129,43 @@
                 url: "ajx_mail_sender.php",
                 data: "report=t&report-content="+$("#report-content").val()+"&type="+$("#type-report").val(),
                 success: function(response){
-                    $(".container-content").html(response);
+                    let resp = $.parseJSON(jsonResponse);
+                    let container = document.createElement("div");
+                    let mainValidator = document.createElement("div");
+                    let spanValidator = document.createElement("span");
+                    let iValidatorCon = document.createElement("i");
+                    let titleValidator = document.createElement("h3");
+
+                    mainValidator.classList.add("response");
+                    container.classList.add("response-container");
+                    iValidatorCon.classList.add("fas");
+
+                    let btnReset = document.createElement("a");
+                    btnReset.href = "https://www.lpgpofficial.com/cgi-actions/send_feedback.html";
+                    btnReset.role = "button";
+                    btnReset.innerText = "Send other feedback";
+                    btnReset.classList.add("btn");
+                    btnReset.classList.add("btn-lg");
+                    btnReset.classList.add("btn-primary");
+                    if(resp['status'] === 0){
+                        // success
+                        mainValidator.classList.add("gen-valid");
+                        iValidatorCon.classList.add("fa-check");
+                        titleValidator.classList.add("valid-title");
+                    }
+                    else{
+                        // error
+                        mainValidator.classList.add("gen-invalid");
+                        iValidatorCon.classList.add("fa-times");
+                        titleValidator.classList.add("invalid-title");
+                        console.error(resp['error']);
+                    }
+                    spanValidator.appendChild(iValidatorCon);
+                    mainValidator.appendChild(spanValidator);
+                    container.appendChild(mainValidator);
+                    container.appendChild(titleValidator);
+                    container.appendChild(btnReset);
+                    $(".main-form").html(container);
                 }
             });
         });
