@@ -51,7 +51,7 @@ sendUserLogged();
             else $("#err-lb-code").hide();
         });
     </script>
-    <div class="container-fluid header-container" role="banner" style="background-color: rgb(51, 51, 71); position: relative;">
+    <div class="container-fluid header-container" role="banner">
         <div class="col-12 header" style="height: 71px">
             <div class="opt-dropdown dropdown login-dropdown">
                 <button type="button" class="btn btn-lg default-btn-header dropdown-toggle" data-toggle="dropdown" id="account-opts" aria-haspopup="true" aria-expanded="false">

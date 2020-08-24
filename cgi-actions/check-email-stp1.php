@@ -1,4 +1,6 @@
-<?php session_start(); ?>
+<?php
+if(session_status() == PHP_SESSION_NONE) session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,21 +9,17 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>LPGP Oficial Server</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link rel="stylesheet" href="../css/new-layout.css">
     <script src="../js/main-script.js"></script>
     <link rel="stylesheet" href="./bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="./bootstrap/font-awesome.min.css">
-    <script src="./bootstrap/jquery-3.3.1.slim.min.js"></script>
     <script src="./bootstrap/bootstrap.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <link rel="shortcut icon" href="../media/new-logo.png" type="image/x-icon">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.2/popper.min.js"></script>
-
+    <script src="../jquery/lib/jquery-3.4.1.min.js" charset="utf-8"></script>
+    <script src="../jquery/lib/bootstrap/js/bootstrap.js" charset="utf-8"></script>
 </head>
 <body>
     <script>
@@ -37,6 +35,19 @@
                 $("#err-lb-code").show();
             }
             else $("#err-lb-code").hide();
+        });
+
+        $(document).on("click", "#bt-resend", function(){
+            $.post({
+                url: "ajx_resend_mail.php",
+                data: "resend=t",
+                success: function(response){
+                    $("#bt-resend").prop("data-toggle", "tooltip");
+                    $("#bt-resend").prop("title", "E-mail Sent");
+                    $("#bt-resend").tooltip("show");
+                },
+                error: function(xhr, status, error){ console.error(error); }
+            });
         });
     </script>
     <div class="container-fluid header-container" role="banner" style="position: relative;">
@@ -86,7 +97,7 @@
                     </label>
                     <br>
                     <div class="button-group default-group">
-                        <button class="btn btn-lg btn-secondary" name="btn-resend">Resend the email</button>
+                        <button class="btn btn-lg btn-secondary" id="bt-resend" type="button">Resend the email</button>
                         <button class="btn btn-lg btn-success" name="bt-code">Submit code</button>
                     </div>
                 </form>

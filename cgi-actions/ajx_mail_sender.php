@@ -52,7 +52,7 @@ function send(string $to, string $content, string $from, string $subject){
     $headers = "MIME-VERSION: 1.0\nContent-Type: text/html; charset=iso-8859-1;\n";
     $headers .= "From: $from\nCc:$to\n";
     $rc = mail($to, $subject, $content, $headers);
-    if($rc === false) die("INTERNAL ERROR");
+    if($rc === false) die();
 }
 
 
@@ -63,13 +63,14 @@ $dt = $_SESSION['mode'] == "normie" ? $m_usr->getUserData($l_name) : $m_prp->get
 
 if(isset($_POST['report'])){
     $email = fetchTemplate($_POST['report-content'], $l_name, $dt['vl_email'], REPORT_TEMPLATE);
-    send(EMAIL_TO, $email, $dt['vl_email'], "$l_name is reporting a error as " . DUMP_REPORT_TYPES[(int)$_POST['type']]);
+    $sent = send(EMAIL_TO, $email, $dt['vl_email'], "$l_name is reporting a error as " . DUMP_REPORT_TYPES[(int)$_POST['type']]);
     die("SENT");
 }
 else if(isset($_POST['feedback'])){
     $md = DUMP_FEEDBACK_MODE[(int)$_POST['mode']];
     $email = fetchTemplate($_POST['feedback-content'], $l_name, $dt['vl_email'], FEEDBACK_TEMPLATE);
-    send(EMAIL_TO, $email, $dt['vl_email'], "$l_name is sending a $md feedback");
+    $sent = send(EMAIL_TO, $email, $dt['vl_email'], "$l_name is sending a $md feedback");
+    if($sent === false){ die("Error: "); }
     die("SENT");
 }
 else{}  // do nothing
