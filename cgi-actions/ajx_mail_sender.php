@@ -14,6 +14,13 @@ if(!defined("DUMP_REPORT_TYPES")) define("DUMP_REPORT_TYPES", ["Other", "Signatu
                                                                "Signatures Management", "Clients Management",
                                                                "Access Plot view", "WebSite Design"]);
 if(!defined("DUMP_FEEDBACK_MODE")) define("DUMP_FEEDBACK_MODE", ['Neutral', 'Positive', "Negative"]);
+if(!defined("JSON_STATUS_ERR")) define("JSON_STATUS_ERR", -1);
+if(!defined("JSON_STATUS_SUC")) define("JSON_STATUS_SUC", 0);
+
+$jsonTemplate = array(
+    "status" => null,
+    "error" => null
+);
 
 /**
  * Replaces the content of the HTML template for e-mails before sending it
@@ -49,10 +56,18 @@ function fetchTemplate(string $content, string $user, string $usr_email, string 
  * @return void
  */
 function send(string $to, string $content, string $from, string $subject){
+    $json = &$GLOBALS['jsonTemplate'];
     $headers = "MIME-VERSION: 1.0\nContent-Type: text/html; charset=iso-8859-1;\n";
     $headers .= "From: $from\nCc:$to\n";
     $rc = mail($to, $subject, $content, $headers);
-    if($rc === false) die();
+    if($rc === false){
+        $json['status'] = JSON_STATUS_ERR;
+        $json['error']  = error_get_last()['message'];
+    }
+    else{
+        $json['status'] = JSON_STATUS_SUC;
+        $json['error']  = null;
+    }
 }
 
 
@@ -64,14 +79,13 @@ $dt = $_SESSION['mode'] == "normie" ? $m_usr->getUserData($l_name) : $m_prp->get
 if(isset($_POST['report'])){
     $email = fetchTemplate($_POST['report-content'], $l_name, $dt['vl_email'], REPORT_TEMPLATE);
     $sent = send(EMAIL_TO, $email, $dt['vl_email'], "$l_name is reporting a error as " . DUMP_REPORT_TYPES[(int)$_POST['type']]);
-    die("SENT");
 }
 else if(isset($_POST['feedback'])){
     $md = DUMP_FEEDBACK_MODE[(int)$_POST['mode']];
     $email = fetchTemplate($_POST['feedback-content'], $l_name, $dt['vl_email'], FEEDBACK_TEMPLATE);
     $sent = send(EMAIL_TO, $email, $dt['vl_email'], "$l_name is sending a $md feedback");
     if($sent === false){ die("Error: "); }
-    die("SENT");
 }
 else{}  // do nothing
+die(json_encode($jsonTemplate));
  ?>

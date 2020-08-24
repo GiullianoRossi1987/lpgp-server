@@ -85,20 +85,7 @@ sendUserLogged();
         <div class="row-main row">
             <div class="col-12 clear-content center-content" style="position: relative;">
             <?php
-
-if(array_key_exists('btn-resend', $_POST)){
-    if($_SESSION['mode'] == "normie"){
-        $usr_obj = new UsersData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
-        $usr_obj->sendCheckEmail($_SESSION['user']);
-    }
-    if($_SESSION['mode'] == "prop"){
-        $prop_obj = new ProprietariesData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
-        $prop_obj->sendCheckEmail($_SESSION['user']);
-
-    }
-    echo "<h1>Email sended successfully!</h1>\n<button class=\"default-btn btn darkble-btn\" onclick=\"window.location.replace('https://localhost/cgi-actions/check-email-stp1.php');\">Go back</button>";
-}
-else if(array_key_exists("bt-code", $_POST)){
+else if(isset($_POST['bt-code'])){
     if($_SESSION['mode'] == "normie"){
         $usr = new UsersData(LPGP_CONF['mysql']['sysuser'], LPGP_CONF['mysql']['passwd']);
         if($usr->authUserKey($_SESSION['user'], $_POST['code'])){
