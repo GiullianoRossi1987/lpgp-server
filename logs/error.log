@@ -1991,3 +1991,11 @@
 [Mon Aug 24 09:08:13.617764 2020] [php7:warn] [pid 4756] [client 127.0.0.1:54744] PHP Warning:  The use statement with non-compound name 'LPGP_CONF' has no effect in /home/giulliano/lpgp-server/cgi-actions/check_email.php on line 9, referer: https://www.lpgpofficial.com/cgi-actions/check-email-stp1.php
 [Mon Aug 24 17:25:25.563961 2020] [php7:notice] [pid 17095] [client 127.0.0.1:58654] PHP Notice:  Undefined index: user-logged in /home/giulliano/lpgp-server/cgi-actions/ajx_logged_request.php on line 22, referer: https://www.lpgpofficial.com/cgi-actions/send_feedback.html
 [Mon Aug 24 18:21:15.793183 2020] [php7:notice] [pid 16747] [client 127.0.0.1:58942] PHP Notice:  Undefined index: user-logged in /home/giulliano/lpgp-server/cgi-actions/ajx_logged_request.php on line 22, referer: https://www.lpgpofficial.com/cgi-actions/send_feedback.html
+[Tue Aug 25 10:06:54.852445 2020] [ssl:warn] [pid 773] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Tue Aug 25 10:06:54.972124 2020] [ssl:warn] [pid 773] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Tue Aug 25 10:06:56.550911 2020] [ssl:warn] [pid 902] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Tue Aug 25 10:06:56.550928 2020] [ssl:warn] [pid 902] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Tue Aug 25 16:48:22.496213 2020] [ssl:warn] [pid 742] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Tue Aug 25 16:48:22.620958 2020] [ssl:warn] [pid 742] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name
+[Tue Aug 25 16:48:23.627730 2020] [ssl:warn] [pid 865] AH01906: www.lpgpofficial.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Tue Aug 25 16:48:23.627803 2020] [ssl:warn] [pid 865] AH01909: www.lpgpofficial.com:443:0 server certificate does NOT include an ID which matches the server name

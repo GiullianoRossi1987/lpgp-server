@@ -79,6 +79,28 @@ create table tb_access(
     on update cascade
 );
 
+CREATE TABLE tb_changelog_signatures(
+    cd_changelog INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL UNIQUE,
+    id_signature INTEGER NOT NULL,
+    dt_changelog TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+    tp_changelog INTEGER NOT NULL CHECK(tp_changelog IN (0, 1, 2, 3)),
+    vl_oldname   VARCHAR(255) NOT NULL,
+    vl_oldkey    LONGTEXT NOT NULL,
+    vl_oldcode   INTEGER NOT NULL CHECK(vl_oldcode IN (0, 1, 2, 3)),
+    FOREIGN KEY (id_signature) REFERENCES tb_signatures(cd_signature)
+);
+
+CREATE TABLE tb_changelog_clients(
+    cd_changelog INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL UNIQUE,
+    id_client    INTEGER NOT NULL,
+    dt_changelog TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+    tp_changelog INTEGER NOT NULL CHECK(tp_changelog IN (0, 1, 2, 3)),
+    vl_oldname   VARCHAR(255) NOT NULL,
+    vl_oldtoken  LONGTEXT NOT NULL,
+    vl_oldroot   INTEGER NOT NULL CHECK(vl_oldroot IN (0, 1)),
+    FOREIGN KEY (id_client) REFERENCES tb_clients(cd_client)
+);
+
 DELIMITER $
 CREATE PROCEDURE AZClientsFrom(IN prop INTEGER)
 BEGIN
@@ -113,6 +135,16 @@ END$
 CREATE PROCEDURE older_signatures(IN prop INTEGER)
 BEGIN
     SELECT * FROM tb_signatures ORDER BY dt_creation ASC;
+END$
+
+CREATE PROCEDURE changelogs_signature(IN cd INTEGER, IN code INTEGER)
+BEGIN
+    SELECT * FROM tb_changelog_signatures WHERE id_signature = cd AND tp_changelog = code;
+END$
+
+CREATE PROCEDURE changelogs_client(IN cd INTEGER, IN code INTEGER)
+BEGIN
+    SELECT * FROM tb_changelog_clients WHERE id_client = cd AND tp_changelog = code;
 END$
 
 DELIMITER ;

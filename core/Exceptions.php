@@ -92,7 +92,7 @@ namespace SignaturesExceptions{
     }
 
     class SignatureFileNotFound extends Exception{
-        public function showMessage(string $file_name) { 
+        public function showMessage(string $file_name) {
             $dft_path = $_SERVER['DOCUMENT_ROOT'] . "/usignatures.d";
             return "The signature file '$file_name' don't exists at \"$dft_path\"";
         }
@@ -261,7 +261,7 @@ namespace ClientsAccessExceptions{
     class RecordError extends Exception{}
 
     /**
-     * That class is a exception, thrown when the clients access try to insert a value, but the success value 
+     * That class is a exception, thrown when the clients access try to insert a value, but the success value
      * isn't valid, which must be integer or boolean
      */
     class SuccessValueError extends Exception{}
@@ -270,5 +270,46 @@ namespace ClientsAccessExceptions{
      * That exception is thrown when the client referred in the record isn't valid.
      */
     class ReferenceError extends Exception{}
+}
+
+namespace ChangeLogExceptions{
+    use Exception;
+
+    /**
+     * <Exception> Thrown when a changelog class tried to use a invalid signature
+     * primary key reference.
+     */
+    class SignatureReferenceError extends Exception{
+        public function __construct($reference){ parent::__construct("SIGNATURE REFERENCE ERROR: $reference -> reference"); }
+    }
+
+    /**
+     * <Exception> Thrown when a changelog class tried to use a invalid client
+     * primary key reference.
+     */
+    class ClientReferenceError extends Exception{
+        public function __construct($reference){ parent::__construct("CLIENT REFERENCE ERROR: $reference -> reference"); }
+    }
+
+    /**
+     * <Exception> Thrown when the changelog code received isn't valid
+     */
+    class InvalidChangelogCode extends Exception{
+        public function __construct(int $changelogCode){ parent::__construct("INVALID CHANGELOG CODE '$changelogCode'"); }
+    }
+
+    /**
+     * <Exception> Thrown when a changelog isn't found in the database
+     */
+    class ChangeLogNotFound extends Exception{
+        public function __construct(int $changelog){ parent::__construct("CHANGELOG #$changelog NOT FOUND"); }
+    }
+
+    /**
+     * <Exception> Thrown when there're errors using a JSON dumped changelog
+     */
+    class JSONChangelogError extends Exception{
+        public function __construct(string $error){ parent::__construct("JSON CHANGELOG ERROR: \"$error\""); }
+    }
 }
 ?>
