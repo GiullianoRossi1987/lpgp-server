@@ -87,7 +87,9 @@ CREATE TABLE tb_changelog_signatures(
     vl_oldname   VARCHAR(255) NOT NULL,
     vl_oldkey    LONGTEXT NOT NULL,
     vl_oldcode   INTEGER NOT NULL CHECK(vl_oldcode IN (0, 1, 2, 3)),
-    FOREIGN KEY (id_signature) REFERENCES tb_signatures(cd_signature)
+    id_wayback   INTEGER DEFAULT NULL,
+    FOREIGN KEY (id_signature) REFERENCES tb_signatures(cd_signature),
+    FOREIGN KEY (id_wayback) REFERENCES tb_changelog_signatures(cd_changelog)
 );
 
 CREATE TABLE tb_changelog_clients(
@@ -98,7 +100,9 @@ CREATE TABLE tb_changelog_clients(
     vl_oldname   VARCHAR(255) NOT NULL,
     vl_oldtoken  LONGTEXT NOT NULL,
     vl_oldroot   INTEGER NOT NULL CHECK(vl_oldroot IN (0, 1)),
-    FOREIGN KEY (id_client) REFERENCES tb_clients(cd_client)
+    id_wayback   INTEGER DEFAULT NULL,
+    FOREIGN KEY (id_client) REFERENCES tb_clients(cd_client),
+    FOREIGN KEY (id_wayback) REFERENCES tb_changelog_clients(cd_changelog)
 );
 
 DELIMITER $
