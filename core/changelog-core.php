@@ -49,7 +49,7 @@ namespace Core{
          * @throws ClientReferenceError If the client (item) reference isn't valid
          * @return void
          */
-        public function addChangelog(int $reference, $date = null, int $code, $waybackRef = null, string $p_name, string $p_key_pass, $p_root_code);
+        public function addChangelog(int $reference, $date = null, int $code, $waybackRef = null, string $p_name, string $p_key_pass, $p_root_code): void;
 
         /**
          * This action removes a changelog item from the database forever.
@@ -58,12 +58,44 @@ namespace Core{
          * @throws ChangeLogNotFound If the changelog reference isn't valid
          * @return void
          */
-        public function removeChangelog(int $changelog);
+        public function removeChangelog(int $changelog): void;
 
         /**
-         * 
+         * Lists all the changelogs in the database
+         * @return array
          */
+        public function lsChangelogs(): array;
+
+        /**
+         * Lists all the changelogs of a specific reference (client/signature)
+         * @param integer $reference The reference to search in the database
+         * @return array
+         */
+        public function changesFrom(int $reference): array;
+
+        /**
+         * Lists all the changelogs of a specific timestamp
+         * @param string $when The timestamp to search
+         * @return array
+         */
+        public function changelogsWhen(string $when): array;
+
+        /**
+         * Restores the changelog data to the original reference and storages a new
+         * changelog with the wayback id, referencing which changelog was
+         * restored.
+         * @param integer $changelog The changelog to restore the data
+         * @return integer The primary key of the wayback changelog
+         */
+        public function restore(int $changelog): int;
     }
 
+    class ClientsChangeLogs extends DatabaseConnection implements changelogManager{
+
+    }
+
+    class SignaturesChangeLogs extends DatabaseConnection implements changelogManager{
+        
+    }
 }
  ?>
