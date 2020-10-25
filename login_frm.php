@@ -73,7 +73,7 @@ sendUserLogged();
     <br>
     <div class="container-fluid container-content" style="position: relative;">
         <div class="row-main row">
-            <div class="col-4 clear-content center-content" style="position: relative; margin-left: 32% !important; margin-top: 5% !important; border-radius: 6%;">
+            <div class="col-4 clear-content center-content" style="position: relative; margin-left: auto !important; margin-right: auto !important; margin-top: 5% !important; border-radius: 6%;">
                 <div id="logo-ex" style="margin-left: 42% !important;"></div>
                 <form action="./cgi-actions/login.php" method="POST">
                     <h1 style="margin-left: 42%;" class="masthead-heading mb-0">Login</h1>
