@@ -3,7 +3,7 @@ namespace Core{
     require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Exceptions.php";
     require_once $_SERVER['DOCUMENT_ROOT'] . "/core/Core.php";
 
-    use Core\DatabaseConnection;
+    // use Core\DatabaseConnection;
     use ChangeLogExceptions\SignatureReferenceError;
     use ChangeLogExceptions\ClientReferenceError;
     use ChangeLogExceptions\ChangeLogNotFound;
