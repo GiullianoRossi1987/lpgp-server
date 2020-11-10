@@ -29,25 +29,11 @@ else{
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>LPGP Oficial Server</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
     <link rel="stylesheet" href="../css/new-layout.css">
-    <script src="../js/main-script.js"></script>
-    <link rel="stylesheet" href="../bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" href="../bootstrap/font-awesome.min.css">
-	<link rel="stylesheet" href="../jquery/lib/bootstrap/css/bootstrap.css">
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc" crossorigin="anonymous">
-    <script src="../bootstrap/jquery-3.3.1.slim.min.js"></script>
-    <script src="../bootstrap/bootstrap.min.js"></script>
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> -->
-    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <link rel="shortcut icon" href="../media/new-logo.png" type="image/x-icon">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.2/popper.min.js"></script>
-	<script src="../jquery/lib/bootstrap/js/bootstrap.js" charset="utf-8"></script>
-	<script src="../jquery/lib/jquery-3.4.1.min.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="../css/content-style.css">
+    <link rel="shortcut icon" href="media/new-logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc" crossorigin="anonymous">
+    <link href="../bootstrap/dist/css/bootstrap.css" rel="stylesheet">
 </head>
 <style>
 	#avatar-ep{
@@ -78,108 +64,7 @@ else{
 	}
 </style>
 <body>
-    <script>
-        $(document).ready(function(){
-            setAccountOpts(true);
-            setSignatureOpts();
-            $("#avatar-ep").css("background-image", "url(" + getLinkedUserIcon() + ")");
-        });
 
-        var pas1 = "text";
-        var pas2 = "text";
-        var vb = "visible";
-		var dp_tmp = false;
-
-        $(document).on("click", "#spass1", function(){
-            $("#passwd1").attr("type", pas1);
-            if(pas1 == "text") pas1 = "password";
-            else pas1 = "text";
-        });
-
-        $(document).on("click", "#spass2", function(){
-            $("#passwd2").attr("type", pas1);
-            if(pas2 == "text") pas2 = "password";
-            else pas2 = "text";
-        });
-
-        $(document).on("change", "#password1", function(){
-            var content = $(this).val();
-            if(content.length <= 7){
-                $("#err-lb-passwd1").text("Please choose a password with more then 7 characters.");
-                $("#err-lb-passwd1").show();
-            }
-            else if(content != $("#password2").val()){
-                $("#err-lb-passwd1").text("The passwords doesn't match");
-                $("#err-lb-passwd1").show();
-            }
-            else $("#err-lb-passwd1").hide();
-        });
-
-        $(document).on("change", "#username", function(){
-            var content = $(this).val();
-            if(content.length <= 0){
-                $("#err-lb-username").text("Please choose a username!");
-                $("#err-lb-username").show();
-            }
-            else $("#err-lb-username").hide();
-        });
-
-        $(document).on("change", "#email", function(){
-            var content = $(this).val();
-            if(content.length <= 0){
-                $("#err-lb-email").text("Please choose a e-amil address");
-                $("#err-lb-email").show();
-            }
-            else if(content.search("@") < 0){
-                $("#err-lb-email").text("Please choose a valid e-mail address");
-                $("#err-lb-email").show();
-            }
-            else $("#err-lb-email").hide();
-        });
-
-        $(document).on("click", "#default-img", function(){
-            $("#upload-img-input").hide();
-        });
-
-		$(document).on("click", "#reset", function(){
-			window.location.reload();
-		});
-
-		// ajax inputs
-		$(document).on("change", "#new-img", function(){
-			let files = new FormData();
-			files.append("img-auto-load", $("#new-img")[0].files[0]);
-			// testing
-			files.append("teste", "aaa");
-			$.post({
-				url: "ajx_img_viewer.php",
-				data: files,
-				processData: false,
-				contentType: false,
-				success: function(response){
-					$("#avatar-ep").css("background-image", "url(../" + response + ")");
-
-				},
-				error: function(xhr, status, error){ console.log(error); }
-			});
-		});
-
-		// send the data using ajx
-		$(document).on("click", "#save", function(){
-			let newData = new FormData();
-			if($("#new-img")[0].files[0] !== undefined && $("#new-img")[0].files[0] !== null)
-				newData.append("new-img", $("#new-img")[0].files[0]);
-			if(dp_tmp) newData.append("dp_tmp_media", true);
-			if($("#username").val().length > 0)
-				newData.append("new-name", $("#username").val());
-			if($("#email").val().length > 0)
-				newData.append("new-email", $("#email").val());
-			if($("#passwd1").val().length > 0 && $("#passwd2").val().length > 0)
-				newData.append("new-passwd", $("passwd1").val());
-		});
-
-		$(document).on("click", "#avatar-container", function(){ $("#opt-avatar").collapse("toggle");})
-    </script>
     <div class="container-fluid header-container" role="banner" style="position: fixed;">
         <div class="col-12 header" style="height: 71px; transition: background-color 200ms linear;">
             <div class="opt-dropdown dropdown login-dropdown">
@@ -286,5 +171,114 @@ else{
             </div>
         </div>
     </div>
+    <!-- Scripts -->
+    <script src="../jquery/lib/jquery-3.4.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="../bootstrap/dist/js/bootstrap.js"></script>
+    <script src="../js/autoload.js" charset="utf-8"></script>
+    <script src="../js/main-script.js"></script>
+    <script src="../js/actions.js"></script>
+    <script>
+        $(document).ready(function(){
+            setAccountOpts(true);
+            setSignatureOpts();
+            $("#avatar-ep").css("background-image", "url(" + getLinkedUserIcon() + ")");
+        });
+
+        var pas1 = "text";
+        var pas2 = "text";
+        var vb = "visible";
+		var dp_tmp = false;
+
+        $(document).on("click", "#spass1", function(){
+            $("#passwd1").attr("type", pas1);
+            if(pas1 == "text") pas1 = "password";
+            else pas1 = "text";
+        });
+
+        $(document).on("click", "#spass2", function(){
+            $("#passwd2").attr("type", pas1);
+            if(pas2 == "text") pas2 = "password";
+            else pas2 = "text";
+        });
+
+        $(document).on("change", "#password1", function(){
+            var content = $(this).val();
+            if(content.length <= 7){
+                $("#err-lb-passwd1").text("Please choose a password with more then 7 characters.");
+                $("#err-lb-passwd1").show();
+            }
+            else if(content != $("#password2").val()){
+                $("#err-lb-passwd1").text("The passwords doesn't match");
+                $("#err-lb-passwd1").show();
+            }
+            else $("#err-lb-passwd1").hide();
+        });
+
+        $(document).on("change", "#username", function(){
+            var content = $(this).val();
+            if(content.length <= 0){
+                $("#err-lb-username").text("Please choose a username!");
+                $("#err-lb-username").show();
+            }
+            else $("#err-lb-username").hide();
+        });
+
+        $(document).on("change", "#email", function(){
+            var content = $(this).val();
+            if(content.length <= 0){
+                $("#err-lb-email").text("Please choose a e-amil address");
+                $("#err-lb-email").show();
+            }
+            else if(content.search("@") < 0){
+                $("#err-lb-email").text("Please choose a valid e-mail address");
+                $("#err-lb-email").show();
+            }
+            else $("#err-lb-email").hide();
+        });
+
+        $(document).on("click", "#default-img", function(){
+            $("#upload-img-input").hide();
+        });
+
+		$(document).on("click", "#reset", function(){
+			window.location.reload();
+		});
+
+		// ajax inputs
+		$(document).on("change", "#new-img", function(){
+			let files = new FormData();
+			files.append("img-auto-load", $("#new-img")[0].files[0]);
+			// testing
+			files.append("teste", "aaa");
+			$.post({
+				url: "ajx_img_viewer.php",
+				data: files,
+				processData: false,
+				contentType: false,
+				success: function(response){
+					$("#avatar-ep").css("background-image", "url(../" + response + ")");
+
+				},
+				error: function(xhr, status, error){ console.log(error); }
+			});
+		});
+
+		// send the data using ajx
+		$(document).on("click", "#save", function(){
+			let newData = new FormData();
+			if($("#new-img")[0].files[0] !== undefined && $("#new-img")[0].files[0] !== null)
+				newData.append("new-img", $("#new-img")[0].files[0]);
+			if(dp_tmp) newData.append("dp_tmp_media", true);
+			if($("#username").val().length > 0)
+				newData.append("new-name", $("#username").val());
+			if($("#email").val().length > 0)
+				newData.append("new-email", $("#email").val());
+			if($("#passwd1").val().length > 0 && $("#passwd2").val().length > 0)
+				newData.append("new-passwd", $("passwd1").val());
+		});
+
+		$(document).on("click", "#avatar-container", function(){ $("#opt-avatar").collapse("toggle");})
+    </script>
 </body>
 </html>

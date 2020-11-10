@@ -8,48 +8,13 @@ if(session_status() == PHP_SESSION_NONE) session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>LPGP Oficial Server</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/new-layout.css">
-    <script src="../js/main-script.js"></script>
-    <link rel="stylesheet" href="./bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" href="./bootstrap/font-awesome.min.css">
-    <script src="./bootstrap/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <link rel="shortcut icon" href="../media/new-logo.png" type="image/x-icon">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.2/popper.min.js"></script>
-    <script src="../jquery/lib/jquery-3.4.1.min.js" charset="utf-8"></script>
-    <script src="../jquery/lib/bootstrap/js/bootstrap.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="../css/content-style.css">
+    <link rel="shortcut icon" href="media/new-logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc" crossorigin="anonymous">
+    <link href="../bootstrap/dist/css/bootstrap.css" rel="stylesheet">
 </head>
 <body>
-    <script>
-        $(document).ready(function(){
-            setAccountOpts(true);
-            setSignatureOpts();
-        });
-
-        $(document).on("change", "#code", function(){
-            var content = $(this).val();
-            if(content.length <= 0){
-                $("#err-lb-code").text("Please insert a valid code!");
-                $("#err-lb-code").show();
-            }
-            else $("#err-lb-code").hide();
-        });
-
-        $(document).on("click", "#bt-resend", function(){
-            $.post({
-                url: "ajx_resend_mail.php",
-                data: "resend=t",
-                success: function(response){
-                    $("#bt-resend").prop("data-toggle", "tooltip");
-                    $("#bt-resend").prop("title", "E-mail Sent");
-                    $("#bt-resend").tooltip("show");
-                },
-                error: function(xhr, status, error){ console.error(error); }
-            });
-        });
-    </script>
     <div class="container-fluid header-container" role="banner" style="position: relative;">
         <div class="col-12 header" style="height: 71px">
             <div class="opt-dropdown dropdown login-dropdown">
@@ -104,5 +69,40 @@ if(session_status() == PHP_SESSION_NONE) session_start();
             </div>
         </div>
     </div>
+    <!-- Scripts -->
+    <script src="../jquery/lib/jquery-3.4.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="../bootstrap/dist/js/bootstrap.js"></script>
+    <script src="../js/autoload.js" charset="utf-8"></script>
+    <script src="../js/main-script.js"></script>
+    <script src="../js/actions.js"></script>
+    <script>
+        $(document).ready(function(){
+            setAccountOpts(true);
+            setSignatureOpts();
+        });
+
+        $(document).on("change", "#code", function(){
+            var content = $(this).val();
+            if(content.length <= 0){
+                $("#err-lb-code").text("Please insert a valid code!");
+                $("#err-lb-code").show();
+            }
+            else $("#err-lb-code").hide();
+        });
+
+        $(document).on("click", "#bt-resend", function(){
+            $.post({
+                url: "ajx_resend_mail.php",
+                data: "resend=t",
+                success: function(response){
+                    $("#bt-resend").prop("data-toggle", "tooltip");
+                    $("#bt-resend").prop("title", "E-mail Sent");
+                    $("#bt-resend").tooltip("show");
+                },
+                error: function(xhr, status, error){ console.error(error); }
+            });
+        });
+    </script>
 </body>
 </html>
